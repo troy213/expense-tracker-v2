@@ -5,10 +5,8 @@ import App from './App'
 
 describe('App', () => {
   it('Renders Hello World', () => {
-    // ARRANGE
     render(<App />)
-    // ACT
-    // EXPECT
+
     expect(
       screen.getByRole('heading', {
         level: 1,
