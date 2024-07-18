@@ -9,8 +9,7 @@
     /* Absolute Import path */
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["*"],
-      "@components": ["components"]
+      "@/*": ["*"]
     },
 
     /* Bundler mode */
