@@ -1,0 +1,29 @@
+.footer{
+    display: flex;
+    position: sticky;
+    bottom: 0;
+    background-color: #fff;
+    height: 64px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+    .flex{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .circle{
+            background-color: #133E5D;
+            // padding: 16px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            svg{
+                path{
+                    stroke: #F2F0ED;
+                }
+            }
+        }
+    }
+}

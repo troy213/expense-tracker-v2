@@ -1,0 +1,197 @@
+.dashboard {
+    padding: 16px;
+    background-color: #f5f5f5;
+    // height: calc(100vh - 64px);
+    // overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    .header {
+        margin-bottom: 24px;
+        .title {
+            font-size: 2rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            color: #133E5D;
+        }
+        .balance {
+            font-size: 2.5rem;
+            font-weight: 400;
+            margin-bottom: 16px;
+            color: #133E5D;
+        }
+    }
+
+    .cardContainer {
+        margin-bottom: 24px;
+        display: flex;
+        gap: 16px;
+
+        .card {
+        padding: 16px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        background: #ffffff;
+        flex: 1;
+
+        .cardContent {
+            .title {
+            color: #6c757d;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .icon {
+                font-size: 1.25rem;
+                color: #28a745; /* Change to red for down arrow */
+            }
+            }
+
+            .amount {
+            font-size: 1.25rem;
+            }
+
+            .date {
+            color: #6c757d;
+            margin-top: 8px;
+            }
+
+            .progressContainer {
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+
+            .progressBar {
+                width: 100%;
+                height: 10px;
+                border-radius: 4px;
+                background: #e0e0e0;
+                margin-right: 8px;
+
+                .progressFill {
+                height: 100%;
+                width: 95%;
+                background: #1976d2;
+                border-radius: 4px;
+                }
+            }
+
+            .progressText {
+                font-size: 0.875rem;
+                color: #6c757d;
+            }
+            }
+        }
+        }
+    }
+    
+    .card {
+        padding: 16px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        background: #ffffff;
+        // flex: 1;
+        margin-bottom: 24px;
+
+        .cardContent {
+            .title {
+            color: #6c757d;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .icon {
+                font-size: 1.25rem;
+                color: #28a745; /* Change to red for down arrow */
+            }
+            }
+
+            .amount {
+            font-size: 1.25rem;
+            }
+
+            .date {
+            color: #6c757d;
+            margin-top: 8px;
+            }
+
+            .progressContainer {
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+
+            .progressBar {
+                width: 100%;
+                height: 10px;
+                border-radius: 4px;
+                background: #e0e0e0;
+                margin-right: 8px;
+
+                .progressFill {
+                height: 100%;
+                width: 95%;
+                background: #1976d2;
+                border-radius: 4px;
+                }
+            }
+
+            .progressText {
+                font-size: 0.875rem;
+                color: #6c757d;
+            }
+            }
+        }
+        }
+
+    .txContainer {
+        background-color: white;
+        margin: 0 -16px -16px -16px;
+        padding: 16px;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 340px;
+        .section {
+            margin-bottom: 24px;
+            width: 100%;
+            .sectionTitle {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            }
+    
+            .entryCard {
+            margin-bottom: 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            background: #ffffff;
+    
+            .entryContent {
+                padding: 16px;
+    
+                .category {
+                color: #6c757d;
+                margin-bottom: 8px;
+                }
+    
+                .description {
+                color: #6c757d;
+                }
+    
+                .amount {
+                font-size: 1.25rem;
+                color: #dc3545; /* For negative values */
+                }
+            }
+            }
+        }
+        .emptyPage {
+            font-style: italic;
+            color: #133E5D;
+        }
+    }
+}
