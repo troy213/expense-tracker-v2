@@ -1,0 +1,12 @@
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background-color: $color-white-2;
+  border-radius: 0.25rem;
+  overflow: hidden;
+
+  &__fill {
+    background-color: $color-primary-2;
+    height: 10px;
+  }
+}

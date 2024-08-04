@@ -1,14 +1,18 @@
-// import "./App.scss";
-import Footer from "./components/Footer";
-import Dashboard from "./pages/Dashboard";
+import { Routes, Route } from 'react-router-dom'
+import { Categories, Dashboard, NotFound, Reports, Settings } from '@/pages'
 
 const App = () => {
   return (
-    <div>
-      <Dashboard />
-      <Footer />
-    </div>
-  );
-};
+    <Routes>
+      <Route path='/' element={<Dashboard />} />
+      <Route path='/categories' element={<Categories />} />
+      <Route path='/reports' element={<Reports />} />
+      <Route path='/settings' element={<Settings />} />
 
-export default App;
+      {/* 404 not found */}
+      <Route path='*' element={<NotFound />} />
+    </Routes>
+  )
+}
+
+export default App

@@ -2,3 +2,16 @@
 @import './styles/config';
 @import './styles/global';
 @import './styles/utility';
+
+// components styles
+@import './components/Modal';
+@import './components/Navbar';
+@import './components/ProgressBar';
+@import './components/Toolbar';
+@import './components/Widget';
+
+// pages styles
+@import './pages/404';
+@import './pages/Categories';
+@import './pages/Dashboard';
+@import './pages/Settings';

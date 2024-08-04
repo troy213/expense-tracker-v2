@@ -1,0 +1,12 @@
+@import './DashboardInfo';
+@import './Transactions';
+
+.dashboard {
+  height: 100dvh;
+  background: linear-gradient($color-primary-2, $color-primary);
+  color: $color-white;
+
+  &__container {
+    padding: 1rem 1rem 1.5rem;
+  }
+}

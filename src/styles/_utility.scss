@@ -159,6 +159,10 @@
   flex: 1;
 }
 
+.gap-1 {
+  gap: 0.25rem;
+}
+
 .gap-2 {
   gap: 0.5rem;
 }
@@ -274,6 +278,11 @@
   border: none;
   border-radius: 0.5em;
   cursor: pointer;
+}
+
+.btn-clear {
+  padding: 0;
+  background-color: unset;
 }
 
 .btn-primary {

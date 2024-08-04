@@ -1,0 +1,15 @@
+.modal {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  width: 100%;
+  z-index: 100;
+
+  &__container {
+    padding: 1em;
+    position: relative;
+    background: $color-white;
+    border-radius: 0.5rem;
+    z-index: 101;
+  }
+}
