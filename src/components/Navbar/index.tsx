@@ -2,13 +2,17 @@ import { ArrowLeftSvg } from '@/assets'
 import { useNavigate } from 'react-router-dom'
 
 type NavbarProps = {
-  children: JSX.Element
+  children?: JSX.Element
+  title?: string
+  titleClass?: string
   enableBackButton?: boolean
   backButtonClass?: string
 }
 
 const Navbar: React.FC<NavbarProps> = ({
   children,
+  title,
+  titleClass,
   enableBackButton,
   backButtonClass,
 }) => {
@@ -20,14 +24,16 @@ const Navbar: React.FC<NavbarProps> = ({
   }
 
   return (
-    <div className='navbar flex-align-center gap-2'>
+    <div className='navbar'>
       {enableBackButton && (
         <button className='btn btn-clear' type='button' onClick={handleBack}>
           <ArrowLeftSvg className={backBtnClass} />
         </button>
       )}
-
-      {children}
+      <div className='flex-align-center flex-space-between flex-1'>
+        <span className={titleClass}>{title}</span>
+        {children}
+      </div>
     </div>
   )
 }

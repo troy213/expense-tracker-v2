@@ -7,13 +7,10 @@ const Dashboard = () => {
   return (
     <div className='dashboard'>
       <div className='dashboard__container'>
-        <Navbar>
-          <div className='flex-space-between flex-align-center flex-1'>
-            <span>Dashboard</span>
-            <button className='btn btn-clear'>
-              <SearchSvg className='icon--stroke-white' />
-            </button>
-          </div>
+        <Navbar title='Dashboard'>
+          <button className='btn btn-clear'>
+            <SearchSvg className='icon--stroke-white' />
+          </button>
         </Navbar>
         <DashboardInfo />
       </div>

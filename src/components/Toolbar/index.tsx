@@ -3,7 +3,7 @@ import { PieChartSvg, PlusSvg, SettingsSvg } from '@/assets'
 
 const Toolbar = () => {
   return (
-    <div className='toolbar flex-justify-center flex-align-center'>
+    <div className='toolbar'>
       <Link to='/reports'>
         <PieChartSvg className='icon--stroke-primary' />
       </Link>
