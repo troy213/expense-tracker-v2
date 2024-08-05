@@ -8,6 +8,7 @@ import svgr from 'vite-plugin-svgr'
 import eslint from 'vite-plugin-eslint'
 import checker from 'vite-plugin-checker'
 import path from 'path'
+import { version } from './package.json'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -21,5 +22,8 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
+  },
+  define: {
+    'import.meta.env.APP_VERSION': JSON.stringify(version),
   },
 })

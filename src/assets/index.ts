@@ -16,6 +16,7 @@ import PlusSvg from './icons/plus.svg?react'
 import SearchSvg from './icons/search.svg?react'
 import SettingsSvg from './icons/settings.svg?react'
 import SlidersSvg from './icons/sliders.svg?react'
+import TrashSvg from './icons/trash.svg?react'
 
 export {
   ArrowDownSvg,
@@ -36,4 +37,5 @@ export {
   SearchSvg,
   SettingsSvg,
   SlidersSvg,
+  TrashSvg,
 }
