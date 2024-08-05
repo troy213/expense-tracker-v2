@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import { Categories, Dashboard, NotFound, Reports, Settings } from '@/pages'
+import { Categories, Dashboard, Language, NotFound, Reports, Settings, Theme } from '@/pages'
 
 const App = () => {
   return (
@@ -8,6 +8,8 @@ const App = () => {
       <Route path='/categories' element={<Categories />} />
       <Route path='/reports' element={<Reports />} />
       <Route path='/settings' element={<Settings />} />
+      <Route path='/theme' element={<Theme />} />
+      <Route path='/language' element={<Language />} />
 
       {/* 404 not found */}
       <Route path='*' element={<NotFound />} />
