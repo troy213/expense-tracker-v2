@@ -4,6 +4,8 @@
   color: $color-primary;
   gap: 4rem;
   box-shadow: 0 -0.25rem 0.75rem rgba($color: black, $alpha: 0.25);
+  position: sticky;
+  bottom: 0;
 
   &__add-button {
     background-color: $color-primary-2;

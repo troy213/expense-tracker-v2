@@ -1,10 +1,9 @@
 import { MoreVerticalSvg } from '@/assets'
-import { Widget } from '@/components'
 
 const TransactionDetail = () => {
   return (
-    <Widget>
-      <div className='transaction-detail flex-column gap-4'>
+    <div className='transaction-detail'>
+      <div className='flex-column gap-4'>
         <span className='text--italic text--light text--3'>Today</span>
 
         {/* transaction detail will be looped here */}
@@ -15,11 +14,13 @@ const TransactionDetail = () => {
           </div>
           <div className='flex-align-center gap-2'>
             <span className='text--color-danger'>-Rp100.000</span>
-            <MoreVerticalSvg className='icon--stroke-primary' />
+            <button className='btn btn-clear'>
+              <MoreVerticalSvg className='icon--stroke-primary' />
+            </button>
           </div>
         </div>
       </div>
-    </Widget>
+    </div>
   )
 }
 

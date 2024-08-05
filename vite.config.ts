@@ -6,11 +6,12 @@ import svgr from 'vite-plugin-svgr'
 
 // @ts-expect-error vite-plugin-eslint has some types issue for typescript 5
 import eslint from 'vite-plugin-eslint'
+import checker from 'vite-plugin-checker'
 import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), svgr(), eslint()],
+  plugins: [react(), svgr(), eslint(), checker({ typescript: true })],
   test: {
     globals: true,
     environment: 'jsdom',
