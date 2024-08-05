@@ -4,7 +4,7 @@ import CategoryTabView from './CategoryTabView'
 const Categories = () => {
   return (
     <div className='categories'>
-      <div className='p-4 flex-column flex-1 gap-4'>
+      <div className='flex-column flex-1 gap-4 p-4'>
         <Navbar enableBackButton={true}>
           <span>Category & Budget</span>
         </Navbar>

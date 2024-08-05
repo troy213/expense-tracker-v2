@@ -268,7 +268,6 @@
 }
 
 // COMPONENT
-
 .btn {
   display: flex;
   justify-content: center;
@@ -283,6 +282,7 @@
 .btn-clear {
   padding: 0;
   background-color: unset;
+  font-size: 1rem;
 }
 
 .btn-primary {
