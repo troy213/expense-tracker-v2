@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 const DashboardInfo = () => {
   return (
-    <div className='flex-column gap-4'>
+    <div className='dashboard-info'>
       <div className='flex-column flex-align-center'>
         <span className='text--light text--3'>Total Balance</span>
         <span className='text--bold text--8'>Rp1.234.567</span>

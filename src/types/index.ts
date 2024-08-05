@@ -18,3 +18,8 @@ export type Data = {
     amount: number
   }
 }
+
+export type ConditionArray = {
+  condition: boolean
+  className: string
+}

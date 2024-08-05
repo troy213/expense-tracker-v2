@@ -1,0 +1,63 @@
+@import './CategoryWidget';
+
+.category-tab-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  &__tab {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    border-radius: 0.5rem 0.5rem 0 0;
+
+    & > button {
+      color: $color-primary;
+      padding: 0.5rem;
+      flex: 1;
+    }
+
+    &.selected {
+      background-color: $color-primary-2;
+
+      & > button {
+        color: $color-white;
+      }
+    }
+  }
+
+  &__budget-widget {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.25rem 12px rgba($color: black, $alpha: 0.25);
+    background: linear-gradient($color-primary-2, $color-primary);
+    color: $color-white;
+  }
+
+  &__add-button {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 2px dashed $color-primary;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 1rem;
+    padding: 1rem;
+    box-shadow: 0 0.25rem 12px rgba($color: black, $alpha: 0.25);
+
+    &.active {
+      &--left {
+        border-radius: 0 1rem 1rem 1rem;
+      }
+
+      &--right {
+        border-radius: 1rem 0 1rem 1rem;
+      }
+    }
+  }
+}

@@ -1,10 +1,12 @@
 @import './TransactionDetail';
 
 .transactions {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 1rem;
   background-color: $color-white;
   color: $color-primary;
-  flex: 1;
   border-radius: 1rem 1rem 0 0;
   padding: 1.5rem 1rem 1rem;
-  // overflow-y: scroll;
 }
