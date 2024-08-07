@@ -1,17 +1,17 @@
-import { Navbar, Toolbar } from "@/components";
-import { ChangeEvent, useState } from "react";
+import { Navbar } from "@/components"
+import useAppDispatch from "@/hooks/useAppDispatch"
+import useAppSelector from "@/hooks/useAppSelector"
+import { themeAction } from "@/store/theme/theme-slice"
 
-const Theme = () => {
-  const appVersion = import.meta.env.APP_VERSION;
-  
-  const [selectedTheme, setSelectedTheme] = useState("light");
 
-  const OnThemeChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSelectedTheme(event.target.value);
+const Theme: React.FC = () => {
+  const theme = useAppSelector((state) => state.themeReducer.theme);
+  const dispatch = useAppDispatch()
+  const OnThemeChange = () => {
+    dispatch(themeAction.toggleTheme())
   };
 
   return (
-    <div className="settings">
       <div className="flex-column gap-8 p-4">
         <Navbar title="Theme" enableBackButton={true} />
 
@@ -24,7 +24,7 @@ const Theme = () => {
                   id="light"
                   name="theme"
                   value="light"
-                  checked={selectedTheme === "light"}
+                  checked={theme === "light"}
                   onChange={OnThemeChange}
                 />
                 <label htmlFor="light">Light Theme</label>
@@ -39,7 +39,7 @@ const Theme = () => {
                   id="dark"
                   name="theme"
                   value="dark"
-                  checked={selectedTheme === "dark"}
+                  checked={theme === "dark"}
                   onChange={OnThemeChange}
                 />
                 <label htmlFor="dark">Dark Theme</label>
@@ -48,14 +48,7 @@ const Theme = () => {
           </li>
         </ul>
       </div>
-      <div>
-        <div className="flex-justify-center">
-          <span className="text--light text--3 py-4">v{appVersion}</span>
-        </div>
-        <Toolbar />
-      </div>
-    </div>
   );
 };
 
-export default Theme;
+export default Theme

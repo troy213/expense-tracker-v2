@@ -10,4 +10,12 @@
   background-color: $color-white;
   color: $color-primary;
   position: relative;
+  
+  &.dark, &.dark .toolbar{
+     background: $color-dark;
+    color: $color-white;
+    svg path{
+      stroke: $color-white;
+    }
+  }
 }

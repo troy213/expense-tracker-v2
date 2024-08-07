@@ -1,11 +1,8 @@
-import { FlagIDSVg, FlagUKSvg } from "@/assets";
-import { Navbar, Toolbar } from "@/components";
+import { FlagIDSVg, FlagUKSvg } from "@/assets"
+import { Navbar } from "@/components"
 
 const Language = () => {
-  const appVersion = import.meta.env.APP_VERSION;
-
   return (
-    <div className="settings">
       <div className="flex-column gap-8 p-4">
         <Navbar title="Theme" enableBackButton={true} />
 
@@ -29,14 +26,7 @@ const Language = () => {
           </li>
         </ul>
       </div>
-      <div>
-        <div className="flex-justify-center">
-          <span className="text--light text--3 py-4">v{appVersion}</span>
-        </div>
-        <Toolbar />
-      </div>
-    </div>
   );
 };
 
-export default Language;
+export default Language

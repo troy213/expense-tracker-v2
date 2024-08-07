@@ -16,4 +16,14 @@
     gap: 1rem;
     padding: 1rem 1rem 1.5rem;
   }
+  
+  &.dark :is(.transactions, .transaction-detail, .widget, .toolbar){
+    background: $color-dark;
+    color: $color-white;
+    svg{
+      path{
+        stroke: $color-white;
+      }
+    }
+  }
 }
