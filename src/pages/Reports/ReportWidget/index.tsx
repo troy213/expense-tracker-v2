@@ -6,7 +6,7 @@ type ReportWidgetProps = {
 
 const ReportWidget: React.FC<ReportWidgetProps> = ({ type }) => {
   return (
-    <div className='report-widget'>
+    <div className="report-widget">
       <span>Top {type}</span>
 
       {/* All Category Report data will be looped here */}

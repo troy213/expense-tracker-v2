@@ -24,13 +24,13 @@ const Navbar: React.FC<NavbarProps> = ({
   }
 
   return (
-    <div className='navbar'>
+    <div className="navbar">
       {enableBackButton && (
-        <button className='btn btn-clear' type='button' onClick={handleBack}>
+        <button className="btn btn-clear" type="button" onClick={handleBack}>
           <ArrowLeftSvg className={backBtnClass} />
         </button>
       )}
-      <div className='flex-align-center flex-space-between flex-1'>
+      <div className="flex-align-center flex-space-between flex-1">
         <span className={titleClass}>{title}</span>
         {children}
       </div>

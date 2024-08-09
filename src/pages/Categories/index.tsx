@@ -2,14 +2,14 @@ import { Navbar, Toolbar } from '@/components'
 import CategoryTabView from './CategoryTabView'
 
 interface ThemeProps {
-  theme: string;
+  theme: string
 }
 
-const Categories:React.FC<ThemeProps> = ({theme}) => {
+const Categories: React.FC<ThemeProps> = ({ theme }) => {
   return (
     <div className={`categories ${theme === 'dark' ? 'dark' : ''}`}>
-      <div className='flex-column flex-1 gap-4 p-4'>
-        <Navbar enableBackButton={true} title='Category & Budget' />
+      <div className="flex-column flex-1 gap-4 p-4">
+        <Navbar enableBackButton={true} title="Category & Budget" />
 
         <CategoryTabView />
       </div>

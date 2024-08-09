@@ -20,17 +20,20 @@
   //     }
   //   }
   // }
-  &.dark, &.dark :is(.flex-column ul > li:not(.mt-6) .flex-align-center span, .toolbar, label)   {
+  &.dark,
+  &.dark
+    :is(
+      .flex-column ul > li:not(.mt-6) .flex-align-center span,
+      .toolbar,
+      label
+    ) {
     background: $color-dark;
     color: $color-white;
-    svg path{
+    svg path {
       stroke: $color-white;
     }
-    svg.icon--stroke-danger path{
+    svg.icon--stroke-danger path {
       stroke: $color-danger;
     }
-    
   }
-  
-
 }

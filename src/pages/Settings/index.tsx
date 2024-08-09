@@ -6,20 +6,22 @@ import {
   PaletteSvg,
   TrashSvg,
 } from '@/assets'
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation } from 'react-router-dom'
 import { Navbar, Toolbar } from '@/components'
 
 interface ThemeProps {
-  theme: string;
+  theme: string
 }
 
-const Settings:React.FC<ThemeProps> = ({theme}) => {
+const Settings: React.FC<ThemeProps> = ({ theme }) => {
   const location = useLocation()
-  const isThemeOrLang = location.pathname.includes('/settings/theme') || location.pathname.includes('/settings/language')
+  const isThemeOrLang =
+    location.pathname.includes('/settings/theme') ||
+    location.pathname.includes('/settings/language')
   const appVersion = import.meta.env.APP_VERSION
 
   return (
-    <div className={`settings ${theme === 'dark' ? 'dark':''}`}>
+    <div className={`settings ${theme === 'dark' ? 'dark' : ''}`}>
       <Outlet />
       {!isThemeOrLang && (
         <>
@@ -90,7 +92,7 @@ const Settings:React.FC<ThemeProps> = ({theme}) => {
         <Toolbar />
       </div>
     </div>
-  );
+  )
 }
 
 export default Settings

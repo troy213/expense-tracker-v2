@@ -2,7 +2,7 @@ import TransactionDetail from './TransactionDetail'
 
 const Transactions = () => {
   return (
-    <div className='transactions'>
+    <div className="transactions">
       <TransactionDetail />
       <TransactionDetail />
       <TransactionDetail />

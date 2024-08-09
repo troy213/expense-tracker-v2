@@ -3,7 +3,7 @@ type WidgetProps = {
 }
 
 const Widget: React.FC<WidgetProps> = ({ children }) => {
-  return <div className='widget'>{children}</div>
+  return <div className="widget">{children}</div>
 }
 
 export default Widget

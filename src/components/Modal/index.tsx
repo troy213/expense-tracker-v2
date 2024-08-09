@@ -25,8 +25,8 @@ const Modal: React.FC<ModalProps> = ({ open, children, onClose }) => {
   }
 
   return ReactDOM.createPortal(
-    <div className='modal' id='modal' onClick={handleClickOutside}>
-      <div className='modal__container'>{children}</div>
+    <div className="modal" id="modal" onClick={handleClickOutside}>
+      <div className="modal__container">{children}</div>
     </div>,
     portalElement
   )
