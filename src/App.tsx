@@ -12,6 +12,7 @@ import useAppSelector from './hooks/useAppSelector'
 
 const App = () => {
   const theme = useAppSelector((state) => state.themeReducer.theme)
+
   return (
     <Routes>
       <Route path="/" element={<Dashboard theme={theme} />} />

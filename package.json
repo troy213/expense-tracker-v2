@@ -1,14 +1,14 @@
 {
   "name": "expense-tracker-v2",
   "private": true,
-  "version": "0.0.0-alpha.5",
+  "version": "0.0.0-alpha.6",
   "type": "module",
   "scripts": {
     "dev": "vite --open --port 3000",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test": "vitest",
+    "test": "vitest --run",
     "prepare": "husky"
   },
   "dependencies": {
@@ -47,14 +47,16 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "applypatch-msg": "echo \"[Husky] applypatch-msg\"",
+      "pre-applypatch": "echo \"[Husky] pre-applypatch\"",
+      "post-applypatch": "echo \"[Husky] post-applypatch\"",
+      "pre-commit": "echo \"[Husky] pre-commit\""
     }
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,json,css,md,html}": [
       "prettier --write",
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ]
   }
 }
