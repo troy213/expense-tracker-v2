@@ -1,3 +1,11 @@
+:root {
+  --default-svg-primary-stroke-color: #133e5d;
+}
+
+body.dark {
+  --default-svg-primary-stroke-color: #f2f0ed;
+}
+
 // TEXT STYLE
 .text--bold {
   font-weight: 700;
@@ -89,7 +97,7 @@
 }
 
 .icon--stroke-primary > * {
-  stroke: $color-primary;
+  stroke: var(--default-svg-primary-stroke-color);
 }
 
 .icon--stroke-white > * {
@@ -105,7 +113,7 @@
 }
 
 .icon--fill-primary > * {
-  fill: $color-primary;
+  fill: var(--default-svg-primary-stroke-color);
 }
 
 .icon--fill-white > * {

@@ -1,9 +1,9 @@
-import { FlagIDSVg, FlagUKSvg } from '@/assets'
+import { CheckSvg, FlagIDSVg, FlagUKSvg } from '@/assets'
 import { Navbar } from '@/components'
 
-const Language = () => {
+const Languages = () => {
   return (
-    <div className="flex-column gap-8 p-4">
+    <div className="languages">
       <Navbar title="Theme" enableBackButton={true} />
 
       <ul className="flex-column gap-8 py-4">
@@ -14,7 +14,7 @@ const Language = () => {
               <span>English</span>
             </div>
           </button>
-          <span className="check-mark">✔</span>
+          <CheckSvg className="icon--stroke-primary" />
         </li>
         <li>
           <button type="button" className="btn btn-clear">
@@ -29,4 +29,4 @@ const Language = () => {
   )
 }
 
-export default Language
+export default Languages

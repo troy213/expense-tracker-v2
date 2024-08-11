@@ -1,26 +1,29 @@
 import { Routes, Route } from 'react-router-dom'
-import {
-  Categories,
-  Dashboard,
-  Language,
-  NotFound,
-  Reports,
-  Settings,
-  Theme,
-} from '@/pages'
-import useAppSelector from './hooks/useAppSelector'
+import { Categories, Dashboard, NotFound, Reports, Settings } from '@/pages'
+import { Languages, SettingMenus, Theme } from '@/pages/Settings'
+import useAppSelector from '@/hooks/useAppSelector'
+import { useEffect } from 'react'
 
 const App = () => {
-  const theme = useAppSelector((state) => state.themeReducer.theme)
+  const theme = useAppSelector((state) => state.mainReducer.theme)
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.body.classList.add('dark')
+    } else {
+      document.body.classList.remove('dark')
+    }
+  }, [theme])
 
   return (
     <Routes>
-      <Route path="/" element={<Dashboard theme={theme} />} />
-      <Route path="/categories" element={<Categories theme={theme} />} />
-      <Route path="/reports" element={<Reports theme={theme} />} />
-      <Route path="/settings" element={<Settings theme={theme} />}>
+      <Route path="/" element={<Dashboard />} />
+      <Route path="/categories" element={<Categories />} />
+      <Route path="/reports" element={<Reports />} />
+      <Route path="/settings" element={<Settings />}>
+        <Route index element={<SettingMenus />} />
         <Route path="theme" element={<Theme />} />
-        <Route path="language" element={<Language />} />
+        <Route path="language" element={<Languages />} />
       </Route>
 
       {/* 404 not found */}

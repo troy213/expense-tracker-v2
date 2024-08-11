@@ -12,7 +12,7 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({ type }) => {
           <span>Food & Beverages</span>
           {type === 'outcome' && (
             <div className="flex-align-center gap-2">
-              <CoinsSvg className="icon--stroke-primary" />
+              <CoinsSvg className="icon--fill-primary" />
               <span className="text--light text--3">Rp1.234.567</span>
             </div>
           )}

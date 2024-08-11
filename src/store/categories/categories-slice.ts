@@ -16,11 +16,13 @@ const categoriesSlice = createSlice({
     setCategories(state, action: PayloadAction<Category[]>) {
       state.categories = action.payload
     },
-    setState(
+    setState<K extends keyof InitialState>(
       state: InitialState,
-      action: PayloadAction<SetStatePayload<InitialState>>
+      action: PayloadAction<SetStatePayload<InitialState, K>>
     ) {
-      state[action.payload.state] = action.payload.value
+      const { state: key, value } = action.payload
+
+      state[key] = value
     },
     resetState() {
       return initialState

@@ -1,0 +1,28 @@
+body.dark {
+  .text--color-primary {
+    color: $color-white;
+  }
+
+  .modal,
+  .toolbar,
+  .widget,
+  .categories,
+  .dashboard,
+  .transactions,
+  .transaction-detail,
+  .reports,
+  .settings {
+    background-color: $color-dark;
+    color: $color-white;
+
+    & button {
+      color: $color-white;
+    }
+  }
+
+  .category-tab-view {
+    &__add-button {
+      border-color: $color-white;
+    }
+  }
+}

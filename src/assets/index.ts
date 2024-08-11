@@ -2,6 +2,7 @@ import ArrowDownSvg from './icons/arrow-down.svg?react'
 import ArrowLeftSvg from './icons/arrow-left.svg?react'
 import ArrowUpSvg from './icons/arrow-up.svg?react'
 import CalendarSvg from './icons/calendar.svg?react'
+import CheckSvg from './icons/check.svg?react'
 import ChevronDownSvg from './icons/chevron-down.svg?react'
 import CoinsSvg from './icons/coins.svg?react'
 import ExportSvg from './icons/export.svg?react'
@@ -23,6 +24,7 @@ export {
   ArrowLeftSvg,
   ArrowUpSvg,
   CalendarSvg,
+  CheckSvg,
   ChevronDownSvg,
   CoinsSvg,
   ExportSvg,

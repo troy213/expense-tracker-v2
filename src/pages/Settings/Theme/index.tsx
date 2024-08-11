@@ -1,17 +1,18 @@
 import { Navbar } from '@/components'
 import useAppDispatch from '@/hooks/useAppDispatch'
 import useAppSelector from '@/hooks/useAppSelector'
-import { themeAction } from '@/store/theme/theme-slice'
+import { mainAction } from '@/store/main/main-slice'
 
 const Theme: React.FC = () => {
-  const theme = useAppSelector((state) => state.themeReducer.theme)
+  const theme = useAppSelector((state) => state.mainReducer.theme)
   const dispatch = useAppDispatch()
-  const OnThemeChange = () => {
-    dispatch(themeAction.toggleTheme())
+
+  const toogleTheme = (theme: 'light' | 'dark') => {
+    dispatch(mainAction.setState({ state: 'theme', value: theme }))
   }
 
   return (
-    <div className="flex-column gap-8 p-4">
+    <div className="theme">
       <Navbar title="Theme" enableBackButton={true} />
 
       <ul className="flex-column gap-8 py-4">
@@ -24,7 +25,7 @@ const Theme: React.FC = () => {
                 name="theme"
                 value="light"
                 checked={theme === 'light'}
-                onChange={OnThemeChange}
+                onChange={() => toogleTheme('light')}
               />
               <label htmlFor="light">Light Theme</label>
             </div>
@@ -39,7 +40,7 @@ const Theme: React.FC = () => {
                 name="theme"
                 value="dark"
                 checked={theme === 'dark'}
-                onChange={OnThemeChange}
+                onChange={() => toogleTheme('dark')}
               />
               <label htmlFor="dark">Dark Theme</label>
             </div>

@@ -1,3 +1,7 @@
+@import 'Languages';
+@import 'SettingMenus';
+@import 'Theme';
+
 .settings {
   display: flex;
   flex-direction: column;
@@ -10,30 +14,5 @@
 
   & button {
     color: $color-primary;
-  }
-  //  ul > *:not(.mt-6){
-  //   background: $color-dark;
-  //   color: $color-white;
-  //   svg{
-  //     path{
-  //       stroke: $color-white;
-  //     }
-  //   }
-  // }
-  &.dark,
-  &.dark
-    :is(
-      .flex-column ul > li:not(.mt-6) .flex-align-center span,
-      .toolbar,
-      label
-    ) {
-    background: $color-dark;
-    color: $color-white;
-    svg path {
-      stroke: $color-white;
-    }
-    svg.icon--stroke-danger path {
-      stroke: $color-danger;
-    }
   }
 }
