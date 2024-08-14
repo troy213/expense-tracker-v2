@@ -1,8 +1,8 @@
 import { Routes, Route } from 'react-router-dom'
+import { useEffect } from 'react'
 import { Categories, Dashboard, NotFound, Reports, Settings } from '@/pages'
 import { Languages, SettingMenus, Theme } from '@/pages/Settings'
 import useAppSelector from '@/hooks/useAppSelector'
-import { useEffect } from 'react'
 
 const App = () => {
   const theme = useAppSelector((state) => state.mainReducer.theme)

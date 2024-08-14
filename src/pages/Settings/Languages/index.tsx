@@ -4,7 +4,7 @@ import { Navbar } from '@/components'
 const Languages = () => {
   return (
     <div className="languages">
-      <Navbar title="Theme" enableBackButton={true} />
+      <Navbar title="Language" enableBackButton={true} />
 
       <ul className="flex-column gap-8 py-4">
         <li className="flex-space-between">
