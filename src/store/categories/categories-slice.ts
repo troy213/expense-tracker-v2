@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Category, SetStatePayload } from '@/types'
+import { setStateReducerValue } from '@/utils'
 
 type InitialState = {
   categories: Category[]
@@ -16,13 +17,13 @@ const categoriesSlice = createSlice({
     setCategories(state, action: PayloadAction<Category[]>) {
       state.categories = action.payload
     },
-    setState<K extends keyof InitialState>(
+    setState(
       state: InitialState,
-      action: PayloadAction<SetStatePayload<InitialState, K>>
+      action: PayloadAction<SetStatePayload<InitialState>>
     ) {
       const { state: key, value } = action.payload
 
-      state[key] = value
+      setStateReducerValue(state, key, value)
     },
     resetState() {
       return initialState

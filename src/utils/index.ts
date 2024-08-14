@@ -14,3 +14,11 @@ export const combineClassName = (
 
   return result.trim()
 }
+
+export const setStateReducerValue = <T, K extends keyof T>(
+  state: T,
+  key: K,
+  value: T[K]
+) => {
+  state[key] = value
+}

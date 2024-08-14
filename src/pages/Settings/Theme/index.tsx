@@ -3,12 +3,12 @@ import useAppDispatch from '@/hooks/useAppDispatch'
 import useAppSelector from '@/hooks/useAppSelector'
 import { mainAction } from '@/store/main/main-slice'
 
-const Theme: React.FC = () => {
+const Theme = () => {
   const theme = useAppSelector((state) => state.mainReducer.theme)
   const dispatch = useAppDispatch()
 
-  const toogleTheme = (theme: 'light' | 'dark') => {
-    dispatch(mainAction.setState({ state: 'theme', value: theme }))
+  const toogleTheme = (selectedTheme: 'light' | 'dark') => {
+    dispatch(mainAction.setState({ state: 'theme', value: selectedTheme }))
   }
 
   return (

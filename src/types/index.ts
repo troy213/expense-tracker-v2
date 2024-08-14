@@ -1,7 +1,9 @@
-export type SetStatePayload<T, K extends keyof T> = {
-  state: K
-  value: T[K]
-}
+export type SetStatePayload<T> = {
+  [K in keyof T]: {
+    state: K
+    value: T[K]
+  }
+}[keyof T]
 
 export type Category = {
   id: string
