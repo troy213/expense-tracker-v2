@@ -7,7 +7,7 @@ const Theme = () => {
   const theme = useAppSelector((state) => state.mainReducer.theme)
   const dispatch = useAppDispatch()
 
-  const toogleTheme = (selectedTheme: 'light' | 'dark') => {
+  const toggleTheme = (selectedTheme: 'light' | 'dark') => {
     dispatch(mainAction.setState({ state: 'theme', value: selectedTheme }))
   }
 
@@ -25,7 +25,7 @@ const Theme = () => {
                 name="theme"
                 value="light"
                 checked={theme === 'light'}
-                onChange={() => toogleTheme('light')}
+                onChange={() => toggleTheme('light')}
               />
               <label htmlFor="light">Light Theme</label>
             </div>
@@ -40,7 +40,7 @@ const Theme = () => {
                 name="theme"
                 value="dark"
                 checked={theme === 'dark'}
-                onChange={() => toogleTheme('dark')}
+                onChange={() => toggleTheme('dark')}
               />
               <label htmlFor="dark">Dark Theme</label>
             </div>
