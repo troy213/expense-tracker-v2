@@ -1,4 +1,5 @@
 import { ArrowLeftSvg } from '@/assets'
+import { useIntl } from 'react-intl'
 import { useNavigate } from 'react-router-dom'
 
 type NavbarProps = {
@@ -22,6 +23,7 @@ const Navbar: React.FC<NavbarProps> = ({
   const handleBack = (): void => {
     navigate(-1)
   }
+  const { formatMessage } = useIntl()
 
   return (
     <div className="navbar">
@@ -31,7 +33,7 @@ const Navbar: React.FC<NavbarProps> = ({
         </button>
       )}
       <div className="flex-align-center flex-space-between flex-1">
-        <span className={titleClass}>{title}</span>
+        <span className={titleClass}>{formatMessage({ id: title })}</span>
         {children}
       </div>
     </div>

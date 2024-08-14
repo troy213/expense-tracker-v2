@@ -4,11 +4,13 @@ import { setStateReducerValue } from '@/utils'
 
 type InitialState = {
   theme: 'light' | 'dark'
+  lang: string
   data: Data[]
 }
 
 const initialState: InitialState = {
   theme: 'light',
+  lang: 'en-US',
   data: [],
 }
 

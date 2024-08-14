@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom'
 import { Navbar } from '@/components'
 import { SETTING_MENUS } from '@/constants/config'
+import { useIntl } from 'react-intl'
 
 const SettingMenus = () => {
+  const { formatMessage } = useIntl()
   return (
     <div className="setting-menus">
       <Navbar title="Settings" enableBackButton={true} />
@@ -29,7 +31,9 @@ const SettingMenus = () => {
                 >
                   <div className="flex-align-center gap-2">
                     <Icon className={iconClassName} />
-                    <span className={titleClassName}>{title}</span>
+                    <span className={titleClassName}>
+                      {formatMessage({ id: title })}
+                    </span>
                   </div>
                 </button>
               </Link>

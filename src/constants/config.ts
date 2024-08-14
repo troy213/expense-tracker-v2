@@ -19,13 +19,13 @@ type SettingMenu = {
 
 export const SETTING_MENUS: SettingMenu[] = [
   {
-    title: 'Category & Budget',
+    title: 'CategoryAndBudget',
     Icon: CoinsSvg,
     iconClassName: 'icon--fill-primary',
     link: '/categories',
   },
   {
-    title: 'Import Data (.xls)',
+    title: 'ImportData',
     Icon: ImportSvg,
     iconClassName: 'icon--stroke-primary',
     callback: () => {
@@ -33,7 +33,7 @@ export const SETTING_MENUS: SettingMenu[] = [
     },
   },
   {
-    title: 'Export Data (.xls)',
+    title: 'ExportData',
     Icon: ExportSvg,
     iconClassName: 'icon--stroke-primary',
     callback: () => {
@@ -53,7 +53,7 @@ export const SETTING_MENUS: SettingMenu[] = [
     link: 'language',
   },
   {
-    title: 'Delete Data',
+    title: 'DeleteData',
     titleClassName: 'text--color-danger',
     Icon: TrashSvg,
     iconClassName: 'icon--stroke-danger',

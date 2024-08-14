@@ -2,6 +2,7 @@ import { Navbar } from '@/components'
 import useAppDispatch from '@/hooks/useAppDispatch'
 import useAppSelector from '@/hooks/useAppSelector'
 import { mainAction } from '@/store/main/main-slice'
+import { useIntl } from 'react-intl'
 
 const Theme = () => {
   const theme = useAppSelector((state) => state.mainReducer.theme)
@@ -10,6 +11,7 @@ const Theme = () => {
   const toggleTheme = (selectedTheme: 'light' | 'dark') => {
     dispatch(mainAction.setState({ state: 'theme', value: selectedTheme }))
   }
+  const { formatMessage } = useIntl()
 
   return (
     <div className="theme">
@@ -27,7 +29,9 @@ const Theme = () => {
                 checked={theme === 'light'}
                 onChange={() => toggleTheme('light')}
               />
-              <label htmlFor="light">Light Theme</label>
+              <label htmlFor="light">
+                {formatMessage({ id: 'LightTheme' })}
+              </label>
             </div>
           </button>
         </li>
@@ -42,7 +46,7 @@ const Theme = () => {
                 checked={theme === 'dark'}
                 onChange={() => toggleTheme('dark')}
               />
-              <label htmlFor="dark">Dark Theme</label>
+              <label htmlFor="dark">{formatMessage({ id: 'DarkTheme' })}</label>
             </div>
           </button>
         </li>
