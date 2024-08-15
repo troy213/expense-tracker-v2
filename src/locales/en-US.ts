@@ -8,6 +8,8 @@ const messages = {
   ExportData: 'Export Data (.xls)',
   Language: 'Language',
   DeleteData: 'Delete Data',
+  Dashboard: 'Dashboard',
+  Reports: 'Reports',
 }
 
 export default {

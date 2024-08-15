@@ -5,7 +5,7 @@ const Categories = () => {
   return (
     <div className="categories">
       <div className="flex-column flex-1 gap-4 p-4">
-        <Navbar enableBackButton={true} title="Category & Budget" />
+        <Navbar enableBackButton={true} title="CategoryAndBudget" />
 
         <CategoryTabView />
       </div>
