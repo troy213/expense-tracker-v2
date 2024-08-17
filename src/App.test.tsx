@@ -1,15 +1,15 @@
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
+import { IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
 import { MemoryRouter } from 'react-router-dom'
+
 import App from './App'
 import store from './store'
-import english from './locales/en-US'
-import indo from './locales/id-Id'
-import { IntlProvider } from 'react-intl'
+import { english, indonesia } from './locales'
 
 const locales = {
-  'id-ID': indo,
+  'id-ID': indonesia,
   'en-US': english,
 }
 const language = 'en-US'

@@ -1,48 +1,54 @@
-import { CheckSvg, FlagIDSVg, FlagUKSvg } from '@/assets'
-import { Navbar } from '@/components'
-import useAppDispatch from '@/hooks/useAppDispatch'
-import useAppSelector from '@/hooks/useAppSelector'
-import { mainAction } from '@/store/main/main-slice'
 import { useIntl } from 'react-intl'
+import { CheckSvg } from '@/assets'
+import { Navbar } from '@/components'
+import { LANGUAGES_MENU } from '@/constants/config'
+import { useAppDispatch, useAppSelector } from '@/hooks'
+import { mainAction } from '@/store/main/main-slice'
+import { Lang } from '@/types'
+import { combineClassName } from '@/utils'
 
 const Languages = () => {
-  const { formatMessage } = useIntl()
   const lang = useAppSelector((state) => state.mainReducer.lang)
   const dispatch = useAppDispatch()
-  const switchLanguage = (selectedLang: string) => {
+  const { formatMessage } = useIntl()
+
+  const switchLanguage = (selectedLang: Lang) => {
     dispatch(mainAction.setState({ state: 'lang', value: selectedLang }))
   }
+
   return (
     <div className="languages">
       <Navbar title="Language" enableBackButton={true} />
 
       <ul className="flex-column gap-8 py-4">
-        <li className="flex-space-between">
-          <button
-            type="button"
-            className="btn btn-clear"
-            onClick={() => switchLanguage('en-US')}
-          >
-            <div className="flex-align-center gap-2">
-              <FlagUKSvg />
-              <span>{formatMessage({ id: 'English' })}</span>
-            </div>
-          </button>
-          {lang === 'en-US' && <CheckSvg className="icon--stroke-primary" />}
-        </li>
-        <li className="flex-space-between">
-          <button
-            type="button"
-            className="btn btn-clear"
-            onClick={() => switchLanguage('id-ID')}
-          >
-            <div className="flex-align-center gap-2">
-              <FlagIDSVg />
-              <span>{formatMessage({ id: 'Indonesia' })}</span>
-            </div>
-          </button>
-          {lang === 'id-ID' && <CheckSvg className="icon--stroke-primary" />}
-        </li>
+        {LANGUAGES_MENU.map((item, index) => {
+          const { Icon, title, langId } = item
+          const isSelected = langId === lang
+          const titleClassName = combineClassName('', [
+            {
+              condition: isSelected,
+              className: 'text--bold',
+            },
+          ])
+
+          return (
+            <li className="flex-space-between" key={index}>
+              <button
+                type="button"
+                className="btn btn-clear"
+                onClick={() => switchLanguage(langId)}
+              >
+                <div className="flex-align-center gap-2">
+                  <Icon />
+                  <span className={titleClassName}>
+                    {formatMessage({ id: title })}
+                  </span>
+                </div>
+              </button>
+              {isSelected && <CheckSvg className="icon--stroke-primary" />}
+            </li>
+          )
+        })}
       </ul>
     </div>
   )

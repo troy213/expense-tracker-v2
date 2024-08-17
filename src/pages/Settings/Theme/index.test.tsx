@@ -1,17 +1,16 @@
 import { describe, expect, it } from 'vitest'
 import { fireEvent, render, screen } from '@testing-library/react'
-
-import { Provider } from 'react-redux'
-import { configureStore } from '@reduxjs/toolkit'
-import { MemoryRouter } from 'react-router-dom'
-import mainSlice, { mainAction } from '@/store/main/main-slice'
-import Theme from '.'
 import { IntlProvider } from 'react-intl'
-import english from '../../../locales/en-US'
-import indo from '../../../locales/id-Id'
+import { Provider } from 'react-redux'
+import { MemoryRouter } from 'react-router-dom'
+import { configureStore } from '@reduxjs/toolkit'
+
+import mainSlice, { mainAction } from '@/store/main/main-slice'
+import { english, indonesia } from '@/locales'
+import Theme from '.'
 
 const locales = {
-  'id-ID': indo,
+  'id-ID': indonesia,
   'en-US': english,
 }
 const language = 'en-US'
