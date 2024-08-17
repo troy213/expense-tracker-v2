@@ -1,14 +1,14 @@
-import { Navbar } from '@/components'
-import useAppDispatch from '@/hooks/useAppDispatch'
-import useAppSelector from '@/hooks/useAppSelector'
-import { mainAction } from '@/store/main/main-slice'
 import { useIntl } from 'react-intl'
+import { Navbar } from '@/components'
+import { useAppDispatch, useAppSelector } from '@/hooks'
+import { mainAction } from '@/store/main/main-slice'
+import { Theme as ThemeType } from '@/types'
 
 const Theme = () => {
   const theme = useAppSelector((state) => state.mainReducer.theme)
   const dispatch = useAppDispatch()
 
-  const toggleTheme = (selectedTheme: 'light' | 'dark') => {
+  const toggleTheme = (selectedTheme: ThemeType) => {
     dispatch(mainAction.setState({ state: 'theme', value: selectedTheme }))
   }
   const { formatMessage } = useIntl()

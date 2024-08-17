@@ -1,20 +1,29 @@
 import {
   CoinsSvg,
   ExportSvg,
+  FlagIDSVg,
+  FlagUKSvg,
   GlobeSvg,
   ImportSvg,
   PaletteSvg,
   TrashSvg,
 } from '@/assets'
+import { Lang } from '@/types'
 
 type SettingMenu = {
-  title: string
-  titleClassName?: string
-  className?: string
   Icon: React.ElementType
+  title: string
+  className?: string
   iconClassName?: string
+  titleClassName?: string
   link?: string
   callback?: () => void
+}
+
+type LanguageMenu = {
+  Icon: React.ElementType
+  title: string
+  langId: Lang
 }
 
 export const SETTING_MENUS: SettingMenu[] = [
@@ -61,5 +70,18 @@ export const SETTING_MENUS: SettingMenu[] = [
     callback: () => {
       console.log('DELETE DATA')
     },
+  },
+]
+
+export const LANGUAGES_MENU: LanguageMenu[] = [
+  {
+    Icon: FlagUKSvg,
+    title: 'English',
+    langId: 'en-US',
+  },
+  {
+    Icon: FlagIDSVg,
+    title: 'Indonesia',
+    langId: 'id-ID',
   },
 ]

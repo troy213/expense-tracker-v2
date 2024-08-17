@@ -7,7 +7,7 @@ import { configureStore } from '@reduxjs/toolkit'
 
 import mainSlice, { mainAction } from '@/store/main/main-slice'
 import { english, indonesia } from '@/locales'
-import Theme from '.'
+import Languages from '.'
 
 const locales = {
   'id-ID': indonesia,
@@ -16,7 +16,7 @@ const locales = {
 const language = 'en-US'
 
 describe('Theme', () => {
-  it('Renders Theme', () => {
+  it('Renders Language', () => {
     const mockStore = configureStore({
       reducer: {
         mainReducer: mainSlice.reducer,
@@ -26,20 +26,20 @@ describe('Theme', () => {
       <Provider store={mockStore}>
         <MemoryRouter>
           <IntlProvider locale={language} messages={locales[language].messages}>
-            <Theme />
+            <Languages />
           </IntlProvider>
         </MemoryRouter>
       </Provider>
     )
-    const navbar = screen.getByText('Theme')
+    const navbar = screen.getByText('Language')
+    const eng = screen.getByText('English')
+    const ind = screen.getByText('Indonesia')
     expect(navbar).toBeInTheDocument()
-    const lightRadio = screen.getByLabelText(/light theme/i)
-    expect(lightRadio).toBeChecked()
-    const darkRadio = screen.getByLabelText(/dark theme/i)
-    expect(darkRadio).not.toBeChecked()
+    expect(eng).toBeInTheDocument()
+    expect(ind).toBeInTheDocument()
   })
 
-  it('Switches to dark theme', () => {
+  it('Switches to Indonesian Language when clicked', () => {
     const mockStore = configureStore({
       reducer: {
         mainReducer: mainSlice.reducer,
@@ -51,19 +51,16 @@ describe('Theme', () => {
       <Provider store={mockStore}>
         <MemoryRouter>
           <IntlProvider locale={language} messages={locales[language].messages}>
-            <Theme />
+            <Languages />
           </IntlProvider>
         </MemoryRouter>
       </Provider>
     )
 
-    const lightRadio = screen.getByLabelText(/light theme/i)
-    const darkRadio = screen.getByLabelText(/dark theme/i)
-    fireEvent.click(darkRadio)
-    expect(darkRadio).toBeChecked()
-    expect(lightRadio).not.toBeChecked()
+    const ind = screen.getByText('Indonesia')
+    fireEvent.click(ind)
     expect(mockDispatch).toBeCalledWith(
-      mainAction.setState({ state: 'theme', value: 'dark' })
+      mainAction.setState({ state: 'lang', value: 'id-ID' })
     )
   })
 })

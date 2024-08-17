@@ -5,9 +5,11 @@ export type SetStatePayload<T> = {
   }
 }[keyof T]
 
+export type CategoryType = 'income' | 'outcome'
+
 export type Category = {
   id: string
-  type: 'income' | 'outcome'
+  type: CategoryType
   name: string
   budget?: number
 }
@@ -16,7 +18,7 @@ export type Data = {
   id: string
   date: Date
   subdata: {
-    type: 'income' | 'outcome'
+    type: CategoryType
     category: string
     description: string
     amount: number
@@ -27,3 +29,7 @@ export type ConditionArray = {
   condition: boolean
   className: string
 }
+
+export type Theme = 'light' | 'dark'
+
+export type Lang = 'en-US' | 'id-ID'

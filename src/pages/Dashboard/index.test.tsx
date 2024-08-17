@@ -1,19 +1,19 @@
-import { render, screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
+import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import Dashboard from './'
 import { IntlProvider } from 'react-intl'
-import english from '../../locales/en-US'
-import indo from '../../locales/id-Id'
+
+import { english, indonesia } from '@/locales'
+import Dashboard from './'
 
 const locales = {
-  'id-ID': indo,
+  'id-ID': indonesia,
   'en-US': english,
 }
 const language = 'en-US'
 
 describe('Dashboard Component', () => {
-  it('renders the Dashboard component on the root path', () => {
+  it('renders Dashboard component', () => {
     render(
       <MemoryRouter>
         <IntlProvider locale={language} messages={locales[language].messages}>

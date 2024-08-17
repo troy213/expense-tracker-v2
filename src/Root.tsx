@@ -1,14 +1,10 @@
-// src/Root.tsx
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-// import { Provider } from 'react-redux'
 import { IntlProvider } from 'react-intl'
+import { useAppSelector } from '@/hooks'
 import App from './App'
+import { english, indonesia } from './locales'
 import './main.scss'
-import english from './locales/en-US'
-import indo from './locales/id-Id'
-import useAppSelector from './hooks/useAppSelector'
-
 interface Messages {
   [key: string]: {
     locale: string
@@ -17,7 +13,7 @@ interface Messages {
 }
 
 const locales: Messages = {
-  'id-ID': indo,
+  'id-ID': indonesia,
   'en-US': english,
 }
 

@@ -2,10 +2,12 @@ import { useState } from 'react'
 import { PlusSvg } from '@/assets'
 import { combineClassName } from '@/utils'
 import CategoryWidget from './CategoryWidget'
+import { useIntl } from 'react-intl'
 
 type SelectedCategory = 'income' | 'outcome'
 
 const CategoryTabView = () => {
+  const { formatMessage } = useIntl()
   const [selectedCategory, setSelectedCategory] =
     useState<SelectedCategory>('income')
 
@@ -35,7 +37,7 @@ const CategoryTabView = () => {
             className="btn btn-clear"
             onClick={() => handleSetCategory('income')}
           >
-            Income
+            {formatMessage({ id: 'Income' })}
           </button>
         </li>
         <li
@@ -46,7 +48,7 @@ const CategoryTabView = () => {
             className="btn btn-clear"
             onClick={() => handleSetCategory('outcome')}
           >
-            Outcome
+            {formatMessage({ id: 'Outcome' })}
           </button>
         </li>
       </ul>
@@ -56,7 +58,9 @@ const CategoryTabView = () => {
         {selectedCategory === 'outcome' && (
           <div className="category-tab-view__budget-widget">
             <div className="flex-column flex-align-center gap-2">
-              <span className="text--light text--3">Total Max Budget</span>
+              <span className="text--light text--3">
+                {formatMessage({ id: 'TotalMaxBudget' })}
+              </span>
               <span>Rp1.234.567</span>
             </div>
           </div>
@@ -65,7 +69,9 @@ const CategoryTabView = () => {
         <button type="button" className="category-tab-view__add-button">
           <div className="flex-align-center gap-2">
             <PlusSvg className="icon--stroke-primary" />
-            <span className="text--light text--3">Add Category</span>
+            <span className="text--light text--3">
+              {formatMessage({ id: 'AddCategory' })}
+            </span>
           </div>
         </button>
 
