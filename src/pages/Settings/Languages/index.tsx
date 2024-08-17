@@ -3,8 +3,10 @@ import { Navbar } from '@/components'
 import useAppDispatch from '@/hooks/useAppDispatch'
 import useAppSelector from '@/hooks/useAppSelector'
 import { mainAction } from '@/store/main/main-slice'
+import { useIntl } from 'react-intl'
 
 const Languages = () => {
+  const { formatMessage } = useIntl()
   const lang = useAppSelector((state) => state.mainReducer.lang)
   const dispatch = useAppDispatch()
   const switchLanguage = (selectedLang: string) => {
@@ -23,7 +25,7 @@ const Languages = () => {
           >
             <div className="flex-align-center gap-2">
               <FlagUKSvg />
-              <span>English</span>
+              <span>{formatMessage({ id: 'English' })}</span>
             </div>
           </button>
           {lang === 'en-US' && <CheckSvg className="icon--stroke-primary" />}
@@ -36,7 +38,7 @@ const Languages = () => {
           >
             <div className="flex-align-center gap-2">
               <FlagIDSVg />
-              <span>Indonesia</span>
+              <span>{formatMessage({ id: 'Indonesia' })}</span>
             </div>
           </button>
           {lang === 'id-ID' && <CheckSvg className="icon--stroke-primary" />}
