@@ -1,16 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Data, Lang, SetStatePayload, Theme } from '@/types'
+import { Data, Locales, SetStatePayload, Theme } from '@/types'
 import { setStateReducerValue } from '@/utils'
+import { LOCALES, THEME } from '@/constants'
 
 type InitialState = {
   theme: Theme
-  lang: Lang
+  selectedLocale: Locales
   data: Data[]
 }
 
 const initialState: InitialState = {
-  theme: 'light',
-  lang: 'en-US',
+  theme: THEME.LIGHT,
+  selectedLocale: LOCALES.ENGLISH,
   data: [],
 }
 

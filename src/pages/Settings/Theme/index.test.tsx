@@ -5,15 +5,9 @@ import { Provider } from 'react-redux'
 import { MemoryRouter } from 'react-router-dom'
 import { configureStore } from '@reduxjs/toolkit'
 
+import { LANGUAGES, LOCALES } from '@/constants'
 import mainSlice, { mainAction } from '@/store/main/main-slice'
-import { english, indonesia } from '@/locales'
 import Theme from '.'
-
-const locales = {
-  'id-ID': indonesia,
-  'en-US': english,
-}
-const language = 'en-US'
 
 describe('Theme', () => {
   it('Renders Theme', () => {
@@ -25,7 +19,10 @@ describe('Theme', () => {
     render(
       <Provider store={mockStore}>
         <MemoryRouter>
-          <IntlProvider locale={language} messages={locales[language].messages}>
+          <IntlProvider
+            locale={LOCALES.ENGLISH}
+            messages={LANGUAGES[LOCALES.ENGLISH].messages}
+          >
             <Theme />
           </IntlProvider>
         </MemoryRouter>
@@ -50,7 +47,10 @@ describe('Theme', () => {
     render(
       <Provider store={mockStore}>
         <MemoryRouter>
-          <IntlProvider locale={language} messages={locales[language].messages}>
+          <IntlProvider
+            locale={LOCALES.ENGLISH}
+            messages={LANGUAGES[LOCALES.ENGLISH].messages}
+          >
             <Theme />
           </IntlProvider>
         </MemoryRouter>

@@ -32,4 +32,4 @@ export type ConditionArray = {
 
 export type Theme = 'light' | 'dark'
 
-export type Lang = 'en-US' | 'id-ID'
+export type Locales = 'en-US' | 'id-ID'
