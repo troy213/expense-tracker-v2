@@ -2,7 +2,7 @@ import { IntlProvider } from 'react-intl'
 import { Routes, Route } from 'react-router-dom'
 import { useEffect } from 'react'
 import { LANGUAGES, LOCALES, THEME } from '@/constants'
-import { useAppSelector } from '@/hooks'
+import { useAppSelector, useInitConfig } from '@/hooks'
 import { Categories, Dashboard, NotFound, Reports, Settings } from '@/pages'
 import { Languages, SettingMenus, Theme } from '@/pages/Settings'
 
@@ -10,6 +10,8 @@ const App = () => {
   const { selectedLocale, theme } = useAppSelector((state) => state.mainReducer)
   const currentLanguage =
     LANGUAGES[selectedLocale] || LANGUAGES[LOCALES.ENGLISH]
+
+  useInitConfig()
 
   useEffect(() => {
     if (theme === THEME.DARK) {

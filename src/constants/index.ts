@@ -25,4 +25,4 @@ export const THEME: Record<ThemeKey, Theme> = {
 export const LANGUAGES: Messages = {
   [LOCALES.ENGLISH]: english,
   [LOCALES.INDONESIA]: indonesia,
-}
+} as const

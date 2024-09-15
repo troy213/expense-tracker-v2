@@ -22,3 +22,11 @@ export const setStateReducerValue = <T, K extends keyof T>(
 ) => {
   state[key] = value
 }
+
+export const setStorage = (key: string, value: string): void => {
+  localStorage.setItem(key, value)
+}
+
+export const getStorage = (key: string) => {
+  return localStorage.getItem(key)
+}

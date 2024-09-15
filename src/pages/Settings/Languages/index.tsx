@@ -5,7 +5,7 @@ import { LANGUAGES_MENU } from '@/constants/config'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { mainAction } from '@/store/main/main-slice'
 import { Locales } from '@/types'
-import { combineClassName } from '@/utils'
+import { combineClassName, setStorage } from '@/utils'
 
 const Languages = () => {
   const selectedLocale = useAppSelector(
@@ -15,6 +15,7 @@ const Languages = () => {
   const { formatMessage } = useIntl()
 
   const switchLanguage = (locale: Locales) => {
+    setStorage('locales', locale)
     dispatch(mainAction.setState({ state: 'selectedLocale', value: locale }))
   }
 

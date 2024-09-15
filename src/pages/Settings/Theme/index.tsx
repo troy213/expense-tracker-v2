@@ -4,6 +4,7 @@ import { THEME } from '@/constants'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { mainAction } from '@/store/main/main-slice'
 import { Theme as ThemeType } from '@/types'
+import { setStorage } from '@/utils'
 
 const Theme = () => {
   const theme = useAppSelector((state) => state.mainReducer.theme)
@@ -11,6 +12,7 @@ const Theme = () => {
   const { formatMessage } = useIntl()
 
   const toggleTheme = (selectedTheme: ThemeType) => {
+    setStorage('theme', selectedTheme)
     dispatch(mainAction.setState({ state: 'theme', value: selectedTheme }))
   }
 
