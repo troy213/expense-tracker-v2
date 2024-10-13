@@ -1,17 +1,20 @@
 import { useIntl } from 'react-intl'
 import { Navbar } from '@/components'
+import { THEME } from '@/constants'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { mainAction } from '@/store/main/main-slice'
 import { Theme as ThemeType } from '@/types'
+import { setStorage } from '@/utils'
 
 const Theme = () => {
   const theme = useAppSelector((state) => state.mainReducer.theme)
   const dispatch = useAppDispatch()
+  const { formatMessage } = useIntl()
 
   const toggleTheme = (selectedTheme: ThemeType) => {
+    setStorage('theme', selectedTheme)
     dispatch(mainAction.setState({ state: 'theme', value: selectedTheme }))
   }
-  const { formatMessage } = useIntl()
 
   return (
     <div className="theme">
@@ -23,13 +26,13 @@ const Theme = () => {
             <div className="flex-align-center gap-2">
               <input
                 type="radio"
-                id="light"
+                id={THEME.LIGHT}
                 name="theme"
-                value="light"
-                checked={theme === 'light'}
-                onChange={() => toggleTheme('light')}
+                value={THEME.LIGHT}
+                checked={theme === THEME.LIGHT}
+                onChange={() => toggleTheme(THEME.LIGHT)}
               />
-              <label htmlFor="light">
+              <label htmlFor={THEME.LIGHT}>
                 {formatMessage({ id: 'LightTheme' })}
               </label>
             </div>
@@ -40,13 +43,15 @@ const Theme = () => {
             <div className="flex-align-center gap-2">
               <input
                 type="radio"
-                id="dark"
+                id={THEME.DARK}
                 name="theme"
-                value="dark"
-                checked={theme === 'dark'}
-                onChange={() => toggleTheme('dark')}
+                value={THEME.DARK}
+                checked={theme === THEME.DARK}
+                onChange={() => toggleTheme(THEME.DARK)}
               />
-              <label htmlFor="dark">{formatMessage({ id: 'DarkTheme' })}</label>
+              <label htmlFor={THEME.DARK}>
+                {formatMessage({ id: 'DarkTheme' })}
+              </label>
             </div>
           </button>
         </li>

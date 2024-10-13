@@ -5,15 +5,9 @@ import { Provider } from 'react-redux'
 import { MemoryRouter } from 'react-router-dom'
 import { configureStore } from '@reduxjs/toolkit'
 
+import { LOCALES, LANGUAGES } from '@/constants'
 import mainSlice, { mainAction } from '@/store/main/main-slice'
-import { english, indonesia } from '@/locales'
 import Languages from '.'
-
-const locales = {
-  'id-ID': indonesia,
-  'en-US': english,
-}
-const language = 'en-US'
 
 describe('Theme', () => {
   it('Renders Language', () => {
@@ -25,12 +19,16 @@ describe('Theme', () => {
     render(
       <Provider store={mockStore}>
         <MemoryRouter>
-          <IntlProvider locale={language} messages={locales[language].messages}>
+          <IntlProvider
+            locale={LOCALES.ENGLISH}
+            messages={LANGUAGES[LOCALES.ENGLISH].messages}
+          >
             <Languages />
           </IntlProvider>
         </MemoryRouter>
       </Provider>
     )
+
     const navbar = screen.getByText('Language')
     const eng = screen.getByText('English')
     const ind = screen.getByText('Indonesia')
@@ -50,7 +48,10 @@ describe('Theme', () => {
     render(
       <Provider store={mockStore}>
         <MemoryRouter>
-          <IntlProvider locale={language} messages={locales[language].messages}>
+          <IntlProvider
+            locale={LOCALES.ENGLISH}
+            messages={LANGUAGES[LOCALES.ENGLISH].messages}
+          >
             <Languages />
           </IntlProvider>
         </MemoryRouter>
@@ -60,7 +61,7 @@ describe('Theme', () => {
     const ind = screen.getByText('Indonesia')
     fireEvent.click(ind)
     expect(mockDispatch).toBeCalledWith(
-      mainAction.setState({ state: 'lang', value: 'id-ID' })
+      mainAction.setState({ state: 'selectedLocale', value: LOCALES.INDONESIA })
     )
   })
 })

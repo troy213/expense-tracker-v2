@@ -1,27 +1,17 @@
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
-import { IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
 import { MemoryRouter } from 'react-router-dom'
 
+import store from '@/store'
 import App from './App'
-import store from './store'
-import { english, indonesia } from './locales'
-
-const locales = {
-  'id-ID': indonesia,
-  'en-US': english,
-}
-const language = 'en-US'
 
 describe('App Component routing test', () => {
   it('renders the Dashboard component on the root path', () => {
     render(
       <MemoryRouter initialEntries={['/']}>
         <Provider store={store}>
-          <IntlProvider locale={language} messages={locales[language].messages}>
-            <App />
-          </IntlProvider>
+          <App />
         </Provider>
       </MemoryRouter>
     )
@@ -33,9 +23,7 @@ describe('App Component routing test', () => {
     render(
       <MemoryRouter initialEntries={['/categories']}>
         <Provider store={store}>
-          <IntlProvider locale={language} messages={locales[language].messages}>
-            <App />
-          </IntlProvider>
+          <App />
         </Provider>
       </MemoryRouter>
     )
@@ -47,9 +35,7 @@ describe('App Component routing test', () => {
     render(
       <MemoryRouter initialEntries={['/reports']}>
         <Provider store={store}>
-          <IntlProvider locale={language} messages={locales[language].messages}>
-            <App />
-          </IntlProvider>
+          <App />
         </Provider>
       </MemoryRouter>
     )
@@ -61,9 +47,7 @@ describe('App Component routing test', () => {
     render(
       <MemoryRouter initialEntries={['/settings']}>
         <Provider store={store}>
-          <IntlProvider locale={language} messages={locales[language].messages}>
-            <App />
-          </IntlProvider>
+          <App />
         </Provider>
       </MemoryRouter>
     )
@@ -75,9 +59,7 @@ describe('App Component routing test', () => {
     render(
       <MemoryRouter initialEntries={['/settings/theme']}>
         <Provider store={store}>
-          <IntlProvider locale={language} messages={locales[language].messages}>
-            <App />
-          </IntlProvider>
+          <App />
         </Provider>
       </MemoryRouter>
     )
@@ -89,9 +71,7 @@ describe('App Component routing test', () => {
     render(
       <MemoryRouter initialEntries={['/settings/language']}>
         <Provider store={store}>
-          <IntlProvider locale={language} messages={locales[language].messages}>
-            <App />
-          </IntlProvider>
+          <App />
         </Provider>
       </MemoryRouter>
     )
@@ -103,9 +83,7 @@ describe('App Component routing test', () => {
     render(
       <MemoryRouter initialEntries={['/unknown-path']}>
         <Provider store={store}>
-          <IntlProvider locale={language} messages={locales[language].messages}>
-            <App />
-          </IntlProvider>
+          <App />
         </Provider>
       </MemoryRouter>
     )

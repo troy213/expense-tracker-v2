@@ -4,16 +4,19 @@ import { Navbar } from '@/components'
 import { LANGUAGES_MENU } from '@/constants/config'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { mainAction } from '@/store/main/main-slice'
-import { Lang } from '@/types'
-import { combineClassName } from '@/utils'
+import { Locales } from '@/types'
+import { combineClassName, setStorage } from '@/utils'
 
 const Languages = () => {
-  const lang = useAppSelector((state) => state.mainReducer.lang)
+  const selectedLocale = useAppSelector(
+    (state) => state.mainReducer.selectedLocale
+  )
   const dispatch = useAppDispatch()
   const { formatMessage } = useIntl()
 
-  const switchLanguage = (selectedLang: Lang) => {
-    dispatch(mainAction.setState({ state: 'lang', value: selectedLang }))
+  const switchLanguage = (locale: Locales) => {
+    setStorage('locales', locale)
+    dispatch(mainAction.setState({ state: 'selectedLocale', value: locale }))
   }
 
   return (
@@ -22,8 +25,8 @@ const Languages = () => {
 
       <ul className="flex-column gap-8 py-4">
         {LANGUAGES_MENU.map((item, index) => {
-          const { Icon, title, langId } = item
-          const isSelected = langId === lang
+          const { Icon, title, locales } = item
+          const isSelected = locales === selectedLocale
           const titleClassName = combineClassName('', [
             {
               condition: isSelected,
@@ -36,7 +39,7 @@ const Languages = () => {
               <button
                 type="button"
                 className="btn btn-clear"
-                onClick={() => switchLanguage(langId)}
+                onClick={() => switchLanguage(locales)}
               >
                 <div className="flex-align-center gap-2">
                   <Icon />

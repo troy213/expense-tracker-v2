@@ -1,5 +1,4 @@
 import {
-  CoinsSvg,
   ExportSvg,
   FlagIDSVg,
   FlagUKSvg,
@@ -8,7 +7,8 @@ import {
   PaletteSvg,
   TrashSvg,
 } from '@/assets'
-import { Lang } from '@/types'
+import { Locales } from '@/types'
+import { LOCALES } from '.'
 
 type SettingMenu = {
   Icon: React.ElementType
@@ -23,16 +23,10 @@ type SettingMenu = {
 type LanguageMenu = {
   Icon: React.ElementType
   title: string
-  langId: Lang
+  locales: Locales
 }
 
 export const SETTING_MENUS: SettingMenu[] = [
-  {
-    title: 'CategoryAndBudget',
-    Icon: CoinsSvg,
-    iconClassName: 'icon--fill-primary',
-    link: '/categories',
-  },
   {
     title: 'ImportData',
     Icon: ImportSvg,
@@ -77,11 +71,11 @@ export const LANGUAGES_MENU: LanguageMenu[] = [
   {
     Icon: FlagUKSvg,
     title: 'English',
-    langId: 'en-US',
+    locales: LOCALES.ENGLISH,
   },
   {
     Icon: FlagIDSVg,
     title: 'Indonesia',
-    langId: 'id-ID',
+    locales: LOCALES.INDONESIA,
   },
 ]
