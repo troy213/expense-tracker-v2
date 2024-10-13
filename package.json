@@ -1,7 +1,7 @@
 {
   "name": "expense-tracker-v2",
   "private": true,
-  "version": "0.0.0-alpha.9",
+  "version": "0.0.0-alpha.10",
   "type": "module",
   "scripts": {
     "dev": "vite --open --port 3000",
@@ -55,9 +55,12 @@
     }
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx,json,css,scss,md,html}": [
+    "*.{ts,tsx,js,jsx,json,md,html}": [
       "prettier --write",
       "eslint --fix"
+    ],
+    "*.{css,scss}": [
+      "prettier --write"
     ]
   }
 }

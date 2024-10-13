@@ -1,5 +1,4 @@
 import {
-  CoinsSvg,
   ExportSvg,
   FlagIDSVg,
   FlagUKSvg,
@@ -28,12 +27,6 @@ type LanguageMenu = {
 }
 
 export const SETTING_MENUS: SettingMenu[] = [
-  {
-    title: 'CategoryAndBudget',
-    Icon: CoinsSvg,
-    iconClassName: 'icon--fill-primary',
-    link: '/categories',
-  },
   {
     title: 'ImportData',
     Icon: ImportSvg,
