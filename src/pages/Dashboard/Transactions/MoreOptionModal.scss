@@ -1,0 +1,13 @@
+.more-option-modal {
+  padding: 1rem;
+  position: absolute;
+  top: 0;
+  right: 1.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  background-color: $color-white;
+  box-shadow: 0 0.25rem 12px rgba($color: black, $alpha: 0.25);
+}
