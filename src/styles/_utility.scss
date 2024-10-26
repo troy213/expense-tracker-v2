@@ -1,9 +1,13 @@
 :root {
   --default-svg-primary-stroke-color: #133e5d;
+  --default-svg-danger-stroke-color: #870805;
+  --default-color-danger: #870805;
 }
 
 body.dark {
   --default-svg-primary-stroke-color: #f2f0ed;
+  --default-svg-danger-stroke-color: #d40d08;
+  --default-color-danger: #d40d08;
 }
 
 // TEXT STYLE
@@ -109,7 +113,7 @@ body.dark {
 }
 
 .icon--stroke-danger > * {
-  stroke: $color-danger;
+  stroke: var(--default-svg-danger-stroke-color);
 }
 
 .icon--fill-primary > * {
@@ -125,7 +129,7 @@ body.dark {
 }
 
 .icon--fill-danger > * {
-  stroke: $color-danger;
+  stroke: var(--default-svg-danger-stroke-color);
 }
 
 // LAYOUT STYLE
