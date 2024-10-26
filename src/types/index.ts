@@ -18,11 +18,14 @@ export type Data = {
   id: string
   date: Date
   subdata: {
+    id: string
     type: CategoryType
     category: string
-    description: string
-    amount: number
-  }
+    item: {
+      description: string
+      amount: number
+    }[]
+  }[]
 }
 
 export type ConditionArray = {

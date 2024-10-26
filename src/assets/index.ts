@@ -7,6 +7,7 @@ import CheckSvg from './icons/check.svg?react'
 import ChevronDownSvg from './icons/chevron-down.svg?react'
 import CoinsSvg from './icons/coins.svg?react'
 import CrossSvg from './icons/cross.svg?react'
+import EditSvg from './icons/edit.svg?react'
 import ExportSvg from './icons/export.svg?react'
 import FlagIDSVg from './icons/flag-id.svg?react'
 import FlagUKSvg from './icons/flag-uk.svg?react'
@@ -32,6 +33,7 @@ export {
   ChevronDownSvg,
   CoinsSvg,
   CrossSvg,
+  EditSvg,
   ExportSvg,
   FlagIDSVg,
   FlagUKSvg,
