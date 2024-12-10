@@ -1,12 +1,12 @@
 import ReactDOM from 'react-dom'
 
 type ModalProps = {
-  open: boolean
+  isOpen: boolean
   children: JSX.Element
   onClose: () => void
 }
 
-const Modal: React.FC<ModalProps> = ({ open, children, onClose }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, children, onClose }) => {
   const handleClickOutside = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
@@ -15,7 +15,7 @@ const Modal: React.FC<ModalProps> = ({ open, children, onClose }) => {
     }
   }
 
-  if (!open) {
+  if (!isOpen) {
     return null
   }
 

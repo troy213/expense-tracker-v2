@@ -1,7 +1,7 @@
 import ReportCategory from './ReportCategory'
 
 type ReportWidgetProps = {
-  type: 'income' | 'outcome'
+  type: 'income' | 'expense'
 }
 
 const ReportWidget: React.FC<ReportWidgetProps> = ({ type }) => {

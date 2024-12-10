@@ -16,7 +16,7 @@ const Reports = () => {
         <ReportInfo />
 
         <ReportWidget type="income" />
-        <ReportWidget type="outcome" />
+        <ReportWidget type="expense" />
       </div>
       <Toolbar />
     </div>

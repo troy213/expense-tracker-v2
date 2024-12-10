@@ -30,7 +30,7 @@ const DashboardInfo = () => {
           <div className="flex-column flex-align-center gap-1">
             <div className="flex-align-center gap-1">
               <span className="text--light text--3">
-                {formatMessage({ id: 'TotalOutcome' })}
+                {formatMessage({ id: 'TotalExpense' })}
               </span>
               <ArrowDownSvg className="icon--sm icon--stroke-danger" />
             </div>

@@ -10,4 +10,9 @@
   gap: 1rem;
   background-color: $color-white;
   box-shadow: 0 0.25rem 12px rgba($color: black, $alpha: 0.25);
+
+  &.modal--top {
+    top: unset;
+    bottom: 0;
+  }
 }
