@@ -7,7 +7,7 @@ const ReportInfo = () => {
         <span>Rp10.000.000</span>
       </div>
       <div className="flex-space-between">
-        <span>Total Outcome</span>
+        <span>Total Expense</span>
         <span>Rp1.234.567</span>
       </div>
       <div className="flex-space-between">

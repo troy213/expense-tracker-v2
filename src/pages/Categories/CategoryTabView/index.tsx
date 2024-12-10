@@ -4,7 +4,7 @@ import { combineClassName } from '@/utils'
 import CategoryWidget from './CategoryWidget'
 import { useIntl } from 'react-intl'
 
-type SelectedCategory = 'income' | 'outcome'
+type SelectedCategory = 'income' | 'expense'
 
 const CategoryTabView = () => {
   const { formatMessage } = useIntl()
@@ -17,7 +17,7 @@ const CategoryTabView = () => {
       className: 'active--left',
     },
     {
-      condition: selectedCategory === 'outcome',
+      condition: selectedCategory === 'expense',
       className: 'active--right',
     },
   ])
@@ -41,21 +41,21 @@ const CategoryTabView = () => {
           </button>
         </li>
         <li
-          className={`category-tab-view__tab${selectedCategory === 'outcome' ? ' selected' : ''}`}
+          className={`category-tab-view__tab${selectedCategory === 'expense' ? ' selected' : ''}`}
         >
           <button
             type="button"
             className="btn btn-clear"
-            onClick={() => handleSetCategory('outcome')}
+            onClick={() => handleSetCategory('expense')}
           >
-            {formatMessage({ id: 'Outcome' })}
+            {formatMessage({ id: 'expense' })}
           </button>
         </li>
       </ul>
 
       <div className={contentClassName}>
         {/* This widget only show when the outcome tab is selected */}
-        {selectedCategory === 'outcome' && (
+        {selectedCategory === 'expense' && (
           <div className="category-tab-view__budget-widget">
             <div className="flex-column flex-align-center gap-2">
               <span className="text--light text--3">
@@ -78,7 +78,7 @@ const CategoryTabView = () => {
         {/* All categories data will be looped here */}
 
         {/* Outcome categories can have a budget  */}
-        <CategoryWidget type="outcome" />
+        <CategoryWidget type="expense" />
 
         {/* Income categories don't have a budget  */}
         <CategoryWidget type="income" />

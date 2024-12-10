@@ -11,7 +11,7 @@ const messages = {
   Indonesia: 'Indonesia',
   Language: 'Language',
   LightTheme: 'Light Theme',
-  Outcome: 'Outcome',
+  Expense: 'Expense',
   Reports: 'Reports',
   Salary: 'Salary',
   Settings: 'Settings',
@@ -19,7 +19,7 @@ const messages = {
   TotalBalance: 'Total Balance',
   TotalIncome: 'Total Income',
   TotalMaxBudget: 'Total Max Budget',
-  TotalOutcome: 'Total Outcome',
+  TotalExpense: 'Total Expense',
   TotalRemainingBudget: 'Total Remaining Budget',
 }
 

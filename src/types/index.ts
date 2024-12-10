@@ -5,7 +5,7 @@ export type SetStatePayload<T> = {
   }
 }[keyof T]
 
-export type CategoryType = 'income' | 'outcome'
+export type CategoryType = 'income' | 'expense'
 
 export type Category = {
   id: string

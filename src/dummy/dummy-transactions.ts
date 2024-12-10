@@ -18,7 +18,7 @@ export const dummyTransactions: Data[] = [
       },
       {
         id: '5b15e8e5-e2dd-4ede-8528-e4f5ea1d31df',
-        type: 'outcome',
+        type: 'expense',
         category: 'Food & Beverages',
         item: [
           {
@@ -29,7 +29,7 @@ export const dummyTransactions: Data[] = [
       },
       {
         id: '9f27ed33-d0e9-464e-aa92-5370888d1d72',
-        type: 'outcome',
+        type: 'expense',
         category: 'Shopping',
         item: [
           {
@@ -58,7 +58,7 @@ export const dummyTransactions: Data[] = [
     subdata: [
       {
         id: '14aca51e-200b-400f-a5f9-83e95f37b915',
-        type: 'outcome',
+        type: 'expense',
         category: 'Transportation',
         item: [
           {
@@ -69,7 +69,7 @@ export const dummyTransactions: Data[] = [
       },
       {
         id: '88d2bf4a-1827-4e71-ad62-429ab037aa87',
-        type: 'outcome',
+        type: 'expense',
         category: 'Food & Beverages',
         item: [
           {
@@ -86,7 +86,7 @@ export const dummyTransactions: Data[] = [
     subdata: [
       {
         id: '1038a8e6-e6bb-4c86-ba4e-a03f15552149',
-        type: 'outcome',
+        type: 'expense',
         category: 'Others',
         item: [
           {

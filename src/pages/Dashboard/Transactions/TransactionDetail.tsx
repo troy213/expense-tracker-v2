@@ -43,7 +43,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
         </span>
 
         {subdata.map((subdataItem) => {
-          const isOutcome = subdataItem.type === 'outcome'
+          const isOutcome = subdataItem.type === 'expense'
           const totalItemValue = isOutcome
             ? -1 * sumTotalItemValue(subdataItem.item)
             : sumTotalItemValue(subdataItem.item)

@@ -1,7 +1,7 @@
 import { CoinsSvg, MoreVerticalSvg } from '@/assets'
 
 type CategoryWidgetProps = {
-  type: 'income' | 'outcome'
+  type: 'income' | 'expense'
 }
 
 const CategoryWidget: React.FC<CategoryWidgetProps> = ({ type }) => {
@@ -10,7 +10,7 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({ type }) => {
       <div className="flex-space-between flex-align-center">
         <div className="flex-column gap-2">
           <span>Food & Beverages</span>
-          {type === 'outcome' && (
+          {type === 'expense' && (
             <div className="flex-align-center gap-2">
               <CoinsSvg className="icon--fill-primary" />
               <span className="text--light text--3">Rp1.234.567</span>

@@ -11,7 +11,7 @@ const messages = {
   Income: 'Pendapatan',
   Language: 'Bahasa',
   LightTheme: 'Mode Terang',
-  Outcome: 'Pengeluaran',
+  Expense: 'Pengeluaran',
   Reports: 'Laporan',
   Salary: 'Gaji',
   Settings: 'Pengaturan',
@@ -19,7 +19,7 @@ const messages = {
   TotalBalance: 'Total Saldo',
   TotalIncome: 'Total Pendapatan',
   TotalMaxBudget: 'Total Max Budget',
-  TotalOutcome: 'Total Pengeluaran',
+  TotalExpense: 'Total Pengeluaran',
   TotalRemainingBudget: 'Sisa Budget',
 }
 
