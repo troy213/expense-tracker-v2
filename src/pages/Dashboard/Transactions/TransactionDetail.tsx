@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react'
 import { MoreVerticalSvg } from '@/assets'
 import { Data } from '@/types'
 import {
@@ -5,7 +6,6 @@ import {
   currencyFormatter,
   formatTransactionDate,
 } from '@/utils'
-import { useState } from 'react'
 import MoreOptionModal from './MoreOptionModal'
 
 type TransactionDetailProps = {
@@ -21,17 +21,29 @@ const sumTotalItemValue = (item: Data['subdata'][0]['item']): number => {
   )
 }
 
+const getModalPositionClassName = (elementRect: DOMRect | undefined) => {
+  const MODAL_BOTTOM_THRESHOLD = 150
+  const viewPortHeight = window.innerHeight
+  const elementSizeDiff = viewPortHeight - (elementRect?.bottom ?? 0)
+
+  if (elementSizeDiff < MODAL_BOTTOM_THRESHOLD) return 'modal--top'
+  return ''
+}
+
 const TransactionDetail: React.FC<TransactionDetailProps> = ({
   data,
   selectedTransaction,
   handleSelectTransaction,
 }) => {
   const { date, subdata } = data
-
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [moreOptionModalClassName, setMoreOptionModalClassName] = useState('')
+  const transactionRefs = useRef<Map<string, HTMLDivElement>>(new Map())
 
-  const handleMoreOption = (e: React.MouseEvent) => {
+  const handleMoreOption = (e: React.MouseEvent, id: string) => {
     e.stopPropagation()
+    const elementRect = transactionRefs.current.get(id)?.getBoundingClientRect()
+    setMoreOptionModalClassName(getModalPositionClassName(elementRect))
     setIsModalOpen((val) => !val)
   }
 
@@ -43,18 +55,22 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
         </span>
 
         {subdata.map((subdataItem) => {
-          const isOutcome = subdataItem.type === 'expense'
-          const totalItemValue = isOutcome
+          const isExpense = subdataItem.type === 'expense'
+          const totalItemValue = isExpense
             ? -1 * sumTotalItemValue(subdataItem.item)
             : sumTotalItemValue(subdataItem.item)
           const totalItemValueClassName = combineClassName('', [
-            { condition: isOutcome, className: 'text--color-danger' },
+            { condition: isExpense, className: 'text--color-danger' },
           ])
 
           return (
             <div
               className="flex-column gap-1"
               key={subdataItem.id}
+              ref={(el) => {
+                if (el) transactionRefs.current.set(subdataItem.id, el)
+                else transactionRefs.current.delete(subdataItem.id)
+              }}
               onClick={() => {
                 handleSelectTransaction(subdataItem.id)
                 setIsModalOpen(false)
@@ -69,22 +85,25 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
                   {selectedTransaction === subdataItem.id && (
                     <div className="relative">
                       <button
-                        className=" btn btn-clear"
+                        className="btn btn-clear"
                         type="button"
-                        onClick={(e) => handleMoreOption(e)}
+                        onClick={(e) => handleMoreOption(e, subdataItem.id)}
                       >
-                        <MoreVerticalSvg className="icon--stroke-primary" />
+                        <MoreVerticalSvg className="icon icon--stroke-primary" />
                       </button>
-                      {isModalOpen && <MoreOptionModal />}
+                      {isModalOpen && (
+                        <MoreOptionModal className={moreOptionModalClassName} />
+                      )}
                     </div>
                   )}
                 </div>
               </div>
               {subdataItem.item.map((item, index) => {
-                const amount = isOutcome ? -1 * item.amount : item.amount
+                const hasMoreItem = subdataItem.item.length > 1
+                const amount = isExpense ? -1 * item.amount : item.amount
                 const amountClassName = combineClassName(
                   'text--light text--3',
-                  [{ condition: isOutcome, className: 'text--color-danger' }]
+                  [{ condition: isExpense, className: 'text--color-danger' }]
                 )
 
                 return (
@@ -92,9 +111,11 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
                     <span className="text--light text--3">
                       {item.description}
                     </span>
-                    <span className={amountClassName}>
-                      {currencyFormatter(amount)}
-                    </span>
+                    {hasMoreItem && (
+                      <span className={amountClassName}>
+                        {currencyFormatter(amount)}
+                      </span>
+                    )}
                   </div>
                 )
               })}

@@ -48,13 +48,13 @@ const CategoryTabView = () => {
             className="btn btn-clear"
             onClick={() => handleSetCategory('expense')}
           >
-            {formatMessage({ id: 'expense' })}
+            {formatMessage({ id: 'Expense' })}
           </button>
         </li>
       </ul>
 
       <div className={contentClassName}>
-        {/* This widget only show when the outcome tab is selected */}
+        {/* This widget only show when the expense tab is selected */}
         {selectedCategory === 'expense' && (
           <div className="category-tab-view__budget-widget">
             <div className="flex-column flex-align-center gap-2">
@@ -77,7 +77,7 @@ const CategoryTabView = () => {
 
         {/* All categories data will be looped here */}
 
-        {/* Outcome categories can have a budget  */}
+        {/* Expense categories can have a budget  */}
         <CategoryWidget type="expense" />
 
         {/* Income categories don't have a budget  */}

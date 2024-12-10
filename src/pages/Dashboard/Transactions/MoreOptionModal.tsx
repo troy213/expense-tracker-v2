@@ -1,8 +1,19 @@
 import { EditSvg, TrashSvg } from '@/assets'
+import { combineClassName } from '@/utils'
 
-const MoreOptionModal = () => {
+type MoreOptionModalProps = {
+  className: string
+}
+
+const MoreOptionModal: React.FC<MoreOptionModalProps> = ({
+  className = '',
+}) => {
+  const moreOptionModalClassName = combineClassName('more-option-modal', [
+    className,
+  ])
+
   return (
-    <div className="more-option-modal">
+    <div className={moreOptionModalClassName}>
       <button className="btn btn-clear text--color-primary" type="button">
         <EditSvg className="icon icon--stroke-primary" />
         <span>Edit</span>
