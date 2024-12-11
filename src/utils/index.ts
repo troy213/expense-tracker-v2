@@ -15,7 +15,7 @@ export const combineClassName = (
   return result.trim()
 }
 
-export const formatTransactionDate = (dateString: Date): string => {
+export const formatTransactionDate = (dateString: string): string => {
   const date = new Date(dateString)
   const today = new Date()
 

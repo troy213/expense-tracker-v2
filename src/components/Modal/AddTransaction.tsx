@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import Modal from '.'
 import { CrossSvg, PlusSvg } from '@/assets'
+import { useAppDispatch, useAppSelector } from '@/hooks'
+import { CategoryType, Data } from '@/types'
+import { mainAction } from '@/store/main/main-slice'
 type ModalProps = {
   isOpen: boolean
   handleOpenModal: () => void
@@ -10,6 +13,8 @@ const AddtransactionModal: React.FC<ModalProps> = ({
   isOpen,
   handleOpenModal,
 }) => {
+  const txData = useAppSelector((state) => state.mainReducer.data)
+  const dispatch = useAppDispatch()
   const [transactionDetails, setTransactionDetails] = useState([
     { description: '', amount: '' },
   ])
@@ -43,10 +48,37 @@ const AddtransactionModal: React.FC<ModalProps> = ({
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    console.log(data.get('transactionType'))
-    console.log(data.get('transactionDate'))
-    console.log(data.get('transactionCategory'))
-    console.log({ transactionDetails })
+    const item = transactionDetails.map((detail) => ({
+      description: detail.description,
+      amount: parseFloat(detail.amount),
+    }))
+    const newSubData = {
+      id: '1111' as string,
+      type: data.get('transactionType') as CategoryType,
+      category: data.get('transactionCategory') as string,
+      item: item,
+    }
+
+    const newTx = {
+      id: '111' as string,
+      date: new Date(data.get('transactionDate') as string).toISOString(),
+      subdata: [newSubData],
+    }
+
+    const existingTxIndex = txData.findIndex((tx) => tx.date === newTx.date)
+    let updatedData: Data[]
+    if (existingTxIndex !== -1) {
+      const existingTx = txData[existingTxIndex]
+      const updatedSubdata = [...existingTx.subdata, newSubData]
+      const updatedTx = { ...existingTx, subdata: updatedSubdata }
+      updatedData = [...txData]
+      updatedData[existingTxIndex] = updatedTx
+    } else {
+      updatedData = [...txData, newTx]
+    }
+
+    dispatch(mainAction.setState({ state: 'data', value: updatedData }))
+
     setTransactionDetails([{ description: '', amount: '' }])
     handleOpenModal()
   }
@@ -104,7 +136,7 @@ const AddtransactionModal: React.FC<ModalProps> = ({
             <fieldset>
               <legend>Date:</legend>
               <label>
-                <input type="date" name="transactionDate" />
+                <input type="date" name="transactionDate" required />
               </label>
             </fieldset>
             <fieldset>
@@ -143,6 +175,7 @@ const AddtransactionModal: React.FC<ModalProps> = ({
                       type="text"
                       name={`desc_${idx}`}
                       value={detail.description}
+                      required
                       onChange={(e) => {
                         handleOnchange(idx, 'description', e.target.value)
                       }}
@@ -154,6 +187,7 @@ const AddtransactionModal: React.FC<ModalProps> = ({
                       type="number"
                       name={`amount_${idx}`}
                       value={detail.amount}
+                      required
                       onChange={(e) => {
                         handleOnchange(idx, 'amount', e.target.value)
                       }}

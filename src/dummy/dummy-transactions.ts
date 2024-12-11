@@ -3,7 +3,7 @@ import { Data } from '@/types'
 export const dummyTransactions: Data[] = [
   {
     id: 'f9dc2457-0c4c-4481-bca0-5c07166beede',
-    date: new Date('2024-10-26T11:33:20.823Z'),
+    date: '2024-10-26T11:33:20.823Z',
     subdata: [
       {
         id: '12d8c759-c5b2-4363-94e9-4185ebece235',
@@ -54,7 +54,7 @@ export const dummyTransactions: Data[] = [
   },
   {
     id: '1103dfed-1add-4f4a-91d3-b9c17472e615',
-    date: new Date('2024-10-25T11:33:20.823Z'),
+    date: '2024-10-25T11:33:20.823Z',
     subdata: [
       {
         id: '14aca51e-200b-400f-a5f9-83e95f37b915',
@@ -82,7 +82,7 @@ export const dummyTransactions: Data[] = [
   },
   {
     id: 'e91082e5-b1db-43ae-bf14-e926294c0116',
-    date: new Date('2024-10-24T11:33:20.823Z'),
+    date: '2024-10-24T11:33:20.823Z',
     subdata: [
       {
         id: '1038a8e6-e6bb-4c86-ba4e-a03f15552149',
