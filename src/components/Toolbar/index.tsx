@@ -10,14 +10,10 @@ const Toolbar = () => {
 
   const handleOpenModal = () => {
     setOpen(!isOpen)
+    document.getElementsByTagName('body')[0].classList.toggle('hide')
   }
   return (
     <div className="toolbar">
-      {/* {isModalOpen && (
-        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <span>Add</span>
-        </Modal>
-      )} */}
       <Link to="/">
         <HomeSvg className="icon--stroke-primary" />
       </Link>

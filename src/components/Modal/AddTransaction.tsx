@@ -16,7 +16,6 @@ const AddtransactionModal: React.FC<ModalProps> = ({
   const [isExpense, setIsExpense] = useState(false)
 
   const handleOnRadioChange = () => {
-    console.log('masuk hanlder')
     setIsExpense(!isExpense)
   }
 
@@ -25,15 +24,12 @@ const AddtransactionModal: React.FC<ModalProps> = ({
     field: 'description' | 'amount',
     value: string
   ) => {
-    console.log({ index, field, value })
     const updatedDetail = [...transactionDetails]
-    console.log({ updatedDetail })
     updatedDetail[index][field] = value
     setTransactionDetails(updatedDetail)
   }
 
   const handleAddDetail = () => {
-    console.log({ transactionDetails })
     setTransactionDetails([
       ...transactionDetails,
       { description: '', amount: '' },
@@ -46,7 +42,6 @@ const AddtransactionModal: React.FC<ModalProps> = ({
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    console.log({ event })
     const data = new FormData(event.currentTarget)
     console.log(data.get('transactionType'))
     console.log(data.get('transactionDate'))
