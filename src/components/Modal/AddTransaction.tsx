@@ -53,14 +53,14 @@ const AddtransactionModal: React.FC<ModalProps> = ({
       amount: parseFloat(detail.amount),
     }))
     const newSubData = {
-      id: '1111' as string,
+      id: crypto.randomUUID() as string,
       type: data.get('transactionType') as CategoryType,
       category: data.get('transactionCategory') as string,
       item: item,
     }
 
     const newTx = {
-      id: '111' as string,
+      id: crypto.randomUUID() as string,
       date: new Date(data.get('transactionDate') as string).toISOString(),
       subdata: [newSubData],
     }
@@ -97,7 +97,7 @@ const AddtransactionModal: React.FC<ModalProps> = ({
           </header>
 
           <form onSubmit={handleSubmit}>
-            <fieldset className="flex gap-8">
+            <fieldset className="modal__fieldset flex gap-8">
               <legend>Transaction Type:</legend>
 
               <label>
@@ -133,16 +133,21 @@ const AddtransactionModal: React.FC<ModalProps> = ({
               ''
             )}
 
-            <fieldset>
+            <fieldset className="modal__fieldset">
               <legend>Date:</legend>
               <label>
-                <input type="date" name="transactionDate" required />
+                <input
+                  className="modal__input"
+                  type="date"
+                  name="transactionDate"
+                  required
+                />
               </label>
             </fieldset>
-            <fieldset>
+            <fieldset className="modal__fieldset">
               <legend>Category:</legend>
               <label>
-                <select name="transactionCategory">
+                <select className="modal__input" name="transactionCategory">
                   <option value="Food">Food</option>
                   <option value="Transport">Transport</option>
                   <option value="Utilities">Utilities</option>
@@ -153,7 +158,7 @@ const AddtransactionModal: React.FC<ModalProps> = ({
             </fieldset>
             {transactionDetails.map((detail, idx) => {
               return (
-                <div key={idx} className="details">
+                <div key={idx} className="modal__detail">
                   <legend className="flex-space-between width-100">
                     Transaction Detail #{idx + 1}:{' '}
                     {transactionDetails.length > 1 ? (
@@ -173,6 +178,7 @@ const AddtransactionModal: React.FC<ModalProps> = ({
                     Description:
                     <input
                       type="text"
+                      className="modal__input"
                       name={`desc_${idx}`}
                       value={detail.description}
                       required
@@ -185,6 +191,7 @@ const AddtransactionModal: React.FC<ModalProps> = ({
                     Amount:
                     <input
                       type="number"
+                      className="modal__input"
                       name={`amount_${idx}`}
                       value={detail.amount}
                       required
