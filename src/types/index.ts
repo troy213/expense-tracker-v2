@@ -16,7 +16,7 @@ export type Category = {
 
 export type Data = {
   id: string
-  date: Date
+  date: string
   subdata: {
     id: string
     type: CategoryType

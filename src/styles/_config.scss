@@ -14,6 +14,9 @@ html {
 body {
   font-family: 'Roboto', sans-serif;
   min-width: 360px;
+  &.hide{
+    overflow: hidden;
+  }
 }
 
 a {
