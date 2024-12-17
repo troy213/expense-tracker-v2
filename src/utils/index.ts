@@ -1,4 +1,4 @@
-import { ConditionArray } from '@/types'
+import { ConditionArray, Data } from '@/types'
 
 export const combineClassName = (
   defaultStyle: string = '',
@@ -53,8 +53,12 @@ export const setStateReducerValue = <T, K extends keyof T>(
   state[key] = value
 }
 
-export const setStorage = (key: string, value: string): void => {
-  localStorage.setItem(key, value)
+export const setStorage = (key: string, value: string | Data[]): void => {
+  if (Array.isArray(value)) {
+    localStorage.setItem(key, JSON.stringify(value))
+  } else {
+    localStorage.setItem(key, value)
+  }
 }
 
 export const getStorage = (key: string) => {

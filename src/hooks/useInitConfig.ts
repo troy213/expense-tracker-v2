@@ -10,7 +10,7 @@ const useInitConfig = () => {
   useEffect(() => {
     const storedTheme = getStorage('theme')
     const storedLocales = getStorage('locales')
-
+    const storedData = getStorage('data')
     if (storedTheme === THEME.DARK || storedTheme === THEME.LIGHT) {
       dispatch(mainAction.setState({ state: 'theme', value: storedTheme }))
     }
@@ -22,6 +22,11 @@ const useInitConfig = () => {
       dispatch(
         mainAction.setState({ state: 'selectedLocale', value: storedLocales })
       )
+    }
+
+    if (storedData) {
+      const parsedData = JSON.parse(storedData)
+      dispatch(mainAction.setState({ state: 'data', value: parsedData }))
     }
   }, [dispatch])
 

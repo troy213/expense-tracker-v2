@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { dummyTransactions } from '@/dummy/dummy-transactions'
 import TransactionDetail from './TransactionDetail'
+import { useAppSelector } from '@/hooks'
 
 const Transactions = () => {
   const [selectedTransaction, setSelectedTransaction] = useState<string>('')
+  const { data } = useAppSelector((state) => state.mainReducer)
 
   const handleSelectedTransaction = (id: string) => {
     if (selectedTransaction && selectedTransaction === id)
@@ -11,8 +12,7 @@ const Transactions = () => {
     setSelectedTransaction(id)
   }
 
-  // temporary using dummy data
-  if (!dummyTransactions.length)
+  if (!data.length)
     return (
       <div className="transactions">
         <div className="flex-justify-center flex-align-center h-100">
@@ -23,10 +23,9 @@ const Transactions = () => {
       </div>
     )
 
-  // temporary using dummy data
   return (
     <div className="transactions">
-      {dummyTransactions.map((item) => {
+      {data.map((item) => {
         return (
           <TransactionDetail
             data={item}

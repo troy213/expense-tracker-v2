@@ -1,5 +1,5 @@
 const messages = {
-  AddCategory: 'Add Total Category',
+  AddCategory: 'Tambah Kategori',
   CategoryAndBudget: 'Kategori & Budget',
   DarkTheme: 'Mode Gelap',
   Dashboard: 'Dasbor',

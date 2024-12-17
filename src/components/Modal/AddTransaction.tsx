@@ -4,6 +4,7 @@ import { CrossSvg, PlusSvg } from '@/assets'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { CategoryType, Data } from '@/types'
 import { mainAction } from '@/store/main/main-slice'
+import { setStorage } from '@/utils'
 type ModalProps = {
   isOpen: boolean
   handleOpenModal: () => void
@@ -78,7 +79,7 @@ const AddtransactionModal: React.FC<ModalProps> = ({
     }
 
     dispatch(mainAction.setState({ state: 'data', value: updatedData }))
-
+    setStorage('data', updatedData)
     setTransactionDetails([{ description: '', amount: '' }])
     handleOpenModal()
   }

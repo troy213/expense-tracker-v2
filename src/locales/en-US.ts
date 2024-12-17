@@ -1,5 +1,5 @@
 const messages = {
-  AddCategory: 'Add Total Category',
+  AddCategory: 'Add Category',
   CategoryAndBudget: 'Category & Budget',
   DarkTheme: 'Dark Theme',
   Dashboard: 'Dashboard',
