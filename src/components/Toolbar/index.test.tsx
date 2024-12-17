@@ -1,7 +1,9 @@
 import { render, screen } from '@testing-library/react'
-import { BrowserRouter } from 'react-router-dom'
 import { vi } from 'vitest'
+import { BrowserRouter } from 'react-router-dom'
+import { Provider } from 'react-redux'
 import Toolbar from '@/components/Toolbar'
+import store from '@/store'
 
 // Mocking the SVGs for simplicity
 vi.mock('@/assets', () => ({
@@ -16,7 +18,9 @@ describe('Toolbar Component', () => {
   test('renders all toolbar icons and links', () => {
     render(
       <BrowserRouter>
-        <Toolbar />
+        <Provider store={store}>
+          <Toolbar />
+        </Provider>
       </BrowserRouter>
     )
 

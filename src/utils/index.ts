@@ -64,3 +64,18 @@ export const setStorage = (key: string, value: string | Data[]): void => {
 export const getStorage = (key: string) => {
   return localStorage.getItem(key)
 }
+
+export const calculateModalBottomThreshold = () => {
+  const DEFAULT_FONT_SIZE = Number(
+    window
+      .getComputedStyle(document.body)
+      .getPropertyValue('font-size')
+      .replace(/[^0-9]/g, '')
+  )
+  const TOOLBAR_HEIGHT = DEFAULT_FONT_SIZE * 4
+  const GAP = DEFAULT_FONT_SIZE * 3 // change this multiplier value to set the modal higher
+
+  const THRESHOLD = GAP + TOOLBAR_HEIGHT
+
+  return THRESHOLD
+}

@@ -26,3 +26,9 @@ export const LANGUAGES: Messages = {
   [LOCALES.ENGLISH]: english,
   [LOCALES.INDONESIA]: indonesia,
 } as const
+
+export const REGEX = {
+  ALPHA_NUMERIC: /^[a-zA-Z0-9]+$/,
+  LETTER: /^[a-zA-Z]+$/,
+  NUMBER: /^\d+$/,
+}

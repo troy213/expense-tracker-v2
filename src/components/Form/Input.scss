@@ -1,0 +1,33 @@
+.form-input {
+  &__input {
+    min-height: 24px;
+    width: 100%;
+    padding: 0 0.5em;
+    background-color: transparent;
+    border: 1px solid $color-primary;
+    border-radius: 0.25em;
+    font-size: 0.75rem;
+
+    &-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5em;
+    }
+
+    &:focus {
+      outline: 1px solid $color-primary;
+    }
+
+    &::placeholder {
+      color: black;
+    }
+
+    &--error {
+      border: 1px solid $color-danger;
+
+      &:focus {
+        border-color: $color-danger;
+      }
+    }
+  }
+}

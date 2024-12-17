@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { MoreVerticalSvg } from '@/assets'
 import { Data } from '@/types'
 import {
+  calculateModalBottomThreshold,
   combineClassName,
   currencyFormatter,
   formatTransactionDate,
@@ -22,11 +23,11 @@ const sumTotalItemValue = (item: Data['subdata'][0]['item']): number => {
 }
 
 const getModalPositionClassName = (elementRect: DOMRect | undefined) => {
-  const MODAL_BOTTOM_THRESHOLD = 150
+  const modalBottomThreshold = calculateModalBottomThreshold()
   const viewPortHeight = window.innerHeight
   const elementSizeDiff = viewPortHeight - (elementRect?.bottom ?? 0)
 
-  if (elementSizeDiff < MODAL_BOTTOM_THRESHOLD) return 'modal--top'
+  if (elementSizeDiff < modalBottomThreshold) return 'modal--top'
   return ''
 }
 

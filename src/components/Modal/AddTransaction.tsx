@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks'
 import { CategoryType, Data } from '@/types'
 import { mainAction } from '@/store/main/main-slice'
 import { setStorage } from '@/utils'
+
 type ModalProps = {
   isOpen: boolean
   handleOpenModal: () => void
