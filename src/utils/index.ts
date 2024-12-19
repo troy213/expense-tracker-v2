@@ -1,4 +1,4 @@
-import { ConditionArray, Data } from '@/types'
+import { Category, ConditionArray, Data } from '@/types'
 
 export const combineClassName = (
   defaultStyle: string = '',
@@ -35,14 +35,18 @@ export const formatTransactionDate = (dateString: string): string => {
   }
 }
 
-export const currencyFormatter = (value: number) => {
+export const currencyFormatter = (amount: string | number) => {
+  const number = typeof amount === 'string' ? Number(amount) : amount
+
+  if (isNaN(number)) return 0
+
   const formatter = new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
     minimumFractionDigits: 0,
   })
 
-  return formatter.format(value)
+  return formatter.format(number || 0)
 }
 
 export const setStateReducerValue = <T, K extends keyof T>(
@@ -53,7 +57,10 @@ export const setStateReducerValue = <T, K extends keyof T>(
   state[key] = value
 }
 
-export const setStorage = (key: string, value: string | Data[]): void => {
+export const setStorage = (
+  key: string,
+  value: string | Data[] | Category[]
+): void => {
   if (Array.isArray(value)) {
     localStorage.setItem(key, JSON.stringify(value))
   } else {

@@ -1,6 +1,12 @@
 const messages = {
+  Add: 'Tambah',
   AddCategory: 'Tambah Kategori',
-  CategoryAndBudget: 'Kategori & Budget',
+  AddIncomeCategory: 'Tambah Kategori Pendapatan',
+  AddExpenseCategory: 'Tambah Kategori Pengeluaran',
+  BudgetRp: 'Anggaran (Rp.)',
+  Cancel: 'Batal',
+  CategoryName: 'Nama Kategori',
+  CategoryAndBudget: 'Kategori & Anggaran',
   DarkTheme: 'Mode Gelap',
   Dashboard: 'Dasbor',
   DeleteData: 'Hapus Data',
@@ -18,9 +24,9 @@ const messages = {
   Theme: 'Tema',
   TotalBalance: 'Total Saldo',
   TotalIncome: 'Total Pendapatan',
-  TotalMaxBudget: 'Total Max Budget',
+  TotalMaxBudget: 'Total Max Anggaran',
   TotalExpense: 'Total Pengeluaran',
-  TotalRemainingBudget: 'Sisa Budget',
+  TotalRemainingBudget: 'Sisa Anggaran',
 }
 
 export default {

@@ -1,5 +1,11 @@
 const messages = {
+  Add: 'Add',
   AddCategory: 'Add Category',
+  AddIncomeCategory: 'Add Income Category',
+  AddExpenseCategory: 'Add Outcome Category',
+  BudgetRp: 'Budget (Rp.)',
+  Cancel: 'Cancel',
+  CategoryName: 'Category name',
   CategoryAndBudget: 'Category & Budget',
   DarkTheme: 'Dark Theme',
   Dashboard: 'Dashboard',

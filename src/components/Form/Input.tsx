@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
-import { combineClassName } from '@/utils'
+import { combineClassName, currencyFormatter } from '@/utils'
 
 type InputProps = {
-  value: string
-  id: string
-  setError: (value: string) => void
+  type: 'text' | 'currency'
+  value: string | number
   onChange: (value: string) => void
+  id?: string
   className?: string
   inputClassName?: string
   label?: string
@@ -14,10 +14,12 @@ type InputProps = {
   pattern?: RegExp
   errorMessage?: string
   patternErrorMessage?: string
+  setError: (val: string) => void
 }
 
 const Input: React.FC<InputProps> = (props) => {
   const {
+    type = 'text',
     label = '',
     placeholder = '',
     pattern = null,
@@ -56,22 +58,33 @@ const Input: React.FC<InputProps> = (props) => {
   ])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value
+    let newValue = e.target.value
+
+    if (type === 'currency') {
+      newValue = newValue.replace(/[^\d]/g, '')
+    }
+
     onChange(newValue)
   }
 
   useEffect(() => {
-    if (pattern && value && !new RegExp(pattern).test(value)) {
-      setInternalError(patternErrorMessage)
-      setError(patternErrorMessage)
-    } else if (errorMessage) {
-      setInternalError(errorMessage)
-      setError(errorMessage)
-    } else {
-      setInternalError('')
-      setError('')
+    const newError =
+      pattern && value && !new RegExp(pattern).test(String(value))
+        ? patternErrorMessage
+        : errorMessage || ''
+
+    if (newError !== internalError) {
+      setInternalError(newError)
+      setError(newError)
     }
-  }, [value, pattern, errorMessage, patternErrorMessage, setError])
+  }, [
+    value,
+    pattern,
+    errorMessage,
+    patternErrorMessage,
+    setError,
+    internalError,
+  ])
 
   return (
     <div className={containerClassName}>
@@ -83,7 +96,7 @@ const Input: React.FC<InputProps> = (props) => {
       <div>
         <input
           type="text"
-          value={value}
+          value={type === 'currency' ? currencyFormatter(value) : String(value)}
           onChange={handleChange}
           placeholder={placeholder}
           className={inputClassName}

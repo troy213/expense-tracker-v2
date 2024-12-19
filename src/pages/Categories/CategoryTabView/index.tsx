@@ -1,17 +1,24 @@
 import { useState } from 'react'
+import { useIntl } from 'react-intl'
 import { PlusSvg } from '@/assets'
 import InputCategoryModal from '@/components/Modal/InputCategoryModal'
-import { combineClassName } from '@/utils'
+import { combineClassName, currencyFormatter } from '@/utils'
+import { CategoryType } from '@/types'
+import { useAppSelector } from '@/hooks'
 import CategoryWidget from './CategoryWidget'
-import { useIntl } from 'react-intl'
-
-type SelectedCategory = 'income' | 'expense'
 
 const CategoryTabView = () => {
   const { formatMessage } = useIntl()
   const [selectedCategory, setSelectedCategory] =
-    useState<SelectedCategory>('income')
+    useState<CategoryType>('income')
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const { categories } = useAppSelector((state) => state.categoriesReducer)
+  const totalBudget = categories
+    .filter((category) => category.type === selectedCategory)
+    .reduce(
+      (accumulator, currentValue) => accumulator + (currentValue.budget ?? 0),
+      0
+    )
 
   const contentClassName = combineClassName('category-tab-view__content', [
     {
@@ -23,34 +30,36 @@ const CategoryTabView = () => {
       className: 'active--right',
     },
   ])
-
-  const handleSetCategory = (category: SelectedCategory) => {
-    setSelectedCategory(category)
-  }
+  const incomeTabViewClassName = combineClassName('category-tab-view__tab', [
+    { condition: selectedCategory === 'income', className: 'selected' },
+  ])
+  const expenseTabViewClassName = combineClassName('category-tab-view__tab', [
+    { condition: selectedCategory === 'expense', className: 'selected' },
+  ])
 
   return (
     <div className="category-tab-view">
-      <InputCategoryModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+      <InputCategoryModal
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        selectedCategory={selectedCategory}
+      />
 
       <ul className="flex">
-        <li
-          className={`category-tab-view__tab${selectedCategory === 'income' ? ' selected' : ''}`}
-        >
+        <li className={incomeTabViewClassName}>
           <button
             type="button"
             className="btn btn-clear"
-            onClick={() => handleSetCategory('income')}
+            onClick={() => setSelectedCategory('income')}
           >
             {formatMessage({ id: 'Income' })}
           </button>
         </li>
-        <li
-          className={`category-tab-view__tab${selectedCategory === 'expense' ? ' selected' : ''}`}
-        >
+        <li className={expenseTabViewClassName}>
           <button
             type="button"
             className="btn btn-clear"
-            onClick={() => handleSetCategory('expense')}
+            onClick={() => setSelectedCategory('expense')}
           >
             {formatMessage({ id: 'Expense' })}
           </button>
@@ -65,7 +74,7 @@ const CategoryTabView = () => {
               <span className="text--light text--3">
                 {formatMessage({ id: 'TotalMaxBudget' })}
               </span>
-              <span>Rp1.234.567</span>
+              <span>{currencyFormatter(totalBudget)}</span>
             </div>
           </div>
         )}
@@ -83,13 +92,16 @@ const CategoryTabView = () => {
           </div>
         </button>
 
-        {/* All categories data will be looped here */}
-
-        {/* Expense categories can have a budget  */}
-        <CategoryWidget type="expense" />
-
-        {/* Income categories don't have a budget  */}
-        <CategoryWidget type="income" />
+        {categories
+          .filter((category) => category.type === selectedCategory)
+          .map((category) => (
+            <CategoryWidget
+              key={category.id}
+              type={category.type}
+              name={category.name}
+              budget={category.budget ?? 0}
+            />
+          ))}
       </div>
     </div>
   )
