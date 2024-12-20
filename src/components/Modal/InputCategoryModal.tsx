@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
 import { v4 as uuidv4 } from 'uuid'
 import { REGEX } from '@/constants'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { categoriesAction } from '@/store/categories/categories-slice'
 import { Category, CategoryType } from '@/types'
+import { validateForm } from '@/utils/formUtils'
 import Modal from '.'
 import Form from '../Form'
 
@@ -69,30 +70,9 @@ const InputCategoryModal: React.FC<InputCategoryModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    let formIsValid = true
-
-    const isExist =
-      categories.findIndex((val) => val.name === data.name.trim()) >= 0
-
-    if (isExist) {
-      handleError('name', 'Category is already exist')
-      formIsValid = false
-    }
-
-    Object.entries(data).forEach(([key, value]) => {
-      const typedKey = key as keyof CategoryForm
-
-      if (value === '') {
-        formIsValid = false
-        setError((prevState) => ({
-          ...prevState,
-          [typedKey]: 'This field cannot be empty',
-        }))
-      }
-
-      if (error[typedKey]) {
-        formIsValid = false
-      }
+    const formIsValid = validateForm(data, categories, setError, {
+      isRequired: ['name', 'budget'],
+      uniqueDataKey: ['name'],
     })
 
     if (formIsValid) {
@@ -115,6 +95,11 @@ const InputCategoryModal: React.FC<InputCategoryModalProps> = ({
     setIsOpen(false)
   }
 
+  useEffect(() => {
+    setData(dataInitialValue)
+    setError(errorInitialValue)
+  }, [isOpen])
+
   return (
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
       <form className="input-category-modal" onSubmit={handleSubmit}>
@@ -127,7 +112,7 @@ const InputCategoryModal: React.FC<InputCategoryModalProps> = ({
           onChange={(val) => handleChange('name', val)}
           errorMessage={error.name}
           setError={(val) => handleError('name', val)}
-          pattern={REGEX.ALPHA_NUMERIC}
+          pattern={REGEX.COMMON_TEXT}
           patternErrorMessage="Only alphanumeric characters allowed"
         />
         {selectedCategory === 'expense' && (

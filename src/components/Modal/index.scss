@@ -3,7 +3,7 @@
 
 .modal {
   position: fixed;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba($color-dark, 0.3);
   height: 100%;
   width: 100%;
   display: flex;
@@ -22,5 +22,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    box-shadow: 0 0.25rem 12px rgba(black, 0.25);
   }
 }

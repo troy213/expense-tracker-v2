@@ -28,7 +28,8 @@ export const LANGUAGES: Messages = {
 } as const
 
 export const REGEX = {
-  ALPHA_NUMERIC: /^[a-zA-Z0-9 ]+$/,
+  ALPHANUMERIC: /^[a-zA-Z0-9]+$/,
+  COMMON_TEXT: /^[a-zA-Z0-9& ]+$/,
   LETTER: /^[a-zA-Z]+$/,
   NUMBER: /^\d+$/,
 }

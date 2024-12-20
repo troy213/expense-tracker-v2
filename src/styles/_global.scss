@@ -8,6 +8,7 @@ body.dark {
   .widget,
   .categories,
   .dashboard,
+  .form-input__input,
   .transactions,
   .transaction-detail,
   .reports,
@@ -16,6 +17,15 @@ body.dark {
     color: $color-white;
 
     & button {
+      color: $color-white;
+    }
+  }
+
+  .modal {
+    background-color: rgba($color-dark, 0.3);
+
+    &__container {
+      background-color: $color-dark;
       color: $color-white;
     }
   }
