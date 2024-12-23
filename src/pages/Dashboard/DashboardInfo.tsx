@@ -1,10 +1,15 @@
 import { ArrowDownSvg, ArrowUpSvg, SlidersSvg } from '@/assets'
 import { ProgressBar, Widget } from '@/components'
+import { useAppSelector } from '@/hooks'
+import { currencyFormatter } from '@/utils'
 import { useIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 
 const DashboardInfo = () => {
   const { formatMessage } = useIntl()
+  const { totalBalance, totalExpense, totalIncome } = useAppSelector(
+    (state) => state.mainReducer
+  )
 
   return (
     <div className="dashboard-info">
@@ -12,7 +17,9 @@ const DashboardInfo = () => {
         <span className="text--light text--3">
           {formatMessage({ id: 'TotalBalance' })}
         </span>
-        <span className="text--bold text--8">Rp1.234.567</span>
+        <span className="text--bold text--8">
+          {currencyFormatter(totalBalance)}
+        </span>
       </div>
       <div className="flex gap-4">
         <Widget>
@@ -23,7 +30,7 @@ const DashboardInfo = () => {
               </span>
               <ArrowUpSvg className="icon--sm icon--stroke-success" />
             </div>
-            <span>Rp1.234.567</span>
+            <span>{currencyFormatter(totalIncome)}</span>
           </div>
         </Widget>
         <Widget>
@@ -34,7 +41,7 @@ const DashboardInfo = () => {
               </span>
               <ArrowDownSvg className="icon--sm icon--stroke-danger" />
             </div>
-            <span>Rp1.234.567</span>
+            <span>{currencyFormatter(totalExpense)}</span>
           </div>
         </Widget>
       </div>

@@ -59,12 +59,12 @@ export const setStateReducerValue = <T, K extends keyof T>(
 
 export const setStorage = (
   key: string,
-  value: string | Data[] | Category[]
+  value: string | Data[] | Category[] | number
 ): void => {
   if (Array.isArray(value)) {
     localStorage.setItem(key, JSON.stringify(value))
   } else {
-    localStorage.setItem(key, value)
+    localStorage.setItem(key, value.toString())
   }
 }
 

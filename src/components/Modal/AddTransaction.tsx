@@ -4,7 +4,6 @@ import { CrossSvg, PlusSvg } from '@/assets'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { CategoryType, Data } from '@/types'
 import { mainAction } from '@/store/main/main-slice'
-import { setStorage } from '@/utils'
 
 type ModalProps = {
   isOpen: boolean
@@ -16,6 +15,8 @@ const AddtransactionModal: React.FC<ModalProps> = ({
   handleOpenModal,
 }) => {
   const txData = useAppSelector((state) => state.mainReducer.data)
+  const category = useAppSelector((state) => state.categoriesReducer.categories)
+  const today = new Date().toISOString().split('T')[0]
   const dispatch = useAppDispatch()
   const [transactionDetails, setTransactionDetails] = useState([
     { description: '', amount: '' },
@@ -79,8 +80,8 @@ const AddtransactionModal: React.FC<ModalProps> = ({
       updatedData = [...txData, newTx]
     }
 
-    dispatch(mainAction.setState({ state: 'data', value: updatedData }))
-    setStorage('data', updatedData)
+    dispatch(mainAction.setData(updatedData))
+
     setTransactionDetails([{ description: '', amount: '' }])
     handleOpenModal()
   }
@@ -106,7 +107,7 @@ const AddtransactionModal: React.FC<ModalProps> = ({
                 <input
                   type="radio"
                   name="transactionType"
-                  value="Income"
+                  value="income"
                   className="mr-2"
                   onChange={handleOnRadioChange}
                   checked={!isExpense}
@@ -118,7 +119,7 @@ const AddtransactionModal: React.FC<ModalProps> = ({
                 <input
                   type="radio"
                   name="transactionType"
-                  value="Expense"
+                  value="expense"
                   className="mr-2"
                   onChange={handleOnRadioChange}
                   checked={isExpense}
@@ -142,6 +143,7 @@ const AddtransactionModal: React.FC<ModalProps> = ({
                   className="modal__input"
                   type="date"
                   name="transactionDate"
+                  max={today}
                   required
                 />
               </label>
@@ -150,11 +152,13 @@ const AddtransactionModal: React.FC<ModalProps> = ({
               <legend>Category:</legend>
               <label>
                 <select className="modal__input" name="transactionCategory">
-                  <option value="Food">Food</option>
-                  <option value="Transport">Transport</option>
-                  <option value="Utilities">Utilities</option>
-                  <option value="Entertainment">Entertainment</option>
-                  <option value="Other">Others</option>
+                  {category
+                    .filter((cat) =>
+                      isExpense ? cat.type === 'expense' : cat.type === 'income'
+                    )
+                    .map((cat) => {
+                      return <option key={cat.id}>{cat.name}</option>
+                    })}
                 </select>
               </label>
             </fieldset>
