@@ -48,7 +48,6 @@ const mainSlice = createSlice({
           currData.subdata.forEach((sub) => {
             const itemTotal = sub.item.reduce((sum, i) => sum + i.amount, 0)
             if (sub.type === 'income') {
-              console.log('income')
               total.totalIncome += itemTotal
             } else if (sub.type === 'expense') {
               total.totalExpense += itemTotal
