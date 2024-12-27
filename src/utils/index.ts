@@ -96,3 +96,22 @@ export const calculateModalBottomThreshold = () => {
 
   return THRESHOLD
 }
+
+export const updateTotal = (data: Data[]) => {
+  const { totalIncome, totalExpense } = data.reduce(
+    (total, currData) => {
+      currData.subdata.forEach((sub) => {
+        const itemTotal = sub.item.reduce((sum, i) => sum + i.amount, 0)
+        if (sub.type === 'income') {
+          total.totalIncome += itemTotal
+        } else if (sub.type === 'expense') {
+          total.totalExpense += itemTotal
+        }
+      })
+      return total
+    },
+    { totalIncome: 0, totalExpense: 0 }
+  )
+  const totalBalance = totalIncome - totalExpense
+  return { totalIncome, totalExpense, totalBalance }
+}

@@ -28,7 +28,6 @@ const mainSlice = createSlice({
     setData(state, action: PayloadAction<Data[]>) {
       state.data = action.payload
       setStorage('data', action.payload)
-      mainSlice.caseReducers.updateTotal(state)
     },
     setState(
       state: InitialState,
@@ -41,29 +40,6 @@ const mainSlice = createSlice({
 
     resetState() {
       return initialState
-    },
-    updateTotal(state) {
-      const { totalIncome, totalExpense } = state.data.reduce(
-        (total, currData) => {
-          currData.subdata.forEach((sub) => {
-            const itemTotal = sub.item.reduce((sum, i) => sum + i.amount, 0)
-            if (sub.type === 'income') {
-              total.totalIncome += itemTotal
-            } else if (sub.type === 'expense') {
-              total.totalExpense += itemTotal
-            }
-          })
-          return total
-        },
-        { totalIncome: 0, totalExpense: 0 }
-      )
-      const totalBalance = totalIncome - totalExpense
-      state.totalIncome = totalIncome
-      state.totalExpense = totalExpense
-      state.totalBalance = totalBalance
-      setStorage('totalIncome', totalIncome)
-      setStorage('totalExpense', totalExpense)
-      setStorage('totalBalance', totalBalance)
     },
   },
 })

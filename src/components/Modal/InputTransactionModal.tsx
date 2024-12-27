@@ -5,7 +5,7 @@ import { REGEX } from '@/constants'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { mainAction } from '@/store/main/main-slice'
 import { CategoryType } from '@/types'
-import { getDate } from '@/utils'
+import { currencyFormatter, getDate } from '@/utils'
 import Modal from '.'
 import Form from '../Form'
 
@@ -76,6 +76,8 @@ const InputTransactionModal: React.FC<ModalProps> = ({
   const categoryList = categories
     .filter((category) => category.type === data.type)
     .map((category) => category.name)
+
+  const [budget] = categories.filter((cat) => cat.name === data.category)
 
   const handleAddDetail = () => {
     setTransactionDetails((prevState) => [
@@ -287,7 +289,9 @@ const InputTransactionModal: React.FC<ModalProps> = ({
             <span className="text--color-primary text--light text--3">
               {formatMessage({ id: 'RemainingBudgetForThisCategory' })}
             </span>
-            <span className="text--color-primary">Rp.2.250.000</span>
+            <span className="text--color-primary">
+              {currencyFormatter(budget?.budget ?? 0)}
+            </span>
           </div>
         )}
 

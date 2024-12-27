@@ -1,16 +1,14 @@
 import { ArrowDownSvg, ArrowUpSvg, SlidersSvg } from '@/assets'
 import { ProgressBar, Widget } from '@/components'
 import { useAppSelector } from '@/hooks'
-import { currencyFormatter } from '@/utils'
+import { currencyFormatter, updateTotal } from '@/utils'
 import { useIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 
 const DashboardInfo = () => {
   const { formatMessage } = useIntl()
-  const { totalBalance, totalExpense, totalIncome } = useAppSelector(
-    (state) => state.mainReducer
-  )
-
+  const { data } = useAppSelector((state) => state.mainReducer)
+  const { totalIncome, totalExpense, totalBalance } = updateTotal(data)
   return (
     <div className="dashboard-info">
       <div className="flex-column flex-align-center">
