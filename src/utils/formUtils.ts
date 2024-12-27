@@ -3,7 +3,7 @@ type ValidationOptions<T> = {
   isRequired?: Array<keyof T>
 }
 
-export const validateForm = <T, E>(
+export const validateEmptyForm = <T, E>(
   data: T,
   currentData: T[],
   setError: React.Dispatch<React.SetStateAction<E>>,

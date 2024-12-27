@@ -10,6 +10,46 @@ body.dark {
   --default-color-danger: #d40d08;
 }
 
+// COMPONENT
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 0.25em;
+  cursor: pointer;
+}
+
+.btn-clear {
+  padding: 0;
+  background-color: unset;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background-color: $color-primary;
+  color: $color-white;
+}
+
+.btn-danger {
+  background-color: $color-danger;
+  color: $color-white;
+}
+
+.btn-outline {
+  &-primary {
+    background-color: transparent;
+    border: 1px solid $color-primary;
+    color: $color-primary;
+  }
+}
+
+.btn-dashed {
+  border: 1px dashed $color-primary;
+}
+
 // TEXT STYLE
 .text--bold {
   font-weight: 700;
@@ -137,6 +177,11 @@ body.dark {
   display: flex;
 }
 
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
 .flex-column {
   display: flex;
   flex-direction: column;
@@ -169,6 +214,10 @@ body.dark {
 
 .flex-1 {
   flex: 1;
+}
+
+.inline {
+  display: inline;
 }
 
 .gap-1 {
@@ -348,46 +397,6 @@ body.dark {
 
 .absolute {
   position: absolute;
-}
-
-// COMPONENT
-.btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5em;
-  padding: 0.5em 1em;
-  border: none;
-  border-radius: 0.25em;
-  cursor: pointer;
-}
-
-.btn-clear {
-  padding: 0;
-  background-color: unset;
-  font-size: 1rem;
-}
-
-.btn-primary {
-  background-color: $color-primary;
-  color: $color-white;
-}
-
-.btn-danger {
-  background-color: $color-danger;
-  color: $color-white;
-}
-
-.btn-outline {
-  &-primary {
-    background-color: transparent;
-    border: 1px solid $color-primary;
-    color: $color-primary;
-  }
-}
-
-.btn-dashed {
-  border: 1px dashed $color-primary;
 }
 
 .width-100 {

@@ -1,7 +1,6 @@
 @import './styles/variables';
 @import './styles/global';
 @import './styles/config';
-@import './styles/utility';
 
 // components styles
 @import './components/Form';
@@ -17,3 +16,5 @@
 @import './pages/Dashboard';
 @import './pages/Reports';
 @import './pages/Settings';
+
+@import './styles/utility';

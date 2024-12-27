@@ -15,6 +15,16 @@ export const combineClassName = (
   return result.trim()
 }
 
+// return a date with {year}-{month}-{date} format
+export const getDate = (): string => {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = now.getMonth() + 1
+  const date = now.getDate()
+
+  return `${year}-${month}-${date}`
+}
+
 export const formatTransactionDate = (dateString: string): string => {
   const date = new Date(dateString)
   const today = new Date()

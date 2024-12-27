@@ -5,7 +5,7 @@ import { REGEX } from '@/constants'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { categoriesAction } from '@/store/categories/categories-slice'
 import { Category, CategoryType } from '@/types'
-import { validateForm } from '@/utils/formUtils'
+import { validateEmptyForm } from '@/utils/formUtils'
 import Modal from '.'
 import Form from '../Form'
 
@@ -70,9 +70,13 @@ const InputCategoryModal: React.FC<InputCategoryModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const formIsValid = validateForm(data, categories, setError, {
+    let formIsValid = validateEmptyForm(data, categories, setError, {
       isRequired: ['name', 'budget'],
       uniqueDataKey: ['name'],
+    })
+
+    Object.entries(error).forEach(([, value]) => {
+      if (value) formIsValid = false
     })
 
     if (formIsValid) {
@@ -112,8 +116,10 @@ const InputCategoryModal: React.FC<InputCategoryModalProps> = ({
           onChange={(val) => handleChange('name', val)}
           errorMessage={error.name}
           setError={(val) => handleError('name', val)}
-          pattern={REGEX.COMMON_TEXT}
-          patternErrorMessage="Only alphanumeric characters allowed"
+          pattern={REGEX.COMMON_TEXT.PATTERN}
+          patternErrorMessage={formatMessage({
+            id: REGEX.COMMON_TEXT.ERROR_MESSAGE,
+          })}
         />
         {selectedCategory === 'expense' && (
           <Form.Input
@@ -124,8 +130,10 @@ const InputCategoryModal: React.FC<InputCategoryModalProps> = ({
             onChange={(val) => handleChange('budget', Number(val))}
             errorMessage={error.budget}
             setError={(val) => handleError('budget', val)}
-            pattern={REGEX.NUMBER}
-            patternErrorMessage="Only numeric characters allowed"
+            pattern={REGEX.NUMBER.PATTERN}
+            patternErrorMessage={formatMessage({
+              id: REGEX.NUMBER.ERROR_MESSAGE,
+            })}
           />
         )}
         <div className="flex-column gap-4 mt-4">

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { combineClassName, currencyFormatter } from '@/utils'
 
 type InputProps = {
-  type: 'text' | 'currency'
+  type: 'text' | 'currency' | 'date'
   value: string | number
   onChange: (value: string) => void
   id?: string
@@ -14,7 +14,7 @@ type InputProps = {
   pattern?: RegExp
   errorMessage?: string
   patternErrorMessage?: string
-  setError: (val: string) => void
+  setError?: (val: string) => void
 }
 
 const Input: React.FC<InputProps> = (props) => {
@@ -43,17 +43,10 @@ const Input: React.FC<InputProps> = (props) => {
     [props.labelClassName ?? '']
   )
   const inputClassName = combineClassName('form-input__input', [
-    {
-      condition: props.inputClassName !== '',
-      className: props.inputClassName ?? '',
-    },
+    props.inputClassName ?? '',
     {
       condition: internalError !== '',
       className: 'form-input__input--error',
-    },
-    {
-      condition: value !== '',
-      className: 'form-input__input--has-value',
     },
   ])
 
@@ -65,6 +58,11 @@ const Input: React.FC<InputProps> = (props) => {
     }
 
     onChange(newValue)
+    if (pattern && newValue && !new RegExp(pattern).test(String(newValue))) {
+      setError(patternErrorMessage)
+    } else {
+      setError('')
+    }
   }
 
   useEffect(() => {
@@ -95,7 +93,7 @@ const Input: React.FC<InputProps> = (props) => {
       )}
       <div>
         <input
-          type="text"
+          type={type === 'text' || type === 'currency' ? 'text' : type}
           value={type === 'currency' ? currencyFormatter(value) : String(value)}
           onChange={handleChange}
           placeholder={placeholder}
