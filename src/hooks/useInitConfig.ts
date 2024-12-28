@@ -13,9 +13,6 @@ const useInitConfig = () => {
     const storedLocales = getStorage('locales')
     const storedData = getStorage('data')
     const storedCategories = getStorage('categories')
-    const storedTotalIncome = getStorage('totalIncome')
-    const storedTotalExpense = getStorage('totalExpense')
-    const storedTotalBalance = getStorage('totalBalance')
 
     if (storedTheme === THEME.DARK || storedTheme === THEME.LIGHT) {
       dispatch(mainAction.setState({ state: 'theme', value: storedTheme }))
@@ -39,30 +36,6 @@ const useInitConfig = () => {
       const parsedData = JSON.parse(storedCategories)
       dispatch(
         categoriesAction.setState({ state: 'categories', value: parsedData })
-      )
-    }
-    if (storedTotalIncome) {
-      dispatch(
-        mainAction.setState({
-          state: 'totalIncome',
-          value: parseFloat(storedTotalIncome),
-        })
-      )
-    }
-    if (storedTotalExpense) {
-      dispatch(
-        mainAction.setState({
-          state: 'totalExpense',
-          value: parseFloat(storedTotalExpense),
-        })
-      )
-    }
-    if (storedTotalBalance) {
-      dispatch(
-        mainAction.setState({
-          state: 'totalBalance',
-          value: parseFloat(storedTotalBalance),
-        })
       )
     }
   }, [dispatch])

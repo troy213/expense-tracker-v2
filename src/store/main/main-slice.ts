@@ -7,18 +7,12 @@ type InitialState = {
   theme: Theme
   selectedLocale: Locales
   data: Data[]
-  totalIncome: number
-  totalExpense: number
-  totalBalance: number
 }
 
 const initialState: InitialState = {
   theme: THEME.LIGHT,
   selectedLocale: LOCALES.ENGLISH,
   data: [],
-  totalIncome: 0,
-  totalExpense: 0,
-  totalBalance: 0,
 }
 
 const mainSlice = createSlice({
@@ -37,7 +31,9 @@ const mainSlice = createSlice({
 
       setStateReducerValue(state, key, value)
     },
-
+    resetData(state) {
+      state.data = []
+    },
     resetState() {
       return initialState
     },
