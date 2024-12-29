@@ -115,3 +115,46 @@ export const updateTotal = (data: Data[]) => {
   const totalBalance = totalIncome - totalExpense
   return { totalIncome, totalExpense, totalBalance }
 }
+
+function getCurrentMonthRange() {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = now.getMonth() + 1 // Months are zero-based, so add 1
+
+  // First day of the month
+  const firstDate = `${year}-${String(month).padStart(2, '0')}-01`
+
+  // Last day of the month
+  const lastDay = new Date(year, month, 0).getDate()
+  const lastDate = `${year}-${String(month).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`
+
+  return {
+    firstDate,
+    lastDate,
+  }
+}
+
+export const calculateRemainingBudget = (
+  txData: Data[],
+  txDetails: { description: string; amount: number }[],
+  category: string = '',
+  budget: number = 0
+) => {
+  const currentExpenses = txDetails.reduce((acc, curr) => acc + curr.amount, 0)
+  const { firstDate, lastDate } = getCurrentMonthRange()
+
+  const currentMonthExpenses = txData.reduce((total, entry) => {
+    if (entry.date >= firstDate && entry.date <= lastDate) {
+      entry.subdata.forEach((subdata) => {
+        if (subdata.type === 'expense' && subdata.category === category) {
+          total += subdata.item.reduce((acc, curr) => acc + curr.amount, 0)
+        }
+      })
+    }
+    return total
+  }, 0)
+
+  const remainingBudget = budget - currentMonthExpenses - currentExpenses
+
+  return remainingBudget
+}

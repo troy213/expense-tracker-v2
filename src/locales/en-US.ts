@@ -4,6 +4,7 @@ const messages = {
   AddIncomeCategory: 'Add Income Category',
   AddExpenseCategory: 'Add Outcome Category',
   AddMoreTransaction: 'Add more transaction',
+  AddTransaction: 'Add Transaction',
   AlphanumericError: 'Only alphanumeric characters allowed',
   AmountRp: 'Amount (Rp.)',
   BudgetRp: 'Budget (Rp.)',
@@ -25,11 +26,14 @@ const messages = {
   ImportData: 'Import Data (.xls)',
   Income: 'Income',
   Indonesia: 'Indonesia',
+  NoCategoryWarningMessage:
+    "Oops! it seems you don't have any category. You can add your first category in the link below.",
   NumberError: 'Only number are allowed',
   Language: 'Language',
   LetterError: 'Only letter are allowed',
   LightTheme: 'Light Theme',
-  RemainingBudgetForThisCategory: 'Remaining budget for this category',
+  RemainingBudgetForThisCategory:
+    'Remaining budget for this category in this month',
   Reports: 'Reports',
   Salary: 'Salary',
   Settings: 'Settings',

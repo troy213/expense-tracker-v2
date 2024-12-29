@@ -33,7 +33,7 @@ const Toolbar = () => {
           <PieChartSvg className="icon--stroke-primary" />
         </Link>
       </div>
-      <div>
+      <div className="toolbar__menu">
         <button
           className="toolbar__add-button"
           onClick={() => {

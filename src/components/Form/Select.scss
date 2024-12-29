@@ -19,6 +19,10 @@
 
     &-placeholder {
       color: rgba($color-dark, 0.5);
+
+      &--has-value {
+        color: $color-primary;
+      }
     }
 
     &-option-container {
@@ -41,6 +45,7 @@
 
     &-option {
       padding: 0.5em;
+      color: $color-primary;
 
       &--selected {
         background-color: $color-primary-2;

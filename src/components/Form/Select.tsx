@@ -55,6 +55,10 @@ const Select: React.FC<SelectProps> = (props) => {
       condition: !value,
       className: 'form-input__select-placeholder',
     },
+    {
+      condition: value !== '',
+      className: 'form-input__select-placeholder--has-value',
+    },
   ])
   const optionContainerClassName = combineClassName(
     'form-input__select-option-container',

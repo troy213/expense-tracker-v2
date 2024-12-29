@@ -1,13 +1,19 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 import { CrossSvg, PlusSvg } from '@/assets'
 import { REGEX } from '@/constants'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { mainAction } from '@/store/main/main-slice'
 import { CategoryType } from '@/types'
-import { currencyFormatter, getDate } from '@/utils'
+import {
+  calculateRemainingBudget,
+  combineClassName,
+  currencyFormatter,
+  getDate,
+} from '@/utils'
 import Modal from '.'
 import Form from '../Form'
+import { Link } from 'react-router-dom'
 
 type ModalProps = {
   isOpen: boolean
@@ -73,11 +79,36 @@ const InputTransactionModal: React.FC<ModalProps> = ({
   const dispatch = useAppDispatch()
   const { formatMessage } = useIntl()
 
-  const categoryList = categories
-    .filter((category) => category.type === data.type)
-    .map((category) => category.name)
+  const filteredCategory = categories.filter(
+    (category) => category.type === data.type
+  )
+  const categoryList = filteredCategory.map((category) => category.name)
 
-  const [budget] = categories.filter((cat) => cat.name === data.category)
+  const budget = categories.filter(
+    (category) => category.name === data.category
+  )[0]?.budget
+
+  const remainingBudget = useMemo(
+    () =>
+      calculateRemainingBudget(
+        transactionsData,
+        transactionDetails,
+        data.category,
+        budget
+      ),
+    [data.category, budget, transactionsData, transactionDetails]
+  )
+
+  const remainingBudgetClassName = combineClassName('', [
+    {
+      condition: remainingBudget >= 0,
+      className: 'text--color-primary',
+    },
+    {
+      condition: remainingBudget < 0,
+      className: 'text--color-danger',
+    },
+  ])
 
   const handleAddDetail = () => {
     setTransactionDetails((prevState) => [
@@ -244,6 +275,26 @@ const InputTransactionModal: React.FC<ModalProps> = ({
     if (!isOpen) resetData()
   }, [data.type, isOpen, categories])
 
+  if (!filteredCategory.length) {
+    return (
+      <Modal isOpen={isOpen} onClose={() => handleOpenModal(false)}>
+        <div className="flex-column gap-2">
+          <span className="text--bold text--color-primary">
+            {formatMessage({ id: 'AddTransaction' })}
+          </span>
+          <span className="text--light text--color-primary text--3">
+            {formatMessage({ id: 'NoCategoryWarningMessage' })}
+          </span>
+          <Link to="/categories" onClick={() => handleOpenModal(false)}>
+            <span className="text--underline text--color-primary text--3">
+              {formatMessage({ id: 'AddCategory' })}
+            </span>
+          </Link>
+        </div>
+      </Modal>
+    )
+  }
+
   return (
     <Modal
       isOpen={isOpen}
@@ -252,7 +303,9 @@ const InputTransactionModal: React.FC<ModalProps> = ({
       }}
     >
       <form className="flex-column gap-4" onSubmit={handleSubmit}>
-        <span className="text--bold text--color-primary">Add Transaction</span>
+        <span className="text--bold text--color-primary">
+          {formatMessage({ id: 'AddTransaction' })}
+        </span>
         <Form.Radio
           groupId="transaction-type"
           defaultValue="income"
@@ -289,8 +342,8 @@ const InputTransactionModal: React.FC<ModalProps> = ({
             <span className="text--color-primary text--light text--3">
               {formatMessage({ id: 'RemainingBudgetForThisCategory' })}
             </span>
-            <span className="text--color-primary">
-              {currencyFormatter(budget?.budget ?? 0)}
+            <span className={remainingBudgetClassName}>
+              {currencyFormatter(remainingBudget ?? 0)}
             </span>
           </div>
         )}

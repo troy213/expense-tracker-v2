@@ -4,6 +4,7 @@ const messages = {
   AddIncomeCategory: 'Tambah Kategori Pendapatan',
   AddExpenseCategory: 'Tambah Kategori Pengeluaran',
   AddMoreTransaction: 'Tambah transaksi baru',
+  AddTransaction: 'Tambah Transaksi',
   AlphanumericError: 'Hanya huruf dan angka yang diperbolehkan',
   AmountRp: 'Jumlah (Rp.)',
   BudgetRp: 'Anggaran (Rp.)',
@@ -25,11 +26,14 @@ const messages = {
   ImportData: 'Unggah Data (.xls)',
   Indonesia: 'Bahasa Indonesia',
   Income: 'Pendapatan',
+  NoCategoryWarningMessage:
+    'Oops! sepertinya anda tidak memiliki kategori apapun. Anda dapat menambahkan kategori pertama anda di tautan di bawah ini.',
   NumberError: 'Hanya angka yang diperbolehkan',
   Language: 'Bahasa',
   LetterError: 'Hanya huruf yang diperbolehkan',
   LightTheme: 'Mode Terang',
-  RemainingBudgetForThisCategory: 'Sisa anggaran untuk kategori ini',
+  RemainingBudgetForThisCategory:
+    'Sisa anggaran untuk kategori ini di bulan ini',
   Reports: 'Laporan',
   Salary: 'Gaji',
   Settings: 'Pengaturan',
