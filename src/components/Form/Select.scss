@@ -47,7 +47,7 @@
       padding: 0.5em;
       color: $color-primary;
 
-      &--selected {
+      &.selected {
         background-color: $color-primary-2;
         color: $color-white;
       }

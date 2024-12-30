@@ -93,7 +93,7 @@ const InputTransactionModal: React.FC<ModalProps> = ({
       calculateRemainingBudget(
         transactionsData,
         transactionDetails,
-        data.category,
+        [data.category],
         budget
       ),
     [data.category, budget, transactionsData, transactionDetails]
@@ -285,7 +285,10 @@ const InputTransactionModal: React.FC<ModalProps> = ({
           <span className="text--light text--color-primary text--3">
             {formatMessage({ id: 'NoCategoryWarningMessage' })}
           </span>
-          <Link to="/categories" onClick={() => handleOpenModal(false)}>
+          <Link
+            to={`/categories?cat=${data.type}`}
+            onClick={() => handleOpenModal(false)}
+          >
             <span className="text--underline text--color-primary text--3">
               {formatMessage({ id: 'AddCategory' })}
             </span>

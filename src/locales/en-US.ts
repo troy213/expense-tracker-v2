@@ -46,6 +46,8 @@ const messages = {
   TotalRemainingBudget: 'Total Remaining Budget',
   Transaction: 'Transaction',
   TransactionDetailNo: 'Transaction Detail #{index}',
+  expense: 'expense',
+  income: 'income',
 }
 
 export default {

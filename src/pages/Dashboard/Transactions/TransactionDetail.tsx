@@ -52,7 +52,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
     <div className="transaction-detail">
       <div className="flex-column gap-4">
         <span className="text--italic text--light text--3">
-          {formatTransactionDate(date)}
+          {formatTransactionDate(date, { enableTodayFormat: true })}
         </span>
 
         {subdata.map((subdataItem) => {

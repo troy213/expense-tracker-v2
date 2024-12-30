@@ -1,14 +1,47 @@
+import { useMemo } from 'react'
+import { useIntl } from 'react-intl'
+import { Link } from 'react-router-dom'
 import { ArrowDownSvg, ArrowUpSvg, SlidersSvg } from '@/assets'
 import { ProgressBar, Widget } from '@/components'
 import { useAppSelector } from '@/hooks'
-import { currencyFormatter, updateTotal } from '@/utils'
-import { useIntl } from 'react-intl'
-import { Link } from 'react-router-dom'
+import {
+  calculatePercentage,
+  calculateRemainingBudget,
+  combineClassName,
+  currencyFormatter,
+  formatTransactionDate,
+  getCurrentMonthRange,
+  updateTotal,
+} from '@/utils'
 
 const DashboardInfo = () => {
   const { formatMessage } = useIntl()
   const { data } = useAppSelector((state) => state.mainReducer)
+  const { categories } = useAppSelector((state) => state.categoriesReducer)
   const { totalIncome, totalExpense, totalBalance } = updateTotal(data)
+  const { firstDate, lastDate } = getCurrentMonthRange()
+
+  const expenseCategories = categories
+    .filter((category) => category.type === 'expense')
+    .map((category) => category.name)
+  const totalBudget = categories
+    .filter((category) => category.type === 'expense')
+    .reduce((acc, curr) => acc + (curr.budget ?? 0), 0)
+
+  const remainingBudget = useMemo(
+    () => calculateRemainingBudget(data, [], expenseCategories, totalBudget),
+    [data, expenseCategories, totalBudget]
+  )
+
+  const budgetPercentage = calculatePercentage(remainingBudget, totalBudget)
+
+  const budgetClassName = combineClassName('text--color-primary', [
+    {
+      condition: remainingBudget < 0,
+      className: 'text--color-danger',
+    },
+  ])
+
   return (
     <div className="dashboard-info">
       <div className="flex-column flex-align-center">
@@ -50,20 +83,22 @@ const DashboardInfo = () => {
               <span className="text--light text--3">
                 {formatMessage({ id: 'TotalRemainingBudget' })}
               </span>
-              <span>Rp1.234.567</span>
+              <span className={budgetClassName}>
+                {currencyFormatter(remainingBudget ?? 0)}
+              </span>
             </div>
             <Link to="/categories">
               <SlidersSvg className="icon--stroke-primary" />
             </Link>
           </div>
 
-          <ProgressBar amount={95} />
+          <ProgressBar amount={budgetPercentage < 0 ? 0 : budgetPercentage} />
 
           <div className="flex-space-between">
             <span className="text--italic text--light text--3">
-              1 Apr 2024 - 30 Apr 2024
+              {`${formatTransactionDate(firstDate)} - ${formatTransactionDate(lastDate)}`}
             </span>
-            <span className="text--light text--3">95%</span>
+            <span className="text--light text--3">{budgetPercentage}%</span>
           </div>
         </div>
       </Widget>

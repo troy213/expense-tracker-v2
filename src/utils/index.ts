@@ -25,7 +25,10 @@ export const getDate = (): string => {
   return `${year}-${month}-${date}`
 }
 
-export const formatTransactionDate = (dateString: string): string => {
+export const formatTransactionDate = (
+  dateString: string,
+  options: { enableTodayFormat?: boolean } = {}
+): string => {
   const date = new Date(dateString)
   const today = new Date()
 
@@ -34,7 +37,7 @@ export const formatTransactionDate = (dateString: string): string => {
     date.getMonth() === today.getMonth() &&
     date.getFullYear() === today.getFullYear()
 
-  if (isToday) {
+  if (isToday && options.enableTodayFormat) {
     return 'today'
   } else {
     return date.toLocaleDateString('en-GB', {
@@ -116,7 +119,7 @@ export const updateTotal = (data: Data[]) => {
   return { totalIncome, totalExpense, totalBalance }
 }
 
-function getCurrentMonthRange() {
+export const getCurrentMonthRange = () => {
   const now = new Date()
   const year = now.getFullYear()
   const month = now.getMonth() + 1 // Months are zero-based, so add 1
@@ -137,7 +140,7 @@ function getCurrentMonthRange() {
 export const calculateRemainingBudget = (
   txData: Data[],
   txDetails: { description: string; amount: number }[],
-  category: string = '',
+  categories: string[] = [],
   budget: number = 0
 ) => {
   const currentExpenses = txDetails.reduce((acc, curr) => acc + curr.amount, 0)
@@ -146,7 +149,10 @@ export const calculateRemainingBudget = (
   const currentMonthExpenses = txData.reduce((total, entry) => {
     if (entry.date >= firstDate && entry.date <= lastDate) {
       entry.subdata.forEach((subdata) => {
-        if (subdata.type === 'expense' && subdata.category === category) {
+        if (
+          subdata.type === 'expense' &&
+          categories.includes(subdata.category)
+        ) {
           total += subdata.item.reduce((acc, curr) => acc + curr.amount, 0)
         }
       })
@@ -157,4 +163,11 @@ export const calculateRemainingBudget = (
   const remainingBudget = budget - currentMonthExpenses - currentExpenses
 
   return remainingBudget
+}
+
+export const calculatePercentage = (currentValue: number, maxValue: number) => {
+  const output = (currentValue / maxValue) * 100
+
+  if (!isFinite(output)) return 100
+  return Number(output.toFixed(2))
 }

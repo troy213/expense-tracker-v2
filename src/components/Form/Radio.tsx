@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useIntl } from 'react-intl'
 import { combineClassName } from '@/utils'
 
 type RadioProps<T> = {
@@ -28,6 +29,7 @@ const Radio = <T,>(props: RadioProps<T>) => {
     setError = () => {},
   } = props
   const [selectedValue, setSelectedValue] = useState(defaultValue.toLowerCase())
+  const { formatMessage } = useIntl()
 
   const containerClassName = combineClassName('flex-column gap-2', [
     props.className ?? '',
@@ -68,7 +70,9 @@ const Radio = <T,>(props: RadioProps<T>) => {
                 onChange={() => handleOptionClick(option)}
                 checked={selectedValue === option}
               />
-              <span>{optionValue}</span>
+              <span className="text--capitalize">
+                {formatMessage({ id: optionValue })}
+              </span>
             </label>
           )
         })}

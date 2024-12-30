@@ -101,7 +101,7 @@ const Select: React.FC<SelectProps> = (props) => {
               <li
                 key={index}
                 className={`${optionClassName} ${
-                  value === item ? 'form-input__select-option--selected' : ''
+                  value === item ? 'selected' : ''
                 }`}
                 role="option"
                 aria-selected={value === item}

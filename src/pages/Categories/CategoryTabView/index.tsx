@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 import { PlusSvg } from '@/assets'
 import InputCategoryModal from '@/components/Modal/InputCategoryModal'
@@ -8,17 +9,21 @@ import { useAppSelector } from '@/hooks'
 import CategoryWidget from './CategoryWidget'
 
 const CategoryTabView = () => {
+  const { search } = useLocation()
+  const query = new URLSearchParams(search)
+  const categoryParam = query.get('cat')
+  const defaultSelectedCategory: CategoryType =
+    categoryParam === 'expense' ? categoryParam : 'income'
+
   const { formatMessage } = useIntl()
-  const [selectedCategory, setSelectedCategory] =
-    useState<CategoryType>('income')
+  const [selectedCategory, setSelectedCategory] = useState<CategoryType>(
+    defaultSelectedCategory
+  )
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
   const totalBudget = categories
     .filter((category) => category.type === selectedCategory)
-    .reduce(
-      (accumulator, currentValue) => accumulator + (currentValue.budget ?? 0),
-      0
-    )
+    .reduce((acc, curr) => acc + (curr.budget ?? 0), 0)
 
   const contentClassName = combineClassName('category-tab-view__content', [
     {
@@ -36,6 +41,12 @@ const CategoryTabView = () => {
   const expenseTabViewClassName = combineClassName('category-tab-view__tab', [
     { condition: selectedCategory === 'expense', className: 'selected' },
   ])
+
+  useEffect(() => {
+    const newSelectedCategory: CategoryType =
+      categoryParam === 'expense' ? categoryParam : 'income'
+    setSelectedCategory(newSelectedCategory)
+  }, [categoryParam])
 
   return (
     <div className="category-tab-view">

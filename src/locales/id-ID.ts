@@ -46,6 +46,8 @@ const messages = {
   TotalRemainingBudget: 'Sisa Anggaran',
   Transaction: 'Transaksi',
   TransactionDetailNo: 'Detail Transaksi #{index}',
+  expense: 'pengeluaran',
+  income: 'pendapatan',
 }
 
 export default {
