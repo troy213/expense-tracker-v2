@@ -1,13 +1,17 @@
+import { useIntl } from 'react-intl'
 import { EditSvg, TrashSvg } from '@/assets'
 import { combineClassName } from '@/utils'
 
 type MoreOptionModalProps = {
   className: string
+  handleDelete: () => void
 }
 
 const MoreOptionModal: React.FC<MoreOptionModalProps> = ({
   className = '',
+  handleDelete,
 }) => {
+  const { formatMessage } = useIntl()
   const moreOptionModalClassName = combineClassName('more-option-modal', [
     className,
   ])
@@ -16,11 +20,15 @@ const MoreOptionModal: React.FC<MoreOptionModalProps> = ({
     <div className={moreOptionModalClassName}>
       <button className="btn btn-clear text--color-primary" type="button">
         <EditSvg className="icon icon--stroke-primary" />
-        <span>Edit</span>
+        <span>{formatMessage({ id: 'Edit' })}</span>
       </button>
-      <button className="btn btn-clear text--color-danger" type="button">
+      <button
+        className="btn btn-clear text--color-danger"
+        type="button"
+        onClick={handleDelete}
+      >
         <TrashSvg className="icon icon--stroke-danger" />
-        <span>Delete</span>
+        <span>{formatMessage({ id: 'Delete' })}</span>
       </button>
     </div>
   )

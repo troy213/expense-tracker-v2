@@ -108,6 +108,7 @@ const CategoryTabView = () => {
           .map((category) => (
             <CategoryWidget
               key={category.id}
+              id={category.id}
               type={category.type}
               name={category.name}
               budget={category.budget ?? 0}

@@ -141,10 +141,14 @@ export const calculateRemainingBudget = (
   txData: Data[],
   txDetails: { description: string; amount: number }[],
   categories: string[] = [],
-  budget: number = 0
+  budget: number = 0,
+  date: string = ''
 ) => {
-  const currentExpenses = txDetails.reduce((acc, curr) => acc + curr.amount, 0)
   const { firstDate, lastDate } = getCurrentMonthRange()
+  const currentExpenses =
+    date >= firstDate && date <= lastDate
+      ? txDetails.reduce((acc, curr) => acc + curr.amount, 0)
+      : 0
 
   const currentMonthExpenses = txData.reduce((total, entry) => {
     if (entry.date >= firstDate && entry.date <= lastDate) {

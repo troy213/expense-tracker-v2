@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { useIntl } from 'react-intl'
 import { MoreVerticalSvg } from '@/assets'
 import { Data } from '@/types'
 import {
@@ -7,7 +8,10 @@ import {
   currencyFormatter,
   formatTransactionDate,
 } from '@/utils'
-import MoreOptionModal from './MoreOptionModal'
+import MoreOptionModal from '@/components/Modal/MoreOptionModal'
+import DeleteDataModal from '@/components/Modal/DeleteDataModal'
+import { useAppDispatch } from '@/hooks'
+import { mainAction } from '@/store/main/main-slice'
 
 type TransactionDetailProps = {
   data: Data
@@ -37,15 +41,31 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
   handleSelectTransaction,
 }) => {
   const { date, subdata } = data
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isMoreModalOpen, setIsMoreModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null)
   const [moreOptionModalClassName, setMoreOptionModalClassName] = useState('')
   const transactionRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+  const dispatch = useAppDispatch()
+  const { formatMessage } = useIntl()
 
   const handleMoreOption = (e: React.MouseEvent, id: string) => {
     e.stopPropagation()
     const elementRect = transactionRefs.current.get(id)?.getBoundingClientRect()
     setMoreOptionModalClassName(getModalPositionClassName(elementRect))
-    setIsModalOpen((val) => !val)
+    setIsMoreModalOpen((val) => !val)
+  }
+
+  const handleDeleteTransaction = () => {
+    if (!deleteTargetId) return
+    dispatch(mainAction.deleteTransaction({ subdataId: deleteTargetId }))
+    setIsDeleteModalOpen(false)
+    setDeleteTargetId(null)
+  }
+
+  const openDeleteModal = (id: string) => {
+    setDeleteTargetId(id)
+    setIsDeleteModalOpen(true)
   }
 
   return (
@@ -74,9 +94,16 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
               }}
               onClick={() => {
                 handleSelectTransaction(subdataItem.id)
-                setIsModalOpen(false)
+                setIsMoreModalOpen(false)
               }}
             >
+              <DeleteDataModal
+                isModalOpen={isDeleteModalOpen}
+                handleOpenModal={setIsDeleteModalOpen}
+                title={formatMessage({ id: 'DeleteTransaction' })}
+                message={formatMessage({ id: 'DeleteDataGeneral' })}
+                handleDelete={handleDeleteTransaction}
+              />
               <div className="flex-space-between">
                 <span>{subdataItem.category}</span>
                 <div className="flex-align-center gap-2">
@@ -92,8 +119,14 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
                       >
                         <MoreVerticalSvg className="icon icon--stroke-primary" />
                       </button>
-                      {isModalOpen && (
-                        <MoreOptionModal className={moreOptionModalClassName} />
+                      {isMoreModalOpen && (
+                        <MoreOptionModal
+                          className={moreOptionModalClassName}
+                          handleDelete={() => {
+                            setIsMoreModalOpen(false)
+                            openDeleteModal(subdataItem.id)
+                          }}
+                        />
                       )}
                     </div>
                   )}

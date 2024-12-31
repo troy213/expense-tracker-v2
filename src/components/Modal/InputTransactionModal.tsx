@@ -94,9 +94,10 @@ const InputTransactionModal: React.FC<ModalProps> = ({
         transactionsData,
         transactionDetails,
         [data.category],
-        budget
+        budget,
+        data.date
       ),
-    [data.category, budget, transactionsData, transactionDetails]
+    [data.category, data.date, budget, transactionsData, transactionDetails]
   )
 
   const remainingBudgetClassName = combineClassName('', [

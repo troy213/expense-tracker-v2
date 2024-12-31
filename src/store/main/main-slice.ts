@@ -31,6 +31,19 @@ const mainSlice = createSlice({
 
       setStateReducerValue(state, key, value)
     },
+    deleteTransaction(state, action: PayloadAction<{ subdataId: string }>) {
+      const newData = state.data
+        .map((item) => ({
+          ...item,
+          subdata: item.subdata.filter(
+            (sub) => sub.id !== action.payload.subdataId
+          ),
+        }))
+        .filter((item) => item.subdata.length > 0)
+
+      state.data = newData
+      setStorage('data', newData)
+    },
     resetData(state) {
       state.data = []
     },

@@ -2,21 +2,37 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 import { Navbar } from '@/components'
-import DeleteAllDataModal from '@/components/Modal/DeleteAllDataModal'
+import DeleteDataModal from '@/components/Modal/DeleteDataModal'
 import { SETTING_MENUS } from '@/constants/config'
+import { useAppDispatch } from '@/hooks'
+import { mainAction } from '@/store/main/main-slice'
+import { categoriesAction } from '@/store/categories/categories-slice'
+import { setStorage } from '@/utils'
 
 const SettingMenus = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedModal, setSelectedModal] = useState('')
+  const dispatch = useAppDispatch()
   const { formatMessage } = useIntl()
+
+  const handleDelete = () => {
+    setStorage('data', '')
+    setStorage('categories', '')
+    dispatch(mainAction.resetData())
+    dispatch(categoriesAction.resetState())
+    setIsModalOpen(false)
+  }
 
   const renderModal = () => {
     switch (selectedModal) {
       case 'DeleteData':
         return (
-          <DeleteAllDataModal
+          <DeleteDataModal
             isModalOpen={isModalOpen}
             handleOpenModal={setIsModalOpen}
+            title={formatMessage({ id: 'DeleteData' })}
+            message={formatMessage({ id: 'DeleteDataGeneral' })}
+            handleDelete={handleDelete}
           />
         )
       default:
