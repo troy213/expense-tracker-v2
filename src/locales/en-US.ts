@@ -5,6 +5,7 @@ const messages = {
   AddExpenseCategory: 'Add Outcome Category',
   AddMoreTransaction: 'Add more transaction',
   AddTransaction: 'Add Transaction',
+  All: 'All',
   AlphanumericError: 'Only alphanumeric characters allowed',
   AmountRp: 'Amount (Rp.)',
   BudgetRp: 'Budget (Rp.)',
@@ -14,6 +15,7 @@ const messages = {
   CategoryAndBudget: 'Category & Budget',
   CommonTextError:
     'Only alphanumeric and specials characters [!@#$%^&*()_-] allowed',
+  CustomFilter: 'Custom Filter',
   DarkTheme: 'Dark Theme',
   Dashboard: 'Dashboard',
   Date: 'Date',
@@ -37,6 +39,7 @@ const messages = {
     "Oops! it seems you don't have any category. You can add your first category in the link below.",
   NumberError: 'Only number are allowed',
   Language: 'Language',
+  LastMonth: 'Last Month',
   LetterError: 'Only letter are allowed',
   LightTheme: 'Light Theme',
   RemainingBudgetForThisCategory:
@@ -46,6 +49,8 @@ const messages = {
   Settings: 'Settings',
   Submit: 'Submit',
   Theme: 'Theme',
+  ThisMonth: 'This Month',
+  ThisYear: 'This Year',
   TotalBalance: 'Total Balance',
   TotalIncome: 'Total Income',
   TotalMaxBudget: 'Total Max Budget',

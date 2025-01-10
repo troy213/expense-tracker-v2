@@ -5,6 +5,7 @@ const messages = {
   AddExpenseCategory: 'Tambah Kategori Pengeluaran',
   AddMoreTransaction: 'Tambah transaksi baru',
   AddTransaction: 'Tambah Transaksi',
+  All: 'Semua',
   AlphanumericError: 'Hanya huruf dan angka yang diperbolehkan',
   AmountRp: 'Jumlah (Rp.)',
   BudgetRp: 'Anggaran (Rp.)',
@@ -14,6 +15,7 @@ const messages = {
   CategoryAndBudget: 'Kategori & Anggaran',
   CommonTextError:
     'Hanya huruf, angka dan karakter spesial [!@#$%^&*()_-] yang diperbolehkan',
+  CustomFilter: 'Set Tanggal',
   DarkTheme: 'Mode Gelap',
   Dashboard: 'Dasbor',
   Date: 'Tanggal',
@@ -37,6 +39,7 @@ const messages = {
     'Oops! sepertinya anda tidak memiliki kategori apapun. Anda dapat menambahkan kategori pertama anda di tautan di bawah ini.',
   NumberError: 'Hanya angka yang diperbolehkan',
   Language: 'Bahasa',
+  LastMonth: 'Bulan Lalu',
   LetterError: 'Hanya huruf yang diperbolehkan',
   LightTheme: 'Mode Terang',
   RemainingBudgetForThisCategory:
@@ -46,6 +49,8 @@ const messages = {
   Settings: 'Pengaturan',
   Submit: 'Kirim',
   Theme: 'Tema',
+  ThisMonth: 'Bulan Ini',
+  ThisYear: 'Tahun Ini',
   TotalBalance: 'Total Saldo',
   TotalIncome: 'Total Pendapatan',
   TotalMaxBudget: 'Total Max Anggaran',

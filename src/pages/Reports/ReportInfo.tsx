@@ -1,8 +1,8 @@
-import { currencyFormatter, formatTransactionDate } from '@/utils'
+import { currencyFormatter } from '@/utils'
 
 type ReportInfoProps = {
-  firstDate: string
-  lastDate: string
+  firstDate: string | null
+  lastDate: string | null
   totalIncome: number
   totalExpense: number
   totalBalance: number
@@ -18,7 +18,9 @@ const ReportInfo: React.FC<ReportInfoProps> = ({
 }) => {
   return (
     <div className="report-info">
-      <span className="text--light text--3">{`${formatTransactionDate(firstDate)} - ${formatTransactionDate(lastDate)}`}</span>
+      <span className="text--light text--3">
+        {firstDate && lastDate ? `${firstDate} - ${lastDate}` : 'ALL TIME'}
+      </span>
       <div className="flex-space-between">
         <span>Total Income</span>
         <span>{currencyFormatter(totalIncome)}</span>
