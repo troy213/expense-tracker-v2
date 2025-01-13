@@ -8,38 +8,23 @@ import { useRef, useState } from 'react'
 // import MoreOptionModal from '@/components/Modal/MoreOptionModal'
 import DateRangeModal from '@/components/Modal/DateRangeModal'
 import { Data } from '@/types'
+import InputDateModal from '@/components/Modal/InputDateModal'
 
 const Reports = () => {
   const { data } = useAppSelector((state) => state.mainReducer)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
   // const { firstDate, lastDate } = getCurrentMonthRange()
   const [moreOptionModalClassName, setMoreOptionModalClassName] = useState('')
+  const [startDate, setStartDate] = useState<Date | null>(null)
+  const [endDate, setEndDate] = useState<Date | null>(null)
   const [isMoreModalOpen, setIsMoreModalOpen] = useState(false)
+  const [isDateModalOpen, setIsDateModalOpen] = useState(false)
   const [dateRange, setDateRange] = useState(0)
   const now = new Date()
 
-  const getDateRange = (range: number) => {
-    switch (range) {
-      case 1:
-        return [
-          new Date(now.getFullYear(), now.getMonth(), 1),
-          new Date(now.getFullYear(), now.getMonth() + 1, 0),
-        ]
-      case 2:
-        return [
-          new Date(now.getFullYear(), now.getMonth() - 1, 1),
-          new Date(now.getFullYear(), now.getMonth(), 0),
-        ]
-      case 3:
-        return [
-          new Date(now.getFullYear(), 0, 1),
-          new Date(now.getFullYear(), 11, 31),
-        ]
-      default:
-        return [null, null]
-    }
+  const OpenDateFilterModal = () => {
+    setIsDateModalOpen(!isDateModalOpen)
   }
-  const [startDate, endDate] = getDateRange(dateRange)
   const filteredData: Data[] =
     dateRange === 0
       ? data
@@ -66,9 +51,41 @@ const Reports = () => {
 
   const buttonRef = useRef<HTMLButtonElement>(null)
 
+  const SetCustomDate = (start: Date, end: Date) => {
+    setStartDate(start)
+    setEndDate(end)
+  }
+
   const handleChangeDateRange = (range: number) => {
-    setDateRange(range)
     setIsMoreModalOpen((val) => !val)
+    if (range === 4) {
+      OpenDateFilterModal()
+    } else {
+      setDateRange(range)
+      switch (range) {
+        case 1:
+          setStartDate(new Date(now.getFullYear(), now.getMonth(), 1))
+          setEndDate(
+            new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59)
+          )
+          break
+        case 2:
+          setStartDate(new Date(now.getFullYear(), now.getMonth() - 1, 1))
+          setEndDate(
+            new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999)
+          )
+          break
+        case 3:
+          setStartDate(new Date(now.getFullYear(), 0, 1))
+          setEndDate(
+            new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59)
+          )
+          break
+        default:
+          setStartDate(null)
+          setEndDate(null)
+      }
+    }
   }
 
   const generateReport = (type: string) =>
@@ -124,6 +141,11 @@ const Reports = () => {
                 handleChangeDateRange={handleChangeDateRange}
               />
             )}
+            <InputDateModal
+              isOpen={isDateModalOpen}
+              setIsOpen={OpenDateFilterModal}
+              SetCustomDate={SetCustomDate}
+            />
           </>
         </Navbar>
 

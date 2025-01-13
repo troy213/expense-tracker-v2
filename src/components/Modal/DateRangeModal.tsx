@@ -46,7 +46,11 @@ const DateRangeModal: React.FC<MoreOptionModalProps> = ({
       >
         <span>{formatMessage({ id: 'ThisYear' })}</span>
       </button>
-      <button className="btn btn-clear text--color-primary" type="button">
+      <button
+        className="btn btn-clear text--color-primary"
+        type="button"
+        onClick={() => handleChangeDateRange(4)}
+      >
         <span>{formatMessage({ id: 'CustomFilter' })}</span>
       </button>
     </div>
