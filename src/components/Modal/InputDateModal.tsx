@@ -3,18 +3,18 @@ import { useIntl } from 'react-intl'
 import Modal from '.'
 import Form from '../Form'
 
-type InputCategoryModalProps = {
+type InputDateModalProps = {
   isOpen: boolean
   setIsOpen: (val: boolean) => void
   SetCustomDate: (from: Date, to: Date) => void
 }
 
-type CategoryForm = {
+type DateForm = {
   from: string
   to: string
 }
 
-type ErrorState = Record<keyof CategoryForm, string>
+type ErrorState = Record<keyof DateForm, string>
 
 const dataInitialValue = {
   from: '',
@@ -25,18 +25,18 @@ const errorInitialValue = {
   to: '',
 }
 
-const InputDateModal: React.FC<InputCategoryModalProps> = ({
+const InputDateModal: React.FC<InputDateModalProps> = ({
   isOpen,
   setIsOpen,
   SetCustomDate,
 }) => {
-  const [data, setData] = useState<CategoryForm>(dataInitialValue)
+  const [data, setData] = useState<DateForm>(dataInitialValue)
   const [error, setError] = useState<ErrorState>(errorInitialValue)
   const { formatMessage } = useIntl()
 
-  const handleChange = <K extends keyof CategoryForm>(
+  const handleChange = <K extends keyof DateForm>(
     key: K,
-    value: CategoryForm[K]
+    value: DateForm[K]
   ) => {
     setData((prevState) => ({
       ...prevState,
