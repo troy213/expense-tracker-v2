@@ -9,10 +9,11 @@ import { validateEmptyForm } from '@/utils/formUtils'
 import Modal from '.'
 import Form from '../Form'
 
-type InputCategoryModalProps = {
+type FormCategoryModalProps = {
   isOpen: boolean
   setIsOpen: (val: boolean) => void
   selectedCategory: CategoryType
+  selectedId?: string
 }
 
 type CategoryForm = {
@@ -31,21 +32,33 @@ const errorInitialValue = {
   budget: '',
 }
 
-const InputCategoryModal: React.FC<InputCategoryModalProps> = ({
+const FormCategoryModal: React.FC<FormCategoryModalProps> = ({
   isOpen,
   setIsOpen,
   selectedCategory,
+  selectedId = '',
 }) => {
+  const isEditForm = selectedId !== ''
+  const { categories } = useAppSelector((state) => state.categoriesReducer)
   const [data, setData] = useState<CategoryForm>(dataInitialValue)
   const [error, setError] = useState<ErrorState>(errorInitialValue)
-  const { categories } = useAppSelector((state) => state.categoriesReducer)
   const dispatch = useAppDispatch()
   const { formatMessage } = useIntl()
 
-  const formTitle =
-    selectedCategory === 'income'
-      ? formatMessage({ id: 'AddIncomeCategory' })
-      : formatMessage({ id: 'AddExpenseCategory' })
+  const getFormTitle = () => {
+    let result = ''
+    if (isEditForm) {
+      selectedCategory === 'income'
+        ? (result = formatMessage({ id: 'EditIncomeCategory' }))
+        : (result = formatMessage({ id: 'EditExpenseCategory' }))
+    } else {
+      selectedCategory === 'income'
+        ? (result = formatMessage({ id: 'AddIncomeCategory' }))
+        : (result = formatMessage({ id: 'AddExpenseCategory' }))
+    }
+
+    return result
+  }
 
   const handleChange = <K extends keyof CategoryForm>(
     key: K,
@@ -72,7 +85,7 @@ const InputCategoryModal: React.FC<InputCategoryModalProps> = ({
     e.preventDefault()
     let formIsValid = validateEmptyForm(data, categories, setError, {
       isRequired: ['name', 'budget'],
-      uniqueDataKey: ['name'],
+      uniqueDataKey: isEditForm ? [] : ['name'],
     })
 
     Object.entries(error).forEach(([, value]) => {
@@ -81,13 +94,17 @@ const InputCategoryModal: React.FC<InputCategoryModalProps> = ({
 
     if (formIsValid) {
       const newCategory: Category = {
-        id: uuidv4(),
+        id: selectedId || uuidv4(),
         type: selectedCategory,
         name: data.name.trim(),
         budget: data.budget,
       }
 
-      dispatch(categoriesAction.setCategories([...categories, newCategory]))
+      if (isEditForm) {
+        dispatch(categoriesAction.updateCategories(newCategory))
+      } else {
+        dispatch(categoriesAction.setCategories([...categories, newCategory]))
+      }
       handleCancel(e)
     }
   }
@@ -100,14 +117,25 @@ const InputCategoryModal: React.FC<InputCategoryModalProps> = ({
   }
 
   useEffect(() => {
-    setData(dataInitialValue)
+    if (isOpen && selectedId) {
+      const selectedData = categories.find(
+        (category) => category.id === selectedId
+      )
+      const newData = {
+        name: selectedData?.name ?? '',
+        budget: selectedData?.budget ?? 0,
+      }
+      setData(newData)
+    } else {
+      setData(dataInitialValue)
+    }
     setError(errorInitialValue)
-  }, [isOpen])
+  }, [isOpen, selectedId, categories])
 
   return (
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
       <form className="input-category-modal" onSubmit={handleSubmit}>
-        <span className="text--bold text--color-primary">{formTitle}</span>
+        <span className="text--bold text--color-primary">{getFormTitle()}</span>
         <Form.Input
           type="text"
           id="category"
@@ -138,7 +166,7 @@ const InputCategoryModal: React.FC<InputCategoryModalProps> = ({
         )}
         <div className="flex-column gap-4 mt-4">
           <button type="submit" className="btn btn-primary">
-            {formatMessage({ id: 'Add' })}
+            {formatMessage({ id: isEditForm ? 'Edit' : 'Add' })}
           </button>
           <button className="btn btn-outline-primary" onClick={handleCancel}>
             {formatMessage({ id: 'Cancel' })}
@@ -149,4 +177,4 @@ const InputCategoryModal: React.FC<InputCategoryModalProps> = ({
   )
 }
 
-export default InputCategoryModal
+export default FormCategoryModal

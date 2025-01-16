@@ -28,8 +28,8 @@ const SettingMenus = () => {
       case 'DeleteData':
         return (
           <DeleteDataModal
-            isModalOpen={isModalOpen}
-            handleOpenModal={setIsModalOpen}
+            isOpen={isModalOpen}
+            setIsOpen={setIsModalOpen}
             title={formatMessage({ id: 'DeleteData' })}
             message={formatMessage({ id: 'DeleteDataGeneral' })}
             handleDelete={handleDelete}

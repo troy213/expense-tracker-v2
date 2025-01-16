@@ -22,7 +22,7 @@ export const getDate = (): string => {
   const month = now.getMonth() + 1
   const date = now.getDate()
 
-  return `${year}-${month}-${date}`
+  return `${year}-${String(month).padStart(2, '0')}-${String(date).padStart(2, '0')}`
 }
 
 export const formatTransactionDate = (
@@ -142,7 +142,8 @@ export const calculateRemainingBudget = (
   txDetails: { description: string; amount: number }[],
   categories: string[] = [],
   budget: number = 0,
-  date: string = ''
+  date: string = '',
+  excludeSubdataId: string = ''
 ) => {
   const { firstDate, lastDate } = getCurrentMonthRange()
   const currentExpenses =
@@ -155,7 +156,8 @@ export const calculateRemainingBudget = (
       entry.subdata.forEach((subdata) => {
         if (
           subdata.type === 'expense' &&
-          categories.includes(subdata.category)
+          categories.includes(subdata.category) &&
+          subdata.id !== excludeSubdataId
         ) {
           total += subdata.item.reduce((acc, curr) => acc + curr.amount, 0)
         }

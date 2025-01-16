@@ -28,6 +28,9 @@ const messages = {
   DeleteTransaction: 'Delete Transaction',
   Description: 'Description',
   Edit: 'Edit',
+  EditExpenseCategory: 'Edit Outcome Category',
+  EditIncomeCategory: 'Edit Income Category',
+  EditTransaction: 'Edit Transaction',
   English: 'English',
   Expense: 'Expense',
   ExportData: 'Export Data (.xls)',
@@ -61,6 +64,7 @@ const messages = {
   TotalRemainingBudget: 'Total Remaining Budget',
   Transaction: 'Transaction',
   TransactionDetailNo: 'Transaction Detail #{index}',
+  Update: 'Update',
   expense: 'expense',
   income: 'income',
 }

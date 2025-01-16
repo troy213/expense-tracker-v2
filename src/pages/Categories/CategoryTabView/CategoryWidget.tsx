@@ -7,6 +7,7 @@ import { useAppDispatch } from '@/hooks'
 import { categoriesAction } from '@/store/categories/categories-slice'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
 import { useIntl } from 'react-intl'
+import InputCategoryModal from '@/components/Modal/FormCategoryModal'
 
 type CategoryWidgetProps = {
   id: string
@@ -31,6 +32,7 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
   budget,
 }) => {
   const [isMoreModalOpen, setIsMoreModalOpen] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [moreOptionModalClassName, setMoreOptionModalClassName] = useState('')
   const transactionRefs = useRef<Map<string, HTMLDivElement>>(new Map())
@@ -50,9 +52,15 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
 
   return (
     <div className="category-widget p-4">
+      <InputCategoryModal
+        isOpen={isEditModalOpen}
+        setIsOpen={setIsEditModalOpen}
+        selectedCategory={type}
+        selectedId={id}
+      />
       <DeleteDataModal
-        isModalOpen={isDeleteModalOpen}
-        handleOpenModal={setIsDeleteModalOpen}
+        isOpen={isDeleteModalOpen}
+        setIsOpen={setIsDeleteModalOpen}
         title={formatMessage({ id: 'DeleteCategory' })}
         message={
           formatMessage(
@@ -86,9 +94,13 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
           {isMoreModalOpen && (
             <MoreOptionModal
               className={moreOptionModalClassName}
-              handleDelete={() => {
-                setIsDeleteModalOpen(true)
+              handleEdit={() => {
                 setIsMoreModalOpen(false)
+                setIsEditModalOpen(true)
+              }}
+              handleDelete={() => {
+                setIsMoreModalOpen(false)
+                setIsDeleteModalOpen(true)
               }}
             />
           )}

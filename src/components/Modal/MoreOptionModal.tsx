@@ -4,11 +4,13 @@ import { combineClassName } from '@/utils'
 
 type MoreOptionModalProps = {
   className: string
+  handleEdit?: () => void
   handleDelete: () => void
 }
 
 const MoreOptionModal: React.FC<MoreOptionModalProps> = ({
   className = '',
+  handleEdit = () => {},
   handleDelete,
 }) => {
   const { formatMessage } = useIntl()
@@ -18,7 +20,11 @@ const MoreOptionModal: React.FC<MoreOptionModalProps> = ({
 
   return (
     <div className={moreOptionModalClassName}>
-      <button className="btn btn-clear text--color-primary" type="button">
+      <button
+        className="btn btn-clear text--color-primary"
+        type="button"
+        onClick={handleEdit}
+      >
         <EditSvg className="icon icon--stroke-primary" />
         <span>{formatMessage({ id: 'Edit' })}</span>
       </button>

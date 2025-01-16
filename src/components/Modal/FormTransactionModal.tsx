@@ -15,9 +15,13 @@ import Modal from '.'
 import Form from '../Form'
 import { Link } from 'react-router-dom'
 
-type ModalProps = {
+type FormTransactionModalProps = {
   isOpen: boolean
-  handleOpenModal: (val: boolean) => void
+  setIsOpen: (val: boolean) => void
+  indexes?: {
+    dataIndex: number
+    subdataIndex: number
+  }
 }
 
 type TransactionForm = {
@@ -38,43 +42,66 @@ const dataInitialValue: TransactionForm = {
   type: 'income',
   category: '',
   date: String(getDate()),
-} as const
+}
 
 const txDetailsInitialValue: TxDetailsForm[] = [
   {
     description: '',
     amount: 0,
   },
-] as const
+]
 
 const errorInitialValue: ErrorState = {
   type: '',
   category: '',
   date: '',
-} as const
+}
 
 const txDetailsErrorInitialValue: TxDetailsErrorState[] = [
   {
     description: '',
     amount: '',
   },
-] as const
+]
 
-const InputTransactionModal: React.FC<ModalProps> = ({
+const FormTransactionModal: React.FC<FormTransactionModalProps> = ({
   isOpen,
-  handleOpenModal,
+  setIsOpen,
+  indexes,
 }) => {
+  const isEditForm = indexes !== undefined
   const transactionsData = useAppSelector((state) => state.mainReducer.data)
   const categories = useAppSelector(
     (state) => state.categoriesReducer.categories
   )
-  const [data, setData] = useState<TransactionForm>(dataInitialValue)
+
+  let currentData = dataInitialValue
+  let currentTxDetails = txDetailsInitialValue
+  let currentTxDetailsError = txDetailsErrorInitialValue
+
+  if (isEditForm) {
+    const { dataIndex, subdataIndex } = indexes!
+    const { date, subdata } = transactionsData[dataIndex]
+
+    currentData = {
+      date,
+      category: subdata[subdataIndex].category,
+      type: subdata[subdataIndex].type,
+    }
+
+    currentTxDetails = subdata[subdataIndex].item
+    currentTxDetailsError = subdata[subdataIndex].item.map(() => ({
+      description: '',
+      amount: '',
+    }))
+  }
+
+  const [data, setData] = useState<TransactionForm>(currentData)
   const [error, setError] = useState<ErrorState>(errorInitialValue)
-  const [transactionDetails, setTransactionDetails] = useState<TxDetailsForm[]>(
-    txDetailsInitialValue
-  )
+  const [transactionDetails, setTransactionDetails] =
+    useState<TxDetailsForm[]>(currentTxDetails)
   const [txDetailsError, setTxDetailsError] = useState<TxDetailsErrorState[]>(
-    txDetailsErrorInitialValue
+    currentTxDetailsError
   )
   const dispatch = useAppDispatch()
   const { formatMessage } = useIntl()
@@ -95,9 +122,20 @@ const InputTransactionModal: React.FC<ModalProps> = ({
         transactionDetails,
         [data.category],
         budget,
-        data.date
+        data.date,
+        isEditForm
+          ? transactionsData[indexes.dataIndex].subdata[indexes.subdataIndex].id
+          : ''
       ),
-    [data.category, data.date, budget, transactionsData, transactionDetails]
+    [
+      data.category,
+      data.date,
+      budget,
+      transactionsData,
+      transactionDetails,
+      isEditForm,
+      indexes,
+    ]
   )
 
   const remainingBudgetClassName = combineClassName('', [
@@ -217,34 +255,84 @@ const InputTransactionModal: React.FC<ModalProps> = ({
         (txData) => txData.date === data.date
       )
       const transactionIsExist = existingTxIndex >= 0
-      const newSubdata = {
-        id: crypto.randomUUID() as string,
-        type: data.type,
-        category: data.category,
-        item: transactionDetails,
-      }
 
-      if (transactionIsExist) {
-        const newTransaction = { ...transactionsData[existingTxIndex] }
-        newTransaction.subdata = [...newTransaction.subdata, newSubdata]
-
-        const newTransactionsData = [...transactionsData]
-        newTransactionsData[existingTxIndex] = newTransaction
-
-        dispatch(mainAction.setData(newTransactionsData))
-      } else {
-        const newTransaction = {
-          id: crypto.randomUUID() as string,
-          date: data.date,
-          subdata: [newSubdata],
+      if (isEditForm) {
+        const { dataIndex, subdataIndex } = indexes
+        const isSameDate = transactionsData[dataIndex].date === data.date
+        const newSubdata = {
+          id: transactionsData[dataIndex].subdata[subdataIndex].id,
+          type: data.type,
+          category: data.category,
+          item: transactionDetails,
         }
-        const newTransactionsData = [...transactionsData]
-        newTransactionsData.push(newTransaction)
-        newTransactionsData.sort(
-          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-        )
 
-        dispatch(mainAction.setData(newTransactionsData))
+        if (isSameDate) {
+          const newTransactionsData = structuredClone(transactionsData)
+          newTransactionsData[dataIndex].subdata[subdataIndex] = newSubdata
+
+          dispatch(mainAction.setData(newTransactionsData))
+        } else if (transactionIsExist) {
+          const newTransactionsData = structuredClone(transactionsData)
+          newTransactionsData[existingTxIndex].subdata.push(newSubdata)
+
+          if (newTransactionsData[dataIndex].subdata.length === 1) {
+            newTransactionsData.splice(dataIndex, 1)
+          } else {
+            newTransactionsData[dataIndex].subdata.splice(subdataIndex, 1)
+          }
+
+          dispatch(mainAction.setData(newTransactionsData))
+        } else {
+          const newTransaction = {
+            id: crypto.randomUUID() as string,
+            date: data.date,
+            subdata: [newSubdata],
+          }
+          const newTransactionsData = structuredClone(transactionsData)
+
+          if (newTransactionsData[dataIndex].subdata.length === 1) {
+            newTransactionsData.splice(dataIndex, 1)
+          } else {
+            newTransactionsData[dataIndex].subdata.splice(subdataIndex, 1)
+          }
+
+          newTransactionsData.push(newTransaction)
+          newTransactionsData.sort(
+            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+          )
+
+          dispatch(mainAction.setData(newTransactionsData))
+        }
+      } else {
+        const newSubdata = {
+          id: crypto.randomUUID() as string,
+          type: data.type,
+          category: data.category,
+          item: transactionDetails,
+        }
+
+        if (transactionIsExist) {
+          const newTransaction = { ...transactionsData[existingTxIndex] }
+          newTransaction.subdata = [...newTransaction.subdata, newSubdata]
+
+          const newTransactionsData = [...transactionsData]
+          newTransactionsData[existingTxIndex] = newTransaction
+
+          dispatch(mainAction.setData(newTransactionsData))
+        } else {
+          const newTransaction = {
+            id: crypto.randomUUID() as string,
+            date: data.date,
+            subdata: [newSubdata],
+          }
+          const newTransactionsData = [...transactionsData]
+          newTransactionsData.push(newTransaction)
+          newTransactionsData.sort(
+            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+          )
+
+          dispatch(mainAction.setData(newTransactionsData))
+        }
       }
 
       handleCancel(e)
@@ -261,24 +349,29 @@ const InputTransactionModal: React.FC<ModalProps> = ({
   const handleCancel = (e: React.FormEvent) => {
     e.preventDefault()
     resetData()
-    handleOpenModal(false)
+    setIsOpen(false)
   }
 
   useEffect(() => {
-    const defaultCategory =
-      categories.filter((category) => category.type === data.type)[0]?.name ??
-      ''
-    setData((prevState) => ({
-      ...prevState,
-      category: defaultCategory,
-    }))
+    if (isOpen) {
+      const defaultCategory =
+        categories.filter((category) => category.type === data.type)[0]?.name ??
+        ''
 
-    if (!isOpen) resetData()
-  }, [data.type, isOpen, categories])
+      if (!isEditForm) {
+        setData((prevState) => ({
+          ...prevState,
+          category: defaultCategory,
+        }))
+      }
+    } else {
+      resetData()
+    }
+  }, [data.type, isOpen, categories, isEditForm])
 
   if (!filteredCategory.length) {
     return (
-      <Modal isOpen={isOpen} onClose={() => handleOpenModal(false)}>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <div className="flex-column gap-2">
           <span className="text--bold text--color-primary">
             {formatMessage({ id: 'AddTransaction' })}
@@ -288,7 +381,7 @@ const InputTransactionModal: React.FC<ModalProps> = ({
           </span>
           <Link
             to={`/categories?cat=${data.type}`}
-            onClick={() => handleOpenModal(false)}
+            onClick={() => setIsOpen(false)}
           >
             <span className="text--underline text--color-primary text--3">
               {formatMessage({ id: 'AddCategory' })}
@@ -303,16 +396,27 @@ const InputTransactionModal: React.FC<ModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={() => {
-        handleOpenModal(false)
+        setIsOpen(false)
       }}
     >
-      <form className="flex-column gap-4" onSubmit={handleSubmit}>
+      <form
+        className="flex-column gap-4"
+        onSubmit={handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault()
+            handleSubmit(e)
+          }
+        }}
+      >
         <span className="text--bold text--color-primary">
-          {formatMessage({ id: 'AddTransaction' })}
+          {formatMessage({
+            id: `${isEditForm ? 'EditTransaction' : 'AddTransaction'}`,
+          })}
         </span>
         <Form.Radio
           groupId="transaction-type"
-          defaultValue="income"
+          defaultValue={data.type}
           onChange={(val) => handleDataChange('type', val)}
           options={['income', 'expense'] satisfies CategoryType[]}
           errorMessage={error.type}
@@ -420,7 +524,7 @@ const InputTransactionModal: React.FC<ModalProps> = ({
         </div>
         <div className="flex-column gap-4 mt-4">
           <button type="submit" className="btn btn-primary">
-            {formatMessage({ id: 'Submit' })}
+            {formatMessage({ id: `${isEditForm ? 'Update' : 'Submit'}` })}
           </button>
           <button className="btn btn-outline-primary" onClick={handleCancel}>
             {formatMessage({ id: 'Cancel' })}
@@ -431,4 +535,4 @@ const InputTransactionModal: React.FC<ModalProps> = ({
   )
 }
 
-export default InputTransactionModal
+export default FormTransactionModal
