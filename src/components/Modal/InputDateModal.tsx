@@ -115,7 +115,7 @@ const InputDateModal: React.FC<InputDateModalProps> = ({
         />
         <div className="flex-column gap-4 mt-4">
           <button type="submit" className="btn btn-primary">
-            {formatMessage({ id: 'Add' })}
+            {formatMessage({ id: 'Filter' })}
           </button>
           <button className="btn btn-outline-primary" onClick={handleCancel}>
             {formatMessage({ id: 'Cancel' })}

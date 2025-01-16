@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl'
 import ReportCategory from './ReportCategory'
 
 type Report = {
@@ -16,18 +17,22 @@ const ReportWidget: React.FC<ReportWidgetProps> = ({
   report,
   typeTotal,
 }) => {
+  const { formatMessage } = useIntl()
+
+  const getTitle = () => {
+    if (type === 'income') {
+      return formatMessage({ id: 'TopIncome' })
+    } else {
+      return formatMessage({ id: 'TopExpense' })
+    }
+  }
+
   return (
     <div key={type} className="report-widget">
-      <span>Top {type}</span>
+      <span>{getTitle()}</span>
       {report.map((cat, idx) => {
         return <ReportCategory key={idx} cat={cat} typeTotal={typeTotal} />
       })}
-
-      {/* All Category Report data will be looped here */}
-      {/* <ReportCategory />
-      <ReportCategory />
-      <ReportCategory />
-      <ReportCategory /> */}
     </div>
   )
 }

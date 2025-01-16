@@ -141,11 +141,13 @@ const Reports = () => {
                 handleChangeDateRange={handleChangeDateRange}
               />
             )}
-            <InputDateModal
-              isOpen={isDateModalOpen}
-              setIsOpen={OpenDateFilterModal}
-              SetCustomDate={SetCustomDate}
-            />
+            {isDateModalOpen && (
+              <InputDateModal
+                isOpen={isDateModalOpen}
+                setIsOpen={OpenDateFilterModal}
+                SetCustomDate={SetCustomDate}
+              />
+            )}
           </>
         </Navbar>
 
