@@ -18,7 +18,7 @@ const SettingMenus = () => {
   const handleDelete = () => {
     setStorage('data', '')
     setStorage('categories', '')
-    dispatch(mainAction.resetData())
+    dispatch(mainAction.resetState())
     dispatch(categoriesAction.resetState())
     setIsModalOpen(false)
   }

@@ -20,7 +20,7 @@
     }
 
     &::placeholder {
-      color: black;
+      color: rgba($color-dark, $alpha: 0.5);
     }
 
     &--error {
