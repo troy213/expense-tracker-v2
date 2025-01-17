@@ -8,6 +8,8 @@ import { categoriesAction } from '@/store/categories/categories-slice'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
 import { useIntl } from 'react-intl'
 import InputCategoryModal from '@/components/Modal/FormCategoryModal'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 type CategoryWidgetProps = {
   id: string
@@ -38,6 +40,12 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
   const transactionRefs = useRef<Map<string, HTMLDivElement>>(new Map())
   const dispatch = useAppDispatch()
   const { formatMessage } = useIntl()
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id })
+  const style = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+  }
 
   const handleMoreOption = (e: React.MouseEvent, id: string) => {
     e.stopPropagation()
@@ -51,7 +59,13 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
   }
 
   return (
-    <div className="category-widget p-4">
+    <div
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      style={style}
+      className="category-widget p-4"
+    >
       <InputCategoryModal
         isOpen={isEditModalOpen}
         setIsOpen={setIsEditModalOpen}
