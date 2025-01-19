@@ -1,15 +1,15 @@
 import { useRef, useState } from 'react'
-import { CoinsSvg, MoreVerticalSvg } from '@/assets'
-import MoreOptionModal from '@/components/Modal/MoreOptionModal'
-import { CategoryType } from '@/types'
-import { calculateModalBottomThreshold, currencyFormatter } from '@/utils'
-import { useAppDispatch } from '@/hooks'
-import { categoriesAction } from '@/store/categories/categories-slice'
-import DeleteDataModal from '@/components/Modal/DeleteDataModal'
 import { useIntl } from 'react-intl'
-import InputCategoryModal from '@/components/Modal/FormCategoryModal'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { CoinsSvg, MoreVerticalSvg } from '@/assets'
+import DeleteDataModal from '@/components/Modal/DeleteDataModal'
+import InputCategoryModal from '@/components/Modal/FormCategoryModal'
+import MoreOptionModal from '@/components/Modal/MoreOptionModal'
+import { useAppDispatch } from '@/hooks'
+import { categoriesAction } from '@/store/categories/categories-slice'
+import { CategoryType } from '@/types'
+import { calculateModalBottomThreshold, currencyFormatter } from '@/utils'
 
 type CategoryWidgetProps = {
   id: string
@@ -42,9 +42,14 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
   const { formatMessage } = useIntl()
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id })
+
+  const newTransform = transform
+    ? { ...transform, scaleX: 1.05, scaleY: 1.05 }
+    : null
+
   const style = {
     transition,
-    transform: CSS.Transform.toString(transform),
+    transform: CSS.Transform.toString(newTransform),
   }
 
   const handleMoreOption = (e: React.MouseEvent, id: string) => {
@@ -66,24 +71,28 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
       style={style}
       className="category-widget p-4"
     >
-      <InputCategoryModal
-        isOpen={isEditModalOpen}
-        setIsOpen={setIsEditModalOpen}
-        selectedCategory={type}
-        selectedId={id}
-      />
-      <DeleteDataModal
-        isOpen={isDeleteModalOpen}
-        setIsOpen={setIsDeleteModalOpen}
-        title={formatMessage({ id: 'DeleteCategory' })}
-        message={
-          formatMessage(
-            { id: 'DeleteDataSpecific' },
-            { name: <strong>{name}</strong> }
-          ) as string
-        }
-        handleDelete={() => handleDeleteCategory(id)}
-      />
+      {isEditModalOpen && (
+        <InputCategoryModal
+          isOpen={isEditModalOpen}
+          setIsOpen={setIsEditModalOpen}
+          selectedCategory={type}
+          selectedId={id}
+        />
+      )}
+      {isDeleteModalOpen && (
+        <DeleteDataModal
+          isOpen={isDeleteModalOpen}
+          setIsOpen={setIsDeleteModalOpen}
+          title={formatMessage({ id: 'DeleteCategory' })}
+          message={
+            formatMessage(
+              { id: 'DeleteDataSpecific' },
+              { name: <strong>{name}</strong> }
+            ) as string
+          }
+          handleDelete={() => handleDeleteCategory(id)}
+        />
+      )}
       <div className="flex-space-between flex-align-center">
         <div className="flex-column gap-2">
           <span>{name}</span>

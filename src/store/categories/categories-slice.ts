@@ -27,13 +27,20 @@ const categoriesSlice = createSlice({
       state.categories = newCategories
       setStorage('categories', newCategories)
     },
-    setState(
-      state: InitialState,
-      action: PayloadAction<SetStatePayload<InitialState>>
+    sortCategories(
+      state,
+      action: PayloadAction<{
+        filteredCategory: Category[]
+        selectedCategory: string
+      }>
     ) {
-      const { state: key, value } = action.payload
+      const categories = state.categories.filter(
+        (category) => category.type !== action.payload.selectedCategory
+      )
+      const newCategories = [...categories, ...action.payload.filteredCategory]
 
-      setStateReducerValue(state, key, value)
+      state.categories = newCategories
+      setStorage('categories', newCategories)
     },
     deleteCategory(state, action: PayloadAction<{ id: string }>) {
       const newCategories = state.categories.filter(
@@ -41,6 +48,14 @@ const categoriesSlice = createSlice({
       )
       state.categories = newCategories
       setStorage('categories', newCategories)
+    },
+    setState(
+      state: InitialState,
+      action: PayloadAction<SetStatePayload<InitialState>>
+    ) {
+      const { state: key, value } = action.payload
+
+      setStateReducerValue(state, key, value)
     },
     resetState() {
       return initialState

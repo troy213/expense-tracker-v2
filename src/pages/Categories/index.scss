@@ -6,6 +6,7 @@
   justify-content: space-between;
   min-height: 100dvh;
   height: 100%;
+  overflow-x: clip;
   background-color: $color-white;
   color: $color-primary;
   position: relative;

@@ -1,26 +1,26 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useIntl } from 'react-intl'
+import {
+  closestCorners,
+  DndContext,
+  DragEndEvent,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { PlusSvg } from '@/assets'
 import InputCategoryModal from '@/components/Modal/FormCategoryModal'
-// import {
-//   DragDropContext,
-//   Droppable,
-//   Draggable,
-//   DroppableProvided,
-//   DropResult,
-//   DraggableProvided,
-// } from 'react-beautiful-dnd'
-import { combineClassName, currencyFormatter } from '@/utils'
+import { useAppDispatch, useAppSelector } from '@/hooks'
+import { categoriesAction } from '@/store/categories/categories-slice'
 import { CategoryType } from '@/types'
-import { useAppSelector } from '@/hooks'
+import { combineClassName, currencyFormatter } from '@/utils'
 import CategoryWidget from './CategoryWidget'
-import { closestCorners, DndContext, DragEndEvent } from '@dnd-kit/core'
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-// import { categoriesAction } from '@/store/categories/categories-slice'
 
 const CategoryTabView = () => {
-  // const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch()
   const { search } = useLocation()
   const query = new URLSearchParams(search)
   const categoryParam = query.get('cat')
@@ -36,6 +36,7 @@ const CategoryTabView = () => {
   const [filteredCategory, setFilteredCategory] = useState(
     categories.filter((category) => category.type === selectedCategory)
   )
+
   const totalBudget = filteredCategory.reduce(
     (acc, curr) => acc + (curr.budget ?? 0),
     0
@@ -58,17 +59,21 @@ const CategoryTabView = () => {
     { condition: selectedCategory === 'expense', className: 'selected' },
   ])
 
-  useEffect(() => {
-    const newSelectedCategory: CategoryType =
-      categoryParam === 'expense' ? categoryParam : 'income'
-    setSelectedCategory(newSelectedCategory)
-  }, [categoryParam])
+  const mouseSensor = useSensor(MouseSensor, {
+    // Require the mouse to move by 10 pixels before activating
+    activationConstraint: {
+      distance: 10,
+    },
+  })
+  const touchSensor = useSensor(TouchSensor, {
+    // Press delay of 250ms, with tolerance of 5px of movement
+    activationConstraint: {
+      delay: 250,
+      tolerance: 5,
+    },
+  })
 
-  useEffect(() => {
-    setFilteredCategory(
-      categories.filter((category) => category.type === selectedCategory)
-    )
-  }, [selectedCategory, categories])
+  const sensors = useSensors(mouseSensor, touchSensor)
 
   // Drag and drop event handler
   const handleDragEnd = (e: DragEndEvent) => {
@@ -84,8 +89,27 @@ const CategoryTabView = () => {
       const [movedItem] = updatedCategories.splice(activeIndex, 1)
       updatedCategories.splice(overIndex, 0, movedItem)
       setFilteredCategory(updatedCategories)
+
+      dispatch(
+        categoriesAction.sortCategories({
+          filteredCategory: updatedCategories,
+          selectedCategory,
+        })
+      )
     }
   }
+
+  useEffect(() => {
+    const newSelectedCategory: CategoryType =
+      categoryParam === 'expense' ? categoryParam : 'income'
+    setSelectedCategory(newSelectedCategory)
+  }, [categoryParam])
+
+  useEffect(() => {
+    setFilteredCategory(
+      categories.filter((category) => category.type === selectedCategory)
+    )
+  }, [selectedCategory, categories])
 
   return (
     <div className="category-tab-view">
@@ -141,46 +165,11 @@ const CategoryTabView = () => {
             </span>
           </div>
         </button>
-        {/* <DragDropContext onDragEnd={handleDrag}>
-          <Droppable droppableId="categories">
-            {(provided: DroppableProvided) => {
-              return (
-                <div
-                  ref={provided.innerRef}
-                  className="categories-list"
-                  {...provided.droppableProps}
-                >
-                  {filteredCategory.map((category, index) => (
-                    <Draggable
-                      key={category.id}
-                      draggableId={category.id}
-                      index={index}
-                    >
-                      {(provided: DraggableProvided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.dragHandleProps}
-                          {...provided.draggableProps}
-                        >
-                          <CategoryWidget
-                            id={category.id}
-                            type={category.type}
-                            name={category.name}
-                            budget={category.budget ?? 0}
-                          />
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )
-            }}
-          </Droppable>
-        </DragDropContext> */}
+
         <DndContext
           collisionDetection={closestCorners}
           onDragEnd={handleDragEnd}
+          sensors={sensors}
         >
           <SortableContext
             items={filteredCategory}
