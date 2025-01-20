@@ -26,7 +26,6 @@ const Select: React.FC<SelectProps> = (props) => {
     label = '',
     placeholder = '',
     errorMessage = '',
-    id: inputId = '',
     onChange = (val) => {
       console.warn('Input onChange is not defined.', `value: ${val}`)
     },
@@ -76,11 +75,7 @@ const Select: React.FC<SelectProps> = (props) => {
 
   return (
     <div className={containerClassName}>
-      {label && (
-        <label className={labelClassName} htmlFor={inputId}>
-          {label}
-        </label>
-      )}
+      {label && <span className={labelClassName}>{label}</span>}
       <div
         ref={inputRef}
         className={inputClassName}

@@ -91,17 +91,15 @@ const Input: React.FC<InputProps> = (props) => {
           {label}
         </label>
       )}
-      <div>
-        <input
-          type={type === 'text' || type === 'currency' ? 'text' : type}
-          value={type === 'currency' ? currencyFormatter(value) : String(value)}
-          onChange={handleChange}
-          placeholder={placeholder}
-          className={inputClassName}
-          id={inputId}
-          autoComplete="off"
-        />
-      </div>
+      <input
+        type={type === 'text' || type === 'currency' ? 'text' : type}
+        value={type === 'currency' ? currencyFormatter(value) : String(value)}
+        onChange={handleChange}
+        placeholder={placeholder}
+        className={inputClassName}
+        id={inputId}
+        autoComplete="off"
+      />
       {internalError && (
         <span className="text--3 text--color-danger">{internalError}</span>
       )}

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useIntl } from 'react-intl'
 import { useAppDispatch } from '@/hooks'
 import { mainAction } from '@/store/main/main-slice'
@@ -22,7 +22,8 @@ const SearchModal = ({ isOpen, setIsOpen }: SearchModalProps) => {
     setIsOpen(false)
   }
 
-  const handleCancel = () => {
+  const handleCancel = (e: React.FormEvent) => {
+    e.preventDefault()
     setSearch('')
     setError('')
     setIsOpen(false)
@@ -42,6 +43,7 @@ const SearchModal = ({ isOpen, setIsOpen }: SearchModalProps) => {
           onChange={(val) => setSearch(val)}
           errorMessage={error}
           setError={(val) => setError(val)}
+          id="search"
         />
         <div className="flex-column gap-4 mt-4">
           <button type="submit" className="btn btn-primary">

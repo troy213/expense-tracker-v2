@@ -7,14 +7,16 @@ body.dark {
   .toolbar,
   .widget,
   .categories,
+  .category-widget,
   .dashboard,
+  .date-range-modal,
   .form-input__input,
   .form-input__radio,
   .form-input__select-option-container,
   .form-input__select-option:not(.selected),
   .form-input__select-placeholder--has-value,
   .transactions,
-  .transaction-detail,
+  .transactions__transaction-detail-container,
   .reports,
   .settings {
     background-color: $color-dark;
