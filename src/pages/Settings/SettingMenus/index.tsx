@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 import { Navbar } from '@/components'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
+import ExportDataModal from '@/components/Modal/ExportDataModa'
 import { SETTING_MENUS } from '@/constants/config'
 import { useAppDispatch } from '@/hooks'
 import { mainAction } from '@/store/main/main-slice'
@@ -25,6 +26,10 @@ const SettingMenus = () => {
 
   const renderModal = () => {
     switch (selectedModal) {
+      case 'ExportData':
+        return (
+          <ExportDataModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+        )
       case 'DeleteData':
         return (
           <DeleteDataModal

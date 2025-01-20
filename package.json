@@ -1,7 +1,7 @@
 {
   "name": "expense-tracker-v2",
   "private": true,
-  "version": "0.0.0-alpha.34",
+  "version": "0.0.0-alpha.35",
   "type": "module",
   "scripts": {
     "dev": "vite --open --port 3000",
@@ -23,7 +23,8 @@
     "react-router-dom": "^6.23.0",
     "redux": "^5.0.1",
     "sass": "^1.76.0",
-    "uuid": "^11.0.3"
+    "uuid": "^11.0.3",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.5",
