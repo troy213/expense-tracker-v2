@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 import { Navbar } from '@/components'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
-import ExportDataModal from '@/components/Modal/ExportDataModa'
+import ExportDataModal from '@/components/Modal/ExportDataModal'
 import { SETTING_MENUS } from '@/constants/config'
 import { useAppDispatch } from '@/hooks'
 import { mainAction } from '@/store/main/main-slice'
 import { categoriesAction } from '@/store/categories/categories-slice'
 import { setStorage } from '@/utils'
+import ImportDataModal from '@/components/Modal/ImportDataModal'
 
 const SettingMenus = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -26,6 +27,10 @@ const SettingMenus = () => {
 
   const renderModal = () => {
     switch (selectedModal) {
+      case 'ImportData':
+        return (
+          <ImportDataModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+        )
       case 'ExportData':
         return (
           <ExportDataModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
@@ -47,7 +52,7 @@ const SettingMenus = () => {
 
   return (
     <div className="setting-menus">
-      {renderModal()}
+      {isModalOpen && renderModal()}
       <Navbar title="Settings" enableBackButton={true} />
 
       <ul className="flex-column gap-8 py-4">

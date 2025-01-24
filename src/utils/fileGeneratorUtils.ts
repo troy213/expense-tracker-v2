@@ -1,6 +1,56 @@
 import * as XLSX from 'xlsx'
-import { Category, Data } from '@/types'
+import { Category, CategoryType, Data } from '@/types'
 import { getStorage } from '.'
+
+export type DataOutput = {
+  date: string
+  id: string
+  subdataId: string
+  type: CategoryType
+  category: string
+  description: string
+  amount: number
+}
+
+export const readXlsx = (file: File) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      try {
+        const dataHeader = [
+          'date',
+          'id',
+          'subdataId',
+          'type',
+          'category',
+          'description',
+          'amount',
+        ]
+        const categoryHeader = ['id', 'type', 'name', 'budget']
+
+        const data = new Uint8Array(e.target?.result as ArrayBuffer)
+        const workbook = XLSX.read(data, { type: 'array' })
+        const dataSheetName = workbook.SheetNames[0]
+        const categorySheetName = workbook.SheetNames[1]
+        const dataSheet = workbook.Sheets[dataSheetName]
+        const categorySheet = workbook.Sheets[categorySheetName]
+        const dataRawData = XLSX.utils.sheet_to_json(dataSheet, {
+          header: dataHeader,
+        })
+        const categoryRawData = XLSX.utils.sheet_to_json(categorySheet, {
+          header: categoryHeader,
+        })
+        const dataOutput = dataRawData.slice(1, dataRawData.length)
+        const categoryOutput = categoryRawData.slice(1, categoryRawData.length)
+
+        resolve({ dataOutput, categoryOutput })
+      } catch (error) {
+        reject(error)
+      }
+    }
+    reader.readAsArrayBuffer(file)
+  })
+}
 
 export const createExcelFile = () => {
   const storedData = getStorage('data')
@@ -56,4 +106,61 @@ export const createExcelFile = () => {
 
   // Export file
   XLSX.writeFile(workbook, 'Expense Tracker.xlsx')
+}
+
+export const processData = (dataOutput: DataOutput[]) => {
+  const newData: Data[] = []
+  dataOutput.forEach((item) => {
+    const { amount, category, date, description, id, subdataId, type } = item
+    const dataIndex = newData.findIndex(
+      (dataItem) => dataItem.date === date && dataItem.id === id
+    )
+
+    if (dataIndex >= 0) {
+      const subdataIndex = newData[dataIndex].subdata.findIndex(
+        (subdataItem) => subdataItem.id === subdataId
+      )
+
+      if (subdataIndex >= 0) {
+        newData[dataIndex].subdata[subdataIndex].item.push({
+          description,
+          amount,
+        })
+      } else {
+        newData[dataIndex].subdata.push({
+          id: subdataId,
+          category,
+          type,
+          item: [
+            {
+              description,
+              amount,
+            },
+          ],
+        })
+      }
+    } else {
+      newData.push({
+        date,
+        id,
+        subdata: [
+          {
+            category,
+            id: subdataId,
+            type,
+            item: [
+              {
+                description,
+                amount,
+              },
+            ],
+          },
+        ],
+      })
+    }
+  })
+
+  return newData.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  )
 }

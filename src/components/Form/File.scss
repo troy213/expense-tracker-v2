@@ -1,0 +1,20 @@
+.form-input__file {
+  display: none;
+
+  &-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+  }
+
+  &-placeholder {
+    border: 1px solid $color-primary;
+    border-radius: 0.25em;
+    padding: 0 0.5em;
+    color: $color-primary;
+
+    &--error {
+      border: 1px solid $color-danger;
+    }
+  }
+}

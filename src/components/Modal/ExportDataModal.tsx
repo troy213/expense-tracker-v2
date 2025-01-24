@@ -2,12 +2,15 @@ import { useIntl } from 'react-intl'
 import { createExcelFile } from '@/utils/fileGeneratorUtils'
 import Modal from '.'
 
-type ExportDataModal = {
+type ExportDataModalProps = {
   isOpen: boolean
   setIsOpen: (val: boolean) => void
 }
 
-const ExportDataModal: React.FC<ExportDataModal> = ({ isOpen, setIsOpen }) => {
+const ExportDataModal: React.FC<ExportDataModalProps> = ({
+  isOpen,
+  setIsOpen,
+}) => {
   const { formatMessage } = useIntl()
 
   const handleExport = () => {
