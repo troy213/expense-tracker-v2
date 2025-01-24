@@ -26,3 +26,22 @@ export const LANGUAGES: Messages = {
   [LOCALES.ENGLISH]: english,
   [LOCALES.INDONESIA]: indonesia,
 } as const
+
+export const REGEX = {
+  ALPHANUMERIC: {
+    PATTERN: /^[a-zA-Z0-9]+$/,
+    ERROR_MESSAGE: 'AlphanumericError',
+  },
+  COMMON_TEXT: {
+    PATTERN: /^[ a-zA-Z0-9!@#$%^&*()_-]+$/,
+    ERROR_MESSAGE: 'CommonTextError',
+  },
+  LETTER: {
+    PATTERN: /^[a-zA-Z]+$/,
+    ERROR_MESSAGE: 'LetterError',
+  },
+  NUMBER: {
+    PATTERN: /^\d+$/,
+    ERROR_MESSAGE: 'NumberError',
+  },
+}

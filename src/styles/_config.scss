@@ -14,7 +14,7 @@ html {
 body {
   font-family: 'Roboto', sans-serif;
   min-width: 360px;
-  &.hide{
+  &.hide {
     overflow: hidden;
   }
 }
@@ -25,4 +25,8 @@ a {
 
 li {
   list-style: none;
+}
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
 }

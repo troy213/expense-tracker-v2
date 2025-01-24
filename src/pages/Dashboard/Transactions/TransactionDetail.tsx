@@ -1,15 +1,22 @@
 import { useRef, useState } from 'react'
+import { useIntl } from 'react-intl'
 import { MoreVerticalSvg } from '@/assets'
+import MoreOptionModal from '@/components/Modal/MoreOptionModal'
+import DeleteDataModal from '@/components/Modal/DeleteDataModal'
+import { useAppDispatch } from '@/hooks'
 import { Data } from '@/types'
+import { mainAction } from '@/store/main/main-slice'
 import {
+  calculateModalBottomThreshold,
   combineClassName,
   currencyFormatter,
-  formatTransactionDate,
 } from '@/utils'
-import MoreOptionModal from './MoreOptionModal'
+import FormTransactionModal from '@/components/Modal/FormTransactionModal'
 
 type TransactionDetailProps = {
-  data: Data
+  data: Data['subdata'][0]
+  dataIndex: number
+  subdataIndex: number
   selectedTransaction: string
   handleSelectTransaction: (id: string) => void
 }
@@ -22,107 +29,122 @@ const sumTotalItemValue = (item: Data['subdata'][0]['item']): number => {
 }
 
 const getModalPositionClassName = (elementRect: DOMRect | undefined) => {
-  const MODAL_BOTTOM_THRESHOLD = 150
+  const modalBottomThreshold = calculateModalBottomThreshold()
   const viewPortHeight = window.innerHeight
   const elementSizeDiff = viewPortHeight - (elementRect?.bottom ?? 0)
 
-  if (elementSizeDiff < MODAL_BOTTOM_THRESHOLD) return 'modal--top'
+  if (elementSizeDiff < modalBottomThreshold) return 'modal--top'
   return ''
 }
 
 const TransactionDetail: React.FC<TransactionDetailProps> = ({
   data,
+  dataIndex,
+  subdataIndex,
   selectedTransaction,
   handleSelectTransaction,
 }) => {
-  const { date, subdata } = data
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const { id, type, category, item } = data
+  const [isMoreModalOpen, setIsMoreModalOpen] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [moreOptionModalClassName, setMoreOptionModalClassName] = useState('')
-  const transactionRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+  const transactionRefs = useRef<HTMLDivElement>(null)
+  const { formatMessage } = useIntl()
+  const dispatch = useAppDispatch()
 
-  const handleMoreOption = (e: React.MouseEvent, id: string) => {
+  const isExpense = type === 'expense'
+  const totalItemValue = isExpense
+    ? -1 * sumTotalItemValue(item)
+    : sumTotalItemValue(item)
+  const totalItemValueClassName = combineClassName('', [
+    { condition: isExpense, className: 'text--color-danger' },
+  ])
+
+  const handleMoreOption = (e: React.MouseEvent) => {
     e.stopPropagation()
-    const elementRect = transactionRefs.current.get(id)?.getBoundingClientRect()
+    const elementRect = transactionRefs.current?.getBoundingClientRect()
     setMoreOptionModalClassName(getModalPositionClassName(elementRect))
-    setIsModalOpen((val) => !val)
+    setIsMoreModalOpen((val) => !val)
+  }
+
+  const handleDeleteTransaction = () => {
+    dispatch(mainAction.deleteTransaction({ subdataId: id }))
+    setIsDeleteModalOpen(false)
   }
 
   return (
-    <div className="transaction-detail">
-      <div className="flex-column gap-4">
-        <span className="text--italic text--light text--3">
-          {formatTransactionDate(date)}
-        </span>
-
-        {subdata.map((subdataItem) => {
-          const isExpense = subdataItem.type === 'expense'
-          const totalItemValue = isExpense
-            ? -1 * sumTotalItemValue(subdataItem.item)
-            : sumTotalItemValue(subdataItem.item)
-          const totalItemValueClassName = combineClassName('', [
-            { condition: isExpense, className: 'text--color-danger' },
-          ])
-
-          return (
-            <div
-              className="flex-column gap-1"
-              key={subdataItem.id}
-              ref={(el) => {
-                if (el) transactionRefs.current.set(subdataItem.id, el)
-                else transactionRefs.current.delete(subdataItem.id)
-              }}
-              onClick={() => {
-                handleSelectTransaction(subdataItem.id)
-                setIsModalOpen(false)
-              }}
-            >
-              <div className="flex-space-between">
-                <span>{subdataItem.category}</span>
-                <div className="flex-align-center gap-2">
-                  <span className={totalItemValueClassName}>
-                    {currencyFormatter(totalItemValue)}
-                  </span>
-                  {selectedTransaction === subdataItem.id && (
-                    <div className="relative">
-                      <button
-                        className="btn btn-clear"
-                        type="button"
-                        onClick={(e) => handleMoreOption(e, subdataItem.id)}
-                      >
-                        <MoreVerticalSvg className="icon icon--stroke-primary" />
-                      </button>
-                      {isModalOpen && (
-                        <MoreOptionModal className={moreOptionModalClassName} />
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-              {subdataItem.item.map((item, index) => {
-                const hasMoreItem = subdataItem.item.length > 1
-                const amount = isExpense ? -1 * item.amount : item.amount
-                const amountClassName = combineClassName(
-                  'text--light text--3',
-                  [{ condition: isExpense, className: 'text--color-danger' }]
-                )
-
-                return (
-                  <div className="flex-space-between" key={index}>
-                    <span className="text--light text--3">
-                      {item.description}
-                    </span>
-                    {hasMoreItem && (
-                      <span className={amountClassName}>
-                        {currencyFormatter(amount)}
-                      </span>
-                    )}
-                  </div>
-                )
-              })}
+    <div
+      className="flex-column gap-1"
+      ref={transactionRefs}
+      onClick={() => handleSelectTransaction(id)}
+    >
+      {isEditModalOpen && (
+        <FormTransactionModal
+          isOpen={isEditModalOpen}
+          setIsOpen={setIsEditModalOpen}
+          indexes={{ dataIndex, subdataIndex }}
+        />
+      )}
+      {isDeleteModalOpen && (
+        <DeleteDataModal
+          isOpen={isDeleteModalOpen}
+          setIsOpen={setIsDeleteModalOpen}
+          title={formatMessage({ id: 'DeleteTransaction' })}
+          message={formatMessage({ id: 'DeleteDataGeneral' })}
+          handleDelete={handleDeleteTransaction}
+        />
+      )}
+      <div className="flex-space-between">
+        <span>{category}</span>
+        <div className="flex-align-center gap-2">
+          <span className={totalItemValueClassName}>
+            {currencyFormatter(totalItemValue)}
+          </span>
+          {selectedTransaction === id && (
+            <div className="relative">
+              <button
+                className="btn btn-clear"
+                type="button"
+                onClick={handleMoreOption}
+              >
+                <MoreVerticalSvg className="icon icon--stroke-primary" />
+              </button>
+              {isMoreModalOpen && (
+                <MoreOptionModal
+                  className={moreOptionModalClassName}
+                  handleDelete={() => {
+                    setIsMoreModalOpen(false)
+                    setIsDeleteModalOpen(true)
+                  }}
+                  handleEdit={() => {
+                    setIsMoreModalOpen(false)
+                    setIsEditModalOpen(true)
+                  }}
+                />
+              )}
             </div>
-          )
-        })}
+          )}
+        </div>
       </div>
+      {item.map((subitem, index) => {
+        const hasMoreItem = data.item.length > 1
+        const amount = isExpense ? -1 * subitem.amount : subitem.amount
+        const amountClassName = combineClassName('text--light text--3', [
+          { condition: isExpense, className: 'text--color-danger' },
+        ])
+
+        return (
+          <div className="flex-space-between" key={index}>
+            <span className="text--light text--3">{subitem.description}</span>
+            {hasMoreItem && (
+              <span className={amountClassName}>
+                {currencyFormatter(amount)}
+              </span>
+            )}
+          </div>
+        )
+      })}
     </div>
   )
 }

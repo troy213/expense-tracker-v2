@@ -1,40 +1,60 @@
-// import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { BudgetSvg, HomeSvg, PieChartSvg, PlusSvg, SettingsSvg } from '@/assets'
-// import Modal from '../Modal'
 import { useState } from 'react'
-import AddtransactionModal from '../Modal/AddTransaction'
+import FormTransactionModal from '../Modal/FormTransactionModal'
+import { combineClassName } from '@/utils'
 
 const Toolbar = () => {
-  const [isOpen, setOpen] = useState(false)
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false)
 
-  const handleOpenModal = () => {
-    setOpen(!isOpen)
-    document.getElementsByTagName('body')[0].classList.toggle('hide')
-  }
+  const currentMenu = useLocation().pathname
+
+  const getClassName = (route: string) =>
+    combineClassName('toolbar__menu', [
+      { condition: currentMenu === route, className: 'selected' },
+    ])
+
   return (
     <div className="toolbar">
-      <Link to="/">
-        <HomeSvg className="icon--stroke-primary" />
-      </Link>
-      <Link to="/reports">
-        <PieChartSvg className="icon--stroke-primary" />
-      </Link>
-      <button
-        className="toolbar__add-button btn"
-        onClick={() => {
-          handleOpenModal()
-        }}
-      >
-        <PlusSvg className="icon--stroke-white" />
-      </button>
-      <Link to="/categories">
-        <BudgetSvg className="icon--stroke-primary" />
-      </Link>
-      <Link to="/settings">
-        <SettingsSvg className="icon--stroke-primary" />
-      </Link>
-      <AddtransactionModal isOpen={isOpen} handleOpenModal={handleOpenModal} />
+      <div className={getClassName('/')}>
+        {isAddModalOpen && (
+          <FormTransactionModal
+            isOpen={isAddModalOpen}
+            setIsOpen={(val) => {
+              setIsAddModalOpen(val)
+            }}
+          />
+        )}
+
+        <Link to="/">
+          <HomeSvg className="icon--stroke-primary" />
+        </Link>
+      </div>
+      <div className={getClassName('/reports')}>
+        <Link to="/reports">
+          <PieChartSvg className="icon--stroke-primary" />
+        </Link>
+      </div>
+      <div className="toolbar__menu">
+        <button
+          className="toolbar__add-button"
+          onClick={() => {
+            setIsAddModalOpen((val) => !val)
+          }}
+        >
+          <PlusSvg className="icon--stroke-white" />
+        </button>
+      </div>
+      <div className={getClassName('/categories')}>
+        <Link to="/categories">
+          <BudgetSvg className="icon--stroke-primary" />
+        </Link>
+      </div>
+      <div className={getClassName('/settings')}>
+        <Link to="/settings">
+          <SettingsSvg className="icon--stroke-primary" />
+        </Link>
+      </div>
     </div>
   )
 }

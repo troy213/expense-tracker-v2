@@ -17,7 +17,6 @@ type SettingMenu = {
   iconClassName?: string
   titleClassName?: string
   link?: string
-  callback?: () => void
 }
 
 type LanguageMenu = {
@@ -31,17 +30,11 @@ export const SETTING_MENUS: SettingMenu[] = [
     title: 'ImportData',
     Icon: ImportSvg,
     iconClassName: 'icon--stroke-primary',
-    callback: () => {
-      console.log('IMPORT')
-    },
   },
   {
     title: 'ExportData',
     Icon: ExportSvg,
     iconClassName: 'icon--stroke-primary',
-    callback: () => {
-      console.log('EXPORT')
-    },
   },
   {
     title: 'Theme',
@@ -61,9 +54,6 @@ export const SETTING_MENUS: SettingMenu[] = [
     Icon: TrashSvg,
     iconClassName: 'icon--stroke-danger',
     className: 'mt-6',
-    callback: () => {
-      console.log('DELETE DATA')
-    },
   },
 ]
 

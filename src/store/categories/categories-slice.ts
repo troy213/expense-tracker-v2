@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Category, SetStatePayload } from '@/types'
-import { setStateReducerValue } from '@/utils'
+import { setStateReducerValue, setStorage } from '@/utils'
 
 type InitialState = {
   categories: Category[]
@@ -16,6 +16,38 @@ const categoriesSlice = createSlice({
   reducers: {
     setCategories(state, action: PayloadAction<Category[]>) {
       state.categories = action.payload
+      setStorage('categories', action.payload)
+    },
+    updateCategories(state, action: PayloadAction<Category>) {
+      const newCategories = state.categories.map((category) => {
+        if (category.id === action.payload.id) return action.payload
+        return category
+      })
+
+      state.categories = newCategories
+      setStorage('categories', newCategories)
+    },
+    sortCategories(
+      state,
+      action: PayloadAction<{
+        filteredCategory: Category[]
+        selectedCategory: string
+      }>
+    ) {
+      const categories = state.categories.filter(
+        (category) => category.type !== action.payload.selectedCategory
+      )
+      const newCategories = [...categories, ...action.payload.filteredCategory]
+
+      state.categories = newCategories
+      setStorage('categories', newCategories)
+    },
+    deleteCategory(state, action: PayloadAction<{ id: string }>) {
+      const newCategories = state.categories.filter(
+        (category) => category.id !== action.payload.id
+      )
+      state.categories = newCategories
+      setStorage('categories', newCategories)
     },
     setState(
       state: InitialState,

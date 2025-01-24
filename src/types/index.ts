@@ -28,10 +28,12 @@ export type Data = {
   }[]
 }
 
-export type ConditionArray = {
-  condition: boolean
-  className: string
-}
+export type ConditionArray =
+  | {
+      condition: boolean
+      className: string
+    }
+  | string
 
 export type Theme = 'light' | 'dark'
 

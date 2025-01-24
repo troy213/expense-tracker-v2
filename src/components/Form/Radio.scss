@@ -1,0 +1,27 @@
+.form-input {
+  &__radio {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    min-height: 24px;
+    width: 100%;
+    background-color: transparent;
+    color: $color-primary;
+
+    &:focus {
+      outline: 1px solid $color-primary;
+    }
+
+    &::placeholder {
+      color: black;
+    }
+
+    &--error {
+      color: $color-danger;
+
+      &:focus {
+        border-color: $color-danger;
+      }
+    }
+  }
+}
