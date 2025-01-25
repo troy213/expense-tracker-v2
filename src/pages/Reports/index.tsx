@@ -12,15 +12,19 @@ import InputDateModal from '@/components/Modal/InputDateModal'
 
 const Reports = () => {
   const { data } = useAppSelector((state) => state.mainReducer)
+  const now = new Date()
   const { categories } = useAppSelector((state) => state.categoriesReducer)
   // const { firstDate, lastDate } = getCurrentMonthRange()
   const [moreOptionModalClassName, setMoreOptionModalClassName] = useState('')
-  const [startDate, setStartDate] = useState<Date | null>(null)
-  const [endDate, setEndDate] = useState<Date | null>(null)
+  const [startDate, setStartDate] = useState<Date | null>(
+    new Date(data[data.length - 1]?.date)
+  )
+  const [endDate, setEndDate] = useState<Date | null>(
+    new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59)
+  )
   const [isMoreModalOpen, setIsMoreModalOpen] = useState(false)
   const [isDateModalOpen, setIsDateModalOpen] = useState(false)
   const [dateRange, setDateRange] = useState(0)
-  const now = new Date()
 
   const OpenDateFilterModal = () => {
     setIsDateModalOpen(!isDateModalOpen)
@@ -45,7 +49,6 @@ const Reports = () => {
     startDate && endDate
       ? (endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)
       : 1
-
   const { totalIncome, totalExpense, totalBalance } = updateTotal(filteredData)
   const avgExpense = totalExpense / totalDays
 
@@ -63,6 +66,12 @@ const Reports = () => {
     } else {
       setDateRange(range)
       switch (range) {
+        case 0:
+          setStartDate(new Date(data[data.length - 1].date))
+          setEndDate(
+            new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59)
+          )
+          break
         case 1:
           setStartDate(new Date(now.getFullYear(), now.getMonth(), 1))
           setEndDate(
