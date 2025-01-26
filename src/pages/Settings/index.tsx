@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom'
 import { Toolbar } from '@/components'
+import About from './About'
 import Languages from './Languages'
 import SettingMenus from './SettingMenus'
 import Theme from './Theme'
@@ -20,6 +21,6 @@ const Settings = () => {
   )
 }
 
-export { Languages, SettingMenus, Theme }
+export { About, Languages, SettingMenus, Theme }
 
 export default Settings

@@ -1,3 +1,4 @@
+// DEVELOPER NOTES: I know this kind of styling is shit, but it works anyway. will update soon
 body.dark {
   .text--color-primary {
     color: $color-white;
@@ -15,6 +16,8 @@ body.dark {
   .form-input__select-option-container,
   .form-input__select-option:not(.selected),
   .form-input__select-placeholder--has-value,
+  .form-input__file-placeholder,
+  .more-option-modal,
   .transactions,
   .transactions__transaction-detail-container,
   .reports,
@@ -40,5 +43,9 @@ body.dark {
     &__add-button {
       border-color: $color-white;
     }
+  }
+
+  ::-webkit-calendar-picker-indicator {
+    filter: invert(1);
   }
 }

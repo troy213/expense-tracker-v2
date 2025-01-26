@@ -88,6 +88,6 @@ describe('App Component routing test', () => {
       </MemoryRouter>
     )
 
-    expect(screen.getByText('404 Not Found')).toBeInTheDocument()
+    expect(screen.getByText('Page Not Found')).toBeInTheDocument()
   })
 })

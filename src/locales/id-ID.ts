@@ -1,4 +1,5 @@
 const messages = {
+  About: 'Tentang',
   Add: 'Tambah',
   AddCategory: 'Tambah Kategori',
   AddIncomeCategory: 'Tambah Kategori Pendapatan',
@@ -10,6 +11,7 @@ const messages = {
   AlphanumericError: 'Hanya huruf dan angka yang diperbolehkan',
   AmountRp: 'Jumlah (Rp.)',
   AvgSpending: 'Rata-rata Pengeluaran',
+  Back: 'Kembali',
   BudgetRp: 'Anggaran (Rp.)',
   Cancel: 'Batal',
   Category: 'Kategori',
@@ -17,6 +19,7 @@ const messages = {
   CategoryAndBudget: 'Kategori & Anggaran',
   CommonTextError:
     'Hanya huruf, angka dan karakter spesial [!@#$%^&*()_-] yang diperbolehkan',
+  Contributors: 'Kontributor',
   CustomFilter: 'Set Tanggal',
   DarkTheme: 'Mode Gelap',
   Dashboard: 'Dasbor',
@@ -45,14 +48,15 @@ const messages = {
   ImportData: 'Unggah Data (.xlsx)',
   Indonesia: 'Bahasa Indonesia',
   Income: 'Pendapatan',
-  NoCategoryWarningMessage:
-    'Oops! sepertinya anda tidak memiliki kategori apapun. Anda dapat menambahkan kategori pertama anda di tautan di bawah ini.',
-  NumberError: 'Hanya angka yang diperbolehkan',
   Language: 'Bahasa',
   LastMonth: 'Bulan Lalu',
   LetterError: 'Hanya huruf yang diperbolehkan',
   LightTheme: 'Mode Terang',
+  NoCategoryWarningMessage:
+    'Oops! sepertinya anda tidak memiliki kategori apapun. Anda dapat menambahkan kategori pertama anda di tautan di bawah ini.',
   NoTransaction: 'Tidak ada transaksi apapun',
+  NumberError: 'Hanya angka yang diperbolehkan',
+  PageNotFound: 'Halaman Tidak Ditemukan',
   RemainingBudgetForThisCategory:
     'Sisa anggaran untuk kategori ini di bulan ini',
   Reports: 'Laporan',

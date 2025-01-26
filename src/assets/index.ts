@@ -1,3 +1,4 @@
+import AlertCircleSvg from './icons/alert-circle.svg?react'
 import ArrowDownSvg from './icons/arrow-down.svg?react'
 import ArrowLeftSvg from './icons/arrow-left.svg?react'
 import ArrowUpSvg from './icons/arrow-up.svg?react'
@@ -24,6 +25,7 @@ import SlidersSvg from './icons/sliders.svg?react'
 import TrashSvg from './icons/trash.svg?react'
 
 export {
+  AlertCircleSvg,
   ArrowDownSvg,
   ArrowLeftSvg,
   ArrowUpSvg,

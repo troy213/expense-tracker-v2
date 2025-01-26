@@ -1,4 +1,5 @@
 const messages = {
+  About: 'About',
   Add: 'Add',
   AddCategory: 'Add Category',
   AddIncomeCategory: 'Add Income Category',
@@ -10,6 +11,7 @@ const messages = {
   AlphanumericError: 'Only alphanumeric characters allowed',
   AmountRp: 'Amount (Rp.)',
   AvgSpending: 'Average Spending',
+  Back: 'Back',
   BudgetRp: 'Budget (Rp.)',
   Cancel: 'Cancel',
   Category: 'Category',
@@ -17,6 +19,7 @@ const messages = {
   CategoryAndBudget: 'Category & Budget',
   CommonTextError:
     'Only alphanumeric and specials characters [!@#$%^&*()_-] allowed',
+  Contributors: 'Contributors',
   CustomFilter: 'Custom Filter',
   DarkTheme: 'Dark Theme',
   Dashboard: 'Dashboard',
@@ -45,14 +48,15 @@ const messages = {
   ImportData: 'Import Data (.xlsx)',
   Income: 'Income',
   Indonesia: 'Indonesia',
-  NoCategoryWarningMessage:
-    "Oops! it seems you don't have any category. You can add your first category in the link below.",
-  NumberError: 'Only number are allowed',
   Language: 'Language',
   LastMonth: 'Last Month',
   LetterError: 'Only letter are allowed',
   LightTheme: 'Light Theme',
+  NoCategoryWarningMessage:
+    "Oops! it seems you don't have any category. You can add your first category in the link below.",
   NoTransaction: 'There is no transaction',
+  NumberError: 'Only number are allowed',
+  PageNotFound: 'Page Not Found',
   RemainingBudgetForThisCategory:
     'Remaining budget for this category in this month',
   Reports: 'Reports',

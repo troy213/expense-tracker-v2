@@ -1,30 +1,30 @@
+import { useEffect, useRef, useState } from 'react'
 import { MoreVerticalSvg } from '@/assets'
 import { Navbar, Toolbar } from '@/components'
+import { DATE_RANGE } from '@/constants'
+import DateRangeModal from '@/components/Modal/DateRangeModal'
+import InputDateModal from '@/components/Modal/InputDateModal'
+import { useAppSelector } from '@/hooks'
+import { Data } from '@/types'
+import { calculateModalBottomThreshold, updateTotal } from '@/utils'
 import ReportInfo from './ReportInfo'
 import ReportWidget from './ReportWidget'
-import { useAppSelector } from '@/hooks'
-import { calculateModalBottomThreshold, updateTotal } from '@/utils'
-import { useRef, useState } from 'react'
-// import MoreOptionModal from '@/components/Modal/MoreOptionModal'
-import DateRangeModal from '@/components/Modal/DateRangeModal'
-import { Data } from '@/types'
-import InputDateModal from '@/components/Modal/InputDateModal'
 
 const Reports = () => {
   const { data } = useAppSelector((state) => state.mainReducer)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
-  // const { firstDate, lastDate } = getCurrentMonthRange()
   const [moreOptionModalClassName, setMoreOptionModalClassName] = useState('')
   const [startDate, setStartDate] = useState<Date | null>(null)
   const [endDate, setEndDate] = useState<Date | null>(null)
   const [isMoreModalOpen, setIsMoreModalOpen] = useState(false)
   const [isDateModalOpen, setIsDateModalOpen] = useState(false)
-  const [dateRange, setDateRange] = useState(0)
+  const [dateRange, setDateRange] = useState(DATE_RANGE.ALL_TIME)
   const now = new Date()
 
-  const OpenDateFilterModal = () => {
+  const openDateFilterModal = () => {
     setIsDateModalOpen(!isDateModalOpen)
   }
+
   const filteredData: Data[] =
     dateRange === 0
       ? data
@@ -45,7 +45,6 @@ const Reports = () => {
     startDate && endDate
       ? (endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)
       : 1
-
   const { totalIncome, totalExpense, totalBalance } = updateTotal(filteredData)
   const avgExpense = totalExpense / totalDays
 
@@ -58,32 +57,32 @@ const Reports = () => {
 
   const handleChangeDateRange = (range: number) => {
     setIsMoreModalOpen((val) => !val)
-    if (range === 4) {
-      OpenDateFilterModal()
+    if (range === DATE_RANGE.CUSTOM_FILTER) {
+      openDateFilterModal()
     } else {
       setDateRange(range)
       switch (range) {
-        case 1:
+        case DATE_RANGE.THIS_MONTH:
           setStartDate(new Date(now.getFullYear(), now.getMonth(), 1))
           setEndDate(
             new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59)
           )
           break
-        case 2:
+        case DATE_RANGE.LAST_MONTH:
           setStartDate(new Date(now.getFullYear(), now.getMonth() - 1, 1))
           setEndDate(
             new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999)
           )
           break
-        case 3:
+        case DATE_RANGE.THIS_YEAR:
           setStartDate(new Date(now.getFullYear(), 0, 1))
           setEndDate(
             new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59)
           )
           break
+        // DATE_RANGE.ALL_TIME:
         default:
-          setStartDate(null)
-          setEndDate(null)
+          return
       }
     }
   }
@@ -122,6 +121,19 @@ const Reports = () => {
     setMoreOptionModalClassName(getModalPositionClassName(elementRect))
     setIsMoreModalOpen((val) => !val)
   }
+
+  useEffect(() => {
+    if (dateRange === DATE_RANGE.ALL_TIME) {
+      const defaultStartDate = data.length
+        ? new Date(data[data.length - 1].date)
+        : null
+      const defaultEndDate = data.length ? new Date(data[0].date) : null
+
+      setStartDate(defaultStartDate)
+      setEndDate(defaultEndDate)
+    }
+  }, [data, dateRange])
+
   return (
     <div className="reports">
       <div className="flex-column gap-4 p-4">
@@ -144,7 +156,7 @@ const Reports = () => {
             {isDateModalOpen && (
               <InputDateModal
                 isOpen={isDateModalOpen}
-                setIsOpen={OpenDateFilterModal}
+                setIsOpen={openDateFilterModal}
                 SetCustomDate={SetCustomDate}
               />
             )}
