@@ -45,7 +45,6 @@ const Reports = () => {
     startDate && endDate
       ? (endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)
       : 1
-
   const { totalIncome, totalExpense, totalBalance } = updateTotal(filteredData)
   const avgExpense = totalExpense / totalDays
 
