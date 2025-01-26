@@ -45,3 +45,11 @@ export const REGEX = {
     ERROR_MESSAGE: 'NumberError',
   },
 }
+
+export const DATE_RANGE = {
+  ALL_TIME: 0,
+  THIS_MONTH: 1,
+  LAST_MONTH: 2,
+  THIS_YEAR: 3,
+  CUSTOM_FILTER: 4,
+}

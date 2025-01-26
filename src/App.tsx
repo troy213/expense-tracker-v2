@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { LANGUAGES, LOCALES, THEME } from '@/constants'
 import { useAppSelector, useInitConfig } from '@/hooks'
 import { Categories, Dashboard, NotFound, Reports, Settings } from '@/pages'
-import { Languages, SettingMenus, Theme } from '@/pages/Settings'
+import { About, Languages, SettingMenus, Theme } from '@/pages/Settings'
 
 const App = () => {
   const { selectedLocale, theme } = useAppSelector((state) => state.mainReducer)
@@ -32,6 +32,7 @@ const App = () => {
         <Route path="/reports" element={<Reports />} />
         <Route path="/settings" element={<Settings />}>
           <Route index element={<SettingMenus />} />
+          <Route path="about" element={<About />} />
           <Route path="theme" element={<Theme />} />
           <Route path="language" element={<Languages />} />
         </Route>

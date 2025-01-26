@@ -1,55 +1,50 @@
 import { useIntl } from 'react-intl'
-// import { combineClassName } from '@/utils'
+import { DATE_RANGE } from '@/constants'
 
 type MoreOptionModalProps = {
   className: string
-  //   handleDelete: () => void
   handleChangeDateRange: (arg: number) => void
 }
 
 const DateRangeModal: React.FC<MoreOptionModalProps> = ({
-  //   className = '',
   handleChangeDateRange,
 }) => {
   const { formatMessage } = useIntl()
-  //   const moreOptionModalClassName = combineClassName('date-range-modal', [
-  //     className,
-  //   ])
 
   return (
     <div className="date-range-modal">
       <button
         className="btn btn-clear text--color-primary"
         type="button"
-        onClick={() => handleChangeDateRange(0)}
+        onClick={() => handleChangeDateRange(DATE_RANGE.ALL_TIME)}
       >
         <span>{formatMessage({ id: 'All' })}</span>
       </button>
       <button
         className="btn btn-clear text--color-primary"
         type="button"
-        onClick={() => handleChangeDateRange(1)}
+        onClick={() => handleChangeDateRange(DATE_RANGE.THIS_MONTH)}
       >
         <span>{formatMessage({ id: 'ThisMonth' })}</span>
       </button>
       <button
         className="btn btn-clear text--color-primary"
         type="button"
-        onClick={() => handleChangeDateRange(2)}
+        onClick={() => handleChangeDateRange(DATE_RANGE.LAST_MONTH)}
       >
         <span>{formatMessage({ id: 'LastMonth' })}</span>
       </button>
       <button
         className="btn btn-clear text--color-primary"
         type="button"
-        onClick={() => handleChangeDateRange(3)}
+        onClick={() => handleChangeDateRange(DATE_RANGE.THIS_YEAR)}
       >
         <span>{formatMessage({ id: 'ThisYear' })}</span>
       </button>
       <button
         className="btn btn-clear text--color-primary"
         type="button"
-        onClick={() => handleChangeDateRange(4)}
+        onClick={() => handleChangeDateRange(DATE_RANGE.CUSTOM_FILTER)}
       >
         <span>{formatMessage({ id: 'CustomFilter' })}</span>
       </button>

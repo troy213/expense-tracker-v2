@@ -1,4 +1,5 @@
 import {
+  AlertCircleSvg,
   ExportSvg,
   FlagIDSVg,
   FlagUKSvg,
@@ -47,6 +48,12 @@ export const SETTING_MENUS: SettingMenu[] = [
     Icon: GlobeSvg,
     iconClassName: 'icon--stroke-primary',
     link: 'language',
+  },
+  {
+    title: 'About',
+    Icon: AlertCircleSvg,
+    iconClassName: 'icon--stroke-primary',
+    link: 'about',
   },
   {
     title: 'DeleteData',
