@@ -1,5 +1,8 @@
 const messages = {
   About: 'About',
+  AboutThisApp: 'About This App',
+  AboutDescription:
+    'This Expense Tracker app helps you manage your budget efficiently by allowing you to track your expenses and budgets. It is designed to provide a simple and intuitive experience.',
   Add: 'Add',
   AddCategory: 'Add Category',
   AddIncomeCategory: 'Add Income Category',
@@ -32,6 +35,7 @@ const messages = {
   DeleteDataGeneral: 'Are you sure? you cannot undo this action.',
   DeleteTransaction: 'Delete Transaction',
   Description: 'Description',
+  Design: 'Design',
   Edit: 'Edit',
   EditExpenseCategory: 'Edit Outcome Category',
   EditIncomeCategory: 'Edit Income Category',
@@ -83,6 +87,8 @@ const messages = {
   Update: 'Update',
   expense: 'expense',
   income: 'income',
+  today: 'today',
+  yesterday: 'yesterday',
 }
 
 export default {

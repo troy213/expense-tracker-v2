@@ -38,7 +38,9 @@ const Transactions = () => {
         return (
           <div className="transactions__transaction-detail-container" key={id}>
             <span className="text--italic text--light text--3">
-              {formatTransactionDate(date, { enableTodayFormat: true })}
+              {formatTransactionDate(date, formatMessage, {
+                enableTodayFormat: true,
+              })}
             </span>
 
             {subdata.map((subitem, subdataIndex) => {

@@ -27,18 +27,28 @@ export const getDate = (): string => {
 
 export const formatTransactionDate = (
   dateString: string,
+  formatMessage: (value: { id: string }) => string = () => '',
   options: { enableTodayFormat?: boolean } = {}
 ): string => {
   const date = new Date(dateString)
   const today = new Date()
+  const yesterday = new Date()
+  yesterday.setDate(today.getDate() - 1)
 
   const isToday =
     date.getDate() === today.getDate() &&
     date.getMonth() === today.getMonth() &&
     date.getFullYear() === today.getFullYear()
 
+  const isYesterday =
+    date.getDate() === today.getDate() - 1 &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear()
+
   if (isToday && options.enableTodayFormat) {
-    return 'today'
+    return formatMessage({ id: 'today' })
+  } else if (isYesterday && options.enableTodayFormat) {
+    return formatMessage({ id: 'yesterday' })
   } else {
     return date.toLocaleDateString('en-GB', {
       day: '2-digit',
