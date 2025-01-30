@@ -33,7 +33,7 @@ const ImportDataModal: React.FC<ImportDataModalProps> = ({
         }
         const newData = processData(rawData.dataOutput)
 
-        dispatch(mainAction.setData(newData))
+        dispatch(mainAction.setState({ state: 'data', value: newData }))
         dispatch(categoriesAction.setCategories(rawData.categoryOutput))
         setStorage('data', newData)
         setStorage('categories', rawData.categoryOutput)

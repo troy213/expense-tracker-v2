@@ -38,3 +38,14 @@ export type ConditionArray =
 export type Theme = 'light' | 'dark'
 
 export type Locales = 'en-US' | 'id-ID'
+
+export type TransactionForm = {
+  type: CategoryType
+  date: string
+  category: string
+}
+
+export type TxDetailsForm = {
+  description: string
+  amount: number
+}

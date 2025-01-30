@@ -4,7 +4,7 @@ import { CrossSvg, PlusSvg } from '@/assets'
 import { REGEX } from '@/constants'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { mainAction } from '@/store/main/main-slice'
-import { CategoryType } from '@/types'
+import { CategoryType, TransactionForm, TxDetailsForm } from '@/types'
 import {
   calculateRemainingBudget,
   combineClassName,
@@ -22,17 +22,6 @@ type FormTransactionModalProps = {
     dataIndex: number
     subdataIndex: number
   }
-}
-
-type TransactionForm = {
-  type: CategoryType
-  date: string
-  category: string
-}
-
-type TxDetailsForm = {
-  description: string
-  amount: number
 }
 
 type ErrorState = Record<keyof TransactionForm, string>
@@ -251,89 +240,7 @@ const FormTransactionModal: React.FC<FormTransactionModalProps> = ({
     })
 
     if (formIsValid) {
-      const existingTxIndex = transactionsData.findIndex(
-        (txData) => txData.date === data.date
-      )
-      const transactionIsExist = existingTxIndex >= 0
-
-      if (isEditForm) {
-        const { dataIndex, subdataIndex } = indexes
-        const isSameDate = transactionsData[dataIndex].date === data.date
-        const newSubdata = {
-          id: transactionsData[dataIndex].subdata[subdataIndex].id,
-          type: data.type,
-          category: data.category,
-          item: transactionDetails,
-        }
-
-        if (isSameDate) {
-          const newTransactionsData = structuredClone(transactionsData)
-          newTransactionsData[dataIndex].subdata[subdataIndex] = newSubdata
-
-          dispatch(mainAction.setData(newTransactionsData))
-        } else if (transactionIsExist) {
-          const newTransactionsData = structuredClone(transactionsData)
-          newTransactionsData[existingTxIndex].subdata.push(newSubdata)
-
-          if (newTransactionsData[dataIndex].subdata.length === 1) {
-            newTransactionsData.splice(dataIndex, 1)
-          } else {
-            newTransactionsData[dataIndex].subdata.splice(subdataIndex, 1)
-          }
-
-          dispatch(mainAction.setData(newTransactionsData))
-        } else {
-          const newTransaction = {
-            id: crypto.randomUUID() as string,
-            date: data.date,
-            subdata: [newSubdata],
-          }
-          const newTransactionsData = structuredClone(transactionsData)
-
-          if (newTransactionsData[dataIndex].subdata.length === 1) {
-            newTransactionsData.splice(dataIndex, 1)
-          } else {
-            newTransactionsData[dataIndex].subdata.splice(subdataIndex, 1)
-          }
-
-          newTransactionsData.push(newTransaction)
-          newTransactionsData.sort(
-            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-          )
-
-          dispatch(mainAction.setData(newTransactionsData))
-        }
-      } else {
-        const newSubdata = {
-          id: crypto.randomUUID() as string,
-          type: data.type,
-          category: data.category,
-          item: transactionDetails,
-        }
-
-        if (transactionIsExist) {
-          const newTransaction = { ...transactionsData[existingTxIndex] }
-          newTransaction.subdata = [...newTransaction.subdata, newSubdata]
-
-          const newTransactionsData = [...transactionsData]
-          newTransactionsData[existingTxIndex] = newTransaction
-
-          dispatch(mainAction.setData(newTransactionsData))
-        } else {
-          const newTransaction = {
-            id: crypto.randomUUID() as string,
-            date: data.date,
-            subdata: [newSubdata],
-          }
-          const newTransactionsData = [...transactionsData]
-          newTransactionsData.push(newTransaction)
-          newTransactionsData.sort(
-            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-          )
-
-          dispatch(mainAction.setData(newTransactionsData))
-        }
-      }
+      dispatch(mainAction.setData({ data, transactionDetails, indexes }))
 
       handleCancel(e)
     }

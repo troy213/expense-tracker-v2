@@ -2,7 +2,7 @@ import { Category, ConditionArray, Data } from '@/types'
 
 export const combineClassName = (
   defaultStyle: string = '',
-  conditionArray: string[] | ConditionArray[] = []
+  conditionArray: (string | ConditionArray)[] = []
 ): string => {
   let result = defaultStyle
 
