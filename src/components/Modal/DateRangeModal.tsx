@@ -1,12 +1,11 @@
 import { useIntl } from 'react-intl'
 import { DATE_RANGE } from '@/constants'
 
-type MoreOptionModalProps = {
-  className: string
+type DateRangeModalProps = {
   handleChangeDateRange: (arg: number) => void
 }
 
-const DateRangeModal: React.FC<MoreOptionModalProps> = ({
+const DateRangeModal: React.FC<DateRangeModalProps> = ({
   handleChangeDateRange,
 }) => {
   const { formatMessage } = useIntl()

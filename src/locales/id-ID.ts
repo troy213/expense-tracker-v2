@@ -1,5 +1,8 @@
 const messages = {
   About: 'Tentang',
+  AboutThisApp: 'Tentang Aplikasi Ini',
+  AboutDescription:
+    'Aplikasi Pelacak Pengeluaran ini membantu anda mengelola anggaran secara efisien dengan memungkinkan anda melacak pengeluaran dan anggaran anda. Aplikasi ini dirancang untuk memberikan pengalaman yang sederhana dan intuitif.',
   Add: 'Tambah',
   AddCategory: 'Tambah Kategori',
   AddIncomeCategory: 'Tambah Kategori Pendapatan',
@@ -32,6 +35,7 @@ const messages = {
   DeleteDataGeneral: 'Apakah kamu yakin? kamu tidak dapat mengulang aksi ini.',
   DeleteTransaction: 'Hapus Transaksi',
   Description: 'Deskripsi',
+  Design: 'Desain',
   Edit: 'Ubah',
   EditExpenseCategory: 'Ubah Kategori Pendapatan',
   EditIncomeCategory: 'Ubah Kategori Pengeluaran',
@@ -83,6 +87,8 @@ const messages = {
   Update: 'Perbarui',
   expense: 'pengeluaran',
   income: 'pendapatan',
+  today: 'hari ini',
+  yesterday: 'kemarin',
 }
 
 export default {

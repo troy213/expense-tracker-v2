@@ -6,14 +6,13 @@ import DateRangeModal from '@/components/Modal/DateRangeModal'
 import InputDateModal from '@/components/Modal/InputDateModal'
 import { useAppSelector } from '@/hooks'
 import { Data } from '@/types'
-import { calculateModalBottomThreshold, updateTotal } from '@/utils'
+import { updateTotal } from '@/utils'
 import ReportInfo from './ReportInfo'
 import ReportWidget from './ReportWidget'
 
 const Reports = () => {
   const { data } = useAppSelector((state) => state.mainReducer)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
-  const [moreOptionModalClassName, setMoreOptionModalClassName] = useState('')
   const [startDate, setStartDate] = useState<Date | null>(null)
   const [endDate, setEndDate] = useState<Date | null>(null)
   const [isMoreModalOpen, setIsMoreModalOpen] = useState(false)
@@ -105,20 +104,9 @@ const Reports = () => {
       .filter((cat) => cat.total > 0)
       .sort((a, b) => b.total - a.total)
 
-  const getModalPositionClassName = (elementRect: DOMRect | undefined) => {
-    const modalBottomThreshold = calculateModalBottomThreshold()
-    const viewPortHeight = window.innerHeight
-    const elementSizeDiff = viewPortHeight - (elementRect?.bottom ?? 0)
-
-    if (elementSizeDiff < modalBottomThreshold) return 'modal--top'
-    return ''
-  }
-
   const incomeReport = generateReport('income')
   const expenseReport = generateReport('expense')
   const handleMoreOption = () => {
-    const elementRect = buttonRef.current?.getBoundingClientRect()
-    setMoreOptionModalClassName(getModalPositionClassName(elementRect))
     setIsMoreModalOpen((val) => !val)
   }
 
@@ -148,10 +136,7 @@ const Reports = () => {
               <MoreVerticalSvg className="icon--stroke-primary" />
             </button>
             {isMoreModalOpen && (
-              <DateRangeModal
-                className={moreOptionModalClassName}
-                handleChangeDateRange={handleChangeDateRange}
-              />
+              <DateRangeModal handleChangeDateRange={handleChangeDateRange} />
             )}
             {isDateModalOpen && (
               <InputDateModal

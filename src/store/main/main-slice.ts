@@ -1,5 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Data, Locales, SetStatePayload, Theme } from '@/types'
+import {
+  Data,
+  Locales,
+  SetStatePayload,
+  Theme,
+  TransactionForm,
+  TxDetailsForm,
+} from '@/types'
 import {
   getStorage,
   searchSubdata,
@@ -26,12 +33,132 @@ const mainSlice = createSlice({
   name: 'main',
   initialState,
   reducers: {
-    setData(state, action: PayloadAction<Data[]>) {
-      state.data = action.payload
-      setStorage('data', action.payload)
+    setData(
+      state,
+      action: PayloadAction<{
+        data: TransactionForm
+        transactionDetails: TxDetailsForm[]
+        indexes: { dataIndex: number; subdataIndex: number } | undefined
+      }>
+    ) {
+      const { data, transactionDetails, indexes } = action.payload
+
+      const storedData = getStorage('data')
+      const transactionsData = storedData
+        ? (JSON.parse(storedData) as Data[])
+        : []
+      const existingTxIndex = transactionsData.findIndex(
+        (txData) => txData.date === data.date
+      )
+      const transactionIsExist = existingTxIndex >= 0
+      const isEditForm = indexes !== undefined
+
+      let newData: Data[] | null = null
+
+      if (isEditForm) {
+        const { dataIndex, subdataIndex } = indexes
+        const isSameDate = transactionsData[dataIndex].date === data.date
+        const newSubdata = {
+          id: transactionsData[dataIndex].subdata[subdataIndex].id,
+          type: data.type,
+          category: data.category,
+          item: transactionDetails,
+        }
+
+        // If transaction is exist and editing the same date
+        if (isSameDate) {
+          const newTransactionsData = structuredClone(transactionsData)
+          newTransactionsData[dataIndex].subdata[subdataIndex] = newSubdata
+
+          newData = newTransactionsData
+
+          // If Transaction is exist but not different date
+        } else if (transactionIsExist) {
+          const newTransactionsData = structuredClone(transactionsData)
+          newTransactionsData[existingTxIndex].subdata.push(newSubdata)
+
+          // Remove old item from the subdata
+          if (newTransactionsData[dataIndex].subdata.length === 1) {
+            newTransactionsData.splice(dataIndex, 1)
+          } else {
+            newTransactionsData[dataIndex].subdata.splice(subdataIndex, 1)
+          }
+
+          newData = newTransactionsData
+
+          // If transaction doesn't exist on any date, create a new one
+        } else {
+          const newTransaction = {
+            id: crypto.randomUUID() as string,
+            date: data.date,
+            subdata: [newSubdata],
+          }
+          const newTransactionsData = structuredClone(transactionsData)
+
+          if (newTransactionsData[dataIndex].subdata.length === 1) {
+            newTransactionsData.splice(dataIndex, 1)
+          } else {
+            newTransactionsData[dataIndex].subdata.splice(subdataIndex, 1)
+          }
+
+          newTransactionsData.push(newTransaction)
+          newTransactionsData.sort(
+            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+          )
+
+          newData = newTransactionsData
+        }
+      } else {
+        const newSubdata = {
+          id: crypto.randomUUID() as string,
+          type: data.type,
+          category: data.category,
+          item: transactionDetails,
+        }
+
+        // If transaction is exist, update the subdata
+        if (transactionIsExist) {
+          const newTransaction = { ...transactionsData[existingTxIndex] }
+          newTransaction.subdata = [...newTransaction.subdata, newSubdata]
+
+          const newTransactionsData = [...transactionsData]
+          newTransactionsData[existingTxIndex] = newTransaction
+
+          newData = newTransactionsData
+
+          // If transaction doesn't exist on any date, create a new one
+        } else {
+          const newTransaction = {
+            id: crypto.randomUUID() as string,
+            date: data.date,
+            subdata: [newSubdata],
+          }
+          const newTransactionsData = [...transactionsData]
+          newTransactionsData.push(newTransaction)
+          newTransactionsData.sort(
+            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+          )
+
+          newData = newTransactionsData
+        }
+      }
+
+      if (state.searchValue) {
+        const filteredData = searchSubdata(newData, state.searchValue)
+        state.data = filteredData
+      } else {
+        state.data = newData
+      }
+
+      setStorage('data', newData)
     },
     deleteTransaction(state, action: PayloadAction<{ subdataId: string }>) {
-      const newData = state.data
+      const storedData = getStorage('data')
+      const transactionsData = storedData
+        ? (JSON.parse(storedData) as Data[])
+        : []
+
+      const newData = transactionsData
         .map((item) => ({
           ...item,
           subdata: item.subdata.filter(
@@ -40,7 +167,13 @@ const mainSlice = createSlice({
         }))
         .filter((item) => item.subdata.length > 0)
 
-      state.data = newData
+      if (state.searchValue) {
+        const filteredData = searchSubdata(newData, state.searchValue)
+        state.data = filteredData
+      } else {
+        state.data = newData
+      }
+
       setStorage('data', newData)
     },
     searchData(state, action: PayloadAction<{ searchValue: string }>) {

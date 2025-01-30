@@ -1,12 +1,19 @@
 import ReactDOM from 'react-dom'
+import { combineClassName } from '@/utils'
 
 type ModalProps = {
   isOpen: boolean
   children: JSX.Element
   onClose: () => void
+  className?: string
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, children, onClose }) => {
+const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  children,
+  className = '',
+  onClose,
+}) => {
   const handleClickOutside = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
@@ -14,6 +21,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, children, onClose }) => {
       onClose()
     }
   }
+
+  const modalClassName = combineClassName('modal', [className])
 
   if (!isOpen) {
     return null
@@ -25,7 +34,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, children, onClose }) => {
   }
 
   return ReactDOM.createPortal(
-    <div className="modal" id="modal" onClick={handleClickOutside}>
+    <div className={modalClassName} id="modal" onClick={handleClickOutside}>
       <div className="modal__container">{children}</div>
     </div>,
     portalElement

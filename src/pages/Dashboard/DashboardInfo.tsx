@@ -87,7 +87,7 @@ const DashboardInfo = () => {
                 {currencyFormatter(remainingBudget ?? 0)}
               </span>
             </div>
-            <Link to="/categories">
+            <Link to="/categories?cat=expense">
               <SlidersSvg className="icon--stroke-primary" />
             </Link>
           </div>
