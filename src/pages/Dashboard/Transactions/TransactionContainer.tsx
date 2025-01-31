@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useIntl } from 'react-intl'
 import { Data } from '@/types'
 import {
@@ -23,6 +23,7 @@ const TransactionContainer: React.FC<TransactionContainerProps> = ({
 }) => {
   const { id, date, subdata } = data
   const [isExpanded, setIsExpanded] = useState(index < 3)
+  const [height, setHeight] = useState('0px')
   const contentRef = useRef<HTMLDivElement>(null)
   const { formatMessage } = useIntl()
 
@@ -31,7 +32,7 @@ const TransactionContainer: React.FC<TransactionContainerProps> = ({
   }, [subdata])
 
   const expandableStyle = {
-    maxHeight: isExpanded ? `${contentRef.current?.scrollHeight}px` : '0px',
+    maxHeight: isExpanded ? height : '0px',
   }
 
   const handleSelectTransaction = (e: React.FormEvent, id: string) => {
@@ -46,6 +47,12 @@ const TransactionContainer: React.FC<TransactionContainerProps> = ({
     setIsExpanded((prevState) => !prevState)
     setSelectedTransaction('')
   }
+
+  useEffect(() => {
+    if (contentRef.current) {
+      setHeight(`${contentRef.current.scrollHeight}px`)
+    }
+  }, [data])
 
   return (
     <div
