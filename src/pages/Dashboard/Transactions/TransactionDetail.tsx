@@ -6,11 +6,7 @@ import DeleteDataModal from '@/components/Modal/DeleteDataModal'
 import { useAppDispatch } from '@/hooks'
 import { Data } from '@/types'
 import { mainAction } from '@/store/main/main-slice'
-import {
-  calculateModalBottomThreshold,
-  combineClassName,
-  currencyFormatter,
-} from '@/utils'
+import { combineClassName, currencyFormatter } from '@/utils'
 import FormTransactionModal from '@/components/Modal/FormTransactionModal'
 
 type TransactionDetailProps = {
@@ -28,15 +24,6 @@ const sumTotalItemValue = (item: Data['subdata'][0]['item']): number => {
   )
 }
 
-const getModalPositionClassName = (elementRect: DOMRect | undefined) => {
-  const modalBottomThreshold = calculateModalBottomThreshold()
-  const viewPortHeight = window.innerHeight
-  const elementSizeDiff = viewPortHeight - (elementRect?.bottom ?? 0)
-
-  if (elementSizeDiff < modalBottomThreshold) return 'modal--top'
-  return ''
-}
-
 const TransactionDetail: React.FC<TransactionDetailProps> = ({
   data,
   dataIndex,
@@ -48,7 +35,6 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
   const [isMoreModalOpen, setIsMoreModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  const [moreOptionModalClassName, setMoreOptionModalClassName] = useState('')
   const transactionRefs = useRef<HTMLDivElement>(null)
   const { formatMessage } = useIntl()
   const dispatch = useAppDispatch()
@@ -63,8 +49,6 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
 
   const handleMoreOption = (e: React.MouseEvent) => {
     e.stopPropagation()
-    const elementRect = transactionRefs.current?.getBoundingClientRect()
-    setMoreOptionModalClassName(getModalPositionClassName(elementRect))
     setIsMoreModalOpen((val) => !val)
   }
 
@@ -116,7 +100,6 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
               </button>
               {isMoreModalOpen && (
                 <MoreOptionModal
-                  className={moreOptionModalClassName}
                   handleDelete={() => {
                     setIsMoreModalOpen(false)
                     setIsDeleteModalOpen(true)
