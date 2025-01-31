@@ -1,16 +1,16 @@
 .transaction-detail-container {
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  padding: 1rem 1rem 0;
   background-color: $color-white;
   color: $color-primary;
   border-radius: 0.5rem;
   box-shadow: 0 0.25rem 12px rgba($color: black, $alpha: 0.25);
+  overflow: hidden;
 
   &__expandable-container {
     display: flex;
     flex-direction: column;
-    overflow: hidden;
     gap: 1rem;
     transition: max-height 250ms ease-in-out;
 
@@ -23,6 +23,10 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    padding-top: 1rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0 1rem;
+    border-top: 1px solid rgba($color-primary, 0.1);
+    background-color: $color-white;
+    z-index: 1;
   }
 }

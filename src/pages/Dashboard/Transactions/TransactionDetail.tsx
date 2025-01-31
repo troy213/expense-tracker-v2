@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useIntl } from 'react-intl'
 import { MoreVerticalSvg } from '@/assets'
 import MoreOptionModal from '@/components/Modal/MoreOptionModal'
@@ -72,6 +72,10 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
     dispatch(mainAction.deleteTransaction({ subdataId: id }))
     setIsDeleteModalOpen(false)
   }
+
+  useEffect(() => {
+    setIsMoreModalOpen(false)
+  }, [selectedTransaction])
 
   return (
     <div

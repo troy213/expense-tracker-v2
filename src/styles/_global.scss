@@ -4,6 +4,10 @@ body.dark {
     color: $color-white;
   }
 
+  .text--color-danger {
+    color: $color-danger !important;
+  }
+
   .modal,
   .toolbar,
   .widget,
@@ -19,7 +23,8 @@ body.dark {
   .form-input__file-placeholder,
   .more-option-modal,
   .transactions,
-  .transactions__transaction-detail-container,
+  .transaction-detail-container,
+  .transaction-detail-container__transaction-summary,
   .reports,
   .settings {
     background-color: $color-dark;
@@ -43,6 +48,10 @@ body.dark {
     &__add-button {
       border-color: $color-white;
     }
+  }
+
+  .transaction-detail-container__transaction-summary {
+    border-top: 1px solid rgba($color-white, 0.1);
   }
 
   ::-webkit-calendar-picker-indicator {

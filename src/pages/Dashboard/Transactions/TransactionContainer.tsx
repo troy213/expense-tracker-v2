@@ -11,15 +11,18 @@ import TransactionDetail from './TransactionDetail'
 type TransactionContainerProps = {
   data: Data
   index: number
+  selectedTransaction: string
+  setSelectedTransaction: (val: string) => void
 }
 
 const TransactionContainer: React.FC<TransactionContainerProps> = ({
   data,
   index,
+  selectedTransaction,
+  setSelectedTransaction,
 }) => {
   const { id, date, subdata } = data
   const [isExpanded, setIsExpanded] = useState(index < 3)
-  const [selectedTransaction, setSelectedTransaction] = useState('')
   const contentRef = useRef<HTMLDivElement>(null)
   const { formatMessage } = useIntl()
 
@@ -41,6 +44,7 @@ const TransactionContainer: React.FC<TransactionContainerProps> = ({
 
   const handleExpand = () => {
     setIsExpanded((prevState) => !prevState)
+    setSelectedTransaction('')
   }
 
   return (

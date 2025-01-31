@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useIntl } from 'react-intl'
 import { useAppSelector } from '@/hooks'
 import SearchResult from './SearchResult'
@@ -5,6 +6,7 @@ import TransactionContainer from './TransactionContainer'
 
 const Transactions = () => {
   const { data } = useAppSelector((state) => state.mainReducer)
+  const [selectedTransaction, setSelectedTransaction] = useState('')
   const { formatMessage } = useIntl()
 
   if (!data.length)
@@ -25,7 +27,15 @@ const Transactions = () => {
       <SearchResult />
 
       {data.map((item, index) => {
-        return <TransactionContainer data={item} index={index} key={item.id} />
+        return (
+          <TransactionContainer
+            data={item}
+            index={index}
+            key={item.id}
+            selectedTransaction={selectedTransaction}
+            setSelectedTransaction={setSelectedTransaction}
+          />
+        )
       })}
     </div>
   )
