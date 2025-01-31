@@ -1,7 +1,7 @@
 {
   "name": "expense-tracker-v2",
   "private": true,
-  "version": "1.0.0-beta.3",
+  "version": "1.0.0-beta.5",
   "type": "module",
   "scripts": {
     "dev": "vite --open --port 3000",

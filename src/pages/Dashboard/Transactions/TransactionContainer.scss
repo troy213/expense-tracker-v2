@@ -1,0 +1,28 @@
+.transaction-detail-container {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background-color: $color-white;
+  color: $color-primary;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.25rem 12px rgba($color: black, $alpha: 0.25);
+
+  &__expandable-container {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    gap: 1rem;
+    transition: max-height 250ms ease-in-out;
+
+    & .transaction-detail:first-child {
+      margin-top: 1rem;
+    }
+  }
+
+  &__transaction-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 1rem;
+  }
+}

@@ -21,7 +21,7 @@ const messages = {
   CategoryName: 'Nama Kategori',
   CategoryAndBudget: 'Kategori & Anggaran',
   CommonTextError:
-    'Hanya huruf, angka dan karakter spesial [!@#$%^&*()_-] yang diperbolehkan',
+    'Hanya huruf, angka dan karakter spesial [!@#$%^&*()_-,.] yang diperbolehkan',
   Contributors: 'Kontributor',
   CustomFilter: 'Set Tanggal',
   DarkTheme: 'Mode Gelap',

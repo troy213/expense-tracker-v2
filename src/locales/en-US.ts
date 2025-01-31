@@ -21,7 +21,7 @@ const messages = {
   CategoryName: 'Category name',
   CategoryAndBudget: 'Category & Budget',
   CommonTextError:
-    'Only alphanumeric and specials characters [!@#$%^&*()_-] allowed',
+    'Only alphanumeric and specials characters [!@#$%^&*()_-,.] allowed',
   Contributors: 'Contributors',
   CustomFilter: 'Custom Filter',
   DarkTheme: 'Dark Theme',

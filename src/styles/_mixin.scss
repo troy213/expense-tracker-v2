@@ -1,0 +1,3 @@
+@mixin fadeInAnimation($time: 100ms) {
+  animation: fadeIn $time;
+}
