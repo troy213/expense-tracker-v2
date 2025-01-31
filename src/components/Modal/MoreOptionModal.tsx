@@ -3,7 +3,7 @@ import { EditSvg, TrashSvg } from '@/assets'
 import { combineClassName } from '@/utils'
 
 type MoreOptionModalProps = {
-  className: string
+  className?: string
   handleEdit?: () => void
   handleDelete: () => void
 }
