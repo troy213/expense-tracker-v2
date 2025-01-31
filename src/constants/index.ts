@@ -33,7 +33,7 @@ export const REGEX = {
     ERROR_MESSAGE: 'AlphanumericError',
   },
   COMMON_TEXT: {
-    PATTERN: /^[ a-zA-Z0-9!@#$%^&*()_-]+$/,
+    PATTERN: /^[ a-zA-Z0-9!@#$%^&*()_,.-]+$/,
     ERROR_MESSAGE: 'CommonTextError',
   },
   LETTER: {

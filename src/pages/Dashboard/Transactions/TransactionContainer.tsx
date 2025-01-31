@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useIntl } from 'react-intl'
 import { Data } from '@/types'
 import {
@@ -20,11 +20,16 @@ const TransactionContainer: React.FC<TransactionContainerProps> = ({
   const { id, date, subdata } = data
   const [isExpanded, setIsExpanded] = useState(index < 3)
   const [selectedTransaction, setSelectedTransaction] = useState('')
+  const contentRef = useRef<HTMLDivElement>(null)
   const { formatMessage } = useIntl()
 
   const { totalSubdataIncome, totalSubdataExpense } = useMemo(() => {
     return calculateSubdataSummary(subdata)
   }, [subdata])
+
+  const expandableStyle = {
+    maxHeight: isExpanded ? `${contentRef.current?.scrollHeight}px` : '0px',
+  }
 
   const handleSelectTransaction = (e: React.FormEvent, id: string) => {
     e.stopPropagation()
@@ -50,8 +55,12 @@ const TransactionContainer: React.FC<TransactionContainerProps> = ({
         })}
       </span>
 
-      {isExpanded &&
-        subdata.map((subitem, subdataIndex) => {
+      <div
+        className="transaction-detail-container__expandable-container"
+        ref={contentRef}
+        style={expandableStyle}
+      >
+        {subdata.map((subitem, subdataIndex) => {
           return (
             <TransactionDetail
               data={subitem}
@@ -63,8 +72,9 @@ const TransactionContainer: React.FC<TransactionContainerProps> = ({
             />
           )
         })}
+      </div>
 
-      <div className="transactions__summary flex-column gap-2 pt-2">
+      <div className="transaction-detail-container__transaction-summary">
         <div className="flex-space-between flex-align-center">
           <span className="text--3">{formatMessage({ id: 'Income' })}</span>
           <span className="text--bold text--3">
