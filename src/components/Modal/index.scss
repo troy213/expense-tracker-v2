@@ -6,6 +6,7 @@
 @import './SearchModal.scss';
 
 .modal {
+  @include fadeInAnimation;
   position: fixed;
   background: rgba($color-dark, 0.3);
   height: 100%;

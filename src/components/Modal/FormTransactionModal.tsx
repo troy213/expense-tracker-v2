@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 import { CrossSvg, PlusSvg } from '@/assets'
 import { REGEX } from '@/constants'
@@ -259,6 +259,14 @@ const FormTransactionModal: React.FC<FormTransactionModalProps> = ({
     setIsOpen(false)
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === 'Enter') {
+      handleSubmit(e)
+    } else if (e.key === 'Escape') {
+      handleCancel(e)
+    }
+  }
+
   useEffect(() => {
     if (isOpen) {
       const defaultCategory =
@@ -278,7 +286,11 @@ const FormTransactionModal: React.FC<FormTransactionModalProps> = ({
 
   if (!filteredCategory.length) {
     return (
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        className="form_transaction_modal"
+      >
         <div className="flex-column gap-2">
           <span className="text--bold text--color-primary">
             {formatMessage({ id: 'AddTransaction' })}
@@ -305,16 +317,12 @@ const FormTransactionModal: React.FC<FormTransactionModalProps> = ({
       onClose={() => {
         setIsOpen(false)
       }}
+      className="form_transaction_modal"
     >
       <form
         className="flex-column gap-4"
         onSubmit={handleSubmit}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            e.preventDefault()
-            handleSubmit(e)
-          }
-        }}
+        onKeyDown={handleKeyDown}
       >
         <span className="text--bold text--color-primary">
           {formatMessage({

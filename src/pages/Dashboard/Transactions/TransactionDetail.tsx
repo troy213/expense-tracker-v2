@@ -18,7 +18,7 @@ type TransactionDetailProps = {
   dataIndex: number
   subdataIndex: number
   selectedTransaction: string
-  handleSelectTransaction: (id: string) => void
+  handleSelectTransaction: (event: React.FormEvent, id: string) => void
 }
 
 const sumTotalItemValue = (item: Data['subdata'][0]['item']): number => {
@@ -75,9 +75,9 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
 
   return (
     <div
-      className="flex-column gap-1"
+      className="transaction-detail"
       ref={transactionRefs}
-      onClick={() => handleSelectTransaction(id)}
+      onClick={(e) => handleSelectTransaction(e, id)}
     >
       {isEditModalOpen && (
         <FormTransactionModal

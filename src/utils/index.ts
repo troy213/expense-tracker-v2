@@ -188,7 +188,7 @@ export const calculatePercentage = (currentValue: number, maxValue: number) => {
   return Number(output.toFixed(2))
 }
 
-export function searchSubdata(data: Data[], searchValue: string): Data[] {
+export const searchSubdata = (data: Data[], searchValue: string): Data[] => {
   return data
     .map((entry) => {
       const filteredSubdata = entry.subdata.filter((sub) =>
@@ -207,4 +207,24 @@ export function searchSubdata(data: Data[], searchValue: string): Data[] {
       return null
     })
     .filter((entry) => entry !== null) as Data[]
+}
+
+export const calculateSubdataSummary = (subdata: Data['subdata']) => {
+  let totalSubdataIncome = 0
+  let totalSubdataExpense = 0
+
+  subdata.forEach((subdataItem) => {
+    const subtotal = subdataItem.item.reduce(
+      (acc, curr) => acc + curr.amount,
+      0
+    )
+
+    if (subdataItem.type === 'income') {
+      totalSubdataIncome += subtotal
+    } else {
+      totalSubdataExpense += subtotal
+    }
+  })
+
+  return { totalSubdataIncome, totalSubdataExpense }
 }
