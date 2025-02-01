@@ -40,7 +40,10 @@ const ReportInfo: React.FC<ReportInfoProps> = ({
       </div>
       <div className="flex-space-between">
         <span>{formatMessage({ id: 'AvgSpending' })}</span>
-        <span>{currencyFormatter(avgExpense)}</span>
+        <span>
+          {currencyFormatter(avgExpense)}
+          {formatMessage({ id: 'PerDay' })}
+        </span>
       </div>
     </div>
   )

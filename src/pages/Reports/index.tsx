@@ -56,10 +56,11 @@ const Reports = () => {
 
   const handleChangeDateRange = (range: number) => {
     setIsMoreModalOpen((val) => !val)
+    setDateRange(range)
+
     if (range === DATE_RANGE.CUSTOM_FILTER) {
       openDateFilterModal()
     } else {
-      setDateRange(range)
       switch (range) {
         case DATE_RANGE.THIS_MONTH:
           setStartDate(new Date(now.getFullYear(), now.getMonth(), 1))
@@ -126,7 +127,7 @@ const Reports = () => {
     <div className="reports">
       <div className="flex-column gap-4 p-4">
         <Navbar enableBackButton={true} title="Reports">
-          <>
+          <div className="relative">
             <button
               type="button"
               className="btn btn-clear"
@@ -136,7 +137,10 @@ const Reports = () => {
               <MoreVerticalSvg className="icon--stroke-primary" />
             </button>
             {isMoreModalOpen && (
-              <DateRangeModal handleChangeDateRange={handleChangeDateRange} />
+              <DateRangeModal
+                dateRange={dateRange}
+                handleChangeDateRange={handleChangeDateRange}
+              />
             )}
             {isDateModalOpen && (
               <InputDateModal
@@ -145,7 +149,7 @@ const Reports = () => {
                 SetCustomDate={SetCustomDate}
               />
             )}
-          </>
+          </div>
         </Navbar>
 
         <ReportInfo

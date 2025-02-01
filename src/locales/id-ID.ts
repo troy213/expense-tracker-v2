@@ -61,6 +61,7 @@ const messages = {
   NoTransaction: 'Tidak ada transaksi apapun',
   NumberError: 'Hanya angka yang diperbolehkan',
   PageNotFound: 'Halaman Tidak Ditemukan',
+  PerDay: '/hari',
   RemainingBudgetForThisCategory:
     'Sisa anggaran untuk kategori ini di bulan ini',
   Reports: 'Laporan',
