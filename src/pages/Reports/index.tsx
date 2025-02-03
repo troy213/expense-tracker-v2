@@ -12,14 +12,29 @@ import ReportWidget from './ReportWidget'
 
 const Reports = () => {
   const now = new Date()
+  const thisMonthStartDate = new Date(now.getFullYear(), now.getMonth(), 1)
+  const nowDate = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    23,
+    59
+  )
+  const lastMonthStartDate = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+  const lastMonthEndDate = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    0,
+    23,
+    59,
+    59,
+    999
+  )
+  const thisYearStartDate = new Date(now.getFullYear(), 0, 1)
   const { data } = useAppSelector((state) => state.mainReducer)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
-  const [startDate, setStartDate] = useState<Date | null>(
-    new Date(now.getFullYear(), now.getMonth(), 1)
-  )
-  const [endDate, setEndDate] = useState<Date | null>(
-    new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59)
-  )
+  const [startDate, setStartDate] = useState<Date | null>(thisMonthStartDate)
+  const [endDate, setEndDate] = useState<Date | null>(nowDate)
   const [isMoreModalOpen, setIsMoreModalOpen] = useState(false)
   const [isDateModalOpen, setIsDateModalOpen] = useState(false)
   const [dateRange, setDateRange] = useState(DATE_RANGE.THIS_MONTH)
@@ -29,7 +44,7 @@ const Reports = () => {
   }
 
   const filteredData: Data[] =
-    dateRange === 0
+    dateRange === DATE_RANGE.ALL_TIME
       ? data
       : data.filter((item) => {
           const itemDate = new Date(item.date)
@@ -62,22 +77,16 @@ const Reports = () => {
     } else {
       switch (range) {
         case DATE_RANGE.THIS_MONTH:
-          setStartDate(new Date(now.getFullYear(), now.getMonth(), 1))
-          setEndDate(
-            new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59)
-          )
+          setStartDate(thisMonthStartDate)
+          setEndDate(nowDate)
           break
         case DATE_RANGE.LAST_MONTH:
-          setStartDate(new Date(now.getFullYear(), now.getMonth() - 1, 1))
-          setEndDate(
-            new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999)
-          )
+          setStartDate(lastMonthStartDate)
+          setEndDate(lastMonthEndDate)
           break
         case DATE_RANGE.THIS_YEAR:
-          setStartDate(new Date(now.getFullYear(), 0, 1))
-          setEndDate(
-            new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59)
-          )
+          setStartDate(thisYearStartDate)
+          setEndDate(nowDate)
           break
         // DATE_RANGE.ALL_TIME:
         default:

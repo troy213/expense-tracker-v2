@@ -34,6 +34,15 @@ body.dark {
       color: $color-white;
     }
   }
+  .form-input__input,
+  .form-input__select,
+  .form-input__select-option-container {
+    border: $color-white 1px solid;
+  }
+
+  .link {
+    color: $color-white;
+  }
 
   .modal {
     background-color: rgba($color-dark, 0.3);
