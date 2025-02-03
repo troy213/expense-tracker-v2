@@ -3,10 +3,24 @@ import { useIntl } from 'react-intl'
 import { useAppSelector } from '@/hooks'
 import SearchResult from './SearchResult'
 import TransactionContainer from './TransactionContainer'
+import { filterDataByCategory } from '@/utils'
+import { useLocation } from 'react-router-dom'
 
 const Transactions = () => {
   const { data } = useAppSelector((state) => state.mainReducer)
   const [selectedTransaction, setSelectedTransaction] = useState('')
+  const { search } = useLocation()
+  const query = new URLSearchParams(search)
+  const categoryParam = query.get('category')
+  const fromParam = query.get('from')
+  const toParam = query.get('to')
+  const filteredData = filterDataByCategory(
+    data,
+    categoryParam,
+    fromParam,
+    toParam
+  )
+  const displayData = filteredData.length > 0 ? filteredData : data
   const { formatMessage } = useIntl()
 
   if (!data.length)
@@ -26,7 +40,7 @@ const Transactions = () => {
     <div className="transactions">
       <SearchResult />
 
-      {data.map((item, index) => {
+      {displayData.map((item, index) => {
         return (
           <TransactionContainer
             data={item}

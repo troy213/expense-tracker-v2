@@ -223,3 +223,34 @@ export const calculateSubdataSummary = (subdata: Data['subdata']) => {
 
   return { totalSubdataIncome, totalSubdataExpense }
 }
+export function filterDataByCategory(
+  data: Data[],
+  category: string | null,
+  from: string | null,
+  to: string | null
+): Data[] {
+  const fromDate = from ? new Date(from) : null
+  const toDate = to ? new Date(to) : null
+  return data
+    .filter((entry) => {
+      const entryDate = new Date(entry.date)
+      const isBeforeTo = toDate ? entryDate <= toDate : true
+      const isAfterFrom = fromDate ? entryDate >= fromDate : true
+      return isBeforeTo && isAfterFrom
+    })
+    .map((entry) => {
+      const filteredSubdata = entry.subdata.filter(
+        (sub) => sub.category === category
+      )
+
+      if (filteredSubdata.length > 0) {
+        return {
+          ...entry,
+          subdata: filteredSubdata,
+        }
+      }
+
+      return null
+    })
+    .filter((entry) => entry !== null) as Data[]
+}

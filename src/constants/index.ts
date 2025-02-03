@@ -53,3 +53,9 @@ export const DATE_RANGE = {
   THIS_YEAR: 3,
   CUSTOM_FILTER: 4,
 }
+
+export const options: Intl.DateTimeFormatOptions = {
+  year: 'numeric',
+  month: 'short',
+  day: '2-digit',
+}

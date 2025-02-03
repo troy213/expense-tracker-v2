@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { MoreVerticalSvg } from '@/assets'
 import { Navbar, Toolbar } from '@/components'
-import { DATE_RANGE } from '@/constants'
+import { DATE_RANGE, options } from '@/constants'
 import DateRangeModal from '@/components/Modal/DateRangeModal'
 import InputDateModal from '@/components/Modal/InputDateModal'
 import { useAppSelector } from '@/hooks'
@@ -35,11 +35,6 @@ const Reports = () => {
           )
         })
 
-  const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'short',
-    day: '2-digit',
-  }
   const totalDays =
     startDate && endDate
       ? (endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)
@@ -167,11 +162,15 @@ const Reports = () => {
           type="income"
           report={incomeReport}
           typeTotal={totalIncome}
+          startDate={startDate}
+          endDate={endDate}
         />
         <ReportWidget
           type="expense"
           report={expenseReport}
           typeTotal={totalExpense}
+          startDate={startDate}
+          endDate={endDate}
         />
       </div>
       <Toolbar />
