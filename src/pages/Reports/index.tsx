@@ -11,14 +11,18 @@ import ReportInfo from './ReportInfo'
 import ReportWidget from './ReportWidget'
 
 const Reports = () => {
+  const now = new Date()
   const { data } = useAppSelector((state) => state.mainReducer)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
-  const [startDate, setStartDate] = useState<Date | null>(null)
-  const [endDate, setEndDate] = useState<Date | null>(null)
+  const [startDate, setStartDate] = useState<Date | null>(
+    new Date(now.getFullYear(), now.getMonth(), 1)
+  )
+  const [endDate, setEndDate] = useState<Date | null>(
+    new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59)
+  )
   const [isMoreModalOpen, setIsMoreModalOpen] = useState(false)
   const [isDateModalOpen, setIsDateModalOpen] = useState(false)
-  const [dateRange, setDateRange] = useState(DATE_RANGE.ALL_TIME)
-  const now = new Date()
+  const [dateRange, setDateRange] = useState(DATE_RANGE.THIS_MONTH)
 
   const openDateFilterModal = () => {
     setIsDateModalOpen(!isDateModalOpen)
