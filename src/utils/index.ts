@@ -223,3 +223,12 @@ export const calculateSubdataSummary = (subdata: Data['subdata']) => {
 
   return { totalSubdataIncome, totalSubdataExpense }
 }
+
+export const getStorageConfig = (): { hideBalance: boolean } => {
+  const storedConfig = getStorage('config')
+
+  if (storedConfig) {
+    return JSON.parse(storedConfig)
+  }
+  return { hideBalance: false }
+}

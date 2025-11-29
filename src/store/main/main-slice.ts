@@ -19,6 +19,7 @@ type InitialState = {
   theme: Theme
   selectedLocale: Locales
   searchValue: string
+  hideBalance: boolean
   data: Data[]
 }
 
@@ -26,6 +27,7 @@ const initialState: InitialState = {
   theme: (getStorage('theme') as Theme) ?? THEME.LIGHT,
   selectedLocale: (getStorage('locales') as Locales) ?? LOCALES.ENGLISH,
   searchValue: '',
+  hideBalance: false,
   data: [],
 }
 

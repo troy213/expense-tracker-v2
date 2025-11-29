@@ -4,7 +4,13 @@ import { useEffect } from 'react'
 import { LANGUAGES, LOCALES, THEME } from '@/constants'
 import { useAppSelector, useInitConfig } from '@/hooks'
 import { Categories, Dashboard, NotFound, Reports, Settings } from '@/pages'
-import { About, Languages, SettingMenus, Theme } from '@/pages/Settings'
+import {
+  About,
+  AdvancedSetting,
+  Languages,
+  SettingMenus,
+  Theme,
+} from '@/pages/Settings'
 
 const App = () => {
   const { selectedLocale, theme } = useAppSelector((state) => state.mainReducer)
@@ -35,6 +41,7 @@ const App = () => {
           <Route path="about" element={<About />} />
           <Route path="theme" element={<Theme />} />
           <Route path="language" element={<Languages />} />
+          <Route path="advanced-setting" element={<AdvancedSetting />} />
         </Route>
 
         {/* 404 not found */}
