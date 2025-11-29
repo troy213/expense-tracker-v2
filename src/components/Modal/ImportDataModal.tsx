@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useIntl } from 'react-intl'
+import { useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '@/hooks'
 import { mainAction } from '@/store/main/main-slice'
 import { categoriesAction } from '@/store/categories/categories-slice'
@@ -22,6 +23,7 @@ const ImportDataModal: React.FC<ImportDataModalProps> = ({
   const [errorMessage, setErrorMessage] = useState('')
   const dispatch = useAppDispatch()
   const { formatMessage } = useIntl()
+  const navigate = useNavigate()
 
   const handleImport = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -37,6 +39,8 @@ const ImportDataModal: React.FC<ImportDataModalProps> = ({
         dispatch(categoriesAction.setCategories(rawData.categoryOutput))
         setStorage('data', newData)
         setStorage('categories', rawData.categoryOutput)
+
+        navigate('/')
       } catch (err) {
         console.error(err)
       }
@@ -58,7 +62,7 @@ const ImportDataModal: React.FC<ImportDataModalProps> = ({
           onChange={setFile}
           errorMessage={errorMessage}
           setError={setErrorMessage}
-          label="Import"
+          label={formatMessage({ id: 'Import' })}
           id="file"
           placeholder="file"
         />

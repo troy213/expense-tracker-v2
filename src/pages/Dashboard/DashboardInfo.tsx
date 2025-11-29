@@ -1,9 +1,17 @@
 import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
-import { ArrowDownSvg, ArrowUpSvg, SlidersSvg } from '@/assets'
+import {
+  ArrowDownSvg,
+  ArrowUpSvg,
+  EyeSvg,
+  EyeOffSvg,
+  SlidersSvg,
+  HiddenTextSvg,
+} from '@/assets'
 import { ProgressBar, Widget } from '@/components'
-import { useAppSelector } from '@/hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks'
+import { mainAction } from '@/store/main/main-slice'
 import {
   calculatePercentage,
   calculateRemainingBudget,
@@ -14,6 +22,10 @@ import {
   updateTotal,
 } from '@/utils'
 
+type BalanceProps = {
+  totalBalance: number
+}
+
 const DashboardInfo = () => {
   const { formatMessage } = useIntl()
   const { data } = useAppSelector((state) => state.mainReducer)
@@ -21,17 +33,19 @@ const DashboardInfo = () => {
   const { totalIncome, totalExpense, totalBalance } = updateTotal(data)
   const { firstDate, lastDate } = getCurrentMonthRange()
 
-  const expenseCategories = categories
-    .filter((category) => category.type === 'expense')
-    .map((category) => category.name)
-  const totalBudget = categories
-    .filter((category) => category.type === 'expense')
-    .reduce((acc, curr) => acc + (curr.budget ?? 0), 0)
+  const expenseCategories = useMemo(() => {
+    return categories.filter((c) => c.type === 'expense').map((c) => c.name)
+  }, [categories])
 
-  const remainingBudget = useMemo(
-    () => calculateRemainingBudget(data, [], expenseCategories, totalBudget),
-    [data, expenseCategories, totalBudget]
-  )
+  const totalBudget = useMemo(() => {
+    return categories
+      .filter((c) => c.type === 'expense')
+      .reduce((acc, curr) => acc + (curr.budget ?? 0), 0)
+  }, [categories])
+
+  const remainingBudget = useMemo(() => {
+    return calculateRemainingBudget(data, [], expenseCategories, totalBudget)
+  }, [data, expenseCategories, totalBudget])
 
   const budgetPercentage = calculatePercentage(remainingBudget, totalBudget)
 
@@ -44,13 +58,11 @@ const DashboardInfo = () => {
 
   return (
     <div className="dashboard-info">
-      <div className="flex-column flex-align-center">
+      <div className="flex-column flex-align-center gap-2">
         <span className="text--light text--3">
           {formatMessage({ id: 'TotalBalance' })}
         </span>
-        <span className="text--bold text--8">
-          {currencyFormatter(totalBalance)}
-        </span>
+        <Balance totalBalance={totalBalance} />
       </div>
       <div className="flex gap-4">
         <Widget>
@@ -102,6 +114,44 @@ const DashboardInfo = () => {
           </div>
         </div>
       </Widget>
+    </div>
+  )
+}
+
+const Balance: React.FC<BalanceProps> = ({ totalBalance }) => {
+  const { hideBalance } = useAppSelector((state) => state.mainReducer)
+  const dispatch = useAppDispatch()
+
+  const handleHideBalance = () => {
+    dispatch(mainAction.setState({ state: 'hideBalance', value: !hideBalance }))
+  }
+
+  if (hideBalance)
+    return (
+      <div className="flex-align-center gap-2">
+        <button
+          className="btn btn-clear"
+          type="button"
+          onClick={handleHideBalance}
+        >
+          <EyeOffSvg className="icon--stroke-white" />
+        </button>
+        <HiddenTextSvg className="icon--stroke-white icon--fill-white" />
+      </div>
+    )
+
+  return (
+    <div className="flex-align-center gap-2">
+      <button
+        className="btn btn-clear"
+        type="button"
+        onClick={handleHideBalance}
+      >
+        <EyeSvg className="icon--stroke-white" />
+      </button>
+      <span className="text--bold text--8">
+        {currencyFormatter(totalBalance)}
+      </span>
     </div>
   )
 }

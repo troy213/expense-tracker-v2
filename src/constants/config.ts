@@ -1,4 +1,5 @@
 import {
+  AdvancedSettingSvg,
   AlertCircleSvg,
   ExportSvg,
   FlagIDSVg,
@@ -54,6 +55,12 @@ export const SETTING_MENUS: SettingMenu[] = [
     Icon: AlertCircleSvg,
     iconClassName: 'icon--stroke-primary',
     link: 'about',
+  },
+  {
+    title: 'AdvancedSetting',
+    Icon: AdvancedSettingSvg,
+    iconClassName: 'icon--stroke-primary',
+    link: 'advanced-setting',
   },
   {
     title: 'DeleteData',

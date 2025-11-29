@@ -13,6 +13,7 @@ const useInitConfig = () => {
     const storedLocales = getStorage('locales')
     const storedData = getStorage('data')
     const storedCategories = getStorage('categories')
+    const storedConfig = getStorage('config')
 
     if (storedTheme === THEME.DARK || storedTheme === THEME.LIGHT) {
       dispatch(mainAction.setState({ state: 'theme', value: storedTheme }))
@@ -36,6 +37,16 @@ const useInitConfig = () => {
       const parsedData = JSON.parse(storedCategories)
       dispatch(
         categoriesAction.setState({ state: 'categories', value: parsedData })
+      )
+    }
+
+    if (storedConfig) {
+      const parsedData = JSON.parse(storedConfig)
+      dispatch(
+        mainAction.setState({
+          state: 'hideBalance',
+          value: parsedData?.hideBalance,
+        })
       )
     }
   }, [dispatch])

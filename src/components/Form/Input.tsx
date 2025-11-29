@@ -99,6 +99,7 @@ const Input: React.FC<InputProps> = (props) => {
         className={inputClassName}
         id={inputId}
         autoComplete="off"
+        inputMode={type === 'currency' ? 'numeric' : 'text'}
       />
       {internalError && (
         <span className="text--3 text--color-danger">{internalError}</span>

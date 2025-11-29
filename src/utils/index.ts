@@ -34,16 +34,11 @@ export const formatTransactionDate = (
   const today = new Date()
   const yesterday = new Date()
   yesterday.setDate(today.getDate() - 1)
+  yesterday.setHours(0, 0, 0, 0) // Normalize to start of day
+  date.setHours(0, 0, 0, 0) // Normalize input date for accurate comparison
 
-  const isToday =
-    date.getDate() === today.getDate() &&
-    date.getMonth() === today.getMonth() &&
-    date.getFullYear() === today.getFullYear()
-
-  const isYesterday =
-    date.getDate() === today.getDate() - 1 &&
-    date.getMonth() === today.getMonth() &&
-    date.getFullYear() === today.getFullYear()
+  const isToday = date.getTime() === today.setHours(0, 0, 0, 0)
+  const isYesterday = date.getTime() === yesterday.getTime()
 
   if (isToday && options.enableTodayFormat) {
     return formatMessage({ id: 'today' })
@@ -227,4 +222,13 @@ export const calculateSubdataSummary = (subdata: Data['subdata']) => {
   })
 
   return { totalSubdataIncome, totalSubdataExpense }
+}
+
+export const getStorageConfig = (): { hideBalance: boolean } => {
+  const storedConfig = getStorage('config')
+
+  if (storedConfig) {
+    return JSON.parse(storedConfig)
+  }
+  return { hideBalance: false }
 }
