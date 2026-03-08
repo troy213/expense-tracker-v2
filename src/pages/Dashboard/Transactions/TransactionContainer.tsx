@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, memo } from 'react'
 import { useIntl } from 'react-intl'
 import { Data } from '@/types'
 import {
@@ -103,4 +103,5 @@ const TransactionContainer: React.FC<TransactionContainerProps> = ({
   )
 }
 
-export default TransactionContainer
+const MemoizedTransactionContainer = memo(TransactionContainer)
+export default MemoizedTransactionContainer

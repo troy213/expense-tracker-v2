@@ -59,6 +59,7 @@ const messages = {
   LastMonth: 'Bulan Lalu',
   LetterError: 'Hanya huruf yang diperbolehkan',
   LightTheme: 'Mode Terang',
+  Loading: 'Memuat',
   NoCategoryWarningMessage:
     'Oops! sepertinya anda tidak memiliki kategori apapun. Anda dapat menambahkan kategori pertama anda di tautan di bawah ini.',
   NoTransaction: 'Tidak ada transaksi apapun',
