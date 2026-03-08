@@ -59,6 +59,7 @@ const messages = {
   LastMonth: 'Last Month',
   LetterError: 'Only letter are allowed',
   LightTheme: 'Light Theme',
+  Loading: 'Loading',
   NoCategoryWarningMessage:
     "Oops! it seems you don't have any category. You can add your first category in the link below.",
   NoTransaction: 'There is no transaction',
