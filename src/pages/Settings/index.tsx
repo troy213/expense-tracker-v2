@@ -1,5 +1,4 @@
 import { Outlet } from 'react-router-dom'
-import { Toolbar } from '@/components'
 import About from './About'
 import AdvancedSetting from './AdvancedSetting'
 import Languages from './Languages'
@@ -16,7 +15,6 @@ const Settings = () => {
         <div className="flex-justify-center">
           <span className="text--light text--3 py-4">v{appVersion}</span>
         </div>
-        <Toolbar />
       </div>
     </div>
   )

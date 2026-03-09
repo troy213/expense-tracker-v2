@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { MoreVerticalSvg } from '@/assets'
-import { Navbar, Toolbar } from '@/components'
+import { Navbar } from '@/components'
 import { DATE_RANGE } from '@/constants'
 import DateRangeModal from '@/components/Modal/DateRangeModal'
 import InputDateModal from '@/components/Modal/InputDateModal'
@@ -174,7 +174,6 @@ const Reports = () => {
           typeTotal={totalExpense}
         />
       </div>
-      <Toolbar />
     </div>
   )
 }

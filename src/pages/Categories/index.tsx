@@ -1,4 +1,4 @@
-import { Navbar, Toolbar } from '@/components'
+import { Navbar } from '@/components'
 import CategoryTabView from './CategoryTabView'
 
 const Categories = () => {
@@ -9,7 +9,6 @@ const Categories = () => {
 
         <CategoryTabView />
       </div>
-      <Toolbar />
     </div>
   )
 }
