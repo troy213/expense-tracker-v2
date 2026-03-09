@@ -1,43 +1,21 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useIntl } from 'react-intl'
-import { INITIAL_LOAD, LOAD_MORE_COUNT } from '@/constants/config'
 import { useAppSelector } from '@/hooks'
 import SearchResult from './SearchResult'
 import TransactionContainer from './TransactionContainer'
 
-const Transactions = () => {
+type TransactionsProps = {
+  displayCount: number
+}
+
+const Transactions = ({ displayCount }: TransactionsProps) => {
   const { data } = useAppSelector((state) => state.mainReducer)
   const [selectedTransaction, setSelectedTransaction] = useState('')
-  const [displayCount, setDisplayCount] = useState(INITIAL_LOAD)
-  const transactionsRef = useRef<HTMLDivElement>(null)
   const { formatMessage } = useIntl()
 
-  // Handle scroll event for infinite scroll
+  // Reset selected transaction when data changes
   useEffect(() => {
-    const container = transactionsRef.current
-    if (!container) return
-
-    const handleScroll = () => {
-      // Check if user has scrolled near bottom
-      const { scrollTop, scrollHeight, clientHeight } = container
-      const distanceFromBottom = scrollHeight - scrollTop - clientHeight
-
-      // Load more when user is 300px from bottom
-      if (distanceFromBottom < 300 && displayCount < data.length) {
-        setDisplayCount((prev) => Math.min(prev + LOAD_MORE_COUNT, data.length))
-      }
-    }
-
-    container.addEventListener('scroll', handleScroll)
-
-    return () => {
-      container.removeEventListener('scroll', handleScroll)
-    }
-  }, [displayCount, data.length])
-
-  // Reset display count when data changes
-  useEffect(() => {
-    setDisplayCount(INITIAL_LOAD)
+    setSelectedTransaction('')
   }, [data.length])
 
   const displayedData = data.slice(0, displayCount)
@@ -56,7 +34,7 @@ const Transactions = () => {
     )
 
   return (
-    <div className="transactions" ref={transactionsRef}>
+    <div className="transactions">
       <SearchResult />
 
       {displayedData.map((item, index) => {

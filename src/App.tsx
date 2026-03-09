@@ -1,6 +1,7 @@
 import { IntlProvider } from 'react-intl'
 import { Routes, Route } from 'react-router-dom'
 import { useEffect } from 'react'
+import { Layout } from '@/components'
 import { LANGUAGES, LOCALES, THEME } from '@/constants'
 import { useAppSelector, useInitConfig } from '@/hooks'
 import { Categories, Dashboard, NotFound, Reports, Settings } from '@/pages'
@@ -33,15 +34,17 @@ const App = () => {
       messages={currentLanguage.messages}
     >
       <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/categories" element={<Categories />} />
-        <Route path="/reports" element={<Reports />} />
-        <Route path="/settings" element={<Settings />}>
-          <Route index element={<SettingMenus />} />
-          <Route path="about" element={<About />} />
-          <Route path="theme" element={<Theme />} />
-          <Route path="language" element={<Languages />} />
-          <Route path="advanced-setting" element={<AdvancedSetting />} />
+        <Route path="/" element={<Layout />}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/categories" element={<Categories />} />
+          <Route path="/reports" element={<Reports />} />
+          <Route path="/settings" element={<Settings />}>
+            <Route index element={<SettingMenus />} />
+            <Route path="about" element={<About />} />
+            <Route path="theme" element={<Theme />} />
+            <Route path="language" element={<Languages />} />
+            <Route path="advanced-setting" element={<AdvancedSetting />} />
+          </Route>
         </Route>
 
         {/* 404 not found */}

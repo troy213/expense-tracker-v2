@@ -2,10 +2,9 @@
 @import './Transactions';
 
 .dashboard {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 100dvh;
   background: linear-gradient($color-primary-2, $color-primary);
   color: $color-white;
   position: relative;
@@ -16,12 +15,12 @@
     gap: 1rem;
     padding: 1rem 1rem 1.5rem;
   }
-  
-  &.dark :is(.transactions, .transaction-detail, .widget, .toolbar){
+
+  &.dark :is(.transactions, .transaction-detail, .widget, .toolbar) {
     background: $color-dark;
     color: $color-white;
-    svg{
-      path{
+    svg {
+      path {
         stroke: $color-white;
       }
     }
