@@ -29,7 +29,7 @@ type TxDetailsErrorState = Record<keyof TxDetailsForm, string>
 
 const dataInitialValue: TransactionForm = {
   type: 'income',
-  category: '',
+  category_id: '',
   date: String(getDate()),
 }
 
@@ -42,7 +42,7 @@ const txDetailsInitialValue: TxDetailsForm[] = [
 
 const errorInitialValue: ErrorState = {
   type: '',
-  category: '',
+  category_id: '',
   date: '',
 }
 
@@ -74,7 +74,7 @@ const FormTransactionModal: React.FC<FormTransactionModalProps> = ({
 
     currentData = {
       date,
-      category: subdata[subdataIndex].category,
+      category_id: subdata[subdataIndex].category_id,
       type: subdata[subdataIndex].type,
     }
 
@@ -98,18 +98,18 @@ const FormTransactionModal: React.FC<FormTransactionModalProps> = ({
   const filteredCategory = categories.filter(
     (category) => category.type === data.type
   )
-  const categoryList = filteredCategory.map((category) => category.name)
+  const categoryListNames = filteredCategory.map((category) => category.name)
 
-  const budget = categories.filter(
-    (category) => category.name === data.category
-  )[0]?.budget
+  const budget = categories.find(
+    (category) => category.id === data.category_id
+  )?.budget
 
   const remainingBudget = useMemo(
     () =>
       calculateRemainingBudget(
         transactionsData,
         transactionDetails,
-        [data.category],
+        [data.category_id],
         budget,
         data.date,
         isEditForm
@@ -117,7 +117,7 @@ const FormTransactionModal: React.FC<FormTransactionModalProps> = ({
           : ''
       ),
     [
-      data.category,
+      data.category_id,
       data.date,
       budget,
       transactionsData,
@@ -247,9 +247,9 @@ const FormTransactionModal: React.FC<FormTransactionModalProps> = ({
   }
 
   const resetData = () => {
-    setData({ type: 'income', category: '', date: String(getDate()) })
+    setData({ type: 'income', category_id: '', date: String(getDate()) })
     setTransactionDetails([{ description: '', amount: 0 }])
-    setError({ date: '', category: '', type: '' })
+    setError({ date: '', category_id: '', type: '' })
     setTxDetailsError([{ description: '', amount: '' }])
   }
 
@@ -270,13 +270,13 @@ const FormTransactionModal: React.FC<FormTransactionModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       const defaultCategory =
-        categories.filter((category) => category.type === data.type)[0]?.name ??
+        categories.filter((category) => category.type === data.type)[0]?.id ??
         ''
 
       if (!isEditForm) {
         setData((prevState) => ({
           ...prevState,
-          category: defaultCategory,
+          category_id: defaultCategory,
         }))
       }
     } else {
@@ -351,11 +351,20 @@ const FormTransactionModal: React.FC<FormTransactionModalProps> = ({
         />
 
         <Form.Select
-          value={data.category}
-          onChange={(val) => handleDataChange('category', val)}
-          options={categoryList}
-          errorMessage={error.category}
-          setError={(val) => handleError('category', val)}
+          value={
+            data.category_id
+              ? (categories.find((c) => c.id === data.category_id)?.name ?? '')
+              : ''
+          }
+          onChange={(val) => {
+            const selectedCategory = categories.find((c) => c.name === val)
+            if (selectedCategory) {
+              handleDataChange('category_id', selectedCategory.id)
+            }
+          }}
+          options={categoryListNames}
+          errorMessage={error.category_id}
+          setError={(val) => handleError('category_id', val)}
           placeholder="category"
           label={formatMessage({ id: 'Category' })}
         />

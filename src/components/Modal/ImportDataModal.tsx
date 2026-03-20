@@ -33,7 +33,7 @@ const ImportDataModal: React.FC<ImportDataModalProps> = ({
           dataOutput: DataOutput[]
           categoryOutput: Category[]
         }
-        const newData = processData(rawData.dataOutput)
+        const newData = processData(rawData)
 
         dispatch(mainAction.setState({ state: 'data', value: newData }))
         dispatch(categoriesAction.setCategories(rawData.categoryOutput))

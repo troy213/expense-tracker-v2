@@ -34,7 +34,7 @@ const DashboardInfo = () => {
   const { firstDate, lastDate } = getCurrentMonthRange()
 
   const expenseCategories = useMemo(() => {
-    return categories.filter((c) => c.type === 'expense').map((c) => c.name)
+    return categories.filter((c) => c.type === 'expense').map((c) => c.id)
   }, [categories])
 
   const totalBudget = useMemo(() => {

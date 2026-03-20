@@ -20,7 +20,7 @@ export type Data = {
   subdata: {
     id: string
     type: CategoryType
-    category: string
+    category_id: string
     item: {
       description: string
       amount: number
@@ -42,7 +42,7 @@ export type Locales = 'en-US' | 'id-ID'
 export type TransactionForm = {
   type: CategoryType
   date: string
-  category: string
+  category_id: string
 }
 
 export type TxDetailsForm = {

@@ -46,6 +46,7 @@ export const formatTransactionDate = (
     return formatMessage({ id: 'yesterday' })
   } else {
     return date.toLocaleDateString('en-GB', {
+      weekday: 'long',
       day: '2-digit',
       month: 'short',
       year: 'numeric',
@@ -145,7 +146,7 @@ export const getCurrentMonthRange = () => {
 export const calculateRemainingBudget = (
   txData: Data[],
   txDetails: { description: string; amount: number }[],
-  categories: string[] = [],
+  categoryIds: string[] = [],
   budget: number = 0,
   date: string = '',
   excludeSubdataId: string = ''
@@ -161,7 +162,7 @@ export const calculateRemainingBudget = (
       entry.subdata.forEach((subdata) => {
         if (
           subdata.type === 'expense' &&
-          categories.includes(subdata.category) &&
+          categoryIds.includes(subdata.category_id) &&
           subdata.id !== excludeSubdataId
         ) {
           total += subdata.item.reduce((acc, curr) => acc + curr.amount, 0)
@@ -231,4 +232,52 @@ export const getStorageConfig = (): { hideBalance: boolean } => {
     return JSON.parse(storedConfig)
   }
   return { hideBalance: false }
+}
+
+export const migrateDataToCategoryId = (
+  data: Data[],
+  categories: Category[]
+): Data[] => {
+  // Check if migration is needed (if any item still has old 'category' field)
+  const needsMigration = data.some((transaction) =>
+    transaction.subdata.some(
+      (subdataItem) =>
+        'category' in subdataItem &&
+        typeof (subdataItem as { category?: string }).category === 'string'
+    )
+  )
+
+  // If already migrated, return as-is
+  if (!needsMigration) {
+    return data
+  }
+
+  // Migrate data
+  const migratedData = data.map((transaction) => ({
+    ...transaction,
+    subdata: transaction.subdata.map((subdataItem) => {
+      // Check if migration is needed for this item
+      const hasOldCategory =
+        'category' in subdataItem &&
+        typeof (subdataItem as { category?: string }).category === 'string'
+
+      if (hasOldCategory) {
+        const categoryName = (subdataItem as { category?: string }).category
+        const category = categories.find((cat) => cat.name === categoryName)
+
+        return {
+          ...subdataItem,
+          category_id: category?.id || '',
+        } as Omit<typeof subdataItem, 'category'> & { category_id: string }
+      }
+
+      // Already migrated
+      return subdataItem as Data['subdata'][0]
+    }),
+  }))
+
+  // Save migrated data back to localStorage to prevent re-migration
+  setStorage('data', migratedData)
+
+  return migratedData
 }
