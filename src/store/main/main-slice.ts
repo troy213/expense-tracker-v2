@@ -63,7 +63,7 @@ const mainSlice = createSlice({
         const newSubdata = {
           id: transactionsData[dataIndex].subdata[subdataIndex].id,
           type: data.type,
-          category: data.category,
+          category_id: data.category_id,
           item: transactionDetails,
         }
 
@@ -114,7 +114,7 @@ const mainSlice = createSlice({
         const newSubdata = {
           id: crypto.randomUUID() as string,
           type: data.type,
-          category: data.category,
+          category_id: data.category_id,
           item: transactionDetails,
         }
 

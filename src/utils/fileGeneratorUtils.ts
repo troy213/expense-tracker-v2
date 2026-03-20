@@ -7,9 +7,15 @@ export type DataOutput = {
   id: string
   subdataId: string
   type: CategoryType
-  category: string
+  category_id: string
   description: string
   amount: number
+}
+
+const isValidUUID = (value: string): boolean => {
+  const uuidRegex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+  return uuidRegex.test(value)
 }
 
 export const readXlsx = (file: File) => {
@@ -17,12 +23,13 @@ export const readXlsx = (file: File) => {
     const reader = new FileReader()
     reader.onload = (e) => {
       try {
+        // Support both old format (category) and new format (category_id)
         const dataHeader = [
           'date',
           'id',
           'subdataId',
           'type',
-          'category',
+          'category_id',
           'description',
           'amount',
         ]
@@ -64,7 +71,15 @@ export const createExcelFile = () => {
 
   // Create Data worksheet header
   const worksheet = XLSX.utils.aoa_to_sheet([
-    ['Date', 'ID', 'Subdata ID', 'Type', 'Category', 'Description', 'Amount'],
+    [
+      'Date',
+      'ID',
+      'Subdata ID',
+      'Type',
+      'Category ID',
+      'Description',
+      'Amount',
+    ],
   ])
 
   // Output: 2025-01-01, {id}, {subId}, expense, transport, bus, 2000
@@ -72,14 +87,24 @@ export const createExcelFile = () => {
     const { id, date, subdata } = item
 
     subdata.forEach((subitem) => {
-      const { id: subId, category, type } = subitem
+      const { id: subId, category_id, type } = subitem
 
       subitem.item.forEach((subsubitem) => {
         const { amount, description } = subsubitem
 
         XLSX.utils.sheet_add_json(
           worksheet,
-          [{ date, id, subId, type, category, description, amount }],
+          [
+            {
+              date,
+              id,
+              subId,
+              type,
+              category_id,
+              description,
+              amount,
+            },
+          ],
           { skipHeader: true, origin: -1 }
         )
       })
@@ -108,10 +133,24 @@ export const createExcelFile = () => {
   XLSX.writeFile(workbook, 'Expense Tracker.xlsx')
 }
 
-export const processData = (dataOutput: DataOutput[]) => {
+export const processData = (rawData: {
+  dataOutput: DataOutput[]
+  categoryOutput: Category[]
+}) => {
   const newData: Data[] = []
-  dataOutput.forEach((item) => {
-    const { amount, category, date, description, id, subdataId, type } = item
+  rawData.dataOutput.forEach((item) => {
+    const { amount, category_id, date, description, id, subdataId, type } = item
+
+    // Handle backward compatibility: check if category_id is actually a category name
+    let actualCategoryId = category_id
+    if (!isValidUUID(category_id)) {
+      // It's likely a category name from old export, find the matching category ID
+      const matchingCategory = rawData.categoryOutput.find(
+        (cat) => cat.name === category_id
+      )
+      actualCategoryId = matchingCategory?.id || category_id
+    }
+
     const dataIndex = newData.findIndex(
       (dataItem) => dataItem.date === date && dataItem.id === id
     )
@@ -129,7 +168,7 @@ export const processData = (dataOutput: DataOutput[]) => {
       } else {
         newData[dataIndex].subdata.push({
           id: subdataId,
-          category,
+          category_id: actualCategoryId,
           type,
           item: [
             {
@@ -145,7 +184,7 @@ export const processData = (dataOutput: DataOutput[]) => {
         id,
         subdata: [
           {
-            category,
+            category_id: actualCategoryId,
             id: subdataId,
             type,
             item: [

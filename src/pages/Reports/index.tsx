@@ -93,7 +93,7 @@ const Reports = () => {
       .map((category) => {
         const catAmount = filteredData
           .flatMap((data) => data.subdata)
-          .filter((sub) => sub.type === type && sub.category === category.name)
+          .filter((sub) => sub.type === type && sub.category_id === category.id)
           .flatMap((sub) => sub.item)
           .reduce((total, curr) => total + curr.amount, 0)
 

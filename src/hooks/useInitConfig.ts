@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import useAppDispatch from './useAppDispatch'
 import { LOCALES, THEME } from '@/constants'
 import { mainAction } from '@/store/main/main-slice'
-import { getStorage } from '@/utils'
+import { getStorage, migrateDataToCategoryId } from '@/utils'
 import { categoriesAction } from '@/store/categories/categories-slice'
 
 const useInitConfig = () => {
@@ -30,7 +30,17 @@ const useInitConfig = () => {
 
     if (storedData) {
       const parsedData = JSON.parse(storedData)
-      dispatch(mainAction.setState({ state: 'data', value: parsedData }))
+      // Migrate data from category name to category_id
+      if (storedCategories) {
+        const parsedCategories = JSON.parse(storedCategories)
+        const migratedData = migrateDataToCategoryId(
+          parsedData,
+          parsedCategories
+        )
+        dispatch(mainAction.setState({ state: 'data', value: migratedData }))
+      } else {
+        dispatch(mainAction.setState({ state: 'data', value: parsedData }))
+      }
     }
 
     if (storedCategories) {
