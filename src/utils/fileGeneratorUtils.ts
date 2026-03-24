@@ -1,22 +1,6 @@
 import * as XLSX from 'xlsx'
-import { Category, CategoryType, Data } from '@/types'
+import { Category, Data } from '@/types'
 import { getStorage } from '.'
-
-export type DataOutput = {
-  date: string
-  id: string
-  subdataId: string
-  type: CategoryType
-  category_id: string
-  description: string
-  amount: number
-}
-
-const isValidUUID = (value: string): boolean => {
-  const uuidRegex =
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
-  return uuidRegex.test(value)
-}
 
 export const readXlsx = (file: File) => {
   return new Promise((resolve, reject) => {
@@ -84,10 +68,10 @@ export const createExcelFile = () => {
 
   // Output: 2025-01-01, {id}, {subId}, expense, transport, bus, 2000
   data.forEach((item) => {
-    const { id, date, subdata } = item
+    const { date, subdata } = item
 
     subdata.forEach((subitem) => {
-      const { id: subId, category_id, type } = subitem
+      const { category_id } = subitem
 
       subitem.item.forEach((subsubitem) => {
         const { amount, description } = subsubitem
@@ -97,9 +81,6 @@ export const createExcelFile = () => {
           [
             {
               date,
-              id,
-              subId,
-              type,
               category_id,
               description,
               amount,
@@ -131,75 +112,4 @@ export const createExcelFile = () => {
 
   // Export file
   XLSX.writeFile(workbook, 'Expense Tracker.xlsx')
-}
-
-export const processData = (rawData: {
-  dataOutput: DataOutput[]
-  categoryOutput: Category[]
-}) => {
-  const newData: Data[] = []
-  rawData.dataOutput.forEach((item) => {
-    const { amount, category_id, date, description, id, subdataId, type } = item
-
-    // Handle backward compatibility: check if category_id is actually a category name
-    let actualCategoryId = category_id
-    if (!isValidUUID(category_id)) {
-      // It's likely a category name from old export, find the matching category ID
-      const matchingCategory = rawData.categoryOutput.find(
-        (cat) => cat.name === category_id
-      )
-      actualCategoryId = matchingCategory?.id || category_id
-    }
-
-    const dataIndex = newData.findIndex(
-      (dataItem) => dataItem.date === date && dataItem.id === id
-    )
-
-    if (dataIndex >= 0) {
-      const subdataIndex = newData[dataIndex].subdata.findIndex(
-        (subdataItem) => subdataItem.id === subdataId
-      )
-
-      if (subdataIndex >= 0) {
-        newData[dataIndex].subdata[subdataIndex].item.push({
-          description,
-          amount,
-        })
-      } else {
-        newData[dataIndex].subdata.push({
-          id: subdataId,
-          category_id: actualCategoryId,
-          type,
-          item: [
-            {
-              description,
-              amount,
-            },
-          ],
-        })
-      }
-    } else {
-      newData.push({
-        date,
-        id,
-        subdata: [
-          {
-            category_id: actualCategoryId,
-            id: subdataId,
-            type,
-            item: [
-              {
-                description,
-                amount,
-              },
-            ],
-          },
-        ],
-      })
-    }
-  })
-
-  return newData.sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  )
 }

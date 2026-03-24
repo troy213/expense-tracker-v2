@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '@/hooks'
 import { mainAction } from '@/store/main/main-slice'
 import { categoriesAction } from '@/store/categories/categories-slice'
-import { Category } from '@/types'
-import { setStorage } from '@/utils'
-import { DataOutput, processData, readXlsx } from '@/utils/fileGeneratorUtils'
+import { Category, Transaction } from '@/types'
+import { processMainData, setStorage } from '@/utils'
+import { readXlsx } from '@/utils/fileGeneratorUtils'
 import Modal from '.'
 import Form from '../Form'
 
@@ -30,10 +30,10 @@ const ImportDataModal: React.FC<ImportDataModalProps> = ({
     if (file) {
       try {
         const rawData = (await readXlsx(file)) as {
-          dataOutput: DataOutput[]
+          dataOutput: Transaction[]
           categoryOutput: Category[]
         }
-        const newData = processData(rawData)
+        const newData = processMainData(rawData.dataOutput)
 
         dispatch(mainAction.setState({ state: 'data', value: newData }))
         dispatch(categoriesAction.setCategories(rawData.categoryOutput))

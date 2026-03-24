@@ -21,7 +21,7 @@ const TransactionContainer: React.FC<TransactionContainerProps> = ({
   selectedTransaction,
   setSelectedTransaction,
 }) => {
-  const { id, date, subdata } = data
+  const { date, subdata } = data
   const [isExpanded, setIsExpanded] = useState(index < 3)
   const [height, setHeight] = useState('0px')
   const contentRef = useRef<HTMLDivElement>(null)
@@ -57,7 +57,7 @@ const TransactionContainer: React.FC<TransactionContainerProps> = ({
   return (
     <div
       className="transaction-detail-container"
-      key={id}
+      key={date}
       onClick={handleExpand}
     >
       <span className="text--italic text--light text--3">
@@ -79,7 +79,7 @@ const TransactionContainer: React.FC<TransactionContainerProps> = ({
               subdataIndex={subdataIndex}
               selectedTransaction={selectedTransaction}
               handleSelectTransaction={handleSelectTransaction}
-              key={subitem.id}
+              key={subitem.category_id}
             />
           )
         })}

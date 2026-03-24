@@ -9,6 +9,7 @@ import {
   calculateRemainingBudget,
   combineClassName,
   currencyFormatter,
+  getCategoryById,
   getDate,
 } from '@/utils'
 import Modal from '.'
@@ -35,6 +36,7 @@ const dataInitialValue: TransactionForm = {
 
 const txDetailsInitialValue: TxDetailsForm[] = [
   {
+    id: crypto.randomUUID(),
     description: '',
     amount: 0,
   },
@@ -48,6 +50,7 @@ const errorInitialValue: ErrorState = {
 
 const txDetailsErrorInitialValue: TxDetailsErrorState[] = [
   {
+    id: '',
     description: '',
     amount: '',
   },
@@ -71,15 +74,20 @@ const FormTransactionModal: React.FC<FormTransactionModalProps> = ({
   if (isEditForm) {
     const { dataIndex, subdataIndex } = indexes!
     const { date, subdata } = transactionsData[dataIndex]
+    const categoryType = getCategoryById(
+      subdata[subdataIndex].category_id,
+      categories
+    )?.type
 
     currentData = {
       date,
       category_id: subdata[subdataIndex].category_id,
-      type: subdata[subdataIndex].type,
+      type: categoryType ?? 'expense',
     }
 
     currentTxDetails = subdata[subdataIndex].item
     currentTxDetailsError = subdata[subdataIndex].item.map(() => ({
+      id: '',
       description: '',
       amount: '',
     }))
@@ -109,17 +117,20 @@ const FormTransactionModal: React.FC<FormTransactionModalProps> = ({
       calculateRemainingBudget(
         transactionsData,
         transactionDetails,
+        filteredCategory,
         [data.category_id],
         budget,
         data.date,
         isEditForm
-          ? transactionsData[indexes.dataIndex].subdata[indexes.subdataIndex].id
+          ? transactionsData[indexes.dataIndex].subdata[indexes.subdataIndex]
+              .category_id
           : ''
       ),
     [
       data.category_id,
       data.date,
       budget,
+      filteredCategory,
       transactionsData,
       transactionDetails,
       isEditForm,
@@ -141,11 +152,11 @@ const FormTransactionModal: React.FC<FormTransactionModalProps> = ({
   const handleAddDetail = () => {
     setTransactionDetails((prevState) => [
       ...prevState,
-      { description: '', amount: 0 },
+      { id: crypto.randomUUID(), description: '', amount: 0 },
     ])
     setTxDetailsError((prevState) => [
       ...prevState,
-      { description: '', amount: '' },
+      { id: '', description: '', amount: '' },
     ])
   }
 
@@ -248,9 +259,11 @@ const FormTransactionModal: React.FC<FormTransactionModalProps> = ({
 
   const resetData = () => {
     setData({ type: 'income', category_id: '', date: String(getDate()) })
-    setTransactionDetails([{ description: '', amount: 0 }])
+    setTransactionDetails([
+      { id: crypto.randomUUID(), description: '', amount: 0 },
+    ])
     setError({ date: '', category_id: '', type: '' })
-    setTxDetailsError([{ description: '', amount: '' }])
+    setTxDetailsError([{ id: '', description: '', amount: '' }])
   }
 
   const handleCancel = (e: React.FormEvent) => {

@@ -14,14 +14,20 @@ export type Category = {
   budget?: number
 }
 
+export type Transaction = {
+  id: string // uuid
+  date: string
+  category_id: string // uuid (foreign key to categories)
+  description: string
+  amount: number
+}
+
 export type Data = {
-  id: string
   date: string
   subdata: {
-    id: string
-    type: CategoryType
     category_id: string
     item: {
+      id: string
       description: string
       amount: number
     }[]
@@ -40,12 +46,13 @@ export type Theme = 'light' | 'dark'
 export type Locales = 'en-US' | 'id-ID'
 
 export type TransactionForm = {
-  type: CategoryType
+  type?: CategoryType
   date: string
   category_id: string
 }
 
 export type TxDetailsForm = {
+  id: string
   description: string
   amount: number
 }

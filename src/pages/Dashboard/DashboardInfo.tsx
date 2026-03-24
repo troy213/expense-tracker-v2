@@ -30,7 +30,10 @@ const DashboardInfo = () => {
   const { formatMessage } = useIntl()
   const { data } = useAppSelector((state) => state.mainReducer)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
-  const { totalIncome, totalExpense, totalBalance } = updateTotal(data)
+  const { totalIncome, totalExpense, totalBalance } = updateTotal(
+    data,
+    categories
+  )
   const { firstDate, lastDate } = getCurrentMonthRange()
 
   const expenseCategories = useMemo(() => {
@@ -44,8 +47,14 @@ const DashboardInfo = () => {
   }, [categories])
 
   const remainingBudget = useMemo(() => {
-    return calculateRemainingBudget(data, [], expenseCategories, totalBudget)
-  }, [data, expenseCategories, totalBudget])
+    return calculateRemainingBudget(
+      data,
+      [],
+      categories,
+      expenseCategories,
+      totalBudget
+    )
+  }, [data, categories, expenseCategories, totalBudget])
 
   const budgetPercentage = calculatePercentage(remainingBudget, totalBudget)
 

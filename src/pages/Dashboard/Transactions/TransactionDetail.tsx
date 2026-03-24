@@ -6,7 +6,7 @@ import DeleteDataModal from '@/components/Modal/DeleteDataModal'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { Data } from '@/types'
 import { mainAction } from '@/store/main/main-slice'
-import { combineClassName, currencyFormatter } from '@/utils'
+import { combineClassName, currencyFormatter, getCategoryById } from '@/utils'
 import FormTransactionModal from '@/components/Modal/FormTransactionModal'
 
 type TransactionDetailProps = {
@@ -31,7 +31,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
   selectedTransaction,
   handleSelectTransaction,
 }) => {
-  const { id, type, category_id, item } = data
+  const { category_id, item } = data
   const [isMoreModalOpen, setIsMoreModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -42,9 +42,9 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
     (state) => state.categoriesReducer.categories
   )
 
-  const categoryName = categories.find((c) => c.id === category_id)?.name ?? '-'
+  const category = getCategoryById(category_id, categories)
 
-  const isExpense = type === 'expense'
+  const isExpense = category?.type === 'expense'
   const totalItemValue = isExpense
     ? -1 * sumTotalItemValue(item)
     : sumTotalItemValue(item)
@@ -58,7 +58,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
   }
 
   const handleDeleteTransaction = () => {
-    dispatch(mainAction.deleteTransaction({ subdataId: id }))
+    dispatch(mainAction.deleteTransaction({ subdataId: category_id }))
     setIsDeleteModalOpen(false)
   }
 
@@ -70,7 +70,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
     <div
       className="transaction-detail"
       ref={transactionRefs}
-      onClick={(e) => handleSelectTransaction(e, id)}
+      onClick={(e) => handleSelectTransaction(e, category_id)}
     >
       {isEditModalOpen && (
         <FormTransactionModal
@@ -89,12 +89,12 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
         />
       )}
       <div className="flex-space-between">
-        <span>{categoryName}</span>
+        <span>{category?.name}</span>
         <div className="flex-align-center gap-2">
           <span className={totalItemValueClassName}>
             {currencyFormatter(totalItemValue)}
           </span>
-          {selectedTransaction === id && (
+          {selectedTransaction === category_id && (
             <div className="relative">
               <button
                 className="btn btn-clear"

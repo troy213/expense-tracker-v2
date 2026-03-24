@@ -61,8 +61,6 @@ const mainSlice = createSlice({
         const { dataIndex, subdataIndex } = indexes
         const isSameDate = transactionsData[dataIndex].date === data.date
         const newSubdata = {
-          id: transactionsData[dataIndex].subdata[subdataIndex].id,
-          type: data.type,
           category_id: data.category_id,
           item: transactionDetails,
         }
@@ -164,7 +162,7 @@ const mainSlice = createSlice({
         .map((item) => ({
           ...item,
           subdata: item.subdata.filter(
-            (sub) => sub.id !== action.payload.subdataId
+            (sub) => sub.category_id !== action.payload.subdataId
           ),
         }))
         .filter((item) => item.subdata.length > 0)

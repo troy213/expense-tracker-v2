@@ -6,7 +6,7 @@ import DateRangeModal from '@/components/Modal/DateRangeModal'
 import InputDateModal from '@/components/Modal/InputDateModal'
 import { useAppSelector } from '@/hooks'
 import { Data } from '@/types'
-import { updateTotal } from '@/utils'
+import { getCategoryById, updateTotal } from '@/utils'
 import ReportInfo from './ReportInfo'
 import ReportWidget from './ReportWidget'
 
@@ -44,8 +44,14 @@ const Reports = () => {
     startDate && endDate
       ? (endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)
       : 1
-  const { totalIncome, totalExpense, totalBalance } = updateTotal(filteredData)
-  const avgExpense = totalExpense / totalDays
+
+  console.log({ totalDays })
+
+  const { totalIncome, totalExpense, totalBalance } = updateTotal(
+    filteredData,
+    categories
+  )
+  const avgExpense = totalExpense / (totalDays ? totalDays : 1)
 
   const buttonRef = useRef<HTMLButtonElement>(null)
 
@@ -93,7 +99,10 @@ const Reports = () => {
       .map((category) => {
         const catAmount = filteredData
           .flatMap((data) => data.subdata)
-          .filter((sub) => sub.type === type && sub.category_id === category.id)
+          .filter((sub) => {
+            const subType = getCategoryById(sub.category_id, categories)?.type
+            return subType === type && sub.category_id === category.id
+          })
           .flatMap((sub) => sub.item)
           .reduce((total, curr) => total + curr.amount, 0)
 
