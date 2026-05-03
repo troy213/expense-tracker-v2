@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
-import { useIntl } from 'react-intl'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useIntl } from 'react-intl'
 import { useAppDispatch } from '@/hooks'
-import { mainAction } from '@/store/main/main-slice'
-import { categoriesAction } from '@/store/categories/categories-slice'
+import dbServices from '@/lib/db'
 import { Category, Transaction } from '@/types'
-import { processMainData, setStorage } from '@/utils'
+import { categoriesAction } from '@/store/categories/categories-slice'
+import { mainAction } from '@/store/main/main-slice'
+import { processMainData } from '@/utils'
 import { readXlsx } from '@/utils/fileGeneratorUtils'
 import Modal from '.'
 import Form from '../Form'
@@ -19,26 +20,28 @@ const ImportDataModal: React.FC<ImportDataModalProps> = ({
   isOpen,
   setIsOpen,
 }) => {
-  const [file, setFile] = useState<File | null>(null)
-  const [errorMessage, setErrorMessage] = useState('')
   const dispatch = useAppDispatch()
-  const { formatMessage } = useIntl()
   const navigate = useNavigate()
+  const { formatMessage } = useIntl()
 
-  const handleImport = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleImport = async (formData: { file: File | null }) => {
+    const { file } = formData
     if (file) {
       try {
         const rawData = (await readXlsx(file)) as {
           dataOutput: Transaction[]
           categoryOutput: Category[]
         }
+
+        await dbServices.importData({
+          categories: rawData.categoryOutput,
+          transactions: rawData.dataOutput,
+        })
+
         const newData = processMainData(rawData.dataOutput)
 
         dispatch(mainAction.setState({ state: 'data', value: newData }))
-        dispatch(categoriesAction.setCategories(rawData.categoryOutput))
-        setStorage('data', newData)
-        setStorage('categories', rawData.categoryOutput)
+        dispatch(categoriesAction.addCategories(rawData.categoryOutput))
 
         navigate('/')
       } catch (err) {
@@ -46,44 +49,31 @@ const ImportDataModal: React.FC<ImportDataModalProps> = ({
       }
 
       setIsOpen(false)
-    } else {
-      setErrorMessage(formatMessage({ id: 'FormEmptyError' }))
     }
   }
 
   return (
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-      <div className="flex-column gap-4">
+      <Form
+        className="flex-column gap-4"
+        onSubmit={handleImport}
+        onCancel={() => setIsOpen(false)}
+      >
         <span className="text--bold text--color-primary">
           {formatMessage({ id: 'ImportData' })}
         </span>
+
         <Form.File
-          value={file}
-          onChange={setFile}
-          errorMessage={errorMessage}
-          setError={setErrorMessage}
           label={formatMessage({ id: 'Import' })}
-          id="file"
+          valueKey="file"
           placeholder="file"
+          accept=".xlsx"
+          required
         />
 
-        <div className="flex-end gap-2 pt-2">
-          <button
-            type="button"
-            className="btn btn-outline-primary"
-            onClick={() => setIsOpen(false)}
-          >
-            {formatMessage({ id: 'Cancel' })}
-          </button>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={handleImport}
-          >
-            {formatMessage({ id: 'Import' })}
-          </button>
-        </div>
-      </div>
+        <Form.Submit />
+        <Form.Cancel />
+      </Form>
     </Modal>
   )
 }

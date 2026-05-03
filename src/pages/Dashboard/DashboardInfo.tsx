@@ -28,7 +28,7 @@ type BalanceProps = {
 
 const DashboardInfo = () => {
   const { formatMessage } = useIntl()
-  const { data } = useAppSelector((state) => state.mainReducer)
+  const { data, hideBalance } = useAppSelector((state) => state.mainReducer)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
   const { totalIncome, totalExpense, totalBalance } = updateTotal(
     data,
@@ -73,30 +73,32 @@ const DashboardInfo = () => {
         </span>
         <Balance totalBalance={totalBalance} />
       </div>
-      <div className="flex gap-4">
-        <Widget>
-          <div className="flex-column flex-align-center gap-1">
-            <div className="flex-align-center gap-1">
-              <span className="text--light text--3">
-                {formatMessage({ id: 'TotalIncome' })}
-              </span>
-              <ArrowUpSvg className="icon--sm icon--stroke-success" />
+      {!hideBalance && (
+        <div className="flex gap-4">
+          <Widget>
+            <div className="flex-column flex-align-center gap-1">
+              <div className="flex-align-center gap-1">
+                <span className="text--light text--3">
+                  {formatMessage({ id: 'TotalIncome' })}
+                </span>
+                <ArrowUpSvg className="icon--sm icon--stroke-success" />
+              </div>
+              <span>{currencyFormatter(totalIncome)}</span>
             </div>
-            <span>{currencyFormatter(totalIncome)}</span>
-          </div>
-        </Widget>
-        <Widget>
-          <div className="flex-column flex-align-center gap-1">
-            <div className="flex-align-center gap-1">
-              <span className="text--light text--3">
-                {formatMessage({ id: 'TotalExpense' })}
-              </span>
-              <ArrowDownSvg className="icon--sm icon--stroke-danger" />
+          </Widget>
+          <Widget>
+            <div className="flex-column flex-align-center gap-1">
+              <div className="flex-align-center gap-1">
+                <span className="text--light text--3">
+                  {formatMessage({ id: 'TotalExpense' })}
+                </span>
+                <ArrowDownSvg className="icon--sm icon--stroke-danger" />
+              </div>
+              <span>{currencyFormatter(totalExpense)}</span>
             </div>
-            <span>{currencyFormatter(totalExpense)}</span>
-          </div>
-        </Widget>
-      </div>
+          </Widget>
+        </div>
+      )}
       <Widget>
         <div className="flex-column gap-2">
           <div className="flex-space-between flex-align-center">
@@ -135,20 +137,6 @@ const Balance: React.FC<BalanceProps> = ({ totalBalance }) => {
     dispatch(mainAction.setState({ state: 'hideBalance', value: !hideBalance }))
   }
 
-  if (hideBalance)
-    return (
-      <div className="flex-align-center gap-2">
-        <button
-          className="btn btn-clear"
-          type="button"
-          onClick={handleHideBalance}
-        >
-          <EyeOffSvg className="icon--stroke-white" />
-        </button>
-        <HiddenTextSvg className="icon--stroke-white icon--fill-white" />
-      </div>
-    )
-
   return (
     <div className="flex-align-center gap-2">
       <button
@@ -156,11 +144,19 @@ const Balance: React.FC<BalanceProps> = ({ totalBalance }) => {
         type="button"
         onClick={handleHideBalance}
       >
-        <EyeSvg className="icon--stroke-white" />
+        {hideBalance ? (
+          <EyeOffSvg className="icon--stroke-white" />
+        ) : (
+          <EyeSvg className="icon--stroke-white" />
+        )}
       </button>
-      <span className="text--bold text--8">
-        {currencyFormatter(totalBalance)}
-      </span>
+      {hideBalance ? (
+        <HiddenTextSvg className="icon--stroke-white icon--fill-white" />
+      ) : (
+        <span className="text--bold text--8">
+          {currencyFormatter(totalBalance)}
+        </span>
+      )}
     </div>
   )
 }

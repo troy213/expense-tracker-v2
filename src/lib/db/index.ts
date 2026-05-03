@@ -101,6 +101,20 @@ async function putCategory(category: Category): Promise<string> {
 }
 
 /**
+ * Add multiple categories at once
+ */
+async function putCategories(categories: Category[]): Promise<void> {
+  const database = await getDB()
+  const tx = database.transaction('categories', 'readwrite')
+
+  for (const category of categories) {
+    tx.store.put(category)
+  }
+
+  await tx.done
+}
+
+/**
  * Delete a category by ID
  */
 async function deleteCategory(id: string): Promise<void> {
@@ -279,7 +293,7 @@ async function clearAllData(): Promise<void> {
 /**
  * all data for backup
  */
-async function llData(): Promise<{
+async function allData(): Promise<{
   categories: Category[]
   transactions: Transaction[]
 }> {
@@ -298,11 +312,12 @@ async function importData(data: {
   transactions: Transaction[]
 }): Promise<void> {
   const database = await getDB()
-  const tx = database.transaction(['categories', 'transactions'], 'readwrite')
 
   // Clear existing data
-  await tx.objectStore('categories').clear()
-  await tx.objectStore('transactions').clear()
+  await database.clear('categories')
+  await database.clear('transactions')
+
+  const tx = database.transaction(['categories', 'transactions'], 'readwrite')
 
   // Import categories
   for (const category of data.categories) {
@@ -328,6 +343,7 @@ async function closeDB(): Promise<void> {
 }
 
 const dbServices = {
+  allData,
   clearAllData,
   clearCategories,
   clearTransactions,
@@ -335,7 +351,6 @@ const dbServices = {
   deleteCategory,
   deleteTransaction,
   deleteTransactions,
-  llData,
   getAllCategories,
   getAllTransactions,
   getCategoriesByType,
@@ -348,6 +363,7 @@ const dbServices = {
   importData,
   initializeDB,
   putCategory,
+  putCategories,
   putTransaction,
   putTransactions,
 }

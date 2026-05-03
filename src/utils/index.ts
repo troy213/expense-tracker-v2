@@ -211,9 +211,14 @@ export const searchSubdata = (data: Data[], searchValue: string): Data[] => {
     .filter((entry) => entry !== null) as Data[]
 }
 
-export const calculateSubdataSummary = (subdata: Data['subdata']) => {
+export const calculateSubdataSummary = (
+  subdata: Data['subdata'],
+  categories: Category[]
+) => {
   let totalSubdataIncome = 0
   let totalSubdataExpense = 0
+
+  const categoryTypeMap = new Map(categories.map((c) => [c.id, c.type]))
 
   subdata.forEach((subdataItem) => {
     const subtotal = subdataItem.item.reduce(
@@ -221,11 +226,13 @@ export const calculateSubdataSummary = (subdata: Data['subdata']) => {
       0
     )
 
-    // if (subdataItem.type === 'income') {
-    totalSubdataIncome += subtotal
-    // } else {
-    totalSubdataExpense += subtotal
-    // }
+    const categoryType = categoryTypeMap.get(subdataItem.category_id)
+
+    if (categoryType === 'income') {
+      totalSubdataIncome += subtotal
+    } else {
+      totalSubdataExpense += subtotal
+    }
   })
 
   return { totalSubdataIncome, totalSubdataExpense }

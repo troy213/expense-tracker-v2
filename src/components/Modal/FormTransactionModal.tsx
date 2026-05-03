@@ -1,309 +1,46 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useState } from 'react'
+import { useFieldArray, useFormContext } from 'react-hook-form'
+import { Link } from 'react-router-dom'
 import { useIntl } from 'react-intl'
+import { v7 as uuidv7 } from 'uuid'
+import Form from '@/components/Form'
 import { CrossSvg, PlusSvg } from '@/assets'
 import { REGEX } from '@/constants'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { mainAction } from '@/store/main/main-slice'
-import { CategoryType, TransactionForm, TxDetailsForm } from '@/types'
-import {
-  calculateRemainingBudget,
-  combineClassName,
-  currencyFormatter,
-  getCategoryById,
-  getDate,
-} from '@/utils'
-import Modal from '.'
-import Form from '../Form'
-import { Link } from 'react-router-dom'
+import { CategoryType, TxFormData } from '@/types'
+import { getDate } from '@/utils'
+import { addDBTransactions, editDBTransactions } from '@/store/main/main-thunk'
 
-type FormTransactionModalProps = {
-  isOpen: boolean
-  setIsOpen: (val: boolean) => void
-  indexes?: {
-    dataIndex: number
-    subdataIndex: number
-  }
+type FormTransactionProps = {
+  data?: TxFormData
+  index?: number
+  onCancel?: () => void
 }
 
-type ErrorState = Record<keyof TransactionForm, string>
-type TxDetailsErrorState = Record<keyof TxDetailsForm, string>
+const makeEmptyItem = () => ({
+  id: uuidv7(),
+  description: '',
+  amount: 0,
+})
 
-const dataInitialValue: TransactionForm = {
-  type: 'income',
-  category_id: '',
-  date: String(getDate()),
-}
-
-const txDetailsInitialValue: TxDetailsForm[] = [
-  {
-    id: crypto.randomUUID(),
-    description: '',
-    amount: 0,
-  },
-]
-
-const errorInitialValue: ErrorState = {
-  type: '',
-  category_id: '',
-  date: '',
-}
-
-const txDetailsErrorInitialValue: TxDetailsErrorState[] = [
-  {
-    id: '',
-    description: '',
-    amount: '',
-  },
-]
-
-const FormTransactionModal: React.FC<FormTransactionModalProps> = ({
-  isOpen,
-  setIsOpen,
-  indexes,
-}) => {
-  const isEditForm = indexes !== undefined
-  const transactionsData = useAppSelector((state) => state.mainReducer.data)
+const FormTransaction = ({ data, index, onCancel }: FormTransactionProps) => {
+  const { formatMessage } = useIntl()
   const categories = useAppSelector(
     (state) => state.categoriesReducer.categories
   )
-
-  let currentData = dataInitialValue
-  let currentTxDetails = txDetailsInitialValue
-  let currentTxDetailsError = txDetailsErrorInitialValue
-
-  if (isEditForm) {
-    const { dataIndex, subdataIndex } = indexes!
-    const { date, subdata } = transactionsData[dataIndex]
-    const categoryType = getCategoryById(
-      subdata[subdataIndex].category_id,
-      categories
-    )?.type
-
-    currentData = {
-      date,
-      category_id: subdata[subdataIndex].category_id,
-      type: categoryType ?? 'expense',
-    }
-
-    currentTxDetails = subdata[subdataIndex].item
-    currentTxDetailsError = subdata[subdataIndex].item.map(() => ({
-      id: '',
-      description: '',
-      amount: '',
-    }))
-  }
-
-  const [data, setData] = useState<TransactionForm>(currentData)
-  const [error, setError] = useState<ErrorState>(errorInitialValue)
-  const [transactionDetails, setTransactionDetails] =
-    useState<TxDetailsForm[]>(currentTxDetails)
-  const [txDetailsError, setTxDetailsError] = useState<TxDetailsErrorState[]>(
-    currentTxDetailsError
+  const defaultCategoryType = data
+    ? categories.find((cat) => cat.id === data.category_id)?.type || 'income'
+    : 'income'
+  const [categoryType, setCategoryType] =
+    useState<CategoryType>(defaultCategoryType)
+  const filteredCategories = categories.filter(
+    (item) => item.type === categoryType
   )
   const dispatch = useAppDispatch()
-  const { formatMessage } = useIntl()
 
-  const filteredCategory = categories.filter(
-    (category) => category.type === data.type
-  )
-  const categoryListNames = filteredCategory.map((category) => category.name)
-
-  const budget = categories.find(
-    (category) => category.id === data.category_id
-  )?.budget
-
-  const remainingBudget = useMemo(
-    () =>
-      calculateRemainingBudget(
-        transactionsData,
-        transactionDetails,
-        filteredCategory,
-        [data.category_id],
-        budget,
-        data.date,
-        isEditForm
-          ? transactionsData[indexes.dataIndex].subdata[indexes.subdataIndex]
-              .category_id
-          : ''
-      ),
-    [
-      data.category_id,
-      data.date,
-      budget,
-      filteredCategory,
-      transactionsData,
-      transactionDetails,
-      isEditForm,
-      indexes,
-    ]
-  )
-
-  const remainingBudgetClassName = combineClassName('', [
-    {
-      condition: remainingBudget >= 0,
-      className: 'text--color-primary',
-    },
-    {
-      condition: remainingBudget < 0,
-      className: 'text--color-danger',
-    },
-  ])
-
-  const handleAddDetail = () => {
-    setTransactionDetails((prevState) => [
-      ...prevState,
-      { id: crypto.randomUUID(), description: '', amount: 0 },
-    ])
-    setTxDetailsError((prevState) => [
-      ...prevState,
-      { id: '', description: '', amount: '' },
-    ])
-  }
-
-  const handleRemoveDetail = (index: number) => {
-    setTransactionDetails(transactionDetails.filter((_, idx) => idx !== index))
-    setTxDetailsError(txDetailsError.filter((_, idx) => idx !== index))
-  }
-
-  const handleDataChange = <K extends keyof TransactionForm>(
-    key: K,
-    value: TransactionForm[K]
-  ) => {
-    setData((prevState) => ({
-      ...prevState,
-      [key]: value,
-    }))
-  }
-
-  const handleTxDetailsChange = <K extends keyof TxDetailsForm>(
-    key: K,
-    value: TxDetailsForm[K],
-    index: number
-  ) => {
-    const newTxDetail = transactionDetails.map((txDetail, idx) => {
-      if (idx === index) return { ...txDetail, [key]: value }
-      return txDetail
-    })
-
-    setTransactionDetails(newTxDetail)
-  }
-
-  const handleError = <K extends keyof ErrorState>(
-    key: K,
-    value: ErrorState[K]
-  ) => {
-    setError((prevState) => ({
-      ...prevState,
-      [key]: value,
-    }))
-  }
-
-  const handleTxDetailsErrorChange = <K extends keyof TxDetailsErrorState>(
-    key: K,
-    value: TxDetailsErrorState[K],
-    index: number
-  ) => {
-    const newTxDetailError = [...txDetailsError]
-    newTxDetailError[index][key] = value
-
-    setTxDetailsError(newTxDetailError)
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    let formIsValid = true
-
-    // check any empty data
-    Object.entries(data).forEach(([key, value]) => {
-      if (value === '') {
-        setError((prevState) => ({
-          ...prevState,
-          [key]: formatMessage({ id: 'FormEmptyError' }),
-        }))
-        formIsValid = false
-      }
-    })
-
-    // check any empty data
-    transactionDetails.forEach((vehicle, index) => {
-      Object.entries(vehicle).forEach(([key, value]) => {
-        if (value === '') {
-          const newTxDetailsError = [...txDetailsError]
-          newTxDetailsError[index][key as keyof TxDetailsErrorState] =
-            formatMessage({ id: 'FormEmptyError' })
-
-          setTxDetailsError(newTxDetailsError)
-          formIsValid = false
-        }
-      })
-    })
-
-    // check any error
-    Object.entries(error).forEach(([, value]) => {
-      if (value) formIsValid = false
-    })
-
-    // check any error
-    txDetailsError.forEach((txDetailError) => {
-      Object.entries(txDetailError).forEach(([, value]) => {
-        if (value) formIsValid = false
-      })
-    })
-
-    if (formIsValid) {
-      dispatch(mainAction.setData({ data, transactionDetails, indexes }))
-
-      handleCancel(e)
-    }
-  }
-
-  const resetData = () => {
-    setData({ type: 'income', category_id: '', date: String(getDate()) })
-    setTransactionDetails([
-      { id: crypto.randomUUID(), description: '', amount: 0 },
-    ])
-    setError({ date: '', category_id: '', type: '' })
-    setTxDetailsError([{ id: '', description: '', amount: '' }])
-  }
-
-  const handleCancel = (e: React.FormEvent) => {
-    e.preventDefault()
-    resetData()
-    setIsOpen(false)
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-    if (e.key === 'Enter') {
-      handleSubmit(e)
-    } else if (e.key === 'Escape') {
-      handleCancel(e)
-    }
-  }
-
-  useEffect(() => {
-    if (isOpen) {
-      const defaultCategory =
-        categories.filter((category) => category.type === data.type)[0]?.id ??
-        ''
-
-      if (!isEditForm) {
-        setData((prevState) => ({
-          ...prevState,
-          category_id: defaultCategory,
-        }))
-      }
-    } else {
-      resetData()
-    }
-  }, [data.type, isOpen, categories, isEditForm])
-
-  if (!filteredCategory.length) {
+  if (filteredCategories.length === 0) {
     return (
-      <Modal
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        className="form_transaction_modal"
-      >
+      <div className="transaction-empty">
         <div className="flex-column gap-2">
           <span className="text--bold text--color-primary">
             {formatMessage({ id: 'AddTransaction' })}
@@ -311,165 +48,165 @@ const FormTransactionModal: React.FC<FormTransactionModalProps> = ({
           <span className="text--light text--color-primary text--3">
             {formatMessage({ id: 'NoCategoryWarningMessage' })}
           </span>
-          <Link
-            to={`/categories?cat=${data.type}`}
-            onClick={() => setIsOpen(false)}
-          >
+          <Link to={`/categories?cat=${categoryType}`} onClick={onCancel}>
             <span className="text--underline text--color-primary text--3">
               {formatMessage({ id: 'AddCategory' })}
             </span>
           </Link>
         </div>
-      </Modal>
+      </div>
     )
   }
 
+  const initialValue: TxFormData = data ?? {
+    date: getDate(),
+    category_id: filteredCategories[0].id,
+    item: [makeEmptyItem()],
+  }
+
+  const selectedCategoryLabel = categories.find(
+    (cat) => cat.id === initialValue.category_id
+  )?.name
+
+  const handleSubmit = (formData: TxFormData) => {
+    if (data && index !== undefined) {
+      dispatch(
+        editDBTransactions({
+          data: formData,
+          oldDate: data.date,
+          oldCategoryId: data.category_id,
+          index,
+        })
+      )
+    } else {
+      dispatch(addDBTransactions({ data: formData }))
+    }
+
+    if (onCancel) {
+      onCancel()
+    }
+  }
+
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={() => {
-        setIsOpen(false)
-      }}
-      className="form_transaction_modal"
-    >
-      <form
-        className="flex-column gap-4"
-        onSubmit={handleSubmit}
-        onKeyDown={handleKeyDown}
-      >
-        <span className="text--bold text--color-primary">
-          {formatMessage({
-            id: `${isEditForm ? 'EditTransaction' : 'AddTransaction'}`,
-          })}
-        </span>
-        <Form.Radio
-          groupId="transaction-type"
-          defaultValue={data.type}
-          onChange={(val) => handleDataChange('type', val)}
-          options={['income', 'expense'] satisfies CategoryType[]}
-          errorMessage={error.type}
-          setError={(val) => handleError('type', val)}
-          label={formatMessage({ id: 'Transaction' })}
-          radioOptionsContainerClassName="flex-row"
-        />
-
-        <Form.Input
-          type="date"
-          value={data.date}
-          onChange={(val) => handleDataChange('date', val)}
-          errorMessage={error.date}
-          setError={(val) => handleError('date', val)}
-          label={formatMessage({ id: 'Date' })}
-          id="date"
-        />
-
-        <Form.Select
-          value={
-            data.category_id
-              ? (categories.find((c) => c.id === data.category_id)?.name ?? '')
-              : ''
-          }
-          onChange={(val) => {
-            const selectedCategory = categories.find((c) => c.name === val)
-            if (selectedCategory) {
-              handleDataChange('category_id', selectedCategory.id)
-            }
-          }}
-          options={categoryListNames}
-          errorMessage={error.category_id}
-          setError={(val) => handleError('category_id', val)}
-          placeholder="category"
-          label={formatMessage({ id: 'Category' })}
-        />
-
-        {data.type === 'expense' && (
-          <div className="flex-column gap-2">
-            <span className="text--color-primary text--light text--3">
-              {formatMessage({ id: 'RemainingBudgetForThisCategory' })}
-            </span>
-            <span className={remainingBudgetClassName}>
-              {currencyFormatter(remainingBudget ?? 0)}
-            </span>
-          </div>
-        )}
-
-        {transactionDetails.map((_, idx) => {
-          return (
-            <div key={idx} className="modal__detail">
-              <div className="flex-space-between">
-                <span className="text--color-primary">
-                  {formatMessage(
-                    { id: 'TransactionDetailNo' },
-                    { index: idx + 1 }
-                  )}
-                </span>
-                {idx > 0 && (
-                  <button
-                    className="btn btn-clear"
-                    onClick={() => {
-                      handleRemoveDetail(idx)
-                    }}
-                  >
-                    <CrossSvg className="icon icon--stroke-primary" />
-                  </button>
-                )}
-              </div>
-
-              <Form.Input
-                type="text"
-                value={transactionDetails[idx].description}
-                onChange={(val) =>
-                  handleTxDetailsChange('description', val, idx)
-                }
-                pattern={REGEX.COMMON_TEXT.PATTERN}
-                patternErrorMessage={formatMessage({
-                  id: REGEX.COMMON_TEXT.ERROR_MESSAGE,
-                })}
-                errorMessage={txDetailsError[idx]?.description}
-                setError={(val) =>
-                  handleTxDetailsErrorChange('description', val, idx)
-                }
-                label={formatMessage({ id: 'Description' })}
-                id="description"
-              />
-
-              <Form.Input
-                type="currency"
-                value={transactionDetails[idx].amount}
-                onChange={(val) =>
-                  handleTxDetailsChange('amount', Number(val), idx)
-                }
-                pattern={REGEX.NUMBER.PATTERN}
-                patternErrorMessage={formatMessage({
-                  id: REGEX.NUMBER.ERROR_MESSAGE,
-                })}
-                errorMessage={txDetailsError[idx]?.amount}
-                setError={(val) =>
-                  handleTxDetailsErrorChange('amount', val, idx)
-                }
-                label={formatMessage({ id: 'AmountRp' })}
-                id="amount"
-              />
-            </div>
-          )
+    <div className="flex-column gap-4">
+      <span className="text--bold text--color-primary">
+        {formatMessage({
+          id: `${data ? 'EditTransaction' : 'AddTransaction'}`,
         })}
-        <div onClick={handleAddDetail} className="btn btn-dashed p-4">
-          <PlusSvg className="icon--stroke-primary" />
-          <span className="text--color-primary text--light text--3">
-            {formatMessage({ id: 'AddMoreTransaction' })}
-          </span>
+      </span>
+      <div className="flex-column gap-2">
+        <span className="text--color-primary text--light text--3">
+          {formatMessage({ id: 'Transaction' })}
+        </span>
+        <div className="flex gap-4">
+          {(['income', 'expense'] as CategoryType[]).map((value) => (
+            <label key={value} className="flex-align-center gap-2 width-100">
+              <input
+                type="radio"
+                name="transaction-type"
+                value={value}
+                checked={categoryType === value}
+                onChange={() => setCategoryType(value)}
+              />
+              <span className="text--color-primary">{value}</span>
+            </label>
+          ))}
         </div>
-        <div className="flex-column gap-4 mt-4">
-          <button type="submit" className="btn btn-primary">
-            {formatMessage({ id: `${isEditForm ? 'Update' : 'Submit'}` })}
-          </button>
-          <button className="btn btn-outline-primary" onClick={handleCancel}>
-            {formatMessage({ id: 'Cancel' })}
-          </button>
+      </div>
+
+      <Form<TxFormData>
+        key={categoryType}
+        defaultValues={initialValue}
+        onSubmit={handleSubmit}
+        onCancel={onCancel}
+      >
+        <div className="flex-column gap-4">
+          <Form.Input
+            type="date"
+            valueKey="date"
+            label="Date"
+            placeholder="yyyy-mm-dd"
+            required
+          />
+          <Form.Select
+            valueKey="category_id"
+            label="Category"
+            options={filteredCategories}
+            selectedValue={selectedCategoryLabel}
+            required
+          />
+
+          <TransactionItems />
+
+          <Form.Submit
+            label={formatMessage({ id: data ? 'Update' : 'Submit' })}
+            className="mt-4 p-4"
+          />
+          <Form.Cancel />
         </div>
-      </form>
-    </Modal>
+      </Form>
+    </div>
   )
 }
 
-export default FormTransactionModal
+const TransactionItems = () => {
+  const { control } = useFormContext<TxFormData>()
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'item',
+  })
+  const { formatMessage } = useIntl()
+
+  return (
+    <div className="form-transaction-items">
+      {fields.map((field, index) => (
+        <div key={field.id} className="form-transaction-items__item">
+          <div className="flex-space-between">
+            <span className="text--color-primary">
+              {formatMessage(
+                { id: 'TransactionDetailNo' },
+                { index: index + 1 }
+              )}
+            </span>
+            {fields.length > 1 && (
+              <button
+                className="btn btn-clear"
+                onClick={() => {
+                  remove(index)
+                }}
+              >
+                <CrossSvg className="icon icon--stroke-primary" />
+              </button>
+            )}
+          </div>
+          <Form.Input
+            valueKey={`item.${index}.description`}
+            label={formatMessage({ id: 'Description' })}
+            placeholder={formatMessage({ id: 'Description' })}
+            pattern={REGEX.COMMON_TEXT.PATTERN}
+            errorMessage={REGEX.COMMON_TEXT.ERROR_MESSAGE}
+            required
+          />
+          <Form.Input
+            valueKey={`item.${index}.amount`}
+            type="currency"
+            label={formatMessage({ id: 'AmountRp' })}
+            required
+          />
+        </div>
+      ))}
+      <button
+        type="button"
+        className="btn btn-dashed p-4"
+        onClick={() => append(makeEmptyItem())}
+      >
+        <PlusSvg className="icon--stroke-primary" />
+        <span className="text--color-primary text--light text--3">
+          {formatMessage({ id: 'AddMoreTransaction' })}
+        </span>
+      </button>
+    </div>
+  )
+}
+
+export default FormTransaction

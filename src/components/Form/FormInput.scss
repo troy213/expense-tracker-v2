@@ -1,3 +1,5 @@
+@import '@/styles/variables.scss';
+
 .form-input {
   &__input {
     min-height: 24px;
@@ -28,6 +30,7 @@
 
       &:focus {
         border-color: $color-danger;
+        outline-color: $color-danger;
       }
     }
   }

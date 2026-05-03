@@ -1,58 +1,40 @@
-import React, { useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
-import { v4 as uuidv4 } from 'uuid'
+import { v7 as uuidv7 } from 'uuid'
+import Form from '@/components/Form'
 import { REGEX } from '@/constants'
-import { useAppDispatch, useAppSelector } from '@/hooks'
-import { categoriesAction } from '@/store/categories/categories-slice'
+import { useAppDispatch } from '@/hooks'
 import { Category, CategoryType } from '@/types'
-import { validateEmptyForm } from '@/utils/formUtils'
-import Modal from '.'
-import Form from '../Form'
+import {
+  addDBCategory,
+  editDBCategory,
+} from '@/store/categories/categories-thunk'
 
-type FormCategoryModalProps = {
-  isOpen: boolean
-  setIsOpen: (val: boolean) => void
-  selectedCategory: CategoryType
-  selectedId?: string
+type CategoryFormData = Category
+
+type FormCategoryProps = {
+  type: CategoryType
+  data?: CategoryFormData
+  onCancel?: () => void
 }
 
-type CategoryForm = {
-  name: string
-  budget?: number
-}
-
-type ErrorState = Record<keyof CategoryForm, string>
-
-const dataInitialValue = {
-  name: '',
-  budget: 0,
-}
-const errorInitialValue = {
-  name: '',
-  budget: '',
-}
-
-const FormCategoryModal: React.FC<FormCategoryModalProps> = ({
-  isOpen,
-  setIsOpen,
-  selectedCategory,
-  selectedId = '',
-}) => {
-  const isEditForm = selectedId !== ''
-  const { categories } = useAppSelector((state) => state.categoriesReducer)
-  const [data, setData] = useState<CategoryForm>(dataInitialValue)
-  const [error, setError] = useState<ErrorState>(errorInitialValue)
+const FormCategory = ({ type, data, onCancel }: FormCategoryProps) => {
+  const initialValue: CategoryFormData = {
+    id: uuidv7(),
+    name: '',
+    type,
+    budget: 0,
+  }
   const dispatch = useAppDispatch()
   const { formatMessage } = useIntl()
 
   const getFormTitle = () => {
     let result = ''
-    if (isEditForm) {
-      selectedCategory === 'income'
+    if (data) {
+      type === 'income'
         ? (result = formatMessage({ id: 'EditIncomeCategory' }))
         : (result = formatMessage({ id: 'EditExpenseCategory' }))
     } else {
-      selectedCategory === 'income'
+      type === 'income'
         ? (result = formatMessage({ id: 'AddIncomeCategory' }))
         : (result = formatMessage({ id: 'AddExpenseCategory' }))
     }
@@ -60,121 +42,45 @@ const FormCategoryModal: React.FC<FormCategoryModalProps> = ({
     return result
   }
 
-  const handleChange = <K extends keyof CategoryForm>(
-    key: K,
-    value: CategoryForm[K]
-  ) => {
-    setData((prevState) => ({
-      ...prevState,
-      [key]: value,
-    }))
-    handleError(key, '')
-  }
-
-  const handleError = <K extends keyof ErrorState>(
-    key: K,
-    value: ErrorState[K]
-  ) => {
-    setError((prevState) => ({
-      ...prevState,
-      [key]: value,
-    }))
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    let formIsValid = validateEmptyForm(data, categories, setError, {
-      isRequired: ['name', 'budget'],
-      uniqueDataKey: isEditForm ? [] : ['name'],
-    })
-
-    Object.entries(error).forEach(([, value]) => {
-      if (value) formIsValid = false
-    })
-
-    if (formIsValid) {
-      const newCategory: Category = {
-        id: selectedId || uuidv4(),
-        type: selectedCategory,
-        name: data.name.trim(),
-        budget: data.budget,
-      }
-
-      if (isEditForm) {
-        dispatch(categoriesAction.updateCategories(newCategory))
-      } else {
-        dispatch(categoriesAction.setCategories([...categories, newCategory]))
-      }
-      handleCancel(e)
-    }
-  }
-
-  const handleCancel = (e: React.FormEvent) => {
-    e.preventDefault()
-    setData(dataInitialValue)
-    setError(errorInitialValue)
-    setIsOpen(false)
-  }
-
-  useEffect(() => {
-    if (isOpen && selectedId) {
-      const selectedData = categories.find(
-        (category) => category.id === selectedId
-      )
-      const newData = {
-        name: selectedData?.name ?? '',
-        budget: selectedData?.budget ?? 0,
-      }
-      setData(newData)
+  const handleSubmit = (formData: CategoryFormData) => {
+    if (data) {
+      dispatch(editDBCategory(formData))
     } else {
-      setData(dataInitialValue)
+      dispatch(addDBCategory(formData))
     }
-    setError(errorInitialValue)
-  }, [isOpen, selectedId, categories])
+
+    onCancel?.()
+  }
 
   return (
-    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-      <form className="input-category-modal" onSubmit={handleSubmit}>
-        <span className="text--bold text--color-primary">{getFormTitle()}</span>
+    <Form<CategoryFormData>
+      defaultValues={data ?? initialValue}
+      onSubmit={handleSubmit}
+      onCancel={onCancel}
+    >
+      <span className="text--bold text--color-primary">{getFormTitle()}</span>
+      <Form.Input
+        valueKey="name"
+        label={formatMessage({ id: 'CategoryName' })}
+        placeholder={formatMessage({ id: 'CategoryName' })}
+        pattern={REGEX.COMMON_TEXT.PATTERN}
+        errorMessage={REGEX.COMMON_TEXT.ERROR_MESSAGE}
+        required
+      />
+      {type === 'expense' && (
         <Form.Input
-          type="text"
-          id="category"
-          label={formatMessage({ id: 'CategoryName' })}
-          value={data.name}
-          onChange={(val) => handleChange('name', val)}
-          errorMessage={error.name}
-          setError={(val) => handleError('name', val)}
-          pattern={REGEX.COMMON_TEXT.PATTERN}
-          patternErrorMessage={formatMessage({
-            id: REGEX.COMMON_TEXT.ERROR_MESSAGE,
-          })}
+          type="currency"
+          valueKey="budget"
+          label={formatMessage({ id: 'BudgetRp' })}
         />
-        {selectedCategory === 'expense' && (
-          <Form.Input
-            type="currency"
-            id="budget"
-            label={formatMessage({ id: 'BudgetRp' })}
-            value={data.budget ?? 0}
-            onChange={(val) => handleChange('budget', Number(val))}
-            errorMessage={error.budget}
-            setError={(val) => handleError('budget', val)}
-            pattern={REGEX.NUMBER.PATTERN}
-            patternErrorMessage={formatMessage({
-              id: REGEX.NUMBER.ERROR_MESSAGE,
-            })}
-          />
-        )}
-        <div className="flex-column gap-4 mt-4">
-          <button type="submit" className="btn btn-primary">
-            {formatMessage({ id: isEditForm ? 'Edit' : 'Add' })}
-          </button>
-          <button className="btn btn-outline-primary" onClick={handleCancel}>
-            {formatMessage({ id: 'Cancel' })}
-          </button>
-        </div>
-      </form>
-    </Modal>
+      )}
+
+      <div className="flex-column gap-4 mt-4">
+        <Form.Submit label={data ? 'Save' : 'Add Category'} className="p-4" />
+        <Form.Cancel />
+      </div>
+    </Form>
   )
 }
 
-export default FormCategoryModal
+export default FormCategory

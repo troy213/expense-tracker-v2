@@ -45,8 +45,6 @@ const Reports = () => {
       ? (endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)
       : 1
 
-  console.log({ totalDays })
-
   const { totalIncome, totalExpense, totalBalance } = updateTotal(
     filteredData,
     categories

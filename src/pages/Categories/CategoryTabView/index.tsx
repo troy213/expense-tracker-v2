@@ -12,12 +12,13 @@ import {
 } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { PlusSvg } from '@/assets'
-import InputCategoryModal from '@/components/Modal/FormCategoryModal'
+import FormCategory from '@/components/Modal/FormCategoryModal'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { categoriesAction } from '@/store/categories/categories-slice'
 import { CategoryType } from '@/types'
 import { combineClassName, currencyFormatter } from '@/utils'
 import CategoryWidget from './CategoryWidget'
+import { Modal } from '@/components'
 
 const CategoryTabView = () => {
   const dispatch = useAppDispatch()
@@ -113,11 +114,12 @@ const CategoryTabView = () => {
 
   return (
     <div className="category-tab-view">
-      <InputCategoryModal
-        isOpen={isModalOpen}
-        setIsOpen={setIsModalOpen}
-        selectedCategory={selectedCategory}
-      />
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <FormCategory
+          type={selectedCategory}
+          onCancel={() => setIsModalOpen(false)}
+        />
+      </Modal>
 
       <ul className="flex">
         <li className={incomeTabViewClassName}>
@@ -176,13 +178,7 @@ const CategoryTabView = () => {
             strategy={verticalListSortingStrategy}
           >
             {filteredCategory.map((category) => (
-              <CategoryWidget
-                key={category.id}
-                id={category.id}
-                type={category.type}
-                name={category.name}
-                budget={category.budget ?? 0}
-              />
+              <CategoryWidget key={category.id} data={category} />
             ))}
           </SortableContext>
         </DndContext>

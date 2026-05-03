@@ -1,6 +1,6 @@
 import { useIntl } from 'react-intl'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { mainAction } from '@/store/main/main-slice'
+import { searchDBTransactions } from '@/store/main/main-thunk'
 import { SearchSvg } from '@/assets'
 
 const SearchResult = () => {
@@ -9,7 +9,7 @@ const SearchResult = () => {
   const dispatch = useAppDispatch()
 
   const handleClearSearch = () => {
-    dispatch(mainAction.searchData({ searchValue: '' }))
+    dispatch(searchDBTransactions({ searchValue: '' }))
   }
 
   if (!searchValue) return null

@@ -4,20 +4,21 @@ import { MoreVerticalSvg } from '@/assets'
 import MoreOptionModal from '@/components/Modal/MoreOptionModal'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { Data } from '@/types'
-import { mainAction } from '@/store/main/main-slice'
+import { TxFormData } from '@/types'
 import { combineClassName, currencyFormatter, getCategoryById } from '@/utils'
 import FormTransactionModal from '@/components/Modal/FormTransactionModal'
+import { Modal } from '@/components'
+import { deleteDBTransactions } from '@/store/main/main-thunk'
 
 type TransactionDetailProps = {
-  data: Data['subdata'][0]
+  data: TxFormData
   dataIndex: number
   subdataIndex: number
   selectedTransaction: string
   handleSelectTransaction: (event: React.FormEvent, id: string) => void
 }
 
-const sumTotalItemValue = (item: Data['subdata'][0]['item']): number => {
+const sumTotalItemValue = (item: TxFormData['item']): number => {
   return item.reduce(
     (accumulator, currValue) => accumulator + currValue.amount,
     0
@@ -27,7 +28,6 @@ const sumTotalItemValue = (item: Data['subdata'][0]['item']): number => {
 const TransactionDetail: React.FC<TransactionDetailProps> = ({
   data,
   dataIndex,
-  subdataIndex,
   selectedTransaction,
   handleSelectTransaction,
 }) => {
@@ -58,7 +58,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
   }
 
   const handleDeleteTransaction = () => {
-    dispatch(mainAction.deleteTransaction({ subdataId: category_id }))
+    dispatch(deleteDBTransactions({ data, index: dataIndex }))
     setIsDeleteModalOpen(false)
   }
 
@@ -72,13 +72,14 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
       ref={transactionRefs}
       onClick={(e) => handleSelectTransaction(e, category_id)}
     >
-      {isEditModalOpen && (
+      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
         <FormTransactionModal
-          isOpen={isEditModalOpen}
-          setIsOpen={setIsEditModalOpen}
-          indexes={{ dataIndex, subdataIndex }}
+          data={data}
+          index={dataIndex}
+          onCancel={() => setIsEditModalOpen(false)}
         />
-      )}
+      </Modal>
+
       {isDeleteModalOpen && (
         <DeleteDataModal
           isOpen={isDeleteModalOpen}
@@ -94,7 +95,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
           <span className={totalItemValueClassName}>
             {currencyFormatter(totalItemValue)}
           </span>
-          {selectedTransaction === category_id && (
+          {selectedTransaction === `${dataIndex}_${category_id}` && (
             <div className="relative">
               <button
                 className="btn btn-clear"

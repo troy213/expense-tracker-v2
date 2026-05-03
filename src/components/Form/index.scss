@@ -1,4 +1,81 @@
-@import './File.scss';
-@import './Input.scss';
-@import './Radio.scss';
-@import './Select.scss';
+@import './FormFile.scss';
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .form-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .form-required {
+    color: #e53935;
+    margin-left: 0.25rem;
+  }
+
+  .form-input,
+  .form-select {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font: inherit;
+    background: transparent;
+    color: inherit;
+
+    &:focus {
+      outline: none;
+      border-color: #1976d2;
+    }
+  }
+
+  .form-radio-options {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .form-radio-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    cursor: pointer;
+  }
+
+  .form-error {
+    color: #e53935;
+    font-size: 0.75rem;
+  }
+
+  .form-submit,
+  .form-cancel {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font: inherit;
+  }
+
+  .form-submit {
+    background: #1976d2;
+    color: white;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  .form-cancel {
+    background: transparent;
+    border-color: #ccc;
+    color: inherit;
+  }
+}

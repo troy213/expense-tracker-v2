@@ -7,15 +7,13 @@ import DeleteDataModal from '@/components/Modal/DeleteDataModal'
 import InputCategoryModal from '@/components/Modal/FormCategoryModal'
 import MoreOptionModal from '@/components/Modal/MoreOptionModal'
 import { useAppDispatch } from '@/hooks'
-import { categoriesAction } from '@/store/categories/categories-slice'
-import { CategoryType } from '@/types'
+import { Category } from '@/types'
 import { calculateModalBottomThreshold, currencyFormatter } from '@/utils'
+import { deleteDBCategory } from '@/store/categories/categories-thunk'
+import { Modal } from '@/components'
 
 type CategoryWidgetProps = {
-  id: string
-  type: CategoryType
-  name: string
-  budget: number
+  data: Category
 }
 
 const getModalPositionClassName = (elementRect: DOMRect | undefined) => {
@@ -27,12 +25,8 @@ const getModalPositionClassName = (elementRect: DOMRect | undefined) => {
   return ''
 }
 
-const CategoryWidget: React.FC<CategoryWidgetProps> = ({
-  id,
-  type,
-  name,
-  budget,
-}) => {
+const CategoryWidget: React.FC<CategoryWidgetProps> = ({ data }) => {
+  const { id, name, type, budget = 0 } = data
   const [isMoreModalOpen, setIsMoreModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -59,8 +53,8 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
     setIsMoreModalOpen((val) => !val)
   }
 
-  const handleDeleteCategory = (id: string) => {
-    dispatch(categoriesAction.deleteCategory({ id }))
+  const handleDeleteCategory = (category: Category) => {
+    dispatch(deleteDBCategory(category))
   }
 
   return (
@@ -71,14 +65,14 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
       style={style}
       className="category-widget p-4"
     >
-      {isEditModalOpen && (
+      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
         <InputCategoryModal
-          isOpen={isEditModalOpen}
-          setIsOpen={setIsEditModalOpen}
-          selectedCategory={type}
-          selectedId={id}
+          data={data}
+          type={type}
+          onCancel={() => setIsEditModalOpen(false)}
         />
-      )}
+      </Modal>
+
       {isDeleteModalOpen && (
         <DeleteDataModal
           isOpen={isDeleteModalOpen}
@@ -90,7 +84,7 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
               { name: <strong>{name}</strong> }
             ) as string
           }
-          handleDelete={() => handleDeleteCategory(id)}
+          handleDelete={() => handleDeleteCategory(data)}
         />
       )}
       <div className="flex-space-between flex-align-center">

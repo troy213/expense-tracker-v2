@@ -45,14 +45,14 @@ export type Theme = 'light' | 'dark'
 
 export type Locales = 'en-US' | 'id-ID'
 
-export type TransactionForm = {
-  type?: CategoryType
-  date: string
-  category_id: string
-}
-
-export type TxDetailsForm = {
+export type TxFormItem = {
   id: string
   description: string
   amount: number
+}
+
+export type TxFormData = {
+  date: string
+  category_id: string
+  item: TxFormItem[]
 }

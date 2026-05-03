@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx'
-import { Category, Data } from '@/types'
-import { getStorage } from '.'
+import { getDate } from '.'
+import dbServices from '@/lib/db'
 
 export const readXlsx = (file: File) => {
   return new Promise((resolve, reject) => {
@@ -11,8 +11,6 @@ export const readXlsx = (file: File) => {
         const dataHeader = [
           'date',
           'id',
-          'subdataId',
-          'type',
           'category_id',
           'description',
           'amount',
@@ -43,53 +41,33 @@ export const readXlsx = (file: File) => {
   })
 }
 
-export const createExcelFile = () => {
-  const storedData = getStorage('data')
-  const storedCategories = getStorage('categories')
-  const data = storedData ? (JSON.parse(storedData) as Data[]) : []
-  const categories = storedCategories
-    ? (JSON.parse(storedCategories) as Category[])
-    : []
+export const createExcelFile = async () => {
+  const transactions = await dbServices.getAllTransactions()
+  const categories = await dbServices.getAllCategories()
 
   const workbook = XLSX.utils.book_new()
 
   // Create Data worksheet header
   const worksheet = XLSX.utils.aoa_to_sheet([
-    [
-      'Date',
-      'ID',
-      'Subdata ID',
-      'Type',
-      'Category ID',
-      'Description',
-      'Amount',
-    ],
+    ['Date', 'ID', 'Category ID', 'Description', 'Amount'],
   ])
 
   // Output: 2025-01-01, {id}, {subId}, expense, transport, bus, 2000
-  data.forEach((item) => {
-    const { date, subdata } = item
-
-    subdata.forEach((subitem) => {
-      const { category_id } = subitem
-
-      subitem.item.forEach((subsubitem) => {
-        const { amount, description } = subsubitem
-
-        XLSX.utils.sheet_add_json(
-          worksheet,
-          [
-            {
-              date,
-              category_id,
-              description,
-              amount,
-            },
-          ],
-          { skipHeader: true, origin: -1 }
-        )
-      })
-    })
+  transactions.forEach((transaction) => {
+    const { date, id, category_id, description, amount } = transaction
+    XLSX.utils.sheet_add_json(
+      worksheet,
+      [
+        {
+          date,
+          id,
+          category_id,
+          description,
+          amount,
+        },
+      ],
+      { skipHeader: true, origin: -1 }
+    )
   })
 
   // Create Categories worksheet header
@@ -111,5 +89,5 @@ export const createExcelFile = () => {
   XLSX.utils.book_append_sheet(workbook, categoriesWorksheet, 'Categories')
 
   // Export file
-  XLSX.writeFile(workbook, 'Expense Tracker.xlsx')
+  XLSX.writeFile(workbook, `Expense Tracker (${getDate()}).xlsx`)
 }

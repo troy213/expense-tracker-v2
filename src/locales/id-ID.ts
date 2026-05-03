@@ -55,6 +55,7 @@ const messages = {
   ImportData: 'Unggah Data (.xlsx)',
   Indonesia: 'Bahasa Indonesia',
   Income: 'Pendapatan',
+  InvalidFormatError: 'Format Tidak Benar',
   Language: 'Bahasa',
   LastMonth: 'Bulan Lalu',
   LetterError: 'Hanya huruf yang diperbolehkan',

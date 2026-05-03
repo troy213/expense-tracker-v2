@@ -67,6 +67,8 @@ const useInitConfig = () => {
           })
         )
       }
+
+      dispatch(mainAction.setState({ state: 'isLoading', value: false }))
     }
 
     initializeData()

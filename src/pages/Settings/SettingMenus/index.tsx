@@ -1,28 +1,27 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useIntl } from 'react-intl'
+import { SETTING_MENUS } from '@/constants/config'
 import { Navbar } from '@/components'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
 import ExportDataModal from '@/components/Modal/ExportDataModal'
-import { SETTING_MENUS } from '@/constants/config'
-import { useAppDispatch } from '@/hooks'
-import { mainAction } from '@/store/main/main-slice'
-import { categoriesAction } from '@/store/categories/categories-slice'
-import { setStorage } from '@/utils'
 import ImportDataModal from '@/components/Modal/ImportDataModal'
+import { useAppDispatch } from '@/hooks'
+import { deleteAllDBCategories } from '@/store/categories/categories-thunk'
+import { deleteAllDBTransactions } from '@/store/main/main-thunk'
 
 const SettingMenus = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedModal, setSelectedModal] = useState('')
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const { formatMessage } = useIntl()
 
   const handleDelete = () => {
-    setStorage('data', '')
-    setStorage('categories', '')
-    dispatch(mainAction.resetState())
-    dispatch(categoriesAction.resetState())
     setIsModalOpen(false)
+    dispatch(deleteAllDBCategories())
+    dispatch(deleteAllDBTransactions())
+    navigate('/')
   }
 
   const renderModal = () => {

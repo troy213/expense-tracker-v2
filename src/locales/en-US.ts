@@ -55,6 +55,7 @@ const messages = {
   ImportData: 'Upload Data (.xlsx)',
   Income: 'Income',
   Indonesia: 'Indonesia',
+  InvalidFormatError: 'Invalid Format',
   Language: 'Language',
   LastMonth: 'Last Month',
   LetterError: 'Only letter are allowed',
