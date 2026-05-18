@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useIntl } from 'react-intl'
 import Modal from '.'
 import Form from '../Form'
@@ -9,119 +9,45 @@ type InputDateModalProps = {
   SetCustomDate: (from: Date, to: Date) => void
 }
 
-type DateForm = {
-  from: string
-  to: string
-}
-
-type ErrorState = Record<keyof DateForm, string>
-
-const dataInitialValue = {
-  from: '',
-  to: '',
-}
-const errorInitialValue = {
-  from: '',
-  to: '',
-}
-
 const InputDateModal: React.FC<InputDateModalProps> = ({
   isOpen,
   setIsOpen,
   SetCustomDate,
 }) => {
-  const [data, setData] = useState<DateForm>(dataInitialValue)
-  const [error, setError] = useState<ErrorState>(errorInitialValue)
   const { formatMessage } = useIntl()
 
-  const handleChange = <K extends keyof DateForm>(
-    key: K,
-    value: DateForm[K]
-  ) => {
-    setData((prevState) => ({
-      ...prevState,
-      [key]: value,
-    }))
-    handleError(key, '')
-  }
-
-  const handleError = <K extends keyof ErrorState>(
-    key: K,
-    value: ErrorState[K]
-  ) => {
-    setError((prevState) => ({
-      ...prevState,
-      [key]: value,
-    }))
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    let formIsValid = true
-
-    // check any empty data
-    Object.entries(data).forEach(([key, value]) => {
-      if (value === '') {
-        setError((prevState) => ({
-          ...prevState,
-          [key]: formatMessage({ id: 'FormEmptyError' }),
-        }))
-        formIsValid = false
-      }
-    })
-
-    if (formIsValid) {
-      SetCustomDate(
-        new Date(data.from + 'T00:00:00'),
-        new Date(data.to + 'T23:59:00')
-      )
-      setIsOpen(false)
-    }
-  }
-
-  const handleCancel = (e: React.FormEvent) => {
-    e.preventDefault()
-    setData(dataInitialValue)
-    setError(errorInitialValue)
+  const handleSubmit = ({ from, to }: { from: string; to: string }) => {
+    SetCustomDate(new Date(from + 'T00:00:00'), new Date(to + 'T23:59:00'))
     setIsOpen(false)
   }
 
-  useEffect(() => {
-    setData(dataInitialValue)
-    setError(errorInitialValue)
-  }, [isOpen])
+  const handleCancel = () => {
+    setIsOpen(false)
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-      <form className="input-category-modal" onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} onCancel={handleCancel}>
         <span className="text--bold text--color-primary">
           {formatMessage({ id: 'Filter' })}
         </span>
+
         <Form.Input
           type="date"
+          valueKey="from"
           label={formatMessage({ id: 'From' })}
-          value={data.from}
-          onChange={(val) => handleChange('from', val)}
-          errorMessage={error.from}
-          setError={(val) => handleError('from', val)}
+          required
         />
         <Form.Input
           type="date"
+          valueKey="to"
           label={formatMessage({ id: 'To' })}
-          value={data.to}
-          onChange={(val) => handleChange('to', val)}
-          errorMessage={error.to}
-          setError={(val) => handleError('to', val)}
+          required
         />
-        <div className="flex-column gap-4 mt-4">
-          <button type="submit" className="btn btn-primary">
-            {formatMessage({ id: 'Filter' })}
-          </button>
-          <button className="btn btn-outline-primary" onClick={handleCancel}>
-            {formatMessage({ id: 'Cancel' })}
-          </button>
-        </div>
-      </form>
+
+        <Form.Submit className="mt-4" label={formatMessage({ id: 'Filter' })} />
+        <Form.Cancel />
+      </Form>
     </Modal>
   )
 }

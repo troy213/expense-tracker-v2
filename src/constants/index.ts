@@ -44,6 +44,10 @@ export const REGEX = {
     PATTERN: /^\d+$/,
     ERROR_MESSAGE: 'NumberError',
   },
+  DATE: {
+    PATTERN: /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$/,
+    ERROR_MESSAGE: 'DateError',
+  },
 }
 
 export const DATE_RANGE = {

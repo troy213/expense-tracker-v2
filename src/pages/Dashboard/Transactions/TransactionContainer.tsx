@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, memo } from 'react'
 import { useIntl } from 'react-intl'
-import { Data } from '@/types'
+import { useAppSelector } from '@/hooks'
+import { Data, TxFormData } from '@/types'
 import {
   calculateSubdataSummary,
   currencyFormatter,
@@ -21,15 +22,16 @@ const TransactionContainer: React.FC<TransactionContainerProps> = ({
   selectedTransaction,
   setSelectedTransaction,
 }) => {
-  const { id, date, subdata } = data
+  const { date, subdata } = data
   const [isExpanded, setIsExpanded] = useState(index < 3)
   const [height, setHeight] = useState('0px')
   const contentRef = useRef<HTMLDivElement>(null)
+  const { categories } = useAppSelector((state) => state.categoriesReducer)
   const { formatMessage } = useIntl()
 
   const { totalSubdataIncome, totalSubdataExpense } = useMemo(() => {
-    return calculateSubdataSummary(subdata)
-  }, [subdata])
+    return calculateSubdataSummary(subdata, categories)
+  }, [subdata, categories])
 
   const expandableStyle = {
     maxHeight: isExpanded ? height : '0px',
@@ -38,9 +40,11 @@ const TransactionContainer: React.FC<TransactionContainerProps> = ({
   const handleSelectTransaction = (e: React.FormEvent, id: string) => {
     e.stopPropagation()
 
-    if (selectedTransaction && selectedTransaction === id)
+    const newTransactionId = `${index}_${id}`
+
+    if (selectedTransaction && selectedTransaction === newTransactionId)
       return setSelectedTransaction('')
-    setSelectedTransaction(id)
+    setSelectedTransaction(newTransactionId)
   }
 
   const handleExpand = () => {
@@ -50,14 +54,16 @@ const TransactionContainer: React.FC<TransactionContainerProps> = ({
 
   useEffect(() => {
     if (contentRef.current) {
-      setHeight(`${contentRef.current.scrollHeight}px`)
+      // Add a small buffer (8px) to account for line-height and spacing
+      const scrollHeight = contentRef.current.scrollHeight
+      setHeight(`${scrollHeight + 8}px`)
     }
   }, [data])
 
   return (
     <div
       className="transaction-detail-container"
-      key={id}
+      key={date}
       onClick={handleExpand}
     >
       <span className="text--italic text--light text--3">
@@ -72,14 +78,20 @@ const TransactionContainer: React.FC<TransactionContainerProps> = ({
         style={expandableStyle}
       >
         {subdata.map((subitem, subdataIndex) => {
+          const transactionDetailData: TxFormData = {
+            date,
+            category_id: subitem.category_id,
+            item: subitem.item,
+          }
+
           return (
             <TransactionDetail
-              data={subitem}
+              data={transactionDetailData}
               dataIndex={index}
               subdataIndex={subdataIndex}
               selectedTransaction={selectedTransaction}
               handleSelectTransaction={handleSelectTransaction}
-              key={subitem.id}
+              key={subitem.category_id}
             />
           )
         })}

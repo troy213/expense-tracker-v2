@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
 import { useIntl } from 'react-intl'
+import { REGEX } from '@/constants'
 import { useAppDispatch } from '@/hooks'
-import { mainAction } from '@/store/main/main-slice'
+import { searchDBTransactions } from '@/store/main/main-thunk'
 import Modal from '.'
 import Form from '../Form'
 
@@ -11,49 +11,40 @@ type SearchModalProps = {
 }
 
 const SearchModal = ({ isOpen, setIsOpen }: SearchModalProps) => {
-  const [search, setSearch] = useState<string>('')
-  const [error, setError] = useState<string>('')
   const { formatMessage } = useIntl()
   const dispatch = useAppDispatch()
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    dispatch(mainAction.searchData({ searchValue: search }))
+  const handleSubmit = ({ search }: { search: string }) => {
+    dispatch(searchDBTransactions({ searchValue: search }))
     setIsOpen(false)
   }
 
-  const handleCancel = (e: React.FormEvent) => {
-    e.preventDefault()
-    setSearch('')
-    setError('')
+  const handleCancel = () => {
     setIsOpen(false)
   }
 
   return (
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-      <form className="input-category-modal" onSubmit={handleSubmit}>
+      <Form
+        className="flex-column gap-4"
+        onSubmit={handleSubmit}
+        onCancel={handleCancel}
+      >
         <span className="text--bold text--color-primary">
           {formatMessage({ id: 'Search' })}
         </span>
         <Form.Input
-          type="text"
+          valueKey="search"
           placeholder="Search"
           label={formatMessage({ id: 'TransactionName' })}
-          value={search}
-          onChange={(val) => setSearch(val)}
-          errorMessage={error}
-          setError={(val) => setError(val)}
-          id="search"
+          pattern={REGEX.COMMON_TEXT.PATTERN}
+          errorMessage={REGEX.COMMON_TEXT.ERROR_MESSAGE}
+          required
         />
-        <div className="flex-column gap-4 mt-4">
-          <button type="submit" className="btn btn-primary">
-            {formatMessage({ id: 'Search' })}
-          </button>
-          <button className="btn btn-outline-primary" onClick={handleCancel}>
-            {formatMessage({ id: 'Cancel' })}
-          </button>
-        </div>
-      </form>
+
+        <Form.Submit className="mt-4" label={formatMessage({ id: 'Search' })} />
+        <Form.Cancel />
+      </Form>
     </Modal>
   )
 }

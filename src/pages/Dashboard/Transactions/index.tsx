@@ -42,7 +42,7 @@ const Transactions = ({ displayCount }: TransactionsProps) => {
           <TransactionContainer
             data={item}
             index={index}
-            key={item.id}
+            key={item.date}
             selectedTransaction={selectedTransaction}
             setSelectedTransaction={setSelectedTransaction}
           />

@@ -2,12 +2,16 @@
   --default-svg-primary-stroke-color: #133e5d;
   --default-svg-danger-stroke-color: #870805;
   --default-color-danger: #870805;
+  --default-svg-warning-stroke-color: #b26a00;
+  --default-color-warning: #b26a00;
 }
 
 body.dark {
   --default-svg-primary-stroke-color: #f2f0ed;
   --default-svg-danger-stroke-color: #d40d08;
   --default-color-danger: #d40d08;
+  --default-svg-warning-stroke-color: #e69500;
+  --default-color-warning: #e69500;
 }
 
 // COMPONENT
@@ -54,6 +58,7 @@ body.dark {
 
 .btn-dashed {
   border: 1px dashed $color-primary;
+  background-color: transparent;
 }
 
 // TEXT STYLE
@@ -121,6 +126,10 @@ body.dark {
   color: $color-danger;
 }
 
+.text--color-warning {
+  color: $color-warning;
+}
+
 .text--color-white {
   color: $color-white;
 }
@@ -164,6 +173,10 @@ body.dark {
 
 .icon--stroke-danger > * {
   stroke: var(--default-svg-danger-stroke-color);
+}
+
+.icon--stroke-warning > * {
+  stroke: var(--default-svg-warning-stroke-color);
 }
 
 .icon--fill-primary > * {
@@ -220,6 +233,11 @@ body.dark {
 .flex-space-evenly {
   display: flex;
   justify-content: space-evenly;
+}
+
+.flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .flex-1 {

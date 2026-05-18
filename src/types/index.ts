@@ -1,3 +1,29 @@
+export type CategoryIconId =
+  | 'credit-card'
+  | 'donations'
+  | 'educations'
+  | 'entertainment'
+  | 'expense'
+  | 'food'
+  | 'gift'
+  | 'gym'
+  | 'health'
+  | 'housing'
+  | 'income'
+  | 'insurance'
+  | 'investment'
+  | 'personal-care'
+  | 'pets'
+  | 'phone'
+  | 'price-tag'
+  | 'salary'
+  | 'scissor'
+  | 'shopping'
+  | 'subscription'
+  | 'suitcase'
+  | 'tax'
+  | 'travel'
+
 export type SetStatePayload<T> = {
   [K in keyof T]: {
     state: K
@@ -11,17 +37,25 @@ export type Category = {
   id: string
   type: CategoryType
   name: string
+  icon_id: CategoryIconId
+  color: string
   budget?: number
 }
 
+export type Transaction = {
+  id: string // uuid
+  date: string
+  category_id: string // uuid (foreign key to categories)
+  description: string
+  amount: number
+}
+
 export type Data = {
-  id: string
   date: string
   subdata: {
-    id: string
-    type: CategoryType
     category_id: string
     item: {
+      id: string
       description: string
       amount: number
     }[]
@@ -39,13 +73,14 @@ export type Theme = 'light' | 'dark'
 
 export type Locales = 'en-US' | 'id-ID'
 
-export type TransactionForm = {
-  type: CategoryType
-  date: string
-  category_id: string
-}
-
-export type TxDetailsForm = {
+export type TxFormItem = {
+  id: string
   description: string
   amount: number
+}
+
+export type TxFormData = {
+  date: string
+  category_id: string
+  item: TxFormItem[]
 }

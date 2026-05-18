@@ -3,19 +3,17 @@ import { useIntl } from 'react-intl'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { CoinsSvg, MoreVerticalSvg } from '@/assets'
+import { ICON_COLORS } from '@/assets/categories-icons'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
-import InputCategoryModal from '@/components/Modal/FormCategoryModal'
 import MoreOptionModal from '@/components/Modal/MoreOptionModal'
 import { useAppDispatch } from '@/hooks'
-import { categoriesAction } from '@/store/categories/categories-slice'
-import { CategoryType } from '@/types'
+import { Category } from '@/types'
 import { calculateModalBottomThreshold, currencyFormatter } from '@/utils'
+import { deleteDBCategory } from '@/store/categories/categories-thunk'
+import { CategoryIcon, FormCategory, Modal } from '@/components'
 
 type CategoryWidgetProps = {
-  id: string
-  type: CategoryType
-  name: string
-  budget: number
+  data: Category
 }
 
 const getModalPositionClassName = (elementRect: DOMRect | undefined) => {
@@ -27,12 +25,8 @@ const getModalPositionClassName = (elementRect: DOMRect | undefined) => {
   return ''
 }
 
-const CategoryWidget: React.FC<CategoryWidgetProps> = ({
-  id,
-  type,
-  name,
-  budget,
-}) => {
+const CategoryWidget: React.FC<CategoryWidgetProps> = ({ data }) => {
+  const { id, name, type, budget = 0, icon_id, color } = data
   const [isMoreModalOpen, setIsMoreModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -52,6 +46,10 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
     transform: CSS.Transform.toString(newTransform),
   }
 
+  const defaultCategoryIcon = type === 'income' ? 'income' : 'expense'
+  const defaultCategoryIconColor =
+    type === 'income' ? ICON_COLORS[0] : ICON_COLORS[1]
+
   const handleMoreOption = (e: React.MouseEvent, id: string) => {
     e.stopPropagation()
     const elementRect = transactionRefs.current.get(id)?.getBoundingClientRect()
@@ -59,8 +57,8 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
     setIsMoreModalOpen((val) => !val)
   }
 
-  const handleDeleteCategory = (id: string) => {
-    dispatch(categoriesAction.deleteCategory({ id }))
+  const handleDeleteCategory = (category: Category) => {
+    dispatch(deleteDBCategory(category))
   }
 
   return (
@@ -71,14 +69,14 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
       style={style}
       className="category-widget p-4"
     >
-      {isEditModalOpen && (
-        <InputCategoryModal
-          isOpen={isEditModalOpen}
-          setIsOpen={setIsEditModalOpen}
-          selectedCategory={type}
-          selectedId={id}
+      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
+        <FormCategory
+          data={data}
+          type={type}
+          onCancel={() => setIsEditModalOpen(false)}
         />
-      )}
+      </Modal>
+
       {isDeleteModalOpen && (
         <DeleteDataModal
           isOpen={isDeleteModalOpen}
@@ -90,20 +88,26 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
               { name: <strong>{name}</strong> }
             ) as string
           }
-          handleDelete={() => handleDeleteCategory(id)}
+          handleDelete={() => handleDeleteCategory(data)}
         />
       )}
       <div className="flex-space-between flex-align-center">
-        <div className="flex-column gap-2">
-          <span>{name}</span>
-          {type === 'expense' && (
-            <div className="flex-align-center gap-2">
-              <CoinsSvg className="icon--fill-primary" />
-              <span className="text--light text--3">
-                {currencyFormatter(budget)}
-              </span>
-            </div>
-          )}
+        <div className="flex-align-center gap-4">
+          <CategoryIcon
+            iconId={icon_id ?? defaultCategoryIcon}
+            color={color ?? defaultCategoryIconColor}
+          />
+          <div className="flex-column flex-justify-center gap-2">
+            <span>{name}</span>
+            {type === 'expense' && (
+              <div className="flex-align-center gap-2">
+                <CoinsSvg className="icon--fill-primary" />
+                <span className="text--light text--3">
+                  {currencyFormatter(budget)}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="relative">

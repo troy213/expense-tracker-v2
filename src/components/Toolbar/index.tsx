@@ -1,8 +1,9 @@
 import { Link, useLocation } from 'react-router-dom'
 import { BudgetSvg, HomeSvg, PieChartSvg, PlusSvg, SettingsSvg } from '@/assets'
 import { useState } from 'react'
-import FormTransactionModal from '../Modal/FormTransactionModal'
 import { combineClassName } from '@/utils'
+import FormTransaction from '../FormTransaction'
+import Modal from '../Modal'
 
 const Toolbar = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
@@ -17,14 +18,9 @@ const Toolbar = () => {
   return (
     <div className="toolbar">
       <div className={getClassName('/')}>
-        {isAddModalOpen && (
-          <FormTransactionModal
-            isOpen={isAddModalOpen}
-            setIsOpen={(val) => {
-              setIsAddModalOpen(val)
-            }}
-          />
-        )}
+        <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)}>
+          <FormTransaction onCancel={() => setIsAddModalOpen(false)} />
+        </Modal>
 
         <Link to="/">
           <HomeSvg className="icon--stroke-primary" />

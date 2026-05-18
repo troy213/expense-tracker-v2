@@ -1,4 +1,11 @@
-import { Category, ConditionArray, Data } from '@/types'
+import { v7 as uuidv7 } from 'uuid'
+import {
+  Category,
+  CategoryType,
+  ConditionArray,
+  Data,
+  Transaction,
+} from '@/types'
 
 export const combineClassName = (
   defaultStyle: string = '',
@@ -28,7 +35,7 @@ export const getDate = (): string => {
 export const formatTransactionDate = (
   dateString: string,
   formatMessage: (value: { id: string }) => string = () => '',
-  options: { enableTodayFormat?: boolean } = {}
+  options: { enableTodayFormat?: boolean; enableDayName?: boolean } = {}
 ): string => {
   const date = new Date(dateString)
   const today = new Date()
@@ -46,7 +53,7 @@ export const formatTransactionDate = (
     return formatMessage({ id: 'yesterday' })
   } else {
     return date.toLocaleDateString('en-GB', {
-      weekday: 'long',
+      weekday: options.enableDayName ? 'long' : undefined,
       day: '2-digit',
       month: 'short',
       year: 'numeric',
@@ -76,14 +83,11 @@ export const setStateReducerValue = <T, K extends keyof T>(
   state[key] = value
 }
 
-export const setStorage = (
-  key: string,
-  value: string | Data[] | Category[] | number
-): void => {
+export const setStorage = <T>(key: string, value: T): void => {
   if (Array.isArray(value)) {
     localStorage.setItem(key, JSON.stringify(value))
   } else {
-    localStorage.setItem(key, value.toString())
+    localStorage.setItem(key, typeof value === 'string' ? value.toString() : '')
   }
 }
 
@@ -106,14 +110,15 @@ export const calculateModalBottomThreshold = () => {
   return THRESHOLD
 }
 
-export const updateTotal = (data: Data[]) => {
+export const updateTotal = (data: Data[], categories: Category[]) => {
   const { totalIncome, totalExpense } = data.reduce(
     (total, currData) => {
       currData.subdata.forEach((sub) => {
+        const category = getCategoryById(sub.category_id, categories)
         const itemTotal = sub.item.reduce((sum, i) => sum + i.amount, 0)
-        if (sub.type === 'income') {
+        if (category?.type === 'income') {
           total.totalIncome += itemTotal
-        } else if (sub.type === 'expense') {
+        } else if (category?.type === 'expense') {
           total.totalExpense += itemTotal
         }
       })
@@ -125,15 +130,17 @@ export const updateTotal = (data: Data[]) => {
   return { totalIncome, totalExpense, totalBalance }
 }
 
-export const getCurrentMonthRange = () => {
-  const now = new Date()
-  const year = now.getFullYear()
-  const month = now.getMonth() + 1 // Months are zero-based, so add 1
+// Returns the first/last date (YYYY-MM-DD) of the month the given date falls in.
+// dateString is expected to be a zero-padded 'YYYY-MM-DD' value (see getDate()).
+export const getMonthRange = (dateString: string) => {
+  const [yearStr, monthStr] = dateString.split('-')
+  const year = Number(yearStr)
+  const month = Number(monthStr) // 1-based
 
   // First day of the month
   const firstDate = `${year}-${String(month).padStart(2, '0')}-01`
 
-  // Last day of the month
+  // Last day of the month (day 0 of next month)
   const lastDay = new Date(year, month, 0).getDate()
   const lastDate = `${year}-${String(month).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`
 
@@ -143,9 +150,12 @@ export const getCurrentMonthRange = () => {
   }
 }
 
+export const getCurrentMonthRange = () => getMonthRange(getDate())
+
 export const calculateRemainingBudget = (
   txData: Data[],
   txDetails: { description: string; amount: number }[],
+  categoriesData: Category[],
   categoryIds: string[] = [],
   budget: number = 0,
   date: string = '',
@@ -160,10 +170,11 @@ export const calculateRemainingBudget = (
   const currentMonthExpenses = txData.reduce((total, entry) => {
     if (entry.date >= firstDate && entry.date <= lastDate) {
       entry.subdata.forEach((subdata) => {
+        const category = getCategoryById(subdata.category_id, categoriesData)
         if (
-          subdata.type === 'expense' &&
+          category?.type === 'expense' &&
           categoryIds.includes(subdata.category_id) &&
-          subdata.id !== excludeSubdataId
+          category.id !== excludeSubdataId
         ) {
           total += subdata.item.reduce((acc, curr) => acc + curr.amount, 0)
         }
@@ -205,9 +216,14 @@ export const searchSubdata = (data: Data[], searchValue: string): Data[] => {
     .filter((entry) => entry !== null) as Data[]
 }
 
-export const calculateSubdataSummary = (subdata: Data['subdata']) => {
+export const calculateSubdataSummary = (
+  subdata: Data['subdata'],
+  categories: Category[]
+) => {
   let totalSubdataIncome = 0
   let totalSubdataExpense = 0
+
+  const categoryTypeMap = new Map(categories.map((c) => [c.id, c.type]))
 
   subdata.forEach((subdataItem) => {
     const subtotal = subdataItem.item.reduce(
@@ -215,7 +231,9 @@ export const calculateSubdataSummary = (subdata: Data['subdata']) => {
       0
     )
 
-    if (subdataItem.type === 'income') {
+    const categoryType = categoryTypeMap.get(subdataItem.category_id)
+
+    if (categoryType === 'income') {
       totalSubdataIncome += subtotal
     } else {
       totalSubdataExpense += subtotal
@@ -234,50 +252,135 @@ export const getStorageConfig = (): { hideBalance: boolean } => {
   return { hideBalance: false }
 }
 
-export const migrateDataToCategoryId = (
-  data: Data[],
-  categories: Category[]
-): Data[] => {
-  // Check if migration is needed (if any item still has old 'category' field)
-  const needsMigration = data.some((transaction) =>
-    transaction.subdata.some(
-      (subdataItem) =>
-        'category' in subdataItem &&
-        typeof (subdataItem as { category?: string }).category === 'string'
+/**
+ * Converts flat transaction array to nested Data structure
+ * Logic:
+ * 1. Group transactions by date
+ * 2. For each date, group transactions by category_id
+ * 3. For each category, collect transaction items (id, description, amount)
+ */
+export const processMainData = (transactions: Transaction[]): Data[] => {
+  type SubdataItemType = { id: string; description: string; amount: number }
+  const dataMap = new Map<string, Map<string, SubdataItemType[]>>()
+
+  // Step 1: Group by date and category
+  transactions.forEach((tx) => {
+    const txItem: SubdataItemType = {
+      id: tx.id,
+      description: tx.description,
+      amount: tx.amount,
+    }
+
+    if (!dataMap.has(tx.date)) {
+      dataMap.set(tx.date, new Map())
+    }
+
+    const categoryMap = dataMap.get(tx.date)!
+
+    if (!categoryMap.has(tx.category_id)) {
+      categoryMap.set(tx.category_id, [])
+    }
+
+    categoryMap.get(tx.category_id)!.push(txItem)
+  })
+
+  // Step 2: Convert to Data[] and sort
+  const result: Data[] = []
+
+  dataMap.forEach((categoryMap, date) => {
+    const subdata: Data['subdata'] = []
+
+    categoryMap.forEach((itemList, category_id) => {
+      subdata.push({ category_id, item: itemList })
+    })
+
+    result.push({ date, subdata })
+  })
+
+  return result.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  )
+}
+
+/**
+ * Groups transactions by date
+ * Returns a Map where key is date and value is array of transactions for that date
+ */
+export const groupTransactionsByDate = (
+  transactions: Transaction[]
+): Map<string, Transaction[]> => {
+  const grouped = new Map<string, Transaction[]>()
+
+  transactions.forEach((tx) => {
+    if (!grouped.has(tx.date)) {
+      grouped.set(tx.date, [])
+    }
+    grouped.get(tx.date)!.push(tx)
+  })
+
+  // Sort dates in descending order (newest first)
+  return new Map(
+    Array.from(grouped.entries()).sort(
+      ([dateA], [dateB]) =>
+        new Date(dateB).getTime() - new Date(dateA).getTime()
     )
   )
-
-  // If already migrated, return as-is
-  if (!needsMigration) {
-    return data
-  }
-
-  // Migrate data
-  const migratedData = data.map((transaction) => ({
-    ...transaction,
-    subdata: transaction.subdata.map((subdataItem) => {
-      // Check if migration is needed for this item
-      const hasOldCategory =
-        'category' in subdataItem &&
-        typeof (subdataItem as { category?: string }).category === 'string'
-
-      if (hasOldCategory) {
-        const categoryName = (subdataItem as { category?: string }).category
-        const category = categories.find((cat) => cat.name === categoryName)
-
-        return {
-          ...subdataItem,
-          category_id: category?.id || '',
-        } as Omit<typeof subdataItem, 'category'> & { category_id: string }
-      }
-
-      // Already migrated
-      return subdataItem as Data['subdata'][0]
-    }),
-  }))
-
-  // Save migrated data back to localStorage to prevent re-migration
-  setStorage('data', migratedData)
-
-  return migratedData
 }
+
+/**
+ * Calculates daily income and expense totals based on category types
+ */
+export const calculateDailyTotals = (
+  transactions: Transaction[],
+  categories: Category[] = []
+) => {
+  const categoryTypeMap = new Map(categories.map((c) => [c.id, c.type]))
+
+  return transactions.reduce(
+    (acc, tx) => {
+      const txType = categoryTypeMap.get(tx.category_id) || 'expense'
+      const isIncome = txType === 'income'
+      return {
+        income: acc.income + (isIncome ? tx.amount : 0),
+        expense: acc.expense + (isIncome ? 0 : tx.amount),
+      }
+    },
+    { income: 0, expense: 0 }
+  )
+}
+
+/**
+ * Gets category from category list by ID
+ */
+export const getCategoryById = (
+  categoryId: string,
+  categories: Category[] = []
+): Category | undefined => {
+  return categories.find((c) => c.id === categoryId)
+}
+
+/**
+ * Gets category type from category list by ID
+ */
+export const getCategoryType = (
+  categoryId: string,
+  categories: Category[] = []
+): 'income' | 'expense' => {
+  return categories.find((c) => c.id === categoryId)?.type ?? 'expense'
+}
+
+/**
+ * Formats transaction amount with sign based on type
+ */
+export const formatTransactionAmount = (
+  amount: number,
+  type: CategoryType
+): number => {
+  return type === 'expense' ? -amount : amount
+}
+
+export const makeEmptyTransactionItem = () => ({
+  id: uuidv7(),
+  description: '',
+  amount: 0,
+})
