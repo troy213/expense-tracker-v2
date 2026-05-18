@@ -8,5 +8,14 @@
   &__fill {
     background-color: $color-primary-2;
     height: 10px;
+    transition: all 0.5s ease-out;
+
+    &--warning {
+      background-color: $color-warning;
+    }
+
+    &--danger {
+      background-color: $color-danger;
+    }
   }
 }

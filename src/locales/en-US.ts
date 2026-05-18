@@ -57,6 +57,11 @@ const messages = {
   ImportData: 'Upload Data (.xlsx)',
   Income: 'Income',
   Indonesia: 'Indonesia',
+  Install: 'Install',
+  InstallApp: 'Install this app',
+  InstallAppHint:
+    'Add Expense Tracker to your home screen for quick, full-screen access.',
+  InstallAppIOSHint: 'Tap the Share button, then choose "Add to Home Screen".',
   InvalidFormatError: 'Invalid Format',
   Language: 'Language',
   LastMonth: 'Last Month',

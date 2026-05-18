@@ -15,7 +15,7 @@ export const addDBTransactions = createAsyncThunk(
     }))
 
     // 1. Perform the async DB operation
-    await dbServices.putTransactions(transactionDBPayload)
+    await dbServices.transactions.putTransactions(transactionDBPayload)
 
     // 2. Return the data to update the Redux state
     return payload
@@ -42,10 +42,10 @@ export const editDBTransactions = createAsyncThunk(
 
     // If the date or category has changed, we need to delete the old transactions and add the new ones
     if (!isSameDate || (!isSameCategory && isSameDate)) {
-      await dbServices.putTransactions(transactionDBPayload)
+      await dbServices.transactions.putTransactions(transactionDBPayload)
     } else {
       // If the date and category are the same, replace the existing transactions with the new ones
-      const allStored = await dbServices.getTransactionsByCategory(
+      const allStored = await dbServices.transactions.getTransactionsByCategory(
         data.category_id
       )
 
@@ -58,8 +58,8 @@ export const editDBTransactions = createAsyncThunk(
         .map((tx) => tx.id)
         .filter((id) => !newItemIds.has(id))
 
-      await dbServices.deleteTransactions(idsToDelete)
-      await dbServices.putTransactions(transactionDBPayload)
+      await dbServices.transactions.deleteTransactions(idsToDelete)
+      await dbServices.transactions.putTransactions(transactionDBPayload)
     }
 
     return payload
@@ -72,7 +72,7 @@ export const deleteDBTransactions = createAsyncThunk(
     const { data } = payload
     const ids = data.item.map((tx) => tx.id)
 
-    await dbServices.deleteTransactions(ids)
+    await dbServices.transactions.deleteTransactions(ids)
 
     return payload
   }
@@ -81,7 +81,7 @@ export const deleteDBTransactions = createAsyncThunk(
 export const deleteAllDBTransactions = createAsyncThunk(
   'main/deleteAllTransactions',
   async () => {
-    await dbServices.clearTransactions()
+    await dbServices.transactions.clearTransactions()
   }
 )
 
@@ -92,9 +92,10 @@ export const searchDBTransactions = createAsyncThunk(
     let transactions: Transaction[] = []
 
     if (searchValue) {
-      transactions = await dbServices.getTransactionsByDescription(searchValue)
+      transactions =
+        await dbServices.transactions.getTransactionsByDescription(searchValue)
     } else {
-      transactions = await dbServices.getAllTransactions()
+      transactions = await dbServices.transactions.getAllTransactions()
     }
 
     return { searchValue, transactions }

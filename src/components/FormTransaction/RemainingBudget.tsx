@@ -47,7 +47,7 @@ const RemainingBudget = ({ editingItemIds }: RemainingBudgetProps) => {
     const excluded = new Set(editingKey ? editingKey.split(',') : [])
     const { firstDate, lastDate } = getMonthRange(date || getDate())
 
-    dbServices
+    dbServices.transactions
       .getTransactionsByCategoryAndDateRange(categoryId, firstDate, lastDate)
       .then((transactions) => {
         if (!active) return

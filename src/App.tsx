@@ -1,7 +1,7 @@
 import { IntlProvider } from 'react-intl'
 import { Routes, Route } from 'react-router-dom'
 import { useEffect } from 'react'
-import { Layout } from '@/components'
+import { Layout, PWAInstallPrompt } from '@/components'
 import { LANGUAGES, LOCALES, THEME } from '@/constants'
 import { useAppSelector, useInitConfig } from '@/hooks'
 import { Categories, Dashboard, NotFound, Reports, Settings } from '@/pages'
@@ -50,6 +50,8 @@ const App = () => {
         {/* 404 not found */}
         <Route path="*" element={<NotFound />} />
       </Routes>
+
+      <PWAInstallPrompt />
     </IntlProvider>
   )
 }

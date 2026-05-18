@@ -36,7 +36,7 @@ const useInitConfig = () => {
       }
 
       // Load categories from IndexedDB or migrate from localStorage
-      const categories = await dbServices.getAllCategories()
+      const categories = await dbServices.categories.getAllCategories()
 
       if (categories.length > 0) {
         dispatch(
@@ -45,7 +45,7 @@ const useInitConfig = () => {
       }
 
       // Load transactions from IndexedDB or migrate from localStorage
-      const transactions = await dbServices.getAllTransactions()
+      const transactions = await dbServices.transactions.getAllTransactions()
 
       if (transactions.length > 0) {
         // Load first 100 for initial display (pagination)

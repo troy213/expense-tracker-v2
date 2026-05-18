@@ -21,7 +21,13 @@ export default defineConfig({
       manifest: {
         name: 'Expense Tracker',
         short_name: 'Expense Tracker',
+        description:
+          'Track your expenses and budgets with a simple, intuitive offline-first app.',
+        start_url: '/',
+        scope: '/',
+        display: 'standalone',
         theme_color: '#ffffff',
+        background_color: '#ffffff',
         icons: [
           {
             src: 'pwa-64x64.png',

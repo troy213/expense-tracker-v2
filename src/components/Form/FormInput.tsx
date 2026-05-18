@@ -65,7 +65,9 @@ const renderField = (
   rawValue: string | number | undefined,
   setValue: (value: string | number) => void,
   props: BaseProps,
-  error?: string
+  error?: string,
+  fieldRef?: React.Ref<HTMLInputElement>,
+  fieldName?: string
 ) => {
   const {
     type = 'text',
@@ -118,8 +120,11 @@ const renderField = (
     <div className={containerClassName}>
       {label && <label className={labelClassName}>{label}</label>}
       <input
+        ref={fieldRef}
+        name={fieldName}
         className={inputClassName}
         type={inputType}
+        inputMode={type === 'currency' ? 'numeric' : undefined}
         value={String(displayValue)}
         placeholder={placeholder}
         onChange={handleChange}
@@ -187,7 +192,9 @@ const FormInput = (props: FormInputProps) => {
           field.value,
           (next) => field.onChange(next),
           props,
-          fieldState.error?.message
+          fieldState.error?.message,
+          field.ref,
+          field.name
         )
       }
     />
