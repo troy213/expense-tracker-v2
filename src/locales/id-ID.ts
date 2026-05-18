@@ -20,6 +20,7 @@ const messages = {
   Cancel: 'Batal',
   Category: 'Kategori',
   CategoryName: 'Nama Kategori',
+  Color: 'Warna',
   CategoryAndBudget: 'Kategori & Anggaran',
   CommonTextError:
     'Hanya huruf, angka dan karakter spesial [!@#$%^&*()_-,.] yang diperbolehkan',
@@ -51,6 +52,7 @@ const messages = {
   FormEmptyError: 'Kolom ini tidak boleh kosong',
   HideBalance: 'Sembunyikan Saldo',
   HideBalanceOnStartup: 'Sembunyikan saldo saat memulai',
+  Icon: 'Ikon',
   Import: 'Unggah',
   ImportData: 'Unggah Data (.xlsx)',
   Indonesia: 'Bahasa Indonesia',

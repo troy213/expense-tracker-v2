@@ -1,27 +1,20 @@
-import { useState } from 'react'
-import { useFieldArray, useFormContext } from 'react-hook-form'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useIntl } from 'react-intl'
-import { v7 as uuidv7 } from 'uuid'
-import Form from '@/components/Form'
-import { CrossSvg, PlusSvg } from '@/assets'
-import { REGEX } from '@/constants'
+import { Form } from '@/components'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { CategoryType, TxFormData } from '@/types'
-import { getDate } from '@/utils'
 import { addDBTransactions, editDBTransactions } from '@/store/main/main-thunk'
+import { CategoryType, TxFormData } from '@/types'
+import { getDate, makeEmptyTransactionItem } from '@/utils'
+import RemainingBudget from './RemainingBudget'
+import TransactionItems from './TransactionItem'
+import './index.scss'
 
 type FormTransactionProps = {
   data?: TxFormData
   index?: number
   onCancel?: () => void
 }
-
-const makeEmptyItem = () => ({
-  id: uuidv7(),
-  description: '',
-  amount: 0,
-})
 
 const FormTransaction = ({ data, index, onCancel }: FormTransactionProps) => {
   const { formatMessage } = useIntl()
@@ -37,6 +30,11 @@ const FormTransaction = ({ data, index, onCancel }: FormTransactionProps) => {
     (item) => item.type === categoryType
   )
   const dispatch = useAppDispatch()
+
+  const editingItemIds = useMemo(
+    () => data?.item.map((item) => item.id),
+    [data]
+  )
 
   if (filteredCategories.length === 0) {
     return (
@@ -61,7 +59,7 @@ const FormTransaction = ({ data, index, onCancel }: FormTransactionProps) => {
   const initialValue: TxFormData = data ?? {
     date: getDate(),
     category_id: filteredCategories[0].id,
-    item: [makeEmptyItem()],
+    item: [makeEmptyTransactionItem()],
   }
 
   const selectedCategoryLabel = categories.find(
@@ -108,7 +106,11 @@ const FormTransaction = ({ data, index, onCancel }: FormTransactionProps) => {
                 checked={categoryType === value}
                 onChange={() => setCategoryType(value)}
               />
-              <span className="text--color-primary">{value}</span>
+              <span className="text--color-primary text--capitalize">
+                {formatMessage({
+                  id: value === 'income' ? 'Income' : 'Expense',
+                })}
+              </span>
             </label>
           ))}
         </div>
@@ -121,21 +123,25 @@ const FormTransaction = ({ data, index, onCancel }: FormTransactionProps) => {
         onCancel={onCancel}
       >
         <div className="flex-column gap-4">
-          <Form.Input
-            type="date"
-            valueKey="date"
-            label="Date"
-            placeholder="yyyy-mm-dd"
-            required
-          />
-          <Form.Select
-            valueKey="category_id"
-            label="Category"
-            options={filteredCategories}
-            selectedValue={selectedCategoryLabel}
-            required
-          />
+          <div className="flex-column">
+            <Form.Input
+              type="date"
+              valueKey="date"
+              label="Date"
+              placeholder="yyyy-mm-dd"
+              enableDateNavigation
+              required
+            />
+            <Form.Select
+              valueKey="category_id"
+              label="Category"
+              options={filteredCategories}
+              selectedValue={selectedCategoryLabel}
+              required
+            />
+          </div>
 
+          <RemainingBudget editingItemIds={editingItemIds} />
           <TransactionItems />
 
           <Form.Submit
@@ -145,66 +151,6 @@ const FormTransaction = ({ data, index, onCancel }: FormTransactionProps) => {
           <Form.Cancel />
         </div>
       </Form>
-    </div>
-  )
-}
-
-const TransactionItems = () => {
-  const { control } = useFormContext<TxFormData>()
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'item',
-  })
-  const { formatMessage } = useIntl()
-
-  return (
-    <div className="form-transaction-items">
-      {fields.map((field, index) => (
-        <div key={field.id} className="form-transaction-items__item">
-          <div className="flex-space-between">
-            <span className="text--color-primary">
-              {formatMessage(
-                { id: 'TransactionDetailNo' },
-                { index: index + 1 }
-              )}
-            </span>
-            {fields.length > 1 && (
-              <button
-                className="btn btn-clear"
-                onClick={() => {
-                  remove(index)
-                }}
-              >
-                <CrossSvg className="icon icon--stroke-primary" />
-              </button>
-            )}
-          </div>
-          <Form.Input
-            valueKey={`item.${index}.description`}
-            label={formatMessage({ id: 'Description' })}
-            placeholder={formatMessage({ id: 'Description' })}
-            pattern={REGEX.COMMON_TEXT.PATTERN}
-            errorMessage={REGEX.COMMON_TEXT.ERROR_MESSAGE}
-            required
-          />
-          <Form.Input
-            valueKey={`item.${index}.amount`}
-            type="currency"
-            label={formatMessage({ id: 'AmountRp' })}
-            required
-          />
-        </div>
-      ))}
-      <button
-        type="button"
-        className="btn btn-dashed p-4"
-        onClick={() => append(makeEmptyItem())}
-      >
-        <PlusSvg className="icon--stroke-primary" />
-        <span className="text--color-primary text--light text--3">
-          {formatMessage({ id: 'AddMoreTransaction' })}
-        </span>
-      </button>
     </div>
   )
 }

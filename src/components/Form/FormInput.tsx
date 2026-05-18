@@ -1,5 +1,6 @@
 import { useFormContext, Controller, FieldValues } from 'react-hook-form'
 import { useIntl } from 'react-intl'
+import { ChevronDownSvg } from '@/assets'
 import { combineClassName, currencyFormatter } from '@/utils'
 import './FormInput.scss'
 
@@ -9,6 +10,7 @@ type BaseProps = {
   placeholder?: string
   pattern?: RegExp
   errorMessage?: string
+  enableDateNavigation?: boolean
   required?: boolean
   className?: string
   labelClassName?: string
@@ -65,7 +67,12 @@ const renderField = (
   props: BaseProps,
   error?: string
 ) => {
-  const { type = 'text', label, placeholder } = props
+  const {
+    type = 'text',
+    label,
+    placeholder,
+    enableDateNavigation = false,
+  } = props
 
   const displayValue =
     type === 'currency'
@@ -99,6 +106,14 @@ const renderField = (
     }
   }
 
+  const shiftDate = (days: number) => {
+    const current = String(rawValue)
+    if (!current) return
+    const date = new Date(current)
+    date.setUTCDate(date.getUTCDate() + days)
+    setValue(date.toISOString().split('T')[0])
+  }
+
   return (
     <div className={containerClassName}>
       {label && <label className={labelClassName}>{label}</label>}
@@ -109,6 +124,24 @@ const renderField = (
         placeholder={placeholder}
         onChange={handleChange}
       />
+      {type === 'date' && enableDateNavigation && (
+        <div className="form-input__input-nav">
+          <button
+            type="button"
+            className="form-input__input-nav-btn"
+            onClick={() => shiftDate(-1)}
+          >
+            <ChevronDownSvg className="form-input__input-nav-btn--prev icon--stroke-white" />
+          </button>
+          <button
+            type="button"
+            className="form-input__input-nav-btn"
+            onClick={() => shiftDate(1)}
+          >
+            <ChevronDownSvg className="form-input__input-nav-btn--next icon--stroke-white" />
+          </button>
+        </div>
+      )}
       {error && <span className="form-error">{error}</span>}
     </div>
   )

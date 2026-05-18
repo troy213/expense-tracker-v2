@@ -1,5 +1,6 @@
 import AdvancedSettingSvg from './icons/advanced-setting.svg?react'
 import AlertCircleSvg from './icons/alert-circle.svg?react'
+import AlertTriangleSvg from './icons/alert-triangle.svg?react'
 import ArrowDownSvg from './icons/arrow-down.svg?react'
 import ArrowLeftSvg from './icons/arrow-left.svg?react'
 import ArrowUpSvg from './icons/arrow-up.svg?react'
@@ -31,6 +32,7 @@ import TrashSvg from './icons/trash.svg?react'
 export {
   AdvancedSettingSvg,
   AlertCircleSvg,
+  AlertTriangleSvg,
   ArrowDownSvg,
   ArrowLeftSvg,
   ArrowUpSvg,

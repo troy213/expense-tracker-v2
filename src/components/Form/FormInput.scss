@@ -33,5 +33,29 @@
         outline-color: $color-danger;
       }
     }
+
+    &-nav {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5em;
+    }
+
+    &-nav-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 0.5em;
+      border: 1px solid transparent;
+      border-radius: 0.25em;
+      background-color: $color-primary-2;
+
+      &--prev {
+        transform: rotate(90deg);
+      }
+
+      &--next {
+        transform: rotate(-90deg);
+      }
+    }
   }
 }

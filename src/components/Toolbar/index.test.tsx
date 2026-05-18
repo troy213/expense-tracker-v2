@@ -7,14 +7,20 @@ import Toolbar from '@/components/Toolbar'
 import store from '@/store'
 import { LANGUAGES, LOCALES } from '@/constants'
 
-// Mocking the SVGs for simplicity
-vi.mock('@/assets', () => ({
-  BudgetSvg: () => <svg data-testid="budget-icon" />,
-  HomeSvg: () => <svg data-testid="home-icon" />,
-  PieChartSvg: () => <svg data-testid="piechart-icon" />,
-  PlusSvg: () => <svg data-testid="plus-icon" />,
-  SettingsSvg: () => <svg data-testid="settings-icon" />,
-}))
+// Keep the real (svgr-transformed) icons so transitive imports such as
+// src/constants/config.ts still resolve, but stub the ones Toolbar renders
+// with stable test ids.
+vi.mock('@/assets', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/assets')>()
+  return {
+    ...actual,
+    BudgetSvg: () => <svg data-testid="budget-icon" />,
+    HomeSvg: () => <svg data-testid="home-icon" />,
+    PieChartSvg: () => <svg data-testid="piechart-icon" />,
+    PlusSvg: () => <svg data-testid="plus-icon" />,
+    SettingsSvg: () => <svg data-testid="settings-icon" />,
+  }
+})
 
 describe('Toolbar Component', () => {
   test('renders all toolbar icons and links', () => {

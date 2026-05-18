@@ -174,6 +174,28 @@ async function getTransactionsByCategory(
 }
 
 /**
+ * Get transactions for a single category within a date range (inclusive).
+ *
+ * Uses the `by-category` index so only one category's transactions are read
+ * from disk, then filters that (small) set by date in memory. Dates are
+ * zero-padded 'YYYY-MM-DD' strings, so lexicographic comparison is correct.
+ */
+async function getTransactionsByCategoryAndDateRange(
+  categoryId: string,
+  startDate: string,
+  endDate: string
+): Promise<Transaction[]> {
+  const database = await getDB()
+  const categoryTx = await database.getAllFromIndex(
+    'transactions',
+    'by-category',
+    categoryId
+  )
+
+  return categoryTx.filter((tx) => tx.date >= startDate && tx.date <= endDate)
+}
+
+/**
  * Get transactions by description (case-insensitive substring match)
  * Similar to SQL LIKE '%value%'
  */
@@ -357,6 +379,7 @@ const dbServices = {
   getCategoryById,
   getTransactionById,
   getTransactionsByCategory,
+  getTransactionsByCategoryAndDateRange,
   getTransactionsByDateRange,
   getTransactionsByDescription,
   getTransactionsWithPagination,

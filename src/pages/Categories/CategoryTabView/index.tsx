@@ -12,13 +12,12 @@ import {
 } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { PlusSvg } from '@/assets'
-import FormCategory from '@/components/Modal/FormCategoryModal'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { categoriesAction } from '@/store/categories/categories-slice'
 import { CategoryType } from '@/types'
 import { combineClassName, currencyFormatter } from '@/utils'
 import CategoryWidget from './CategoryWidget'
-import { Modal } from '@/components'
+import { FormCategory, Modal } from '@/components'
 
 const CategoryTabView = () => {
   const dispatch = useAppDispatch()

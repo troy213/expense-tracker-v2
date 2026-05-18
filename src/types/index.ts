@@ -1,3 +1,29 @@
+export type CategoryIconId =
+  | 'credit-card'
+  | 'donations'
+  | 'educations'
+  | 'entertainment'
+  | 'expense'
+  | 'food'
+  | 'gift'
+  | 'gym'
+  | 'health'
+  | 'housing'
+  | 'income'
+  | 'insurance'
+  | 'investment'
+  | 'personal-care'
+  | 'pets'
+  | 'phone'
+  | 'price-tag'
+  | 'salary'
+  | 'scissor'
+  | 'shopping'
+  | 'subscription'
+  | 'suitcase'
+  | 'tax'
+  | 'travel'
+
 export type SetStatePayload<T> = {
   [K in keyof T]: {
     state: K
@@ -11,6 +37,8 @@ export type Category = {
   id: string
   type: CategoryType
   name: string
+  icon_id: CategoryIconId
+  color: string
   budget?: number
 }
 

@@ -3,14 +3,14 @@ import { useIntl } from 'react-intl'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { CoinsSvg, MoreVerticalSvg } from '@/assets'
+import { ICON_COLORS } from '@/assets/categories-icons'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
-import InputCategoryModal from '@/components/Modal/FormCategoryModal'
 import MoreOptionModal from '@/components/Modal/MoreOptionModal'
 import { useAppDispatch } from '@/hooks'
 import { Category } from '@/types'
 import { calculateModalBottomThreshold, currencyFormatter } from '@/utils'
 import { deleteDBCategory } from '@/store/categories/categories-thunk'
-import { Modal } from '@/components'
+import { CategoryIcon, FormCategory, Modal } from '@/components'
 
 type CategoryWidgetProps = {
   data: Category
@@ -26,7 +26,7 @@ const getModalPositionClassName = (elementRect: DOMRect | undefined) => {
 }
 
 const CategoryWidget: React.FC<CategoryWidgetProps> = ({ data }) => {
-  const { id, name, type, budget = 0 } = data
+  const { id, name, type, budget = 0, icon_id, color } = data
   const [isMoreModalOpen, setIsMoreModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -45,6 +45,10 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({ data }) => {
     transition,
     transform: CSS.Transform.toString(newTransform),
   }
+
+  const defaultCategoryIcon = type === 'income' ? 'income' : 'expense'
+  const defaultCategoryIconColor =
+    type === 'income' ? ICON_COLORS[0] : ICON_COLORS[1]
 
   const handleMoreOption = (e: React.MouseEvent, id: string) => {
     e.stopPropagation()
@@ -66,7 +70,7 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({ data }) => {
       className="category-widget p-4"
     >
       <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
-        <InputCategoryModal
+        <FormCategory
           data={data}
           type={type}
           onCancel={() => setIsEditModalOpen(false)}
@@ -88,16 +92,22 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({ data }) => {
         />
       )}
       <div className="flex-space-between flex-align-center">
-        <div className="flex-column gap-2">
-          <span>{name}</span>
-          {type === 'expense' && (
-            <div className="flex-align-center gap-2">
-              <CoinsSvg className="icon--fill-primary" />
-              <span className="text--light text--3">
-                {currencyFormatter(budget)}
-              </span>
-            </div>
-          )}
+        <div className="flex-align-center gap-4">
+          <CategoryIcon
+            iconId={icon_id ?? defaultCategoryIcon}
+            color={color ?? defaultCategoryIconColor}
+          />
+          <div className="flex-column flex-justify-center gap-2">
+            <span>{name}</span>
+            {type === 'expense' && (
+              <div className="flex-align-center gap-2">
+                <CoinsSvg className="icon--fill-primary" />
+                <span className="text--light text--3">
+                  {currencyFormatter(budget)}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="relative">

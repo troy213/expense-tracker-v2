@@ -8,6 +8,10 @@ body.dark {
     color: $color-danger !important;
   }
 
+  .text--color-warning {
+    color: $color-warning !important;
+  }
+
   .modal,
   .toolbar,
   .widget,
@@ -54,7 +58,58 @@ body.dark {
     border-top: 1px solid rgba($color-white, 0.1);
   }
 
+  input[type='radio'] {
+    border-color: $color-white;
+
+    &::before {
+      background-color: $color-white;
+    }
+
+    &:focus-visible {
+      outline-color: $color-white;
+    }
+  }
+
   ::-webkit-calendar-picker-indicator {
     filter: invert(1);
+  }
+}
+
+input[type='radio'] {
+  appearance: none;
+  -webkit-appearance: none;
+  flex-shrink: 0;
+  margin: 0;
+  width: 1rem;
+  height: 1rem;
+  display: inline-grid;
+  place-content: center;
+  border: 1px solid $color-primary;
+  border-radius: 50%;
+  background-color: transparent;
+  cursor: pointer;
+
+  &::before {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: $color-primary;
+    transform: scale(0);
+    transition: transform 0.12s ease-in-out;
+  }
+
+  &:checked::before {
+    transform: scale(1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 1px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
   }
 }

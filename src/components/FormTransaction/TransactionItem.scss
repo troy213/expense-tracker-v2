@@ -1,9 +1,3 @@
-.modal__fieldset {
-  margin-bottom: 0.5rem;
-  padding: 0.5rem;
-  border: none;
-}
-
 .form-transaction-items {
   display: flex;
   flex-direction: column;
@@ -17,13 +11,4 @@
   gap: 0.5rem;
   border-radius: 0.5rem;
   box-shadow: 0 0.25rem 12px rgba($color: black, $alpha: 0.25);
-}
-
-.modal__input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  margin-top: 5px;
 }

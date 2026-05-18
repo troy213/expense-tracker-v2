@@ -20,6 +20,7 @@ const messages = {
   Cancel: 'Cancel',
   Category: 'Category',
   CategoryName: 'Category name',
+  Color: 'Color',
   CategoryAndBudget: 'Category & Budget',
   CommonTextError:
     'Only alphanumeric and specials characters [!@#$%^&*()_-,.] allowed',
@@ -51,6 +52,7 @@ const messages = {
   FormEmptyError: 'This field cannot be empty',
   HideBalance: 'Hide Balance',
   HideBalanceOnStartup: 'Hide balance on startup',
+  Icon: 'Icon',
   Import: 'Upload',
   ImportData: 'Upload Data (.xlsx)',
   Income: 'Income',

@@ -6,9 +6,9 @@ import DeleteDataModal from '@/components/Modal/DeleteDataModal'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { TxFormData } from '@/types'
 import { combineClassName, currencyFormatter, getCategoryById } from '@/utils'
-import FormTransactionModal from '@/components/Modal/FormTransactionModal'
-import { Modal } from '@/components'
+import { CategoryIcon, FormTransaction, Modal } from '@/components'
 import { deleteDBTransactions } from '@/store/main/main-thunk'
+import { ICON_COLORS } from '@/assets/categories-icons'
 
 type TransactionDetailProps = {
   data: TxFormData
@@ -43,6 +43,9 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
   )
 
   const category = getCategoryById(category_id, categories)
+  const defaultCategoryIcon = category?.type === 'income' ? 'income' : 'expense'
+  const defaultCategoryIconColor =
+    category?.type === 'income' ? ICON_COLORS[0] : ICON_COLORS[1]
 
   const isExpense = category?.type === 'expense'
   const totalItemValue = isExpense
@@ -73,7 +76,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
       onClick={(e) => handleSelectTransaction(e, category_id)}
     >
       <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
-        <FormTransactionModal
+        <FormTransaction
           data={data}
           index={dataIndex}
           onCancel={() => setIsEditModalOpen(false)}
@@ -89,55 +92,61 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
           handleDelete={handleDeleteTransaction}
         />
       )}
-      <div className="flex-space-between">
-        <span>{category?.name}</span>
-        <div className="flex-align-center gap-2">
-          <span className={totalItemValueClassName}>
-            {currencyFormatter(totalItemValue)}
-          </span>
-          {selectedTransaction === `${dataIndex}_${category_id}` && (
-            <div className="relative">
-              <button
-                className="btn btn-clear"
-                type="button"
-                onClick={handleMoreOption}
-              >
-                <MoreVerticalSvg className="icon icon--stroke-primary" />
-              </button>
-              {isMoreModalOpen && (
-                <MoreOptionModal
-                  handleDelete={() => {
-                    setIsMoreModalOpen(false)
-                    setIsDeleteModalOpen(true)
-                  }}
-                  handleEdit={() => {
-                    setIsMoreModalOpen(false)
-                    setIsEditModalOpen(true)
-                  }}
-                />
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-      {item.map((subitem, index) => {
-        const hasMoreItem = data.item.length > 1
-        const amount = isExpense ? -1 * subitem.amount : subitem.amount
-        const amountClassName = combineClassName('text--light text--3', [
-          { condition: isExpense, className: 'text--color-danger' },
-        ])
-
-        return (
-          <div className="flex-space-between" key={index}>
-            <span className="text--light text--3">{subitem.description}</span>
-            {hasMoreItem && (
-              <span className={amountClassName}>
-                {currencyFormatter(amount)}
-              </span>
+      <CategoryIcon
+        iconId={category?.icon_id ?? defaultCategoryIcon}
+        color={category?.color ?? defaultCategoryIconColor}
+      />
+      <div className="flex-column flex-1 gap-1">
+        <div className="flex-space-between">
+          <span>{category?.name}</span>
+          <div className="flex-align-center gap-2">
+            <span className={totalItemValueClassName}>
+              {currencyFormatter(totalItemValue)}
+            </span>
+            {selectedTransaction === `${dataIndex}_${category_id}` && (
+              <div className="relative">
+                <button
+                  className="btn btn-clear"
+                  type="button"
+                  onClick={handleMoreOption}
+                >
+                  <MoreVerticalSvg className="icon icon--stroke-primary" />
+                </button>
+                {isMoreModalOpen && (
+                  <MoreOptionModal
+                    handleDelete={() => {
+                      setIsMoreModalOpen(false)
+                      setIsDeleteModalOpen(true)
+                    }}
+                    handleEdit={() => {
+                      setIsMoreModalOpen(false)
+                      setIsEditModalOpen(true)
+                    }}
+                  />
+                )}
+              </div>
             )}
           </div>
-        )
-      })}
+        </div>
+        {item.map((subitem, index) => {
+          const hasMoreItem = data.item.length > 1
+          const amount = isExpense ? -1 * subitem.amount : subitem.amount
+          const amountClassName = combineClassName('text--light text--3', [
+            { condition: isExpense, className: 'text--color-danger' },
+          ])
+
+          return (
+            <div className="flex-space-between" key={index}>
+              <span className="text--light text--3">{subitem.description}</span>
+              {hasMoreItem && (
+                <span className={amountClassName}>
+                  {currencyFormatter(amount)}
+                </span>
+              )}
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }

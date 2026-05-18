@@ -1,3 +1,4 @@
+import { v7 as uuidv7 } from 'uuid'
 import {
   Category,
   CategoryType,
@@ -129,15 +130,17 @@ export const updateTotal = (data: Data[], categories: Category[]) => {
   return { totalIncome, totalExpense, totalBalance }
 }
 
-export const getCurrentMonthRange = () => {
-  const now = new Date()
-  const year = now.getFullYear()
-  const month = now.getMonth() + 1 // Months are zero-based, so add 1
+// Returns the first/last date (YYYY-MM-DD) of the month the given date falls in.
+// dateString is expected to be a zero-padded 'YYYY-MM-DD' value (see getDate()).
+export const getMonthRange = (dateString: string) => {
+  const [yearStr, monthStr] = dateString.split('-')
+  const year = Number(yearStr)
+  const month = Number(monthStr) // 1-based
 
   // First day of the month
   const firstDate = `${year}-${String(month).padStart(2, '0')}-01`
 
-  // Last day of the month
+  // Last day of the month (day 0 of next month)
   const lastDay = new Date(year, month, 0).getDate()
   const lastDate = `${year}-${String(month).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`
 
@@ -146,6 +149,8 @@ export const getCurrentMonthRange = () => {
     lastDate,
   }
 }
+
+export const getCurrentMonthRange = () => getMonthRange(getDate())
 
 export const calculateRemainingBudget = (
   txData: Data[],
@@ -373,3 +378,9 @@ export const formatTransactionAmount = (
 ): number => {
   return type === 'expense' ? -amount : amount
 }
+
+export const makeEmptyTransactionItem = () => ({
+  id: uuidv7(),
+  description: '',
+  amount: 0,
+})

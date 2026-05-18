@@ -15,7 +15,14 @@ export const readXlsx = (file: File) => {
           'description',
           'amount',
         ]
-        const categoryHeader = ['id', 'type', 'name', 'budget']
+        const categoryHeader = [
+          'id',
+          'type',
+          'name',
+          'budget',
+          'icon_id',
+          'color',
+        ]
 
         const data = new Uint8Array(e.target?.result as ArrayBuffer)
         const workbook = XLSX.read(data, { type: 'array' })
@@ -72,14 +79,14 @@ export const createExcelFile = async () => {
 
   // Create Categories worksheet header
   const categoriesWorksheet = XLSX.utils.aoa_to_sheet([
-    ['ID', 'Type', 'Name', 'Budget'],
+    ['ID', 'Type', 'Name', 'Budget', 'Icon ID', 'Color'],
   ])
 
   categories.forEach((item) => {
-    const { id, type, name, budget } = item
+    const { id, type, name, budget, icon_id, color } = item
     XLSX.utils.sheet_add_json(
       categoriesWorksheet,
-      [{ id, type, name, budget }],
+      [{ id, type, name, budget, icon_id, color }],
       { skipHeader: true, origin: -1 }
     )
   })

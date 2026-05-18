@@ -71,8 +71,10 @@ const ImportDataModal: React.FC<ImportDataModalProps> = ({
           required
         />
 
-        <Form.Submit />
-        <Form.Cancel />
+        <div className="flex-end gap-2 mt-4">
+          <Form.Cancel />
+          <Form.Submit label={formatMessage({ id: 'Import' })} />
+        </div>
       </Form>
     </Modal>
   )
