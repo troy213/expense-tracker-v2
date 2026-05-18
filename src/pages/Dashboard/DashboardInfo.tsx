@@ -8,6 +8,8 @@ import {
   EyeOffSvg,
   SlidersSvg,
   HiddenTextSvg,
+  AlertTriangleSvg,
+  AlertCircleSvg,
 } from '@/assets'
 import { ProgressBar, Widget } from '@/components'
 import { useAppDispatch, useAppSelector } from '@/hooks'
@@ -57,6 +59,16 @@ const DashboardInfo = () => {
   }, [data, categories, expenseCategories, totalBudget])
 
   const budgetPercentage = calculatePercentage(remainingBudget, totalBudget)
+  const isWarning = budgetPercentage > 0 && budgetPercentage <= 25
+  const isDanger = budgetPercentage <= 0
+
+  const budgetPercentageClassName = combineClassName('text--light text--3', [
+    {
+      condition: isWarning,
+      className: 'text--color-warning',
+    },
+    { condition: isDanger, className: 'text--color-danger' },
+  ])
 
   const budgetClassName = combineClassName('text--color-primary', [
     {
@@ -121,7 +133,17 @@ const DashboardInfo = () => {
             <span className="text--italic text--light text--3">
               {`${formatTransactionDate(firstDate)} - ${formatTransactionDate(lastDate)}`}
             </span>
-            <span className="text--light text--3">{budgetPercentage}%</span>
+            <div className="flex-align-center gap-1">
+              {isWarning && (
+                <AlertTriangleSvg className="icon--sm icon--stroke-warning" />
+              )}
+              {isDanger && (
+                <AlertCircleSvg className="icon--sm icon--stroke-danger" />
+              )}
+              <span className={budgetPercentageClassName}>
+                {budgetPercentage}%
+              </span>
+            </div>
           </div>
         </div>
       </Widget>

@@ -20,7 +20,7 @@ const TransactionItems = () => {
       {fields.map((field, index) => (
         <div key={field.id} className="form-transaction-items__item">
           <div className="flex-space-between">
-            <span className="text--color-primary">
+            <span className="text--color-primary text--bold text--3">
               {formatMessage(
                 { id: 'TransactionDetailNo' },
                 { index: index + 1 }
@@ -28,6 +28,7 @@ const TransactionItems = () => {
             </span>
             {fields.length > 1 && (
               <button
+                type="button"
                 className="btn btn-clear"
                 onClick={() => {
                   remove(index)

@@ -49,8 +49,8 @@ export const readXlsx = (file: File) => {
 }
 
 export const createExcelFile = async () => {
-  const transactions = await dbServices.getAllTransactions()
-  const categories = await dbServices.getAllCategories()
+  const transactions = await dbServices.transactions.getAllTransactions()
+  const categories = await dbServices.categories.getAllCategories()
 
   const workbook = XLSX.utils.book_new()
 

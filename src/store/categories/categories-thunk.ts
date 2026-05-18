@@ -5,7 +5,7 @@ import dbServices from '@/lib/db'
 export const addDBCategory = createAsyncThunk(
   'categories/addDBCategory',
   async (payload: Category) => {
-    await dbServices.putCategory(payload)
+    await dbServices.categories.putCategory(payload)
 
     return payload
   }
@@ -14,7 +14,7 @@ export const addDBCategory = createAsyncThunk(
 export const addDBCategories = createAsyncThunk(
   'categories/addDBCategories',
   async (payload: Category[]) => {
-    await dbServices.putCategories(payload)
+    await dbServices.categories.putCategories(payload)
 
     return payload
   }
@@ -23,7 +23,7 @@ export const addDBCategories = createAsyncThunk(
 export const editDBCategory = createAsyncThunk(
   'categories/editDBCategory',
   async (payload: Category) => {
-    await dbServices.putCategory(payload)
+    await dbServices.categories.putCategory(payload)
 
     return payload
   }
@@ -32,7 +32,7 @@ export const editDBCategory = createAsyncThunk(
 export const deleteDBCategory = createAsyncThunk(
   'categories/deleteDBCategory',
   async (payload: Category) => {
-    await dbServices.deleteCategory(payload.id)
+    await dbServices.categories.deleteCategory(payload.id)
 
     return payload
   }
@@ -41,6 +41,6 @@ export const deleteDBCategory = createAsyncThunk(
 export const deleteAllDBCategories = createAsyncThunk(
   'categories/deleteAllCategories',
   async () => {
-    await dbServices.clearCategories()
+    await dbServices.categories.clearCategories()
   }
 )

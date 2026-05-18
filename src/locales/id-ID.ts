@@ -57,6 +57,12 @@ const messages = {
   ImportData: 'Unggah Data (.xlsx)',
   Indonesia: 'Bahasa Indonesia',
   Income: 'Pendapatan',
+  Install: 'Instal',
+  InstallApp: 'Instal aplikasi ini',
+  InstallAppHint:
+    'Tambahkan Expense Tracker ke layar utama untuk akses cepat layar penuh.',
+  InstallAppIOSHint:
+    'Ketuk tombol Bagikan, lalu pilih "Tambahkan ke Layar Utama".',
   InvalidFormatError: 'Format Tidak Benar',
   Language: 'Bahasa',
   LastMonth: 'Bulan Lalu',
