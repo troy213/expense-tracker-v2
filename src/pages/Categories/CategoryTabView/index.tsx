@@ -17,7 +17,7 @@ import { categoriesAction } from '@/store/categories/categories-slice'
 import { CategoryType } from '@/types'
 import { combineClassName, currencyFormatter } from '@/utils'
 import CategoryWidget from './CategoryWidget'
-import { FormCategory, Modal } from '@/components'
+import { FormModal, Modal } from '@/components'
 
 const CategoryTabView = () => {
   const dispatch = useAppDispatch()
@@ -114,7 +114,7 @@ const CategoryTabView = () => {
   return (
     <div className="category-tab-view">
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <FormCategory
+        <FormModal.FormCategory
           type={selectedCategory}
           onCancel={() => setIsModalOpen(false)}
         />

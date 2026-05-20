@@ -1,8 +1,7 @@
 import CategoryIcon from './CategoryIcon'
 import ColorPicker from './ColorPicker'
 import Form from './Form'
-import FormCategory from './FormCategory'
-import FormTransaction from './FormTransaction'
+import FormModal from './FormModal'
 import IconPicker from './IconPicker'
 import Layout from './Layout'
 import Modal from './Modal'
@@ -16,8 +15,7 @@ export {
   CategoryIcon,
   ColorPicker,
   Form,
-  FormCategory,
-  FormTransaction,
+  FormModal,
   IconPicker,
   Layout,
   Modal,

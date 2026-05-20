@@ -6,7 +6,7 @@ import DeleteDataModal from '@/components/Modal/DeleteDataModal'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { TxFormData } from '@/types'
 import { combineClassName, currencyFormatter, getCategoryById } from '@/utils'
-import { CategoryIcon, FormTransaction, Modal } from '@/components'
+import { CategoryIcon, FormModal, Modal } from '@/components'
 import { deleteDBTransactions } from '@/store/main/main-thunk'
 import { ICON_COLORS } from '@/assets/categories-icons'
 
@@ -76,7 +76,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
       onClick={(e) => handleSelectTransaction(e, category_id)}
     >
       <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
-        <FormTransaction
+        <FormModal.FormTransaction
           data={data}
           index={dataIndex}
           onCancel={() => setIsEditModalOpen(false)}

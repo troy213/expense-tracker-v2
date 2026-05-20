@@ -35,7 +35,7 @@ const PWAInstallPrompt = () => {
           className="pwa-install__action"
           onClick={promptInstall}
         >
-          <ImportSvg />
+          <ImportSvg className="icon--stroke-white" />
           {intl.formatMessage({ id: 'Install' })}
         </button>
       )}

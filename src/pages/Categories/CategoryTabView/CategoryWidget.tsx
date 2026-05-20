@@ -10,7 +10,7 @@ import { useAppDispatch } from '@/hooks'
 import { Category } from '@/types'
 import { calculateModalBottomThreshold, currencyFormatter } from '@/utils'
 import { deleteDBCategory } from '@/store/categories/categories-thunk'
-import { CategoryIcon, FormCategory, Modal } from '@/components'
+import { CategoryIcon, FormModal, Modal } from '@/components'
 
 type CategoryWidgetProps = {
   data: Category
@@ -70,7 +70,7 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({ data }) => {
       className="category-widget p-4"
     >
       <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
-        <FormCategory
+        <FormModal.FormCategory
           data={data}
           type={type}
           onCancel={() => setIsEditModalOpen(false)}
