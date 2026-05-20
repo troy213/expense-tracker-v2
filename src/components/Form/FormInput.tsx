@@ -65,6 +65,7 @@ const renderField = (
   rawValue: string | number | undefined,
   setValue: (value: string | number) => void,
   props: BaseProps,
+  formatMessage: (msg: { id: string }) => string,
   error?: string,
   fieldRef?: React.Ref<HTMLInputElement>,
   fieldName?: string
@@ -136,14 +137,20 @@ const renderField = (
             className="form-input__input-nav-btn"
             onClick={() => shiftDate(-1)}
           >
-            <ChevronDownSvg className="form-input__input-nav-btn--prev icon--stroke-white" />
+            <ChevronDownSvg className="form-input__input-nav-btn--prev icon--sm icon--stroke-primary" />
+            <span className="text--color-primary text--light text--3">
+              {formatMessage({ id: 'PreviousDay' })}
+            </span>
           </button>
           <button
             type="button"
             className="form-input__input-nav-btn"
             onClick={() => shiftDate(1)}
           >
-            <ChevronDownSvg className="form-input__input-nav-btn--next icon--stroke-white" />
+            <span className="text--color-primary text--light text--3">
+              {formatMessage({ id: 'NextDay' })}
+            </span>
+            <ChevronDownSvg className="form-input__input-nav-btn--next icon--sm icon--stroke-primary" />
           </button>
         </div>
       )}
@@ -169,6 +176,7 @@ const FormInput = (props: FormInputProps) => {
       value,
       (next) => onChange?.(next),
       props,
+      formatMessage,
       error === true ? undefined : error
     )
   }
@@ -192,6 +200,7 @@ const FormInput = (props: FormInputProps) => {
           field.value,
           (next) => field.onChange(next),
           props,
+          formatMessage,
           fieldState.error?.message,
           field.ref,
           field.name

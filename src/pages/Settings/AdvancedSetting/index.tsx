@@ -22,7 +22,7 @@ const AdvancedSetting = () => {
     <div className="advanced-setting">
       <Navbar title="AdvancedSetting" enableBackButton={true} />
 
-      <div className="flex-space-between">
+      <div className="flex-space-between flex-align-center">
         <span>{formatMessage({ id: 'HideBalanceOnStartup' })}</span>
         <input
           type="checkbox"

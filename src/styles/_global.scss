@@ -70,6 +70,23 @@ body.dark {
     }
   }
 
+  input[type='checkbox'] {
+    border-color: $color-white;
+
+    &:checked {
+      background-color: $color-white;
+      border-color: $color-white;
+
+      &::before {
+        border-color: $color-dark;
+      }
+    }
+
+    &:focus-visible {
+      outline-color: $color-white;
+    }
+  }
+
   ::-webkit-calendar-picker-indicator {
     filter: invert(1);
   }
@@ -101,6 +118,54 @@ input[type='radio'] {
 
   &:checked::before {
     transform: scale(1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 1px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+input[type='checkbox'] {
+  appearance: none;
+  -webkit-appearance: none;
+  flex-shrink: 0;
+  margin: 0;
+  width: 1rem;
+  height: 1rem;
+  display: inline-grid;
+  place-content: center;
+  border: 1px solid $color-primary;
+  border-radius: 3px;
+  background-color: transparent;
+  cursor: pointer;
+  transition:
+    background-color 0.12s ease-in-out,
+    border-color 0.12s ease-in-out;
+
+  &::before {
+    content: '';
+    width: 0.625rem;
+    height: 0.3125rem;
+    border-left: 2px solid $color-white;
+    border-bottom: 2px solid $color-white;
+    transform: rotate(-45deg) translate(1px, -1px) scale(0);
+    transform-origin: center;
+    transition: transform 0.12s ease-in-out;
+  }
+
+  &:checked {
+    background-color: $color-primary;
+    border-color: $color-primary;
+
+    &::before {
+      transform: rotate(-45deg) translate(1px, -1px) scale(1);
+    }
   }
 
   &:focus-visible {

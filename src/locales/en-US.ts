@@ -68,12 +68,14 @@ const messages = {
   LetterError: 'Only letter are allowed',
   LightTheme: 'Light Theme',
   Loading: 'Loading',
+  NextDay: 'Next Day',
   NoCategoryWarningMessage:
     "Oops! it seems you don't have any category. You can add your first category in the link below.",
   NoTransaction: 'There is no transaction',
   NumberError: 'Only number are allowed',
   PageNotFound: 'Page Not Found',
   PerDay: '/day',
+  PreviousDay: 'Previous Day',
   RemainingBudgetForThisCategory:
     'Remaining budget for this category in this month',
   Reports: 'Reports',

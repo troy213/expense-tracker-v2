@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { BudgetSvg, HomeSvg, PieChartSvg, PlusSvg, SettingsSvg } from '@/assets'
 import { useState } from 'react'
 import { combineClassName } from '@/utils'
-import FormTransaction from '../FormTransaction'
+import { FormModal } from '@/components'
 import Modal from '../Modal'
 
 const Toolbar = () => {
@@ -19,7 +19,9 @@ const Toolbar = () => {
     <div className="toolbar">
       <div className={getClassName('/')}>
         <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)}>
-          <FormTransaction onCancel={() => setIsAddModalOpen(false)} />
+          <FormModal.FormTransaction
+            onCancel={() => setIsAddModalOpen(false)}
+          />
         </Modal>
 
         <Link to="/">

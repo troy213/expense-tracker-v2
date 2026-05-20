@@ -69,12 +69,14 @@ const messages = {
   LetterError: 'Hanya huruf yang diperbolehkan',
   LightTheme: 'Mode Terang',
   Loading: 'Memuat',
+  NextDay: 'Hari Berikutnya',
   NoCategoryWarningMessage:
     'Oops! sepertinya anda tidak memiliki kategori apapun. Anda dapat menambahkan kategori pertama anda di tautan di bawah ini.',
   NoTransaction: 'Tidak ada transaksi apapun',
   NumberError: 'Hanya angka yang diperbolehkan',
   PageNotFound: 'Halaman Tidak Ditemukan',
   PerDay: '/hari',
+  PreviousDay: 'Hari Sebelumnya',
   RemainingBudgetForThisCategory:
     'Sisa anggaran untuk kategori ini di bulan ini',
   Reports: 'Laporan',

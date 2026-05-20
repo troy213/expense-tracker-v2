@@ -10,10 +10,12 @@ import { useAppDispatch } from '@/hooks'
 import { Category } from '@/types'
 import { calculateModalBottomThreshold, currencyFormatter } from '@/utils'
 import { deleteDBCategory } from '@/store/categories/categories-thunk'
-import { CategoryIcon, FormCategory, Modal } from '@/components'
+import { CategoryIcon, FormModal, Modal } from '@/components'
 
 type CategoryWidgetProps = {
   data: Category
+  selectedCategoryId: string | null
+  setSelectedCategoryId: (id: string | null) => void
 }
 
 const getModalPositionClassName = (elementRect: DOMRect | undefined) => {
@@ -25,7 +27,11 @@ const getModalPositionClassName = (elementRect: DOMRect | undefined) => {
   return ''
 }
 
-const CategoryWidget: React.FC<CategoryWidgetProps> = ({ data }) => {
+const CategoryWidget: React.FC<CategoryWidgetProps> = ({
+  data,
+  selectedCategoryId,
+  setSelectedCategoryId,
+}) => {
   const { id, name, type, budget = 0, icon_id, color } = data
   const [isMoreModalOpen, setIsMoreModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
@@ -55,6 +61,7 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({ data }) => {
     const elementRect = transactionRefs.current.get(id)?.getBoundingClientRect()
     setMoreOptionModalClassName(getModalPositionClassName(elementRect))
     setIsMoreModalOpen((val) => !val)
+    setSelectedCategoryId(id)
   }
 
   const handleDeleteCategory = (category: Category) => {
@@ -70,7 +77,7 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({ data }) => {
       className="category-widget p-4"
     >
       <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
-        <FormCategory
+        <FormModal.FormCategory
           data={data}
           type={type}
           onCancel={() => setIsEditModalOpen(false)}
@@ -118,7 +125,7 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({ data }) => {
           >
             <MoreVerticalSvg className="icon--stroke-primary" />
           </button>
-          {isMoreModalOpen && (
+          {isMoreModalOpen && selectedCategoryId === id && (
             <MoreOptionModal
               className={moreOptionModalClassName}
               handleEdit={() => {

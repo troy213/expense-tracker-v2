@@ -5,7 +5,8 @@ import { Form } from '@/components'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { addDBTransactions, editDBTransactions } from '@/store/main/main-thunk'
 import { CategoryType, TxFormData } from '@/types'
-import { getDate, makeEmptyTransactionItem } from '@/utils'
+import { combineClassName, getDate, makeEmptyTransactionItem } from '@/utils'
+import CategoryIconPreview from './CategoryIconPreview'
 import RemainingBudget from './RemainingBudget'
 import TransactionItems from './TransactionItem'
 import './index.scss'
@@ -96,22 +97,29 @@ const FormTransaction = ({ data, index, onCancel }: FormTransactionProps) => {
         <span className="text--color-primary text--light text--3">
           {formatMessage({ id: 'Transaction' })}
         </span>
-        <div className="flex gap-4">
+        <div
+          className="transaction-type-tabs"
+          role="tablist"
+          aria-label={formatMessage({ id: 'Transaction' })}
+        >
           {(['income', 'expense'] as CategoryType[]).map((value) => (
-            <label key={value} className="flex-align-center gap-2 width-100">
-              <input
-                type="radio"
-                name="transaction-type"
-                value={value}
-                checked={categoryType === value}
-                onChange={() => setCategoryType(value)}
-              />
-              <span className="text--color-primary text--capitalize">
-                {formatMessage({
-                  id: value === 'income' ? 'Income' : 'Expense',
-                })}
-              </span>
-            </label>
+            <button
+              key={value}
+              type="button"
+              role="tab"
+              aria-selected={categoryType === value}
+              className={combineClassName('transaction-type-tabs__tab', [
+                {
+                  condition: categoryType === value,
+                  className: 'selected',
+                },
+              ])}
+              onClick={() => setCategoryType(value)}
+            >
+              {formatMessage({
+                id: value === 'income' ? 'Income' : 'Expense',
+              })}
+            </button>
           ))}
         </div>
       </div>
@@ -123,20 +131,22 @@ const FormTransaction = ({ data, index, onCancel }: FormTransactionProps) => {
         onCancel={onCancel}
       >
         <div className="flex-column gap-4">
-          <div className="flex-column">
-            <Form.Input
-              type="date"
-              valueKey="date"
-              label="Date"
-              placeholder="yyyy-mm-dd"
-              enableDateNavigation
-              required
-            />
+          <Form.Input
+            type="date"
+            valueKey="date"
+            label="Date"
+            placeholder="yyyy-mm-dd"
+            enableDateNavigation
+            required
+          />
+          <div className="flex-align-center gap-4">
+            <CategoryIconPreview />
             <Form.Select
               valueKey="category_id"
               label="Category"
               options={filteredCategories}
               selectedValue={selectedCategoryLabel}
+              className="width-100"
               required
             />
           </div>

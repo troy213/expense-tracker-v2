@@ -17,7 +17,7 @@ import { categoriesAction } from '@/store/categories/categories-slice'
 import { CategoryType } from '@/types'
 import { combineClassName, currencyFormatter } from '@/utils'
 import CategoryWidget from './CategoryWidget'
-import { FormCategory, Modal } from '@/components'
+import { FormModal, Modal } from '@/components'
 
 const CategoryTabView = () => {
   const dispatch = useAppDispatch()
@@ -32,6 +32,9 @@ const CategoryTabView = () => {
     defaultSelectedCategory
   )
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
+    null
+  )
   const { categories } = useAppSelector((state) => state.categoriesReducer)
   const [filteredCategory, setFilteredCategory] = useState(
     categories.filter((category) => category.type === selectedCategory)
@@ -114,7 +117,7 @@ const CategoryTabView = () => {
   return (
     <div className="category-tab-view">
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <FormCategory
+        <FormModal.FormCategory
           type={selectedCategory}
           onCancel={() => setIsModalOpen(false)}
         />
@@ -177,7 +180,12 @@ const CategoryTabView = () => {
             strategy={verticalListSortingStrategy}
           >
             {filteredCategory.map((category) => (
-              <CategoryWidget key={category.id} data={category} />
+              <CategoryWidget
+                key={category.id}
+                data={category}
+                selectedCategoryId={selectedCategoryId}
+                setSelectedCategoryId={setSelectedCategoryId}
+              />
             ))}
           </SortableContext>
         </DndContext>
