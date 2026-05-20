@@ -32,6 +32,9 @@ const CategoryTabView = () => {
     defaultSelectedCategory
   )
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
+    null
+  )
   const { categories } = useAppSelector((state) => state.categoriesReducer)
   const [filteredCategory, setFilteredCategory] = useState(
     categories.filter((category) => category.type === selectedCategory)
@@ -177,7 +180,12 @@ const CategoryTabView = () => {
             strategy={verticalListSortingStrategy}
           >
             {filteredCategory.map((category) => (
-              <CategoryWidget key={category.id} data={category} />
+              <CategoryWidget
+                key={category.id}
+                data={category}
+                selectedCategoryId={selectedCategoryId}
+                setSelectedCategoryId={setSelectedCategoryId}
+              />
             ))}
           </SortableContext>
         </DndContext>
