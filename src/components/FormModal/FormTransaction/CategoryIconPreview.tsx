@@ -14,7 +14,14 @@ const CategoryIconPreview = () => {
 
   if (!category) return null
 
-  return <CategoryIcon iconId={category.icon_id} color={category.color} />
+  return (
+    <CategoryIcon
+      iconId={category.icon_id}
+      color={category.color}
+      height={'3.5rem'}
+      width={'3.5rem'}
+    />
+  )
 }
 
 export default CategoryIconPreview

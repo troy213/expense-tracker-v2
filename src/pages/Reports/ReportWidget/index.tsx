@@ -1,7 +1,10 @@
 import { useIntl } from 'react-intl'
+import { CategoryIconId } from '@/types'
 import ReportCategory from './ReportCategory'
 
 type Report = {
+  icon_id: CategoryIconId
+  color: string
   category: string
   total: number
 }

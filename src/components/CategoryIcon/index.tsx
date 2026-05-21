@@ -5,17 +5,21 @@ import './index.scss'
 type CategoryIconProps = {
   iconId: CategoryIconId
   color?: string
+  width?: number | string
+  height?: number | string
 }
 
-const CategoryIcon = ({ iconId, color }: CategoryIconProps) => {
+const CategoryIcon = ({ iconId, color, width, height }: CategoryIconProps) => {
   const IconComponent = CATEGORY_ICONS_MAP[iconId]
   return (
     <div
       className="category-icon"
       style={
         {
-          backgroundColor: color ? `${color}33` : undefined,
           '--icon-color': color,
+          backgroundColor: color ? `${color}33` : undefined,
+          width: width || '',
+          height: height || '',
         } as React.CSSProperties
       }
     >

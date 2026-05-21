@@ -105,6 +105,8 @@ const Reports = () => {
           .reduce((total, curr) => total + curr.amount, 0)
 
         return {
+          icon_id: category.icon_id,
+          color: category.color,
           category: category.name,
           total: catAmount,
         }

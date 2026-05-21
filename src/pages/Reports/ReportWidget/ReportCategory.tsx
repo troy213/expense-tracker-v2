@@ -1,6 +1,10 @@
-import { ProgressBar } from '@/components'
+import { CategoryIcon, ProgressBar } from '@/components'
+import { CategoryIconId } from '@/types'
 import { calculatePercentage, currencyFormatter } from '@/utils'
+
 type Report = {
+  icon_id: CategoryIconId
+  color: string
   category: string
   total: number
 }
@@ -15,13 +19,16 @@ const ReportCategory: React.FC<ReportCategoryProps> = ({ cat, typeTotal }) => {
 
   return (
     <div className="report-category">
-      <span>{cat.category}</span>
-      <ProgressBar amount={percentage} options={{ enableStyle: false }} />
-      <div className="flex-space-between">
-        <span className="text--light text--3">
-          {currencyFormatter(cat.total)}
-        </span>
-        <span className="text--light text--3">{percentage}%</span>
+      <CategoryIcon iconId={cat.icon_id} color={cat.color} />
+      <div className="flex-column flex-1 gap-2">
+        <span>{cat.category}</span>
+        <ProgressBar amount={percentage} options={{ enableStyle: false }} />
+        <div className="flex-space-between">
+          <span className="text--light text--3">
+            {currencyFormatter(cat.total)}
+          </span>
+          <span className="text--light text--3">{percentage}%</span>
+        </div>
       </div>
     </div>
   )
