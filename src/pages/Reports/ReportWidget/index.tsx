@@ -1,14 +1,10 @@
 import { useIntl } from 'react-intl'
 import ReportCategory from './ReportCategory'
-
-type Report = {
-  category: string
-  total: number
-}
+import { Category, ReportCategory as TReportCategory } from '@/types'
 
 type ReportWidgetProps = {
   type: 'income' | 'expense'
-  report: Report[]
+  report: TReportCategory[]
   typeTotal: number
 }
 
@@ -31,7 +27,13 @@ const ReportWidget: React.FC<ReportWidgetProps> = ({
     <div key={type} className="report-widget">
       <span>{getTitle()}</span>
       {report.map((cat, idx) => {
-        return <ReportCategory key={idx} cat={cat} typeTotal={typeTotal} />
+        return (
+          <ReportCategory
+            key={idx}
+            cat={cat as Category & { total: number }}
+            typeTotal={typeTotal}
+          />
+        )
       })}
     </div>
   )

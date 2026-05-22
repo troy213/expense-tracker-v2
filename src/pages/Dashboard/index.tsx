@@ -2,17 +2,14 @@ import { useState } from 'react'
 import { SearchSvg } from '@/assets'
 import { useOutletContext } from 'react-router-dom'
 import { Navbar } from '@/components'
+import type { LayoutContextType } from '@/components/Layout'
 import SearchModal from '@/components/Modal/SearchModal'
 import DashboardInfo from './DashboardInfo'
 import Transactions from './Transactions'
 
-type LayoutContextType = {
-  displayCount: number
-}
-
 const Dashboard = () => {
   const [searchModalIsOpen, setSearchModalIsOpen] = useState(false)
-  const { displayCount } = useOutletContext<LayoutContextType>()
+  const { scrollParent } = useOutletContext<LayoutContextType>()
 
   const handleOpenModal = () => {
     setSearchModalIsOpen((prevState) => !prevState)
@@ -35,7 +32,7 @@ const Dashboard = () => {
         <DashboardInfo />
       </div>
 
-      <Transactions displayCount={displayCount} />
+      <Transactions scrollParent={scrollParent} />
     </div>
   )
 }

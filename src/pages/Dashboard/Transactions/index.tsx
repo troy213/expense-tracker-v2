@@ -1,24 +1,31 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
-import { useAppSelector } from '@/hooks'
+import { Virtuoso } from 'react-virtuoso'
+import { useAppSelector, useExpandableGroups } from '@/hooks'
 import SearchResult from './SearchResult'
 import TransactionContainer from './TransactionContainer'
 
 type TransactionsProps = {
-  displayCount: number
+  scrollParent: HTMLElement | null
 }
 
-const Transactions = ({ displayCount }: TransactionsProps) => {
+// Number of most-recent groups expanded by default on first load.
+const DEFAULT_EXPANDED_COUNT = 3
+
+const Transactions = ({ scrollParent }: TransactionsProps) => {
   const { data } = useAppSelector((state) => state.mainReducer)
   const [selectedTransaction, setSelectedTransaction] = useState('')
+  const { isExpanded, toggle } = useExpandableGroups(
+    data,
+    (group) => group.date,
+    DEFAULT_EXPANDED_COUNT
+  )
   const { formatMessage } = useIntl()
 
   // Reset selected transaction when data changes
   useEffect(() => {
     setSelectedTransaction('')
   }, [data.length])
-
-  const displayedData = data.slice(0, displayCount)
 
   if (!data.length)
     return (
@@ -37,17 +44,25 @@ const Transactions = ({ displayCount }: TransactionsProps) => {
     <div className="transactions">
       <SearchResult />
 
-      {displayedData.map((item, index) => {
-        return (
-          <TransactionContainer
-            data={item}
-            index={index}
-            key={item.date}
-            selectedTransaction={selectedTransaction}
-            setSelectedTransaction={setSelectedTransaction}
-          />
-        )
-      })}
+      {scrollParent && (
+        <Virtuoso
+          customScrollParent={scrollParent}
+          data={data}
+          computeItemKey={(_, item) => item.date}
+          itemContent={(index, item) => (
+            <div className="transactions__item">
+              <TransactionContainer
+                data={item}
+                index={index}
+                isExpanded={isExpanded(item.date)}
+                onToggle={toggle}
+                selectedTransaction={selectedTransaction}
+                setSelectedTransaction={setSelectedTransaction}
+              />
+            </div>
+          )}
+        />
+      )}
     </div>
   )
 }

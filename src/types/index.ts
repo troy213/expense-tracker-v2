@@ -62,6 +62,10 @@ export type Data = {
   }[]
 }
 
+export type ReportCategory = Category & {
+  total: number
+}
+
 export type ConditionArray =
   | {
       condition: boolean

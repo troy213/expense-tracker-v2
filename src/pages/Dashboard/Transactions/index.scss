@@ -11,5 +11,7 @@
   color: $color-primary;
   border-radius: 1rem 1rem 0 0;
   padding: 1.5rem 1rem 1rem;
-  // overflow-y: auto;
+  &__item {
+    padding-bottom: 1rem;
+  }
 }
