@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect } from 'react'
 import { useIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import {
@@ -14,14 +14,13 @@ import {
 import { ProgressBar, Widget } from '@/components'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { mainAction } from '@/store/main/main-slice'
+import { getDBDashboardInfo } from '@/store/report/report-thunk'
 import {
   calculatePercentage,
-  calculateRemainingBudget,
   combineClassName,
   currencyFormatter,
   formatTransactionDate,
   getCurrentMonthRange,
-  updateTotal,
 } from '@/utils'
 
 type BalanceProps = {
@@ -29,34 +28,19 @@ type BalanceProps = {
 }
 
 const DashboardInfo = () => {
+  const dispatch = useAppDispatch()
   const { formatMessage } = useIntl()
   const { data, hideBalance } = useAppSelector((state) => state.mainReducer)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
-  const { totalIncome, totalExpense, totalBalance } = updateTotal(
-    data,
-    categories
-  )
+  const { totalIncome, totalExpenses, totalBudget, remainingBudget } =
+    useAppSelector((state) => state.reportReducer)
+
+  const totalBalance = totalIncome - totalExpenses
   const { firstDate, lastDate } = getCurrentMonthRange()
 
-  const expenseCategories = useMemo(() => {
-    return categories.filter((c) => c.type === 'expense').map((c) => c.id)
-  }, [categories])
-
-  const totalBudget = useMemo(() => {
-    return categories
-      .filter((c) => c.type === 'expense')
-      .reduce((acc, curr) => acc + (curr.budget ?? 0), 0)
-  }, [categories])
-
-  const remainingBudget = useMemo(() => {
-    return calculateRemainingBudget(
-      data,
-      [],
-      categories,
-      expenseCategories,
-      totalBudget
-    )
-  }, [data, categories, expenseCategories, totalBudget])
+  useEffect(() => {
+    dispatch(getDBDashboardInfo())
+  }, [dispatch, data, categories])
 
   const budgetPercentage = calculatePercentage(remainingBudget, totalBudget)
   const isWarning = budgetPercentage > 0 && budgetPercentage <= 25
@@ -106,7 +90,7 @@ const DashboardInfo = () => {
                 </span>
                 <ArrowDownSvg className="icon--sm icon--stroke-danger" />
               </div>
-              <span>{currencyFormatter(totalExpense)}</span>
+              <span>{currencyFormatter(totalExpenses)}</span>
             </div>
           </Widget>
         </div>

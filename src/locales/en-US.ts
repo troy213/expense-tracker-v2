@@ -44,6 +44,7 @@ const messages = {
   EditTransaction: 'Edit Transaction',
   English: 'English',
   Expense: 'Expense',
+  Experimental: 'Experimental',
   Export: 'Download',
   ExportData: 'Download Data (.xlsx)',
   ExportDataMessage: 'It will export all your data to an .xlsx file.',

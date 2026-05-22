@@ -44,6 +44,7 @@ const messages = {
   EditTransaction: 'Ubah Transaksi',
   English: 'Bahasa Inggris',
   Expense: 'Pengeluaran',
+  Experimental: 'Eksperimental',
   Export: 'Unduh',
   ExportData: 'Unduh Data (.xlsx)',
   ExportDataMessage: 'Ini akan mengunduh semua data anda ke file .xlsx.',
