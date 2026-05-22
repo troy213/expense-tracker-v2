@@ -5,7 +5,7 @@ import { DATE_RANGE } from '@/constants'
 import DateRangeModal from '@/components/Modal/DateRangeModal'
 import InputDateModal from '@/components/Modal/InputDateModal'
 import { useAppSelector } from '@/hooks'
-import { Data } from '@/types'
+import { Data, ReportCategory } from '@/types'
 import { getCategoryById, updateTotal } from '@/utils'
 import ReportInfo from './ReportInfo'
 import ReportWidget from './ReportWidget'
@@ -91,7 +91,7 @@ const Reports = () => {
     }
   }
 
-  const generateReport = (type: string) =>
+  const generateReport = (type: string): ReportCategory[] =>
     categories
       .filter((category) => category.type === type)
       .map((category) => {
@@ -105,9 +105,7 @@ const Reports = () => {
           .reduce((total, curr) => total + curr.amount, 0)
 
         return {
-          icon_id: category.icon_id,
-          color: category.color,
-          category: category.name,
+          ...category,
           total: catAmount,
         }
       })
