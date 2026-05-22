@@ -53,6 +53,9 @@ const Theme = () => {
                 {formatMessage({ id: 'DarkTheme' })}
               </label>
             </div>
+            <span className="text--italic text--light text--3">
+              ({formatMessage({ id: 'Experimental' })})
+            </span>
           </button>
         </li>
       </ul>

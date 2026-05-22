@@ -66,6 +66,13 @@ export type ReportCategory = Category & {
   total: number
 }
 
+export type DashboardInfo = {
+  totalIncome: number
+  totalExpenses: number
+  totalBudget: number
+  remainingBudget: number
+}
+
 export type ConditionArray =
   | {
       condition: boolean

@@ -1,18 +1,17 @@
 import { useEffect, useState } from 'react'
-import { useIntl } from 'react-intl'
+import { useOutletContext } from 'react-router-dom'
 import { Virtuoso } from 'react-virtuoso'
+import { useIntl } from 'react-intl'
 import { useAppSelector, useExpandableGroups } from '@/hooks'
 import SearchResult from './SearchResult'
 import TransactionContainer from './TransactionContainer'
-
-type TransactionsProps = {
-  scrollParent: HTMLElement | null
-}
+import type { LayoutContextType } from '@/components/Layout'
 
 // Number of most-recent groups expanded by default on first load.
 const DEFAULT_EXPANDED_COUNT = 3
 
-const Transactions = ({ scrollParent }: TransactionsProps) => {
+const Transactions = () => {
+  const { scrollParent } = useOutletContext<LayoutContextType>()
   const { data } = useAppSelector((state) => state.mainReducer)
   const [selectedTransaction, setSelectedTransaction] = useState('')
   const { isExpanded, toggle } = useExpandableGroups(
