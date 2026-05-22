@@ -27,9 +27,6 @@ type LanguageMenu = {
   locales: Locales
 }
 
-export const INITIAL_LOAD = 20
-export const LOAD_MORE_COUNT = 20
-
 export const SETTING_MENUS: SettingMenu[] = [
   {
     title: 'ImportData',

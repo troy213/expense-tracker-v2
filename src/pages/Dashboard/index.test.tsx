@@ -14,7 +14,7 @@ vi.mock('react-router-dom', async () => {
   return {
     ...actual,
     useOutletContext: () => ({
-      displayCount: 20,
+      scrollParent: null,
     }),
   }
 })

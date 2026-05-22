@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef, useState, memo } from 'react'
+import { memo, useEffect, useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 import { useAppSelector } from '@/hooks'
 import { Data, TxFormData } from '@/types'
 import {
   calculateSubdataSummary,
+  combineClassName,
   currencyFormatter,
   formatTransactionDate,
 } from '@/utils'
@@ -12,6 +13,8 @@ import TransactionDetail from './TransactionDetail'
 type TransactionContainerProps = {
   data: Data
   index: number
+  isExpanded: boolean
+  onToggle: (date: string) => void
   selectedTransaction: string
   setSelectedTransaction: (val: string) => void
 }
@@ -19,13 +22,12 @@ type TransactionContainerProps = {
 const TransactionContainer: React.FC<TransactionContainerProps> = ({
   data,
   index,
+  isExpanded,
+  onToggle,
   selectedTransaction,
   setSelectedTransaction,
 }) => {
   const { date, subdata } = data
-  const [isExpanded, setIsExpanded] = useState(index < 3)
-  const [height, setHeight] = useState('0px')
-  const contentRef = useRef<HTMLDivElement>(null)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
   const { formatMessage } = useIntl()
 
@@ -33,8 +35,23 @@ const TransactionContainer: React.FC<TransactionContainerProps> = ({
     return calculateSubdataSummary(subdata, categories)
   }, [subdata, categories])
 
-  const expandableStyle = {
-    maxHeight: isExpanded ? height : '0px',
+  // The collapse wrapper must clip its content (overflow: hidden) while it is
+  // collapsed or animating, otherwise the grid trick can't hide the rows. But
+  // that same clip eats the more-options dropdown. So we only clip until a
+  // group is fully open: a row that mounts already-expanded starts visible (it
+  // doesn't animate), and a toggle-to-open switches to visible once the grid
+  // transition settles.
+  const [allowOverflow, setAllowOverflow] = useState(isExpanded)
+
+  useEffect(() => {
+    // Collapsing: clip immediately so the closing animation hides its content.
+    if (!isExpanded) setAllowOverflow(false)
+  }, [isExpanded])
+
+  const handleExpandableTransitionEnd = (e: React.TransitionEvent) => {
+    if (e.propertyName === 'grid-template-rows' && isExpanded) {
+      setAllowOverflow(true)
+    }
   }
 
   const handleSelectTransaction = (e: React.FormEvent, id: string) => {
@@ -48,24 +65,25 @@ const TransactionContainer: React.FC<TransactionContainerProps> = ({
   }
 
   const handleExpand = () => {
-    setIsExpanded((prevState) => !prevState)
+    onToggle(date)
     setSelectedTransaction('')
   }
 
-  useEffect(() => {
-    if (contentRef.current) {
-      // Add a small buffer (8px) to account for line-height and spacing
-      const scrollHeight = contentRef.current.scrollHeight
-      setHeight(`${scrollHeight + 8}px`)
-    }
-  }, [data])
+  // Collapse uses the CSS grid `grid-template-rows: 0fr -> 1fr` trick (see
+  // SCSS). An already-expanded row renders straight at `1fr` with no value
+  // change, so it never animates on mount/remount — only a real toggle does.
+  const expandableClassName = combineClassName(
+    'transaction-detail-container__expandable-container',
+    [{ condition: isExpanded, className: 'is-expanded' }]
+  )
+
+  const expandableInnerClassName = combineClassName(
+    'transaction-detail-container__expandable-inner',
+    [{ condition: allowOverflow, className: 'is-overflow-visible' }]
+  )
 
   return (
-    <div
-      className="transaction-detail-container"
-      key={date}
-      onClick={handleExpand}
-    >
+    <div className="transaction-detail-container" onClick={handleExpand}>
       <span className="text--italic text--light text--3">
         {formatTransactionDate(date, formatMessage, {
           enableTodayFormat: true,
@@ -73,28 +91,29 @@ const TransactionContainer: React.FC<TransactionContainerProps> = ({
       </span>
 
       <div
-        className="transaction-detail-container__expandable-container"
-        ref={contentRef}
-        style={expandableStyle}
+        className={expandableClassName}
+        onTransitionEnd={handleExpandableTransitionEnd}
       >
-        {subdata.map((subitem, subdataIndex) => {
-          const transactionDetailData: TxFormData = {
-            date,
-            category_id: subitem.category_id,
-            item: subitem.item,
-          }
+        <div className={expandableInnerClassName}>
+          {subdata.map((subitem, subdataIndex) => {
+            const transactionDetailData: TxFormData = {
+              date,
+              category_id: subitem.category_id,
+              item: subitem.item,
+            }
 
-          return (
-            <TransactionDetail
-              data={transactionDetailData}
-              dataIndex={index}
-              subdataIndex={subdataIndex}
-              selectedTransaction={selectedTransaction}
-              handleSelectTransaction={handleSelectTransaction}
-              key={subitem.category_id}
-            />
-          )
-        })}
+            return (
+              <TransactionDetail
+                data={transactionDetailData}
+                dataIndex={index}
+                subdataIndex={subdataIndex}
+                selectedTransaction={selectedTransaction}
+                handleSelectTransaction={handleSelectTransaction}
+                key={subitem.category_id}
+              />
+            )
+          })}
+        </div>
       </div>
 
       <div className="transaction-detail-container__transaction-summary">
