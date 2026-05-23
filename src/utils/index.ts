@@ -152,6 +152,28 @@ export const getMonthRange = (dateString: string) => {
 
 export const getCurrentMonthRange = () => getMonthRange(getDate())
 
+// Returns the 'YYYY-MM' month key of a 'YYYY-MM-DD' date string. Year-aware, so
+// the same month in two different years yields different keys.
+export const getMonthKey = (dateString: string): string =>
+  dateString.slice(0, 7)
+
+// Returns the full month name only (no year), e.g. 'May'. Parsed from the
+// numeric parts and built in local time (mirrors getMonthRange) so day-01 dates
+// never slip to the previous month in negative-offset timezones.
+export const formatMonthLabel = (dateString: string): string => {
+  const [yearStr, monthStr] = dateString.split('-')
+  const date = new Date(Number(yearStr), Number(monthStr) - 1, 1)
+  return date.toLocaleDateString('en-GB', { month: 'long' })
+}
+
+// True when `currentDate` starts a new month relative to the entry above it
+// (or when there is no entry above it). The boundary key is year-aware.
+export const shouldShowMonthHeader = (
+  currentDate: string,
+  prevDate?: string
+): boolean =>
+  prevDate === undefined || getMonthKey(prevDate) !== getMonthKey(currentDate)
+
 export const calculateRemainingBudget = (
   txData: Data[],
   txDetails: { description: string; amount: number }[],

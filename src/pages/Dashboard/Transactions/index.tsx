@@ -3,6 +3,7 @@ import { useOutletContext } from 'react-router-dom'
 import { Virtuoso } from 'react-virtuoso'
 import { useIntl } from 'react-intl'
 import { useAppSelector, useExpandableGroups } from '@/hooks'
+import { formatMonthLabel, shouldShowMonthHeader } from '@/utils'
 import SearchResult from './SearchResult'
 import TransactionContainer from './TransactionContainer'
 import type { LayoutContextType } from '@/components/Layout'
@@ -50,6 +51,11 @@ const Transactions = () => {
           computeItemKey={(_, item) => item.date}
           itemContent={(index, item) => (
             <div className="transactions__item">
+              {shouldShowMonthHeader(item.date, data[index - 1]?.date) && (
+                <span className="transactions__month-header">
+                  {formatMessage({ id: formatMonthLabel(item.date) })}
+                </span>
+              )}
               <TransactionContainer
                 data={item}
                 index={index}
