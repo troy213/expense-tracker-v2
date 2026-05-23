@@ -1,0 +1,4 @@
+# Git hooks (husky) are POSIX sh scripts. Force LF line endings so they execute
+# correctly on macOS/Linux and on fresh Windows clones, where Git's autocrlf
+# would otherwise rewrite them to CRLF and break `sh`.
+.husky/* text eol=lf
