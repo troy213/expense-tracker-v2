@@ -111,6 +111,8 @@ const messages = {
   TotalMaxBudget: 'Total Max Anggaran',
   TotalRemainingBudget: 'Sisa Anggaran',
   Transaction: 'Transaksi',
+  Transactions: 'Transaksi',
+  TransactionCount: '{count} transaksi',
   TransactionDetailNo: 'Detail Transaksi #{index}',
   TransactionName: 'Nama transaksi',
   Update: 'Perbarui',

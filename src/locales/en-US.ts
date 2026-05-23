@@ -110,6 +110,8 @@ const messages = {
   TotalMaxBudget: 'Total Max Budget',
   TotalRemainingBudget: 'Total Remaining Budget',
   Transaction: 'Transaction',
+  Transactions: 'Transactions',
+  TransactionCount: '{count} transactions',
   TransactionDetailNo: 'Transaction Detail #{index}',
   TransactionName: 'Transaction name',
   Update: 'Update',

@@ -5,7 +5,9 @@ import {
   ConditionArray,
   Data,
   Transaction,
+  TransactionFilters,
 } from '@/types'
+import { DATE_RANGE } from '@/constants'
 
 export const combineClassName = (
   defaultStyle: string = '',
@@ -151,6 +153,136 @@ export const getMonthRange = (dateString: string) => {
 }
 
 export const getCurrentMonthRange = () => getMonthRange(getDate())
+
+// Maps a Date to a zero-padded local 'YYYY-MM-DD' key (mirrors getDate()).
+// Exported so callers converting a Date back to a date string stay timezone-safe
+// (toISOString() would shift the day in non-UTC timezones).
+export const toDateKey = (d: Date): string =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+
+// Translates a DATE_RANGE selection into inclusive 'YYYY-MM-DD' bounds.
+// All Time yields null bounds (no date filtering).
+export const getDateRangeForFilter = (
+  rangeType: number,
+  now: Date,
+  custom?: { from: string; to: string }
+): { dateFrom: string | null; dateTo: string | null } => {
+  switch (rangeType) {
+    case DATE_RANGE.THIS_MONTH: {
+      const { firstDate, lastDate } = getMonthRange(toDateKey(now))
+      return { dateFrom: firstDate, dateTo: lastDate }
+    }
+    case DATE_RANGE.LAST_MONTH: {
+      const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+      const { firstDate, lastDate } = getMonthRange(toDateKey(lastMonth))
+      return { dateFrom: firstDate, dateTo: lastDate }
+    }
+    case DATE_RANGE.THIS_YEAR:
+      return {
+        dateFrom: `${now.getFullYear()}-01-01`,
+        dateTo: `${now.getFullYear()}-12-31`,
+      }
+    case DATE_RANGE.CUSTOM_FILTER:
+      return { dateFrom: custom?.from ?? null, dateTo: custom?.to ?? null }
+    case DATE_RANGE.ALL_TIME:
+    default:
+      return { dateFrom: null, dateTo: null }
+  }
+}
+
+// Inclusive whole-day difference between two 'YYYY-MM-DD' strings (local).
+const inclusiveDayCount = (startKey: string, endKey: string): number => {
+  const [sy, sm, sd] = startKey.split('-').map(Number)
+  const [ey, em, ed] = endKey.split('-').map(Number)
+  const start = new Date(sy, sm - 1, sd)
+  const end = new Date(ey, em - 1, ed)
+  const diffMs = end.getTime() - start.getTime()
+  return Math.floor(diffMs / (24 * 60 * 60 * 1000)) + 1
+}
+
+// Average daily expense within a window clamped to `today`, so future-dated
+// entries distort neither the numerator (summed expense) nor the denominator
+// (elapsed days). For All Time (null bounds) the window is [oldest tx, today].
+export const calculateAverageSpending = (
+  data: Data[],
+  categories: Category[],
+  dateFrom: string | null,
+  dateTo: string | null,
+  today: string
+): number => {
+  const expenseIds = new Set(
+    categories.filter((c) => c.type === 'expense').map((c) => c.id)
+  )
+
+  // Determine the window start.
+  let windowStart = dateFrom
+  if (windowStart === null) {
+    // All Time: oldest transaction date present in data.
+    for (const entry of data) {
+      if (windowStart === null || entry.date < windowStart) {
+        windowStart = entry.date
+      }
+    }
+    if (windowStart === null) return 0 // no data
+  }
+
+  // Window end is clamped to today.
+  const windowEnd = dateTo !== null && dateTo < today ? dateTo : today
+
+  if (windowEnd < windowStart) return 0 // range entirely in the future
+
+  const totalExpense = data.reduce((sum, entry) => {
+    if (entry.date < windowStart! || entry.date > windowEnd) return sum
+    entry.subdata.forEach((sub) => {
+      if (expenseIds.has(sub.category_id)) {
+        sum += sub.item.reduce((acc, i) => acc + i.amount, 0)
+      }
+    })
+    return sum
+  }, 0)
+
+  const days = Math.max(1, inclusiveDayCount(windowStart, windowEnd))
+  return totalExpense / days
+}
+
+// Pure predicate chain over a flat Transaction[]. All provided filters are
+// combined with AND. Dates are 'YYYY-MM-DD' strings (lexicographic compare).
+export const filterTransactions = (
+  transactions: Transaction[],
+  categories: Category[],
+  filters: TransactionFilters
+): Transaction[] => {
+  const { type, category_id, search, date_from, date_to } = filters
+  const typeById = type ? new Map(categories.map((c) => [c.id, c.type])) : null
+  const lowerSearch = search?.toLowerCase()
+
+  return transactions.filter((tx) => {
+    if (type && typeById!.get(tx.category_id) !== type) return false
+    if (category_id && tx.category_id !== category_id) return false
+    if (lowerSearch && !tx.description.toLowerCase().includes(lowerSearch))
+      return false
+    if (date_from && tx.date < date_from) return false
+    if (date_to && tx.date > date_to) return false
+    return true
+  })
+}
+
+// Builds a report-detail query string, omitting empty/null params.
+export const buildReportDetailQuery = (ctx: {
+  type?: 'income' | 'expense'
+  categoryId?: string
+  search?: string
+  dateFrom?: string | null
+  dateTo?: string | null
+}): string => {
+  const params = new URLSearchParams()
+  if (ctx.type) params.set('type', ctx.type)
+  if (ctx.categoryId) params.set('category_id', ctx.categoryId)
+  if (ctx.search) params.set('search', ctx.search)
+  if (ctx.dateFrom) params.set('date_from', ctx.dateFrom)
+  if (ctx.dateTo) params.set('date_to', ctx.dateTo)
+  return params.toString()
+}
 
 // Returns the 'YYYY-MM' month key of a 'YYYY-MM-DD' date string. Year-aware, so
 // the same month in two different years yields different keys.

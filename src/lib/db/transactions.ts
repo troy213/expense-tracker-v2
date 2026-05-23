@@ -1,4 +1,5 @@
-import { Transaction } from '@/types'
+import { Transaction, TransactionFilters } from '@/types'
+import { filterTransactions } from '@/utils'
 import { getDB } from './connection'
 
 /**
@@ -166,6 +167,23 @@ async function clearTransactions(): Promise<void> {
   await database.clear('transactions')
 }
 
+/**
+ * Get transactions matching a combination of filters
+ * (type / category_id / search / date range). Reads both stores once and
+ * applies the predicate chain in memory — fine at the current scale and
+ * handles every param combination uniformly.
+ */
+async function getFilteredTransactions(
+  filters: TransactionFilters
+): Promise<Transaction[]> {
+  const database = await getDB()
+  const transactions = await database.getAll('transactions')
+  const categories = filters.type
+    ? await database.getAllFromIndex('categories', 'by-type', filters.type)
+    : []
+  return filterTransactions(transactions, categories, filters)
+}
+
 const transactionServices = {
   getAllTransactions,
   getTransactionsByDateRange,
@@ -174,6 +192,7 @@ const transactionServices = {
   getTransactionsByDescription,
   getTransactionsWithPagination,
   getTransactionById,
+  getFilteredTransactions,
   putTransaction,
   putTransactions,
   deleteTransaction,

@@ -95,3 +95,11 @@ export type TxFormData = {
   category_id: string
   item: TxFormItem[]
 }
+
+export type TransactionFilters = {
+  type?: 'income' | 'expense'
+  category_id?: string
+  search?: string
+  date_from?: string
+  date_to?: string
+}
