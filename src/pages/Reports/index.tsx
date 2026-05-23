@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { MoreVerticalSvg } from '@/assets'
 import { Navbar } from '@/components'
 import { DATE_RANGE } from '@/constants'
@@ -6,88 +6,66 @@ import DateRangeModal from '@/components/Modal/DateRangeModal'
 import InputDateModal from '@/components/Modal/InputDateModal'
 import { useAppSelector } from '@/hooks'
 import { Data, ReportCategory } from '@/types'
-import { getCategoryById, updateTotal } from '@/utils'
+import {
+  calculateAverageSpending,
+  getCategoryById,
+  getDate,
+  getDateRangeForFilter,
+  toDateKey,
+  updateTotal,
+} from '@/utils'
 import ReportInfo from './ReportInfo'
 import ReportWidget from './ReportWidget'
 
 const Reports = () => {
   const { data } = useAppSelector((state) => state.mainReducer)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
-  const [startDate, setStartDate] = useState<Date | null>(null)
-  const [endDate, setEndDate] = useState<Date | null>(null)
   const [isMoreModalOpen, setIsMoreModalOpen] = useState(false)
   const [isDateModalOpen, setIsDateModalOpen] = useState(false)
   const [dateRange, setDateRange] = useState(DATE_RANGE.ALL_TIME)
+  const [customRange, setCustomRange] = useState<{
+    from: string
+    to: string
+  } | null>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
   const now = new Date()
+  const today = getDate()
 
-  const openDateFilterModal = () => {
-    setIsDateModalOpen(!isDateModalOpen)
-  }
+  const { dateFrom, dateTo } = getDateRangeForFilter(
+    dateRange,
+    now,
+    customRange ?? undefined
+  )
 
   const filteredData: Data[] =
-    dateRange === 0
-      ? data
-      : data.filter((item) => {
-          const itemDate = new Date(item.date)
-          return (
-            itemDate >= (startDate ?? new Date(0)) &&
-            itemDate <= (endDate ?? new Date(0))
-          )
-        })
-
-  const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'short',
-    day: '2-digit',
-  }
-  const totalDays =
-    startDate && endDate
-      ? (endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)
-      : 1
+    dateFrom && dateTo
+      ? data.filter((item) => item.date >= dateFrom && item.date <= dateTo)
+      : data
 
   const { totalIncome, totalExpense, totalBalance } = updateTotal(
     filteredData,
     categories
   )
-  const avgExpense = totalExpense / (totalDays ? totalDays : 1)
+  const avgExpense = calculateAverageSpending(
+    data,
+    categories,
+    dateFrom,
+    dateTo,
+    today
+  )
 
-  const buttonRef = useRef<HTMLButtonElement>(null)
+  const openDateFilterModal = () => setIsDateModalOpen((val) => !val)
+  const handleMoreOption = () => setIsMoreModalOpen((val) => !val)
 
-  const SetCustomDate = (start: Date, end: Date) => {
-    setStartDate(start)
-    setEndDate(end)
+  const setCustomDate = (from: string, to: string) => {
+    setCustomRange({ from, to })
   }
 
   const handleChangeDateRange = (range: number) => {
-    setIsMoreModalOpen((val) => !val)
+    setIsMoreModalOpen(false)
     setDateRange(range)
-
     if (range === DATE_RANGE.CUSTOM_FILTER) {
       openDateFilterModal()
-    } else {
-      switch (range) {
-        case DATE_RANGE.THIS_MONTH:
-          setStartDate(new Date(now.getFullYear(), now.getMonth(), 1))
-          setEndDate(
-            new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59)
-          )
-          break
-        case DATE_RANGE.LAST_MONTH:
-          setStartDate(new Date(now.getFullYear(), now.getMonth() - 1, 1))
-          setEndDate(
-            new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999)
-          )
-          break
-        case DATE_RANGE.THIS_YEAR:
-          setStartDate(new Date(now.getFullYear(), 0, 1))
-          setEndDate(
-            new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59)
-          )
-          break
-        // DATE_RANGE.ALL_TIME:
-        default:
-          return
-      }
     }
   }
 
@@ -96,7 +74,7 @@ const Reports = () => {
       .filter((category) => category.type === type)
       .map((category) => {
         const catAmount = filteredData
-          .flatMap((data) => data.subdata)
+          .flatMap((entry) => entry.subdata)
           .filter((sub) => {
             const subType = getCategoryById(sub.category_id, categories)?.type
             return subType === type && sub.category_id === category.id
@@ -104,31 +82,21 @@ const Reports = () => {
           .flatMap((sub) => sub.item)
           .reduce((total, curr) => total + curr.amount, 0)
 
-        return {
-          ...category,
-          total: catAmount,
-        }
+        return { ...category, total: catAmount }
       })
       .filter((cat) => cat.total > 0)
       .sort((a, b) => b.total - a.total)
 
   const incomeReport = generateReport('income')
   const expenseReport = generateReport('expense')
-  const handleMoreOption = () => {
-    setIsMoreModalOpen((val) => !val)
+
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
   }
-
-  useEffect(() => {
-    if (dateRange === DATE_RANGE.ALL_TIME) {
-      const defaultStartDate = data.length
-        ? new Date(data[data.length - 1].date)
-        : null
-      const defaultEndDate = data.length ? new Date(data[0].date) : null
-
-      setStartDate(defaultStartDate)
-      setEndDate(defaultEndDate)
-    }
-  }, [data, dateRange])
+  const formatLabel = (key: string) =>
+    new Date(`${key}T00:00:00`).toLocaleString('en-US', options)
 
   return (
     <div className="reports">
@@ -153,17 +121,17 @@ const Reports = () => {
               <InputDateModal
                 isOpen={isDateModalOpen}
                 setIsOpen={openDateFilterModal}
-                SetCustomDate={SetCustomDate}
+                SetCustomDate={(from: Date, to: Date) =>
+                  setCustomDate(toDateKey(from), toDateKey(to))
+                }
               />
             )}
           </div>
         </Navbar>
 
         <ReportInfo
-          firstDate={
-            startDate ? startDate.toLocaleString('en-US', options) : ''
-          }
-          lastDate={endDate ? endDate.toLocaleString('en-US', options) : ''}
+          firstDate={dateFrom ? formatLabel(dateFrom) : ''}
+          lastDate={dateTo ? formatLabel(dateTo) : ''}
           totalIncome={totalIncome}
           totalExpense={totalExpense}
           totalBalance={totalBalance}
@@ -174,11 +142,15 @@ const Reports = () => {
           type="income"
           report={incomeReport}
           typeTotal={totalIncome}
+          dateFrom={dateFrom}
+          dateTo={dateTo}
         />
         <ReportWidget
           type="expense"
           report={expenseReport}
           typeTotal={totalExpense}
+          dateFrom={dateFrom}
+          dateTo={dateTo}
         />
       </div>
     </div>

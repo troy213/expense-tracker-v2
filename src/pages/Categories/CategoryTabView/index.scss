@@ -29,7 +29,7 @@
   &__budget-widget {
     padding: 1rem;
     border-radius: 0.5rem;
-    box-shadow: 0 0.25rem 12px rgba($color: black, $alpha: 0.25);
+    box-shadow: $box-shadow-default;
     background: linear-gradient($color-primary-2, $color-primary);
     color: $color-white;
   }
@@ -49,7 +49,7 @@
     flex: 1;
     gap: 1rem;
     padding: 1rem;
-    box-shadow: 0 0.25rem 12px rgba($color: black, $alpha: 0.25);
+    box-shadow: $box-shadow-default;
 
     &.active {
       &--left {

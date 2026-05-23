@@ -1,3 +1,5 @@
+@import '@/styles/variables';
+
 .form-transaction-items {
   display: flex;
   flex-direction: column;
@@ -10,5 +12,5 @@
   padding: 1rem;
   gap: 0.5rem;
   border-radius: 0.5rem;
-  box-shadow: 0 0.25rem 12px rgba($color: black, $alpha: 0.25);
+  box-shadow: $box-shadow-default;
 }

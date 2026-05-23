@@ -1,5 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit'
-import { DashboardInfo } from '@/types'
+import { Data, DashboardInfo } from '@/types'
 import { InitialState } from './report-slice'
 
 export const setDashboardInfo = (
@@ -14,4 +14,12 @@ export const setDashboardInfo = (
   state.totalBudget = totalBudget
   state.remainingBudget = remainingBudget
   state.isLoading = false
+}
+
+export const setDetailData = (
+  state: InitialState,
+  action: PayloadAction<Data[]>
+) => {
+  state.detailData = action.payload
+  state.isDetailLoading = false
 }

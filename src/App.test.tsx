@@ -43,6 +43,18 @@ describe('App Component routing test', () => {
     expect(screen.getByText('Reports')).toBeInTheDocument()
   })
 
+  it('renders the Report Detail component on /report-detail path', () => {
+    render(
+      <MemoryRouter initialEntries={['/report-detail?type=expense']}>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </MemoryRouter>
+    )
+
+    expect(screen.getByText('Reports')).toBeInTheDocument()
+  })
+
   it('renders the Settings component on /settings path', () => {
     render(
       <MemoryRouter initialEntries={['/settings']}>

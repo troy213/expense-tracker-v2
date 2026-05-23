@@ -4,7 +4,14 @@ import { useEffect } from 'react'
 import { Layout, PWAInstallPrompt } from '@/components'
 import { LANGUAGES, LOCALES, THEME } from '@/constants'
 import { useAppSelector, useInitConfig } from '@/hooks'
-import { Categories, Dashboard, NotFound, Reports, Settings } from '@/pages'
+import {
+  Categories,
+  Dashboard,
+  NotFound,
+  ReportDetail,
+  Reports,
+  Settings,
+} from '@/pages'
 import {
   About,
   AdvancedSetting,
@@ -38,6 +45,7 @@ const App = () => {
           <Route path="/" element={<Dashboard />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/reports" element={<Reports />} />
+          <Route path="/report-detail" element={<ReportDetail />} />
           <Route path="/settings" element={<Settings />}>
             <Route index element={<SettingMenus />} />
             <Route path="about" element={<About />} />
