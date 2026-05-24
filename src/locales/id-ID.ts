@@ -18,6 +18,8 @@ const messages = {
   August: 'Agustus',
   AvgSpending: 'Rata-rata Pengeluaran',
   Back: 'Kembali',
+  BudgetLeft: '{budget} Tersisa',
+  BudgetMonthlyUsed: '{budget}% anggaran bulanan terpakai',
   BudgetRp: 'Anggaran (Rp.)',
   Cancel: 'Batal',
   Category: 'Kategori',
@@ -90,6 +92,7 @@ const messages = {
   PerDay: '/hari',
   PreviousDay: 'Hari Sebelumnya',
   RecentTransactions: 'Transaksi Terbaru',
+  RemainingBudget: 'Sisa Anggaran',
   RemainingBudgetForThisCategory:
     'Sisa anggaran untuk kategori ini di bulan ini',
   Reports: 'Laporan',

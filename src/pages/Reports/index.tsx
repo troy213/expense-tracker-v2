@@ -4,7 +4,7 @@ import { Navbar } from '@/components'
 import { DATE_RANGE } from '@/constants'
 import DateRangeModal from '@/components/Modal/DateRangeModal'
 import InputDateModal from '@/components/Modal/InputDateModal'
-import { useAppSelector, useClickOutside } from '@/hooks'
+import { useAppDispatch, useAppSelector, useClickOutside } from '@/hooks'
 import { Data, ReportCategory } from '@/types'
 import {
   calculateAverageSpending,
@@ -16,17 +16,19 @@ import {
 } from '@/utils'
 import ReportInfo from './ReportInfo'
 import ReportWidget from './ReportWidget'
+import { reportAction } from '@/store/report/report-slice'
 
 const Reports = () => {
   const { data } = useAppSelector((state) => state.mainReducer)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
+  const { dateRange, customRange } = useAppSelector(
+    (state) => state.reportReducer
+  )
   const [isMoreModalOpen, setIsMoreModalOpen] = useState(false)
   const [isDateModalOpen, setIsDateModalOpen] = useState(false)
-  const [dateRange, setDateRange] = useState(DATE_RANGE.ALL_TIME)
-  const [customRange, setCustomRange] = useState<{
-    from: string
-    to: string
-  } | null>(null)
+
+  const dispatch = useAppDispatch()
+
   const buttonRef = useRef<HTMLButtonElement>(null)
   const dateRangeModalRef = useRef<HTMLDivElement>(null)
   useClickOutside(
@@ -65,12 +67,14 @@ const Reports = () => {
   const handleMoreOption = () => setIsMoreModalOpen((val) => !val)
 
   const setCustomDate = (from: string, to: string) => {
-    setCustomRange({ from, to })
+    dispatch(
+      reportAction.setState({ state: 'customRange', value: { from, to } })
+    )
   }
 
   const handleChangeDateRange = (range: number) => {
     setIsMoreModalOpen(false)
-    setDateRange(range)
+    dispatch(reportAction.setState({ state: 'dateRange', value: range }))
     if (range === DATE_RANGE.CUSTOM_FILTER) {
       openDateFilterModal()
     }

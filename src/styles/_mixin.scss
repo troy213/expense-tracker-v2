@@ -1,3 +1,7 @@
 @mixin fadeInAnimation($time: 100ms) {
   animation: fadeIn $time;
 }
+
+@mixin spinAnimation($time: 1s) {
+  animation: spin $time linear infinite;
+}

@@ -15,6 +15,12 @@
   color: $color-primary;
   border-radius: 0.75rem;
   box-shadow: $box-shadow-default;
+
+  &__budget {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
 }
 
 body.dark .report-detail-info {

@@ -18,6 +18,8 @@ const messages = {
   August: 'August',
   AvgSpending: 'Average Spending',
   Back: 'Back',
+  BudgetLeft: '{budget} Left',
+  BudgetMonthlyUsed: '{budget}% of monthly budget used',
   BudgetRp: 'Budget (Rp.)',
   Cancel: 'Cancel',
   Category: 'Category',
@@ -89,6 +91,7 @@ const messages = {
   PerDay: '/day',
   PreviousDay: 'Previous Day',
   RecentTransactions: 'Recent Transactions',
+  RemainingBudget: 'Remaining Budget',
   RemainingBudgetForThisCategory:
     'Remaining budget for this category in this month',
   Reports: 'Reports',

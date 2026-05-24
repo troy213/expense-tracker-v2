@@ -13,7 +13,7 @@ import TransactionContainer from '@/pages/Dashboard/Transactions/TransactionCont
 import { getDBReportDetail } from '@/store/report/report-thunk'
 import { reportAction } from '@/store/report/report-slice'
 import { TransactionFilters } from '@/types'
-import { formatTransactionDate, getCategoryById, updateTotal } from '@/utils'
+import { formatTransactionDate, getCategoryById } from '@/utils'
 import ReportDetailInfo from './ReportDetailInfo'
 
 const ReportDetail = () => {
@@ -24,7 +24,7 @@ const ReportDetail = () => {
 
   const { data } = useAppSelector((state) => state.mainReducer)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
-  const { detailData, selectedDetailCategory, isDetailLoading } =
+  const { detailCount, detailData, selectedDetailCategory, isDetailLoading } =
     useAppSelector((state) => state.reportReducer)
 
   const [selectedTransaction, setSelectedTransaction] = useState('')
@@ -87,13 +87,6 @@ const ReportDetail = () => {
     return formatMessage({ id: 'AllTime' })
   }, [filters, formatMessage])
 
-  const { totalIncome, totalExpense } = updateTotal(detailData, categories)
-  const count = detailData.reduce(
-    (sum, entry) =>
-      sum + entry.subdata.reduce((s, sub) => s + sub.item.length, 0),
-    0
-  )
-
   // Collapse to the first few date groups until the user opts into the full list.
   const hasMore = detailData.length > DEFAULT_VISIBLE_GROUPS
   const visibleData = showAll
@@ -121,10 +114,7 @@ const ReportDetail = () => {
           </div>
         </div>
 
-        <ReportDetailInfo
-          totalIncome={totalIncome}
-          totalExpense={totalExpense}
-        />
+        <ReportDetailInfo />
 
         <div className="flex-space-between flex-align-center pt-4">
           <div className="flex-column">
@@ -132,7 +122,10 @@ const ReportDetail = () => {
               {formatMessage({ id: 'RecentTransactions' })}
             </span>
             <span className="text--light text--3">
-              {formatMessage({ id: 'TransactionCount' }, { count })}
+              {formatMessage(
+                { id: 'TransactionCount' },
+                { count: detailCount }
+              )}
             </span>
           </div>
 
@@ -187,7 +180,7 @@ const ReportDetail = () => {
               <span className="text--italic text--3 text--color-primary">
                 {formatMessage(
                   { id: 'SeeMoreTransactions' },
-                  { count: count - DEFAULT_VISIBLE_GROUPS }
+                  { count: detailCount - DEFAULT_VISIBLE_GROUPS }
                 )}
               </span>
             </button>
