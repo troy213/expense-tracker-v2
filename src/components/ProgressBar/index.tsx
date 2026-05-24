@@ -4,11 +4,12 @@ type ProgressBarProps = {
   amount: number
   options?: {
     enableStyle?: boolean
+    progressClassName?: string
   }
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ amount, options = {} }) => {
-  const { enableStyle = true } = options
+  const { enableStyle = true, progressClassName = '' } = options
   const progressWidth = `${amount}%`
   const isWarning = amount > 0 && amount <= 25
   const isDanger = amount <= 0
@@ -21,6 +22,10 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ amount, options = {} }) => {
     {
       condition: enableStyle && isDanger,
       className: 'progress-bar__fill--danger',
+    },
+    {
+      condition: progressClassName !== '',
+      className: progressClassName,
     },
   ])
 

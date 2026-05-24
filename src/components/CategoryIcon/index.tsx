@@ -7,9 +7,16 @@ type CategoryIconProps = {
   color?: string
   width?: number | string
   height?: number | string
+  iconClassName?: string
 }
 
-const CategoryIcon = ({ iconId, color, width, height }: CategoryIconProps) => {
+const CategoryIcon = ({
+  iconId,
+  color,
+  width,
+  height,
+  iconClassName,
+}: CategoryIconProps) => {
   const IconComponent = CATEGORY_ICONS_MAP[iconId]
   return (
     <div
@@ -23,7 +30,9 @@ const CategoryIcon = ({ iconId, color, width, height }: CategoryIconProps) => {
         } as React.CSSProperties
       }
     >
-      {IconComponent && <IconComponent className="icon--xl" />}
+      {IconComponent && (
+        <IconComponent className={iconClassName || 'icon--xl'} />
+      )}
     </div>
   )
 }
