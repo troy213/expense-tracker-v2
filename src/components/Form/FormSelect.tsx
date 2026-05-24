@@ -1,6 +1,7 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { useFormContext, Controller, FieldValues } from 'react-hook-form'
 import { useIntl } from 'react-intl'
+import { useClickOutside } from '@/hooks'
 import { combineClassName } from '@/utils'
 import { ChevronDownSvg } from '@/assets'
 import './FormSelect.scss'
@@ -52,6 +53,9 @@ const FormSelect = ({
   const { formatMessage } = useIntl()
   const [isOpen, setIsOpen] = useState(false)
   const inputRef = useRef<HTMLDivElement>(null)
+
+  const close = useCallback(() => setIsOpen(false), [])
+  useClickOutside(inputRef, close, isOpen)
 
   return (
     <Controller
@@ -123,7 +127,6 @@ const FormSelect = ({
               ref={inputRef}
               className={finalInputClassName}
               onClick={() => setIsOpen((val) => !val)}
-              onBlur={() => setIsOpen(false)}
               role="combobox"
               aria-haspopup="listbox"
               aria-expanded={isOpen}

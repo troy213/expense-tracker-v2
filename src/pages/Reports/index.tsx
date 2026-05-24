@@ -4,7 +4,7 @@ import { Navbar } from '@/components'
 import { DATE_RANGE } from '@/constants'
 import DateRangeModal from '@/components/Modal/DateRangeModal'
 import InputDateModal from '@/components/Modal/InputDateModal'
-import { useAppSelector } from '@/hooks'
+import { useAppSelector, useClickOutside } from '@/hooks'
 import { Data, ReportCategory } from '@/types'
 import {
   calculateAverageSpending,
@@ -28,6 +28,13 @@ const Reports = () => {
     to: string
   } | null>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
+  const dateRangeModalRef = useRef<HTMLDivElement>(null)
+  useClickOutside(
+    dateRangeModalRef,
+    () => setIsMoreModalOpen(false),
+    isMoreModalOpen
+  )
+
   const now = new Date()
   const today = getDate()
 
@@ -112,10 +119,12 @@ const Reports = () => {
               <MoreVerticalSvg className="icon--stroke-primary" />
             </button>
             {isMoreModalOpen && (
-              <DateRangeModal
-                dateRange={dateRange}
-                handleChangeDateRange={handleChangeDateRange}
-              />
+              <div ref={dateRangeModalRef}>
+                <DateRangeModal
+                  dateRange={dateRange}
+                  handleChangeDateRange={handleChangeDateRange}
+                />
+              </div>
             )}
             {isDateModalOpen && (
               <InputDateModal
