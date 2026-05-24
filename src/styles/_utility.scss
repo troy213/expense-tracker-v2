@@ -159,6 +159,11 @@ body.dark {
   height: 1.5rem;
 }
 
+.icon--2xl {
+  width: 2rem;
+  height: 2rem;
+}
+
 .icon--stroke-primary > * {
   stroke: var(--default-svg-primary-stroke-color);
 }

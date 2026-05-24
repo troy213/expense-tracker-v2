@@ -12,11 +12,19 @@ export const getDBDashboardInfo = createAsyncThunk(
   }
 )
 
-export const getFilteredTransactionsThunk = createAsyncThunk(
-  'report/getFilteredTransactions',
+export const getDBReportDetail = createAsyncThunk(
+  'report/getDBReportDetail',
   async (filters: TransactionFilters) => {
+    let selectedCategory = null
+    if (filters.category_id) {
+      const category = await dbServices.categories.getCategoryById(
+        filters.category_id
+      )
+      selectedCategory = category || null
+    }
+
     const transactions =
       await dbServices.transactions.getFilteredTransactions(filters)
-    return processMainData(transactions)
+    return { data: processMainData(transactions), selectedCategory }
   }
 )

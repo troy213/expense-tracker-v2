@@ -83,3 +83,6 @@ export const LANGUAGES_MENU: LanguageMenu[] = [
     locales: LOCALES.INDONESIA,
   },
 ]
+
+export const DEFAULT_EXPANDED_COUNT = 3
+export const DEFAULT_VISIBLE_GROUPS = 3
