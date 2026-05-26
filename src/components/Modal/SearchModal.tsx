@@ -1,7 +1,6 @@
+import { useNavigate } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 import { REGEX } from '@/constants'
-import { useAppDispatch } from '@/hooks'
-import { searchDBTransactions } from '@/store/main/main-thunk'
 import Modal from '.'
 import Form from '../Form'
 
@@ -12,10 +11,10 @@ type SearchModalProps = {
 
 const SearchModal = ({ isOpen, setIsOpen }: SearchModalProps) => {
   const { formatMessage } = useIntl()
-  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   const handleSubmit = ({ search }: { search: string }) => {
-    dispatch(searchDBTransactions({ searchValue: search }))
+    navigate(`/report-detail?search=${search}`)
     setIsOpen(false)
   }
 
