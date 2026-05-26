@@ -109,6 +109,8 @@ describe('calculateAverageSpending', () => {
       name: 'Food',
       icon_id: 'food',
       color: '#000',
+      index: 0,
+      is_active: true,
     },
     {
       id: 'c-inc',
@@ -116,6 +118,8 @@ describe('calculateAverageSpending', () => {
       name: 'Salary',
       icon_id: 'salary',
       color: '#fff',
+      index: 0,
+      is_active: true,
     },
   ]
   const today = '2026-05-23'
@@ -218,6 +222,8 @@ describe('filterTransactions', () => {
       name: 'Food',
       icon_id: 'food',
       color: '#000',
+      index: 0,
+      is_active: true,
     },
     {
       id: 'c-inc',
@@ -225,6 +231,8 @@ describe('filterTransactions', () => {
       name: 'Salary',
       icon_id: 'salary',
       color: '#fff',
+      index: 1,
+      is_active: true,
     },
   ]
   const txs: Transaction[] = [

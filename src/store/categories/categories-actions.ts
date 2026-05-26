@@ -30,10 +30,16 @@ export const editCategory = (
 
 export const deleteCategory = (
   state: InitialState,
-  action: PayloadAction<Category>
+  action: PayloadAction<{ id: string; updated: Category | null }>
 ) => {
-  const newCategories = state.categories.filter(
-    (category) => category.id !== action.payload.id
+  const { id, updated } = action.payload
+
+  if (updated === null) {
+    state.categories = state.categories.filter((category) => category.id !== id)
+    return
+  }
+
+  state.categories = state.categories.map((category) =>
+    category.id === id ? updated : category
   )
-  state.categories = newCategories
 }

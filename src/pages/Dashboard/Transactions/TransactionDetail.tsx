@@ -5,10 +5,14 @@ import MoreOptionModal from '@/components/Modal/MoreOptionModal'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { TxFormData } from '@/types'
-import { combineClassName, currencyFormatter, getCategoryById } from '@/utils'
+import {
+  combineClassName,
+  currencyFormatter,
+  getCategoryById,
+  getDefaultCategoryIconColor,
+} from '@/utils'
 import { CategoryIcon, FormModal, Modal } from '@/components'
 import { deleteDBTransactions } from '@/store/main/main-thunk'
-import { ICON_COLORS } from '@/assets/categories-icons'
 
 type TransactionDetailProps = {
   data: TxFormData
@@ -44,8 +48,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
 
   const category = getCategoryById(category_id, categories)
   const defaultCategoryIcon = category?.type === 'income' ? 'income' : 'expense'
-  const defaultCategoryIconColor =
-    category?.type === 'income' ? ICON_COLORS[0] : ICON_COLORS[1]
+  const defaultCategoryIconColor = getDefaultCategoryIconColor(category?.type)
 
   const isExpense = category?.type === 'expense'
   const totalItemValue = isExpense
@@ -146,6 +149,13 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
             </div>
           )
         })}
+        {category && !category.is_active && (
+          <div className="mt-2">
+            <span className="pill pill--default text--uppercase">
+              {formatMessage({ id: 'Archived' })}
+            </span>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -15,6 +15,7 @@ const messages = {
   AlphanumericError: 'Hanya huruf dan angka yang diperbolehkan',
   AmountRp: 'Jumlah (Rp.)',
   April: 'April',
+  Archived: 'Diarsipkan',
   August: 'Agustus',
   AvgSpending: 'Rata-rata Pengeluaran',
   Back: 'Kembali',

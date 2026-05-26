@@ -37,6 +37,8 @@ const sampleCat: ReportCategory = {
   icon_id: 'food',
   color: '#000',
   total: 1000,
+  index: 0,
+  is_active: true,
 }
 
 describe('ReportWidget navigation', () => {

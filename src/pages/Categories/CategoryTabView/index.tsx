@@ -13,11 +13,12 @@ import {
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { PlusSvg } from '@/assets'
 import { useAppDispatch, useAppSelector } from '@/hooks'
+import dbServices from '@/lib/db'
+import { FormModal, Modal } from '@/components'
 import { categoriesAction } from '@/store/categories/categories-slice'
 import { CategoryType } from '@/types'
 import { combineClassName, currencyFormatter } from '@/utils'
 import CategoryWidget from './CategoryWidget'
-import { FormModal, Modal } from '@/components'
 
 const CategoryTabView = () => {
   const dispatch = useAppDispatch()
@@ -37,7 +38,9 @@ const CategoryTabView = () => {
   )
   const { categories } = useAppSelector((state) => state.categoriesReducer)
   const [filteredCategory, setFilteredCategory] = useState(
-    categories.filter((category) => category.type === selectedCategory)
+    categories.filter(
+      (category) => category.type === selectedCategory && category.is_active
+    )
   )
 
   const totalBudget = filteredCategory.reduce(
@@ -79,7 +82,7 @@ const CategoryTabView = () => {
   const sensors = useSensors(mouseSensor, touchSensor)
 
   // Drag and drop event handler
-  const handleDragEnd = (e: DragEndEvent) => {
+  const handleDragEnd = async (e: DragEndEvent) => {
     const { active, over } = e
     if (!over) return
     if (active.id === over.id) return
@@ -91,6 +94,11 @@ const CategoryTabView = () => {
       const updatedCategories = [...filteredCategory]
       const [movedItem] = updatedCategories.splice(activeIndex, 1)
       updatedCategories.splice(overIndex, 0, movedItem)
+
+      await dbServices.categories.putCategories(
+        updatedCategories.map((c, index) => ({ ...c, index }))
+      )
+
       setFilteredCategory(updatedCategories)
 
       dispatch(
@@ -110,7 +118,9 @@ const CategoryTabView = () => {
 
   useEffect(() => {
     setFilteredCategory(
-      categories.filter((category) => category.type === selectedCategory)
+      categories.filter(
+        (category) => category.type === selectedCategory && category.is_active
+      )
     )
   }, [selectedCategory, categories])
 

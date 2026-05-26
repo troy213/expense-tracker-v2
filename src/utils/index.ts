@@ -1,5 +1,10 @@
 import { v7 as uuidv7 } from 'uuid'
 import {
+  DEFAULT_EXPENSE_COLOR,
+  DEFAULT_INCOME_COLOR,
+} from '@/assets/categories-icons'
+import { DATE_RANGE } from '@/constants'
+import {
   Category,
   CategoryType,
   ConditionArray,
@@ -7,7 +12,6 @@ import {
   Transaction,
   TransactionFilters,
 } from '@/types'
-import { DATE_RANGE } from '@/constants'
 
 export const combineClassName = (
   defaultStyle: string = '',
@@ -538,3 +542,8 @@ export const makeEmptyTransactionItem = () => ({
   description: '',
   amount: 0,
 })
+
+export const getDefaultCategoryIconColor = (type?: CategoryType): string => {
+  if (type === 'income') return DEFAULT_INCOME_COLOR
+  return DEFAULT_EXPENSE_COLOR
+}

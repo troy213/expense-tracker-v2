@@ -11,13 +11,14 @@ export async function initializeDB(): Promise<IDBPDatabase<ExpenseTrackerDB>> {
   if (db) return db
 
   db = await openDB<ExpenseTrackerDB>(DB_NAME, DB_VERSION, {
-    upgrade(db) {
-      // Create categories store
+    async upgrade(db, oldVersion, _newVersion, transaction) {
+      // Create categories store (fresh installs get the full schema here)
       if (!db.objectStoreNames.contains('categories')) {
         const categoryStore = db.createObjectStore('categories', {
           keyPath: 'id',
         })
         categoryStore.createIndex('by-type', 'type')
+        categoryStore.createIndex('by-index', 'index')
       }
 
       // Create transactions store
@@ -26,6 +27,29 @@ export async function initializeDB(): Promise<IDBPDatabase<ExpenseTrackerDB>> {
         txStore.createIndex('by-date', 'date')
         txStore.createIndex('by-category', 'category_id')
         txStore.createIndex('by-description', 'description')
+      }
+
+      // v2: add the by-index index to existing installs and backfill any
+      // legacy categories that predate the `index` field, so they aren't
+      // dropped from the (sparse) by-index index.
+      if (oldVersion > 0 && oldVersion < 2) {
+        const store = transaction.objectStore('categories')
+        store.createIndex('by-index', 'index')
+
+        let cursor = await store.openCursor()
+        let fallbackIndex = 0
+        while (cursor) {
+          const category = cursor.value
+          if ((category as { index?: number }).index === undefined) {
+            await cursor.update({
+              ...category,
+              index: fallbackIndex,
+              is_active: true,
+            })
+          }
+          fallbackIndex += 1
+          cursor = await cursor.continue()
+        }
       }
     },
   })

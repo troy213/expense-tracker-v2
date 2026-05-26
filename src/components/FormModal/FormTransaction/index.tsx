@@ -28,7 +28,7 @@ const FormTransaction = ({ data, index, onCancel }: FormTransactionProps) => {
   const [categoryType, setCategoryType] =
     useState<CategoryType>(defaultCategoryType)
   const filteredCategories = categories.filter(
-    (item) => item.type === categoryType
+    (item) => item.type === categoryType && item.is_active
   )
   const dispatch = useAppDispatch()
 

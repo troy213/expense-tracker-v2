@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import { useIntl } from 'react-intl'
 import { v7 as uuidv7 } from 'uuid'
-import { ICON_COLORS } from '@/assets/categories-icons'
 import { CategoryIcon, ColorPicker, Form, IconPicker } from '@/components'
 import { REGEX } from '@/constants'
-import { useAppDispatch } from '@/hooks'
+import { useAppDispatch, useAppSelector } from '@/hooks'
 import { Category, CategoryIconId, CategoryType } from '@/types'
 import {
   addDBCategory,
   editDBCategory,
 } from '@/store/categories/categories-thunk'
+import { getDefaultCategoryIconColor } from '@/utils'
 import './index.scss'
 
 type CategoryFormData = Category
@@ -22,7 +22,14 @@ type FormCategoryProps = {
 
 const FormCategory = ({ type, data, onCancel }: FormCategoryProps) => {
   const defaultIcon: CategoryIconId = type === 'income' ? 'income' : 'expense'
-  const defaultColor = type === 'income' ? ICON_COLORS[0] : ICON_COLORS[1]
+  const defaultColor = getDefaultCategoryIconColor(type)
+  const lastIndex = useAppSelector((state) =>
+    Math.max(
+      ...state.categoriesReducer.categories
+        .filter((c) => c.type === type)
+        .map((c) => c.index)
+    )
+  )
 
   const [selectedIcon, setSelectedIcon] = useState<CategoryIconId>(
     data?.icon_id ?? defaultIcon
@@ -38,6 +45,8 @@ const FormCategory = ({ type, data, onCancel }: FormCategoryProps) => {
     budget: 0,
     icon_id: selectedIcon,
     color: selectedColor,
+    is_active: true,
+    index: lastIndex + 1,
   }
 
   const dispatch = useAppDispatch()

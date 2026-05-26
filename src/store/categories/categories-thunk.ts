@@ -32,9 +32,9 @@ export const editDBCategory = createAsyncThunk(
 export const deleteDBCategory = createAsyncThunk(
   'categories/deleteDBCategory',
   async (payload: Category) => {
-    await dbServices.categories.deleteCategory(payload.id)
+    const updated = await dbServices.categories.deleteCategory(payload.id)
 
-    return payload
+    return { id: payload.id, updated }
   }
 )
 

@@ -6,7 +6,10 @@ export interface ExpenseTrackerDB extends DBSchema {
   categories: {
     key: string
     value: Category
-    indexes: { 'by-type': CategoryType }
+    indexes: {
+      'by-type': CategoryType
+      'by-index': number
+    }
   }
   transactions: {
     key: string
@@ -20,4 +23,4 @@ export interface ExpenseTrackerDB extends DBSchema {
 }
 
 export const DB_NAME = 'expense-tracker'
-export const DB_VERSION = 1
+export const DB_VERSION = 2
