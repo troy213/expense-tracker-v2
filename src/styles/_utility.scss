@@ -114,6 +114,10 @@ body.dark {
   text-transform: uppercase;
 }
 
+.text--lowercase {
+  text-transform: lowercase;
+}
+
 .line-height--6 {
   line-height: 150%;
 }
@@ -467,6 +471,27 @@ body.dark {
 
 .width-100 {
   width: 100%;
+}
+
+.pill {
+  border-radius: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+
+  &--default {
+    background-color: $color-mute;
+    color: $color-white;
+  }
+
+  &--primary {
+    background-color: $color-primary;
+    color: $color-white;
+  }
+
+  &--danger {
+    background-color: $color-danger;
+    color: $color-white;
+  }
 }
 
 // ANIMATION

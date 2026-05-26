@@ -29,11 +29,13 @@ vi.mock('@/lib/db', () => ({
     importData: vi.fn().mockResolvedValue(undefined),
     categories: {
       getAllCategories: vi.fn().mockResolvedValue([]),
+      getCategoriesByIndex: vi.fn().mockResolvedValue([]),
       getCategoriesByType: vi.fn().mockResolvedValue([]),
       getCategoryById: vi.fn().mockResolvedValue(undefined),
       putCategory: vi.fn().mockResolvedValue(''),
       putCategories: vi.fn().mockResolvedValue(undefined),
-      deleteCategory: vi.fn().mockResolvedValue(undefined),
+      deleteCategory: vi.fn().mockResolvedValue(null),
+      hardDeleteCategory: vi.fn().mockResolvedValue(undefined),
       clearCategories: vi.fn().mockResolvedValue(undefined),
     },
     transactions: {

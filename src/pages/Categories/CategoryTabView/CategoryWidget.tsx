@@ -3,12 +3,15 @@ import { useIntl } from 'react-intl'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { CoinsSvg, MoreVerticalSvg } from '@/assets'
-import { ICON_COLORS } from '@/assets/categories-icons'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
 import MoreOptionModal from '@/components/Modal/MoreOptionModal'
 import { useAppDispatch } from '@/hooks'
 import { Category } from '@/types'
-import { calculateModalBottomThreshold, currencyFormatter } from '@/utils'
+import {
+  calculateModalBottomThreshold,
+  currencyFormatter,
+  getDefaultCategoryIconColor,
+} from '@/utils'
 import { deleteDBCategory } from '@/store/categories/categories-thunk'
 import { CategoryIcon, FormModal, Modal } from '@/components'
 
@@ -53,8 +56,7 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
   }
 
   const defaultCategoryIcon = type === 'income' ? 'income' : 'expense'
-  const defaultCategoryIconColor =
-    type === 'income' ? ICON_COLORS[0] : ICON_COLORS[1]
+  const defaultCategoryIconColor = getDefaultCategoryIconColor(type)
 
   const handleMoreOption = (e: React.MouseEvent, id: string) => {
     e.stopPropagation()

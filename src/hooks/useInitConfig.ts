@@ -36,11 +36,14 @@ const useInitConfig = () => {
       }
 
       // Load categories from IndexedDB or migrate from localStorage
-      const categories = await dbServices.categories.getAllCategories()
+      const categories = await dbServices.categories.getCategoriesByIndex()
 
       if (categories.length > 0) {
         dispatch(
-          categoriesAction.setState({ state: 'categories', value: categories })
+          categoriesAction.setState({
+            state: 'categories',
+            value: categories,
+          })
         )
       }
 

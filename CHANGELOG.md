@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.0-beta.23](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.22...v1.0.0-beta.23) (2026-05-26)
+
+
+### Features
+
+* add category soft deletion and ordering (DB v2 migration) ([6578426](https://github.com/troy213/expense-tracker-v2/commit/6578426ca27ff91335b04cf5865b8253e9e8e9c2))
+* route search submissions to the report detail page ([d7344ac](https://github.com/troy213/expense-tracker-v2/commit/d7344ac36db6d5b49499b4b2359f8f980cab6bb7))
+
 ## [1.0.0-beta.22](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.21...v1.0.0-beta.22) (2026-05-24)
 
 

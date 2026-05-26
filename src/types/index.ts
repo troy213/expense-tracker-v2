@@ -39,6 +39,8 @@ export type Category = {
   name: string
   icon_id: CategoryIconId
   color: string
+  index: number
+  is_active: boolean
   budget?: number
 }
 

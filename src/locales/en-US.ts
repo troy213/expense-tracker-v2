@@ -15,6 +15,7 @@ const messages = {
   AlphanumericError: 'Only alphanumeric characters allowed',
   AmountRp: 'Amount (Rp.)',
   April: 'April',
+  Archived: 'Archived',
   August: 'August',
   AvgSpending: 'Average Spending',
   Back: 'Back',

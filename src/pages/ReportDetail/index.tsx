@@ -170,7 +170,7 @@ const ReportDetail = () => {
           />
         )}
 
-        {hasMore && (
+        {hasMore && !showAll && (
           <div className="flex-justify-center flex-align-center mb-4">
             <button
               type="button"

@@ -68,6 +68,10 @@ export const ICON_COLORS = [
   '#8e44ad',
 ]
 
+export const DEFAULT_INCOME_COLOR = ICON_COLORS[0]
+export const DEFAULT_EXPENSE_COLOR = ICON_COLORS[1]
+export const DEFAULT_MUTE_COLOR = '#9ca3af'
+
 export const CATEGORY_ICONS_MAP: Record<
   CategoryIconId,
   ComponentType<SVGProps<SVGSVGElement>>
