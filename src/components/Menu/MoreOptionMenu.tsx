@@ -1,20 +1,21 @@
 import { useIntl } from 'react-intl'
 import { EditSvg, TrashSvg } from '@/assets'
 import { combineClassName } from '@/utils'
+import './MoreOptionMenu.scss'
 
-type MoreOptionModalProps = {
+type MoreOptionMenuProps = {
   className?: string
   handleEdit?: () => void
   handleDelete: () => void
 }
 
-const MoreOptionModal: React.FC<MoreOptionModalProps> = ({
+const MoreOptionMenu: React.FC<MoreOptionMenuProps> = ({
   className = '',
   handleEdit = () => {},
   handleDelete,
 }) => {
   const { formatMessage } = useIntl()
-  const moreOptionModalClassName = combineClassName('more-option-modal', [
+  const moreOptionModalClassName = combineClassName('more-option-menu', [
     className,
   ])
 
@@ -40,4 +41,4 @@ const MoreOptionModal: React.FC<MoreOptionModalProps> = ({
   )
 }
 
-export default MoreOptionModal
+export default MoreOptionMenu

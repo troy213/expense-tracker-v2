@@ -1,4 +1,6 @@
-.date-range-modal {
+@import '@/styles/variables';
+
+.more-option-menu {
   padding: 1rem;
   position: absolute;
   top: 0;
@@ -6,12 +8,14 @@
   border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 1rem;
   background-color: $color-white;
   box-shadow: $box-shadow-default;
+  z-index: 2;
 
-  .btn {
-    width: 100%;
-    min-width: max-content;
+  &.menu--top {
+    top: unset;
+    bottom: 0;
   }
 }

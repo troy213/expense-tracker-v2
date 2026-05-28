@@ -13,12 +13,12 @@ import Form from '../Form'
 
 type ImportDataModalProps = {
   isOpen: boolean
-  setIsOpen: (val: boolean) => void
+  onClose: () => void
 }
 
 const ImportDataModal: React.FC<ImportDataModalProps> = ({
   isOpen,
-  setIsOpen,
+  onClose,
 }) => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
@@ -48,16 +48,16 @@ const ImportDataModal: React.FC<ImportDataModalProps> = ({
         console.error(err)
       }
 
-      setIsOpen(false)
+      onClose()
     }
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <Form
         className="flex-column gap-4"
         onSubmit={handleImport}
-        onCancel={() => setIsOpen(false)}
+        onCancel={onClose}
       >
         <span className="text--bold text--color-primary">
           {formatMessage({ id: 'ImportData' })}

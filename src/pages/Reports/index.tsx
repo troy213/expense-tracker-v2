@@ -1,10 +1,15 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { MoreVerticalSvg } from '@/assets'
 import { Navbar } from '@/components'
 import { DATE_RANGE } from '@/constants'
-import DateRangeModal from '@/components/Modal/DateRangeModal'
+import DateRangeMenu from '@/components/Menu/DateRangeMenu'
 import InputDateModal from '@/components/Modal/InputDateModal'
-import { useAppDispatch, useAppSelector, useClickOutside } from '@/hooks'
+import {
+  useAppDispatch,
+  useAppSelector,
+  useClickOutside,
+  useDisclosure,
+} from '@/hooks'
 import { Data, ReportCategory } from '@/types'
 import {
   calculateAverageSpending,
@@ -24,18 +29,14 @@ const Reports = () => {
   const { dateRange, customRange } = useAppSelector(
     (state) => state.reportReducer
   )
-  const [isMoreModalOpen, setIsMoreModalOpen] = useState(false)
-  const [isDateModalOpen, setIsDateModalOpen] = useState(false)
+  const moreMenu = useDisclosure()
+  const dateModal = useDisclosure()
 
   const dispatch = useAppDispatch()
 
   const buttonRef = useRef<HTMLButtonElement>(null)
   const dateRangeModalRef = useRef<HTMLDivElement>(null)
-  useClickOutside(
-    dateRangeModalRef,
-    () => setIsMoreModalOpen(false),
-    isMoreModalOpen
-  )
+  useClickOutside(dateRangeModalRef, moreMenu.close, moreMenu.isOpen)
 
   const now = new Date()
   const today = getDate()
@@ -63,8 +64,7 @@ const Reports = () => {
     today
   )
 
-  const openDateFilterModal = () => setIsDateModalOpen((val) => !val)
-  const handleMoreOption = () => setIsMoreModalOpen((val) => !val)
+  const handleMoreOption = () => moreMenu.toggle()
 
   const setCustomDate = (from: string, to: string) => {
     dispatch(
@@ -73,10 +73,10 @@ const Reports = () => {
   }
 
   const handleChangeDateRange = (range: number) => {
-    setIsMoreModalOpen(false)
+    moreMenu.close()
     dispatch(reportAction.setState({ state: 'dateRange', value: range }))
     if (range === DATE_RANGE.CUSTOM_FILTER) {
-      openDateFilterModal()
+      dateModal.open()
     }
   }
 
@@ -122,18 +122,18 @@ const Reports = () => {
             >
               <MoreVerticalSvg className="icon--stroke-primary" />
             </button>
-            {isMoreModalOpen && (
+            {moreMenu.isOpen && (
               <div ref={dateRangeModalRef}>
-                <DateRangeModal
+                <DateRangeMenu
                   dateRange={dateRange}
                   handleChangeDateRange={handleChangeDateRange}
                 />
               </div>
             )}
-            {isDateModalOpen && (
+            {dateModal.isOpen && (
               <InputDateModal
-                isOpen={isDateModalOpen}
-                setIsOpen={openDateFilterModal}
+                isOpen={dateModal.isOpen}
+                onClose={dateModal.close}
                 SetCustomDate={(from: Date, to: Date) =>
                   setCustomDate(toDateKey(from), toDateKey(to))
                 }

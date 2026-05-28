@@ -4,8 +4,8 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { CoinsSvg, MoreVerticalSvg } from '@/assets'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
-import MoreOptionModal from '@/components/Modal/MoreOptionModal'
-import { useAppDispatch } from '@/hooks'
+import MoreOptionMenu from '@/components/Menu/MoreOptionMenu'
+import { useAppDispatch, useDisclosure } from '@/hooks'
 import { Category } from '@/types'
 import {
   calculateModalBottomThreshold,
@@ -36,9 +36,9 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
   setSelectedCategoryId,
 }) => {
   const { id, name, type, budget = 0, icon_id, color } = data
-  const [isMoreModalOpen, setIsMoreModalOpen] = useState(false)
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const moreMenu = useDisclosure()
+  const editModal = useDisclosure()
+  const deleteModal = useDisclosure()
   const [moreOptionModalClassName, setMoreOptionModalClassName] = useState('')
   const transactionRefs = useRef<Map<string, HTMLDivElement>>(new Map())
   const dispatch = useAppDispatch()
@@ -62,7 +62,7 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
     e.stopPropagation()
     const elementRect = transactionRefs.current.get(id)?.getBoundingClientRect()
     setMoreOptionModalClassName(getModalPositionClassName(elementRect))
-    setIsMoreModalOpen((val) => !val)
+    moreMenu.toggle()
     setSelectedCategoryId(id)
   }
 
@@ -78,18 +78,18 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
       style={style}
       className="category-widget p-4"
     >
-      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
+      <Modal isOpen={editModal.isOpen} onClose={editModal.close}>
         <FormModal.FormCategory
           data={data}
           type={type}
-          onCancel={() => setIsEditModalOpen(false)}
+          onCancel={editModal.close}
         />
       </Modal>
 
-      {isDeleteModalOpen && (
+      {deleteModal.isOpen && (
         <DeleteDataModal
-          isOpen={isDeleteModalOpen}
-          setIsOpen={setIsDeleteModalOpen}
+          isOpen={deleteModal.isOpen}
+          onClose={deleteModal.close}
           title={formatMessage({ id: 'DeleteCategory' })}
           message={
             formatMessage(
@@ -127,16 +127,16 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
           >
             <MoreVerticalSvg className="icon--stroke-primary" />
           </button>
-          {isMoreModalOpen && selectedCategoryId === id && (
-            <MoreOptionModal
+          {moreMenu.isOpen && selectedCategoryId === id && (
+            <MoreOptionMenu
               className={moreOptionModalClassName}
               handleEdit={() => {
-                setIsMoreModalOpen(false)
-                setIsEditModalOpen(true)
+                moreMenu.close()
+                editModal.open()
               }}
               handleDelete={() => {
-                setIsMoreModalOpen(false)
-                setIsDeleteModalOpen(true)
+                moreMenu.close()
+                deleteModal.open()
               }}
             />
           )}

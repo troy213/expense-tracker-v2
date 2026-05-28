@@ -5,7 +5,7 @@ type DeleteDataModalProps = {
   isOpen: boolean
   title: string
   message: string
-  setIsOpen: (val: boolean) => void
+  onClose: () => void
   handleDelete: () => void
 }
 
@@ -13,13 +13,13 @@ const DeleteDataModal: React.FC<DeleteDataModalProps> = ({
   isOpen,
   title,
   message,
-  setIsOpen,
+  onClose,
   handleDelete,
 }) => {
   const { formatMessage } = useIntl()
 
   return (
-    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex-column gap-4">
         <span className="text--bold text--color-primary">{title}</span>
         <span className="text--color-primary text--3">{message}</span>
@@ -27,7 +27,7 @@ const DeleteDataModal: React.FC<DeleteDataModalProps> = ({
           <button
             type="button"
             className="btn btn-outline-primary"
-            onClick={() => setIsOpen(false)}
+            onClick={onClose}
           >
             {formatMessage({ id: 'Cancel' })}
           </button>
