@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.0-beta.24](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.23...v1.0.0-beta.24) (2026-05-28)
+
+
+### Features
+
+* add time-range tab selector to the reports page ([3c3dd12](https://github.com/troy213/expense-tracker-v2/commit/3c3dd12542abad099e3e484f84c74b1286d2fa23))
+
 ## [1.0.0-beta.23](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.22...v1.0.0-beta.23) (2026-05-26)
 
 
