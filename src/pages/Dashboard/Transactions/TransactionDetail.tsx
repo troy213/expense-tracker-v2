@@ -3,7 +3,12 @@ import { useIntl } from 'react-intl'
 import { MoreVerticalSvg } from '@/assets'
 import MoreOptionMenu from '@/components/Menu/MoreOptionMenu'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
-import { useAppDispatch, useAppSelector, useDisclosure } from '@/hooks'
+import {
+  useAppDispatch,
+  useAppSelector,
+  useClickOutside,
+  useDisclosure,
+} from '@/hooks'
 import { TxFormData } from '@/types'
 import {
   combineClassName,
@@ -40,11 +45,13 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
   const editModal = useDisclosure()
   const deleteModal = useDisclosure()
   const transactionRefs = useRef<HTMLDivElement>(null)
+  const moreOptionMenuRef = useRef<HTMLDivElement>(null)
   const { formatMessage } = useIntl()
   const dispatch = useAppDispatch()
   const categories = useAppSelector(
     (state) => state.categoriesReducer.categories
   )
+  useClickOutside(moreOptionMenuRef, moreMenu.close, moreMenu.isOpen)
 
   const category = getCategoryById(category_id, categories)
   const defaultCategoryIcon = category?.type === 'income' ? 'income' : 'expense'
@@ -101,6 +108,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
       <CategoryIcon
         iconId={category?.icon_id ?? defaultCategoryIcon}
         color={category?.color ?? defaultCategoryIconColor}
+        isActive={category?.is_active}
       />
       <div className="flex-column flex-1 gap-1">
         <div className="flex-space-between">
@@ -110,7 +118,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
               {currencyFormatter(totalItemValue)}
             </span>
             {selectedTransaction === `${dataIndex}_${category_id}` && (
-              <div className="relative">
+              <div className="relative" ref={moreOptionMenuRef}>
                 <button
                   className="btn btn-clear"
                   type="button"
@@ -153,7 +161,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
           )
         })}
         {category && !category.is_active && (
-          <div className="mt-2">
+          <div className="mt-1">
             <span className="pill pill--default text--uppercase">
               {formatMessage({ id: 'Archived' })}
             </span>

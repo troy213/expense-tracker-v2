@@ -92,6 +92,7 @@ const FormCategory = ({ type, data, onCancel }: FormCategoryProps) => {
         <CategoryIcon
           iconId={selectedIcon ?? defaultIcon}
           color={selectedColor}
+          isActive={true}
         />
         <Form.Input
           className="flex-1"

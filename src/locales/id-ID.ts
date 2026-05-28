@@ -82,6 +82,7 @@ const messages = {
   Loading: 'Memuat',
   March: 'Maret',
   May: 'Mei',
+  MoreOptions: 'Opsi Lainnya',
   NextDay: 'Hari Berikutnya',
   NoCategoryWarningMessage:
     'Oops! sepertinya anda tidak memiliki kategori apapun. Anda dapat menambahkan kategori pertama anda di tautan di bawah ini.',

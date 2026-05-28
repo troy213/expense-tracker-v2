@@ -5,7 +5,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { CoinsSvg, MoreVerticalSvg } from '@/assets'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
 import MoreOptionMenu from '@/components/Menu/MoreOptionMenu'
-import { useAppDispatch, useDisclosure } from '@/hooks'
+import { useAppDispatch, useClickOutside, useDisclosure } from '@/hooks'
 import { Category } from '@/types'
 import {
   calculateModalBottomThreshold,
@@ -35,16 +35,18 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
   selectedCategoryId,
   setSelectedCategoryId,
 }) => {
-  const { id, name, type, budget = 0, icon_id, color } = data
+  const { id, name, type, budget = 0, icon_id, color, is_active } = data
   const moreMenu = useDisclosure()
   const editModal = useDisclosure()
   const deleteModal = useDisclosure()
   const [moreOptionModalClassName, setMoreOptionModalClassName] = useState('')
   const transactionRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+  const moreOptionMenuRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch()
   const { formatMessage } = useIntl()
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id })
+  useClickOutside(moreOptionMenuRef, moreMenu.close, moreMenu.isOpen)
 
   const newTransform = transform
     ? { ...transform, scaleX: 1.05, scaleY: 1.05 }
@@ -105,6 +107,7 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
           <CategoryIcon
             iconId={icon_id ?? defaultCategoryIcon}
             color={color ?? defaultCategoryIconColor}
+            isActive={is_active}
           />
           <div className="flex-column flex-justify-center gap-2">
             <span>{name}</span>
@@ -119,7 +122,7 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
           </div>
         </div>
 
-        <div className="relative">
+        <div className="relative" ref={moreOptionMenuRef}>
           <button
             type="button"
             className="btn btn-clear"
