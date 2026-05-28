@@ -12,7 +12,7 @@ import {
 } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { PlusSvg } from '@/assets'
-import { useAppDispatch, useAppSelector } from '@/hooks'
+import { useAppDispatch, useAppSelector, useDisclosure } from '@/hooks'
 import dbServices from '@/lib/db'
 import { FormModal, Modal } from '@/components'
 import { categoriesAction } from '@/store/categories/categories-slice'
@@ -32,7 +32,7 @@ const CategoryTabView = () => {
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>(
     defaultSelectedCategory
   )
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const addModal = useDisclosure()
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
     null
   )
@@ -126,10 +126,10 @@ const CategoryTabView = () => {
 
   return (
     <div className="category-tab-view">
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      <Modal isOpen={addModal.isOpen} onClose={addModal.close}>
         <FormModal.FormCategory
           type={selectedCategory}
-          onCancel={() => setIsModalOpen(false)}
+          onCancel={addModal.close}
         />
       </Modal>
 
@@ -170,7 +170,7 @@ const CategoryTabView = () => {
         <button
           type="button"
           className="category-tab-view__add-button"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => addModal.open()}
         >
           <div className="flex-align-center gap-2">
             <PlusSvg className="icon--stroke-primary" />

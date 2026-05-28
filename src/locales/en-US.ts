@@ -81,6 +81,7 @@ const messages = {
   Loading: 'Loading',
   March: 'March',
   May: 'May',
+  MoreOptions: 'More options',
   NextDay: 'Next Day',
   NoCategoryWarningMessage:
     "Oops! it seems you don't have any category. You can add your first category in the link below.",

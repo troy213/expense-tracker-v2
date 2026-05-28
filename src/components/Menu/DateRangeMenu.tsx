@@ -1,44 +1,23 @@
 import { useIntl } from 'react-intl'
-import { DATE_RANGE } from '@/constants'
 import { CheckSvg } from '@/assets'
+import './DateRangeMenu.scss'
 
-type DateRangeModalProps = {
+type DateRangeMenuProps = {
+  data: { title: string; value: number }[]
   dateRange: number
   handleChangeDateRange: (arg: number) => void
 }
 
-const DATE_RANGE_ITEM = [
-  {
-    title: 'All',
-    value: DATE_RANGE.ALL_TIME,
-  },
-  {
-    title: 'ThisMonth',
-    value: DATE_RANGE.THIS_MONTH,
-  },
-  {
-    title: 'LastMonth',
-    value: DATE_RANGE.LAST_MONTH,
-  },
-  {
-    title: 'ThisYear',
-    value: DATE_RANGE.THIS_YEAR,
-  },
-  {
-    title: 'CustomFilter',
-    value: DATE_RANGE.CUSTOM_FILTER,
-  },
-]
-
-const DateRangeModal: React.FC<DateRangeModalProps> = ({
+const DateRangeMenu: React.FC<DateRangeMenuProps> = ({
+  data,
   dateRange,
   handleChangeDateRange,
 }) => {
   const { formatMessage } = useIntl()
 
   return (
-    <div className="date-range-modal">
-      {DATE_RANGE_ITEM.map((item, index) => {
+    <div className="date-range-menu">
+      {data.map((item, index) => {
         return (
           <button
             key={index}
@@ -59,4 +38,4 @@ const DateRangeModal: React.FC<DateRangeModalProps> = ({
   )
 }
 
-export default DateRangeModal
+export default DateRangeMenu

@@ -1,10 +1,14 @@
-import { CATEGORY_ICONS_MAP } from '@/assets/categories-icons'
+import {
+  CATEGORY_ICONS_MAP,
+  DEFAULT_MUTE_COLOR,
+} from '@/assets/categories-icons'
 import { CategoryIconId } from '@/types'
 import './index.scss'
 
 type CategoryIconProps = {
   iconId: CategoryIconId
   color?: string
+  isActive?: boolean
   width?: number | string
   height?: number | string
   iconClassName?: string
@@ -13,18 +17,21 @@ type CategoryIconProps = {
 const CategoryIcon = ({
   iconId,
   color,
+  isActive,
   width,
   height,
   iconClassName,
 }: CategoryIconProps) => {
   const IconComponent = CATEGORY_ICONS_MAP[iconId]
+  const iconColor = isActive ? color : DEFAULT_MUTE_COLOR
+
   return (
     <div
       className="category-icon"
       style={
         {
-          '--icon-color': color,
-          backgroundColor: color ? `${color}33` : undefined,
+          '--icon-color': iconColor,
+          backgroundColor: iconColor ? `${iconColor}33` : undefined,
           width: width || '',
           height: height || '',
         } as React.CSSProperties

@@ -84,7 +84,6 @@ async function deleteCategory(id: string): Promise<Category | null> {
   const updated: Category = {
     ...category,
     is_active: false,
-    color: '#9ca3af',
   }
   await database.put('categories', updated)
   return updated

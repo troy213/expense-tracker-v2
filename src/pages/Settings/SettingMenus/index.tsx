@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 import { SETTING_MENUS } from '@/constants/config'
@@ -6,39 +5,34 @@ import { Navbar } from '@/components'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
 import ExportDataModal from '@/components/Modal/ExportDataModal'
 import ImportDataModal from '@/components/Modal/ImportDataModal'
-import { useAppDispatch } from '@/hooks'
+import { useAppDispatch, useDisclosure } from '@/hooks'
 import { deleteAllDBCategories } from '@/store/categories/categories-thunk'
 import { deleteAllDBTransactions } from '@/store/main/main-thunk'
 
 const SettingMenus = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedModal, setSelectedModal] = useState('')
+  const modal = useDisclosure<string>()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { formatMessage } = useIntl()
 
   const handleDelete = () => {
-    setIsModalOpen(false)
+    modal.close()
     dispatch(deleteAllDBCategories())
     dispatch(deleteAllDBTransactions())
     navigate('/')
   }
 
   const renderModal = () => {
-    switch (selectedModal) {
+    switch (modal.data) {
       case 'ImportData':
-        return (
-          <ImportDataModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
-        )
+        return <ImportDataModal isOpen={modal.isOpen} onClose={modal.close} />
       case 'ExportData':
-        return (
-          <ExportDataModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
-        )
+        return <ExportDataModal isOpen={modal.isOpen} onClose={modal.close} />
       case 'DeleteData':
         return (
           <DeleteDataModal
-            isOpen={isModalOpen}
-            setIsOpen={setIsModalOpen}
+            isOpen={modal.isOpen}
+            onClose={modal.close}
             title={formatMessage({ id: 'DeleteData' })}
             message={formatMessage({ id: 'DeleteDataGeneral' })}
             handleDelete={handleDelete}
@@ -51,7 +45,7 @@ const SettingMenus = () => {
 
   return (
     <div className="setting-menus">
-      {isModalOpen && renderModal()}
+      {modal.isOpen && renderModal()}
       <Navbar title="Settings" enableBackButton={true} />
 
       <ul className="flex-column gap-8 py-4">
@@ -66,8 +60,7 @@ const SettingMenus = () => {
           } = menu
 
           const handleClick = () => {
-            setSelectedModal(title)
-            setIsModalOpen(true)
+            modal.open(title)
           }
 
           return (

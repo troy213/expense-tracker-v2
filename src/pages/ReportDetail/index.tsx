@@ -98,20 +98,29 @@ const ReportDetail = () => {
       <div className="flex-column flex-1 gap-4 p-4">
         <Navbar enableBackButton={true} title="Reports" />
 
-        <div className="flex-align-center gap-4">
-          {selectedDetailCategory && (
-            <CategoryIcon
-              iconId={selectedDetailCategory.icon_id}
-              color={selectedDetailCategory.color}
-              height="4rem"
-              width="4rem"
-              iconClassName="icon--2xl"
-            />
-          )}
-          <div className="flex-column">
-            <span className="text--bold">{title}</span>
-            <span className="text--light text--3">{rangeLabel}</span>
+        <div className="flex-space-between flex-align-center">
+          <div className="flex-align-center gap-4">
+            {selectedDetailCategory && (
+              <CategoryIcon
+                iconId={selectedDetailCategory.icon_id}
+                color={selectedDetailCategory.color}
+                isActive={selectedDetailCategory.is_active}
+                height="4rem"
+                width="4rem"
+                iconClassName="icon--2xl"
+              />
+            )}
+            <div className="flex-column">
+              <span className="text--bold">{title}</span>
+              <span className="text--light text--3">{rangeLabel}</span>
+            </div>
           </div>
+
+          {selectedDetailCategory && !selectedDetailCategory.is_active && (
+            <span className="pill pill--default text--uppercase">
+              {formatMessage({ id: 'Archived' })}
+            </span>
+          )}
         </div>
 
         <ReportDetailInfo />

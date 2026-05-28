@@ -18,6 +18,7 @@ const CategoryIconPreview = () => {
     <CategoryIcon
       iconId={category.icon_id}
       color={category.color}
+      isActive={category.is_active}
       height={'3.5rem'}
       width={'3.5rem'}
     />

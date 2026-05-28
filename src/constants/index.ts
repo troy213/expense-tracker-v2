@@ -57,3 +57,26 @@ export const DATE_RANGE = {
   THIS_YEAR: 3,
   CUSTOM_FILTER: 4,
 }
+
+export const DATE_RANGE_ITEM = [
+  {
+    title: 'All',
+    value: DATE_RANGE.ALL_TIME,
+  },
+  {
+    title: 'ThisMonth',
+    value: DATE_RANGE.THIS_MONTH,
+  },
+  {
+    title: 'LastMonth',
+    value: DATE_RANGE.LAST_MONTH,
+  },
+  {
+    title: 'ThisYear',
+    value: DATE_RANGE.THIS_YEAR,
+  },
+  {
+    title: 'CustomFilter',
+    value: DATE_RANGE.CUSTOM_FILTER,
+  },
+]

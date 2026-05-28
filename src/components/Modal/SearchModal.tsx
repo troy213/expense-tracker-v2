@@ -6,24 +6,24 @@ import Form from '../Form'
 
 type SearchModalProps = {
   isOpen: boolean
-  setIsOpen: (val: boolean) => void
+  onClose: () => void
 }
 
-const SearchModal = ({ isOpen, setIsOpen }: SearchModalProps) => {
+const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
   const { formatMessage } = useIntl()
   const navigate = useNavigate()
 
   const handleSubmit = ({ search }: { search: string }) => {
     navigate(`/report-detail?search=${search}`)
-    setIsOpen(false)
+    onClose()
   }
 
   const handleCancel = () => {
-    setIsOpen(false)
+    onClose()
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <Form
         className="flex-column gap-4"
         onSubmit={handleSubmit}

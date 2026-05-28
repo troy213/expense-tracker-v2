@@ -4,22 +4,22 @@ import Modal from '.'
 
 type ExportDataModalProps = {
   isOpen: boolean
-  setIsOpen: (val: boolean) => void
+  onClose: () => void
 }
 
 const ExportDataModal: React.FC<ExportDataModalProps> = ({
   isOpen,
-  setIsOpen,
+  onClose,
 }) => {
   const { formatMessage } = useIntl()
 
   const handleExport = () => {
     createExcelFile()
-    setIsOpen(false)
+    onClose()
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex-column gap-4">
         <span className="text--bold text--color-primary">
           {formatMessage({ id: 'ExportData' })}
@@ -31,7 +31,7 @@ const ExportDataModal: React.FC<ExportDataModalProps> = ({
           <button
             type="button"
             className="btn btn-outline-primary"
-            onClick={() => setIsOpen(false)}
+            onClick={onClose}
           >
             {formatMessage({ id: 'Cancel' })}
           </button>

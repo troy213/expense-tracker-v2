@@ -5,28 +5,28 @@ import Form from '../Form'
 
 type InputDateModalProps = {
   isOpen: boolean
-  setIsOpen: (val: boolean) => void
+  onClose: () => void
   SetCustomDate: (from: Date, to: Date) => void
 }
 
 const InputDateModal: React.FC<InputDateModalProps> = ({
   isOpen,
-  setIsOpen,
+  onClose,
   SetCustomDate,
 }) => {
   const { formatMessage } = useIntl()
 
   const handleSubmit = ({ from, to }: { from: string; to: string }) => {
     SetCustomDate(new Date(from + 'T00:00:00'), new Date(to + 'T23:59:00'))
-    setIsOpen(false)
+    onClose()
   }
 
   const handleCancel = () => {
-    setIsOpen(false)
+    onClose()
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <Form onSubmit={handleSubmit} onCancel={handleCancel}>
         <span className="text--bold text--color-primary">
           {formatMessage({ id: 'Filter' })}

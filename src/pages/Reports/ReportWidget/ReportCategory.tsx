@@ -23,7 +23,11 @@ const ReportCategory: React.FC<ReportCategoryProps> = ({
 
   return (
     <button type="button" className="report-category" onClick={handleClick}>
-      <CategoryIcon iconId={cat.icon_id} color={cat.color} />
+      <CategoryIcon
+        iconId={cat.icon_id}
+        color={cat.color}
+        isActive={cat.is_active}
+      />
       <div className="flex-column flex-1 gap-2">
         <div className="flex-space-between flex-align-center gap-2">
           <span className="text--4">{cat.name}</span>

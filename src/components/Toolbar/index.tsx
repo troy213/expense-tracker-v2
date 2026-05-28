@@ -1,12 +1,12 @@
 import { Link, useLocation } from 'react-router-dom'
 import { BudgetSvg, HomeSvg, PieChartSvg, PlusSvg, SettingsSvg } from '@/assets'
-import { useState } from 'react'
 import { combineClassName } from '@/utils'
+import { useDisclosure } from '@/hooks'
 import { FormModal } from '@/components'
 import Modal from '../Modal'
 
 const Toolbar = () => {
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const addModal = useDisclosure()
 
   const currentMenu = useLocation().pathname
 
@@ -18,10 +18,8 @@ const Toolbar = () => {
   return (
     <div className="toolbar">
       <div className={getClassName('/')}>
-        <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)}>
-          <FormModal.FormTransaction
-            onCancel={() => setIsAddModalOpen(false)}
-          />
+        <Modal isOpen={addModal.isOpen} onClose={addModal.close}>
+          <FormModal.FormTransaction onCancel={addModal.close} />
         </Modal>
 
         <Link to="/">
@@ -34,12 +32,7 @@ const Toolbar = () => {
         </Link>
       </div>
       <div className="toolbar__menu">
-        <button
-          className="toolbar__add-button"
-          onClick={() => {
-            setIsAddModalOpen((val) => !val)
-          }}
-        >
+        <button className="toolbar__add-button" onClick={addModal.toggle}>
           <PlusSvg className="icon--stroke-white" />
         </button>
       </div>

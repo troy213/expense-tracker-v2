@@ -1,9 +1,14 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useIntl } from 'react-intl'
 import { MoreVerticalSvg } from '@/assets'
-import MoreOptionModal from '@/components/Modal/MoreOptionModal'
+import MoreOptionMenu from '@/components/Menu/MoreOptionMenu'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
-import { useAppDispatch, useAppSelector } from '@/hooks'
+import {
+  useAppDispatch,
+  useAppSelector,
+  useClickOutside,
+  useDisclosure,
+} from '@/hooks'
 import { TxFormData } from '@/types'
 import {
   combineClassName,
@@ -36,15 +41,17 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
   handleSelectTransaction,
 }) => {
   const { category_id, item } = data
-  const [isMoreModalOpen, setIsMoreModalOpen] = useState(false)
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const moreMenu = useDisclosure()
+  const editModal = useDisclosure()
+  const deleteModal = useDisclosure()
   const transactionRefs = useRef<HTMLDivElement>(null)
+  const moreOptionMenuRef = useRef<HTMLDivElement>(null)
   const { formatMessage } = useIntl()
   const dispatch = useAppDispatch()
   const categories = useAppSelector(
     (state) => state.categoriesReducer.categories
   )
+  useClickOutside(moreOptionMenuRef, moreMenu.close, moreMenu.isOpen)
 
   const category = getCategoryById(category_id, categories)
   const defaultCategoryIcon = category?.type === 'income' ? 'income' : 'expense'
@@ -60,17 +67,20 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
 
   const handleMoreOption = (e: React.MouseEvent) => {
     e.stopPropagation()
-    setIsMoreModalOpen((val) => !val)
+    moreMenu.toggle()
   }
 
   const handleDeleteTransaction = () => {
     dispatch(deleteDBTransactions({ data, index: dataIndex }))
-    setIsDeleteModalOpen(false)
+    deleteModal.close()
   }
 
+  // close() is a stable ref from useDisclosure; depend on it (not the whole
+  // moreMenu object) so this only re-runs when the selected row changes.
+  const { close: closeMoreMenu } = moreMenu
   useEffect(() => {
-    setIsMoreModalOpen(false)
-  }, [selectedTransaction])
+    closeMoreMenu()
+  }, [selectedTransaction, closeMoreMenu])
 
   return (
     <div
@@ -78,18 +88,18 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
       ref={transactionRefs}
       onClick={(e) => handleSelectTransaction(e, category_id)}
     >
-      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
+      <Modal isOpen={editModal.isOpen} onClose={editModal.close}>
         <FormModal.FormTransaction
           data={data}
           index={dataIndex}
-          onCancel={() => setIsEditModalOpen(false)}
+          onCancel={editModal.close}
         />
       </Modal>
 
-      {isDeleteModalOpen && (
+      {deleteModal.isOpen && (
         <DeleteDataModal
-          isOpen={isDeleteModalOpen}
-          setIsOpen={setIsDeleteModalOpen}
+          isOpen={deleteModal.isOpen}
+          onClose={deleteModal.close}
           title={formatMessage({ id: 'DeleteTransaction' })}
           message={formatMessage({ id: 'DeleteDataGeneral' })}
           handleDelete={handleDeleteTransaction}
@@ -98,6 +108,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
       <CategoryIcon
         iconId={category?.icon_id ?? defaultCategoryIcon}
         color={category?.color ?? defaultCategoryIconColor}
+        isActive={category?.is_active}
       />
       <div className="flex-column flex-1 gap-1">
         <div className="flex-space-between">
@@ -107,7 +118,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
               {currencyFormatter(totalItemValue)}
             </span>
             {selectedTransaction === `${dataIndex}_${category_id}` && (
-              <div className="relative">
+              <div className="relative" ref={moreOptionMenuRef}>
                 <button
                   className="btn btn-clear"
                   type="button"
@@ -115,15 +126,15 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
                 >
                   <MoreVerticalSvg className="icon icon--stroke-primary" />
                 </button>
-                {isMoreModalOpen && (
-                  <MoreOptionModal
+                {moreMenu.isOpen && (
+                  <MoreOptionMenu
                     handleDelete={() => {
-                      setIsMoreModalOpen(false)
-                      setIsDeleteModalOpen(true)
+                      moreMenu.close()
+                      deleteModal.open()
                     }}
                     handleEdit={() => {
-                      setIsMoreModalOpen(false)
-                      setIsEditModalOpen(true)
+                      moreMenu.close()
+                      editModal.open()
                     }}
                   />
                 )}
@@ -150,7 +161,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
           )
         })}
         {category && !category.is_active && (
-          <div className="mt-2">
+          <div className="mt-1">
             <span className="pill pill--default text--uppercase">
               {formatMessage({ id: 'Archived' })}
             </span>
