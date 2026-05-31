@@ -3,15 +3,6 @@ import dbServices from '@/lib/db'
 import { Category, TransactionFilters } from '@/types'
 import { getCurrentMonthRange, processMainData } from '@/utils'
 
-export const getDBDashboardInfo = createAsyncThunk(
-  'report/getDashboardInfo',
-  async () => {
-    const dashboardInfo = await dbServices.report.getDashboardInfo()
-
-    return dashboardInfo
-  }
-)
-
 export const getDBReportDetail = createAsyncThunk(
   'report/getDBReportDetail',
   async (filters: TransactionFilters) => {

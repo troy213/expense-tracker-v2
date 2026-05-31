@@ -1,16 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { setDashboardInfo, setDetailData } from './report-actions'
-import { getDBDashboardInfo, getDBReportDetail } from './report-thunk'
+import { setDetailData } from './report-actions'
+import { getDBReportDetail } from './report-thunk'
 import { Category, Data, SetStatePayload } from '@/types'
 import { DATE_RANGE } from '@/constants'
 import { setStateReducerValue } from '@/utils'
 import { addAsyncThunkCases } from '../utils'
 
 export type InitialState = {
-  totalIncome: number
-  totalExpenses: number
-  totalBudget: number
-  remainingBudget: number
   isLoading: boolean
   customRange: { from: string; to: string } | null
   dateRange: number
@@ -25,10 +21,6 @@ export type InitialState = {
 }
 
 const initialState: InitialState = {
-  totalIncome: 0,
-  totalExpenses: 0,
-  totalBudget: 0,
-  remainingBudget: 0,
   isLoading: true,
   customRange: null,
   dateRange: DATE_RANGE.ALL_TIME,
@@ -68,12 +60,6 @@ const reportSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    addAsyncThunkCases(
-      builder,
-      getDBDashboardInfo,
-      'isLoading',
-      setDashboardInfo
-    )
     addAsyncThunkCases(
       builder,
       getDBReportDetail,

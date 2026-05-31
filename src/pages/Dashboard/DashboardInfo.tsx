@@ -14,7 +14,7 @@ import {
 import { ProgressBar, Widget } from '@/components'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { configAction } from '@/store/config/config-slice'
-import { getDBDashboardInfo } from '@/store/report/report-thunk'
+import { getDBDashboardInfo } from '@/store/main/main-thunk'
 import {
   calculatePercentage,
   combineClassName,
@@ -33,10 +33,10 @@ const DashboardInfo = () => {
   const { data } = useAppSelector((state) => state.transactionsReducer)
   const { hideBalance } = useAppSelector((state) => state.configReducer)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
-  const { totalIncome, totalExpenses, totalBudget, remainingBudget } =
-    useAppSelector((state) => state.reportReducer)
+  const { totalIncome, totalExpense, totalBudget, remainingBudget } =
+    useAppSelector((state) => state.mainReducer)
 
-  const totalBalance = totalIncome - totalExpenses
+  const totalBalance = totalIncome - totalExpense
   const { firstDate, lastDate } = getCurrentMonthRange()
 
   useEffect(() => {
@@ -91,7 +91,7 @@ const DashboardInfo = () => {
                 </span>
                 <ArrowDownSvg className="icon--sm icon--stroke-danger" />
               </div>
-              <span>{currencyFormatter(totalExpenses)}</span>
+              <span>{currencyFormatter(totalExpense)}</span>
             </div>
           </Widget>
         </div>

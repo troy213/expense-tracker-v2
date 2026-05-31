@@ -70,7 +70,7 @@ export type ReportCategory = Category & {
 
 export type DashboardInfo = {
   totalIncome: number
-  totalExpenses: number
+  totalExpense: number
   totalBudget: number
   remainingBudget: number
 }

@@ -26,13 +26,13 @@ async function getDashboardInfo(): Promise<DashboardInfo> {
   const categoryTypeById = new Map(categories.map((c) => [c.id, c.type]))
 
   let currentMonthExpenses = 0
-  let totalExpenses = 0
+  let totalExpense = 0
   let totalIncome = 0
 
   transactions.forEach((transaction) => {
     const categoryType = categoryTypeById.get(transaction.category_id)
     if (categoryType === 'expense') {
-      totalExpenses += transaction.amount
+      totalExpense += transaction.amount
 
       if (transaction.date >= firstDate && transaction.date <= lastDate) {
         currentMonthExpenses += transaction.amount
@@ -43,7 +43,7 @@ async function getDashboardInfo(): Promise<DashboardInfo> {
   })
 
   return {
-    totalExpenses,
+    totalExpense,
     totalIncome,
     totalBudget,
     remainingBudget: totalBudget - currentMonthExpenses,
