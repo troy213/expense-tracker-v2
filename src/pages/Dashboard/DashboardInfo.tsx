@@ -30,7 +30,7 @@ type BalanceProps = {
 const DashboardInfo = () => {
   const dispatch = useAppDispatch()
   const { formatMessage } = useIntl()
-  const { data } = useAppSelector((state) => state.mainReducer)
+  const { data } = useAppSelector((state) => state.transactionsReducer)
   const { hideBalance } = useAppSelector((state) => state.configReducer)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
   const { totalIncome, totalExpenses, totalBudget, remainingBudget } =

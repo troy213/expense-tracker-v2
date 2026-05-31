@@ -3,7 +3,7 @@ import { Transaction, TxFormData } from '@/types'
 import dbServices from '@/lib/db'
 
 export const addDBTransactions = createAsyncThunk(
-  'main/addTransactions',
+  'transactions/addTransactions',
   async (payload: { data: TxFormData }) => {
     const { data } = payload
 
@@ -23,7 +23,7 @@ export const addDBTransactions = createAsyncThunk(
 )
 
 export const editDBTransactions = createAsyncThunk(
-  'main/editTransactions',
+  'transactions/editTransactions',
   async (payload: {
     data: TxFormData
     oldDate: string
@@ -67,7 +67,7 @@ export const editDBTransactions = createAsyncThunk(
 )
 
 export const deleteDBTransactions = createAsyncThunk(
-  'main/deleteTransactions',
+  'transactions/deleteTransactions',
   async (payload: { data: TxFormData; index: number }) => {
     const { data } = payload
     const ids = data.item.map((tx) => tx.id)
@@ -79,25 +79,8 @@ export const deleteDBTransactions = createAsyncThunk(
 )
 
 export const deleteAllDBTransactions = createAsyncThunk(
-  'main/deleteAllTransactions',
+  'transactions/deleteAllTransactions',
   async () => {
     await dbServices.transactions.clearTransactions()
-  }
-)
-
-export const searchDBTransactions = createAsyncThunk(
-  'main/searchTransactions',
-  async (payload: { searchValue: string }) => {
-    const { searchValue } = payload
-    let transactions: Transaction[] = []
-
-    if (searchValue) {
-      transactions =
-        await dbServices.transactions.getTransactionsByDescription(searchValue)
-    } else {
-      transactions = await dbServices.transactions.getAllTransactions()
-    }
-
-    return { searchValue, transactions }
   }
 )

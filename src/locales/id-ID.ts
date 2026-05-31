@@ -100,7 +100,6 @@ const messages = {
   Reports: 'Laporan',
   Salary: 'Gaji',
   Search: 'Cari',
-  SearchResult: 'Hasil pencarian untuk "{result}"',
   SeeMoreTransactions: 'Lihat {count} transaksi lebih lanjut',
   September: 'September',
   Settings: 'Pengaturan',

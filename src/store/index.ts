@@ -3,6 +3,7 @@ import categoriesSlice from './categories/categories-slice'
 import configSlice from './config/config-slice'
 import mainSlice from './main/main-slice'
 import reportSlice from './report/report-slice'
+import transactionsSlice from './transactions/transactions-slice'
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     configReducer: configSlice.reducer,
     mainReducer: mainSlice.reducer,
     reportReducer: reportSlice.reducer,
+    transactionsReducer: transactionsSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -359,27 +359,6 @@ export const calculatePercentage = (currentValue: number, maxValue: number) => {
   return Number(output.toFixed(2))
 }
 
-export const searchSubdata = (data: Data[], searchValue: string): Data[] => {
-  return data
-    .map((entry) => {
-      const filteredSubdata = entry.subdata.filter((sub) =>
-        sub.item.some((item) =>
-          item.description.toLowerCase().includes(searchValue.toLowerCase())
-        )
-      )
-
-      if (filteredSubdata.length > 0) {
-        return {
-          ...entry,
-          subdata: filteredSubdata,
-        }
-      }
-
-      return null
-    })
-    .filter((entry) => entry !== null) as Data[]
-}
-
 export const calculateSubdataSummary = (
   subdata: Data['subdata'],
   categories: Category[]

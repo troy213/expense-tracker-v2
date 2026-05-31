@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { mainAction } from '@/store/main/main-slice'
+import { transactionsAction } from '@/store/transactions/transactions-slice'
 import { categoriesAction } from '@/store/categories/categories-slice'
 import dbServices from '@/lib/db'
 import { processMainData } from '@/utils'
@@ -30,14 +30,16 @@ const useInitConfig = () => {
 
       if (transactions.length > 0) {
         dispatch(
-          mainAction.setState({
+          transactionsAction.setState({
             state: 'data',
             value: processMainData(transactions),
           })
         )
       }
 
-      dispatch(mainAction.setState({ state: 'isLoading', value: false }))
+      dispatch(
+        transactionsAction.setState({ state: 'isLoading', value: false })
+      )
     }
 
     initializeData()

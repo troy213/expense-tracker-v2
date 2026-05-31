@@ -7,7 +7,9 @@ import { configureStore } from '@reduxjs/toolkit'
 
 import { LANGUAGES, LOCALES } from '@/constants'
 import categoriesSlice from '@/store/categories/categories-slice'
-import mainSlice, { type InitialState } from '@/store/main/main-slice'
+import transactionsSlice, {
+  type InitialState,
+} from '@/store/transactions/transactions-slice'
 import type { Data } from '@/types'
 import Transactions from './'
 
@@ -43,8 +45,7 @@ vi.mock('react-router-dom', async () => {
 })
 
 const renderTransactions = (data: Data[]) => {
-  const mainReducer: InitialState = {
-    searchValue: '',
+  const transactionsReducer: InitialState = {
     isLoading: false,
     data,
   }
@@ -52,11 +53,11 @@ const renderTransactions = (data: Data[]) => {
   const store = configureStore({
     reducer: {
       categoriesReducer: categoriesSlice.reducer,
-      mainReducer: mainSlice.reducer,
+      transactionsReducer: transactionsSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({ immutableCheck: false, serializableCheck: false }),
-    preloadedState: { mainReducer },
+    preloadedState: { transactionsReducer },
   })
 
   return render(

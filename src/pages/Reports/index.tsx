@@ -13,7 +13,7 @@ import ReportTimeTab from './ReportTimeTab'
 import ReportWidget from './ReportWidget'
 
 const Reports = () => {
-  const { data } = useAppSelector((state) => state.mainReducer)
+  const { data } = useAppSelector((state) => state.transactionsReducer)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
   const { dateRange, customRange } = useAppSelector(
     (state) => state.reportReducer

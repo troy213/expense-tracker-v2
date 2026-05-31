@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 import { Form } from '@/components'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { addDBTransactions, editDBTransactions } from '@/store/main/main-thunk'
+import {
+  addDBTransactions,
+  editDBTransactions,
+} from '@/store/transactions/transactions-thunk'
 import { CategoryType, TxFormData } from '@/types'
 import { combineClassName, getDate, makeEmptyTransactionItem } from '@/utils'
 import CategoryIconPreview from './CategoryIconPreview'

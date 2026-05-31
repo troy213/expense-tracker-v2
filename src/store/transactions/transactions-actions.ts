@@ -1,7 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit'
-import { Transaction, TxFormData } from '@/types'
-import { processMainData } from '@/utils'
-import { InitialState } from './main-slice'
+import { TxFormData } from '@/types'
+import { InitialState } from './transactions-slice'
 
 export const addData = (
   state: InitialState,
@@ -118,19 +117,4 @@ export const deleteData = (
   if (dayEntry.subdata.length === 0) {
     state.data.splice(index, 1)
   }
-}
-
-export const searchData = (
-  state: InitialState,
-  action: PayloadAction<{ searchValue: string; transactions: Transaction[] }>
-) => {
-  const { searchValue, transactions } = action.payload
-
-  state.searchValue = searchValue
-  state.data = processMainData(transactions)
-
-  state.data.sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  )
-  state.isLoading = false
 }

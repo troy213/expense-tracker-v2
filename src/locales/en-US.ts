@@ -99,7 +99,6 @@ const messages = {
   Reports: 'Reports',
   Salary: 'Salary',
   Search: 'Search',
-  SearchResult: 'Search result for "{result}"',
   SeeMoreTransactions: 'See {count} more transactions',
   September: 'September',
   Settings: 'Settings',

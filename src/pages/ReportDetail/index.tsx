@@ -22,7 +22,7 @@ const ReportDetail = () => {
   const dispatch = useAppDispatch()
   const { formatMessage } = useIntl()
 
-  const { data } = useAppSelector((state) => state.mainReducer)
+  const { data } = useAppSelector((state) => state.transactionsReducer)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
   const { detailCount, detailData, selectedDetailCategory, isDetailLoading } =
     useAppSelector((state) => state.reportReducer)

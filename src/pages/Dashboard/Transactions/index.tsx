@@ -6,12 +6,11 @@ import type { LayoutContextType } from '@/components/Layout'
 import { DEFAULT_EXPANDED_COUNT } from '@/constants/config'
 import { useAppSelector, useExpandableGroups } from '@/hooks'
 import { formatMonthLabel, shouldShowMonthHeader } from '@/utils'
-import SearchResult from './SearchResult'
 import TransactionContainer from './TransactionContainer'
 
 const Transactions = () => {
   const { scrollParent } = useOutletContext<LayoutContextType>()
-  const { data } = useAppSelector((state) => state.mainReducer)
+  const { data } = useAppSelector((state) => state.transactionsReducer)
   const [selectedTransaction, setSelectedTransaction] = useState('')
   const { isExpanded, toggle } = useExpandableGroups(
     data,
@@ -28,8 +27,6 @@ const Transactions = () => {
   if (!data.length)
     return (
       <div className="transactions">
-        <SearchResult />
-
         <div className="flex-justify-center flex-align-center h-100">
           <span className="text--italic text--light">
             {formatMessage({ id: 'NoTransaction' })}
@@ -40,8 +37,6 @@ const Transactions = () => {
 
   return (
     <div className="transactions">
-      <SearchResult />
-
       {scrollParent && (
         <Virtuoso
           customScrollParent={scrollParent}
