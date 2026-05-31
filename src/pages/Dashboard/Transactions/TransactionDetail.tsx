@@ -17,7 +17,7 @@ import {
   getDefaultCategoryIconColor,
 } from '@/utils'
 import { CategoryIcon, FormModal, Modal } from '@/components'
-import { deleteDBTransactions } from '@/store/main/main-thunk'
+import { deleteDBTransactions } from '@/store/transactions/transactions-thunk'
 
 type TransactionDetailProps = {
   data: TxFormData

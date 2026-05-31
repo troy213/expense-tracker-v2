@@ -13,8 +13,8 @@ import {
 } from '@/assets'
 import { ProgressBar, Widget } from '@/components'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { mainAction } from '@/store/main/main-slice'
-import { getDBDashboardInfo } from '@/store/report/report-thunk'
+import { configAction } from '@/store/config/config-slice'
+import { getDBDashboardInfo } from '@/store/main/main-thunk'
 import {
   calculatePercentage,
   combineClassName,
@@ -30,12 +30,13 @@ type BalanceProps = {
 const DashboardInfo = () => {
   const dispatch = useAppDispatch()
   const { formatMessage } = useIntl()
-  const { data, hideBalance } = useAppSelector((state) => state.mainReducer)
+  const { data } = useAppSelector((state) => state.transactionsReducer)
+  const { hideBalance } = useAppSelector((state) => state.configReducer)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
-  const { totalIncome, totalExpenses, totalBudget, remainingBudget } =
-    useAppSelector((state) => state.reportReducer)
+  const { totalIncome, totalExpense, totalBudget, remainingBudget } =
+    useAppSelector((state) => state.mainReducer)
 
-  const totalBalance = totalIncome - totalExpenses
+  const totalBalance = totalIncome - totalExpense
   const { firstDate, lastDate } = getCurrentMonthRange()
 
   useEffect(() => {
@@ -90,7 +91,7 @@ const DashboardInfo = () => {
                 </span>
                 <ArrowDownSvg className="icon--sm icon--stroke-danger" />
               </div>
-              <span>{currencyFormatter(totalExpenses)}</span>
+              <span>{currencyFormatter(totalExpense)}</span>
             </div>
           </Widget>
         </div>
@@ -136,11 +137,11 @@ const DashboardInfo = () => {
 }
 
 const Balance: React.FC<BalanceProps> = ({ totalBalance }) => {
-  const { hideBalance } = useAppSelector((state) => state.mainReducer)
+  const { hideBalance } = useAppSelector((state) => state.configReducer)
   const dispatch = useAppDispatch()
 
   const handleHideBalance = () => {
-    dispatch(mainAction.setState({ state: 'hideBalance', value: !hideBalance }))
+    dispatch(configAction.toggleHideBalance())
   }
 
   return (

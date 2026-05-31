@@ -6,14 +6,14 @@ import { MemoryRouter } from 'react-router-dom'
 import { configureStore } from '@reduxjs/toolkit'
 
 import { LANGUAGES, LOCALES } from '@/constants'
-import mainSlice, { mainAction } from '@/store/main/main-slice'
+import configSlice, { configAction } from '@/store/config/config-slice'
 import Theme from '.'
 
 describe('Theme', () => {
   it('Renders Theme', () => {
     const mockStore = configureStore({
       reducer: {
-        mainReducer: mainSlice.reducer,
+        configReducer: configSlice.reducer,
       },
     })
     render(
@@ -39,7 +39,7 @@ describe('Theme', () => {
   it('Switches to dark theme', () => {
     const mockStore = configureStore({
       reducer: {
-        mainReducer: mainSlice.reducer,
+        configReducer: configSlice.reducer,
       },
     })
     const mockDispatch = vi.spyOn(mockStore, 'dispatch')
@@ -62,8 +62,6 @@ describe('Theme', () => {
     fireEvent.click(darkRadio)
     expect(darkRadio).toBeChecked()
     expect(lightRadio).not.toBeChecked()
-    expect(mockDispatch).toBeCalledWith(
-      mainAction.setState({ state: 'theme', value: 'dark' })
-    )
+    expect(mockDispatch).toBeCalledWith(configAction.setTheme('dark'))
   })
 })

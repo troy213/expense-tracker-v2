@@ -7,7 +7,7 @@ import ExportDataModal from '@/components/Modal/ExportDataModal'
 import ImportDataModal from '@/components/Modal/ImportDataModal'
 import { useAppDispatch, useDisclosure } from '@/hooks'
 import { deleteAllDBCategories } from '@/store/categories/categories-thunk'
-import { deleteAllDBTransactions } from '@/store/main/main-thunk'
+import { deleteAllDBTransactions } from '@/store/transactions/transactions-thunk'
 
 const SettingMenus = () => {
   const modal = useDisclosure<string>()

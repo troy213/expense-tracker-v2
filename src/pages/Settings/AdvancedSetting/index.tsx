@@ -1,21 +1,19 @@
+import { useState } from 'react'
 import { useIntl } from 'react-intl'
 import { Navbar } from '@/components'
-import { getStorageConfig, setStorage } from '@/utils'
-import { useState } from 'react'
+import { useAppDispatch } from '@/hooks'
+import { configAction } from '@/store/config/config-slice'
+import { getStorageConfig } from '@/utils'
 
 const AdvancedSetting = () => {
   const [config, setConfig] = useState(getStorageConfig())
+  const dispatch = useAppDispatch()
   const { formatMessage } = useIntl()
 
   const onHideBalanceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked
-    const existingConfig = config
-    const updatedConfig = {
-      ...existingConfig,
-      hideBalance: isChecked,
-    }
-    setConfig(updatedConfig)
-    setStorage('config', JSON.stringify(updatedConfig))
+    setConfig({ ...config, hideBalance: isChecked })
+    dispatch(configAction.setHideBalanceDefault(isChecked))
   }
 
   return (

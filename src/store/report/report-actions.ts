@@ -1,49 +1,28 @@
 import { PayloadAction } from '@reduxjs/toolkit'
-import { Data, DashboardInfo, Category } from '@/types'
+import { ReportCategory } from '@/types'
 import { InitialState } from './report-slice'
 
-export const setDashboardInfo = (
-  state: InitialState,
-  action: PayloadAction<DashboardInfo>
-) => {
-  const { totalIncome, totalExpenses, totalBudget, remainingBudget } =
-    action.payload
-
-  state.totalIncome = totalIncome
-  state.totalExpenses = totalExpenses
-  state.totalBudget = totalBudget
-  state.remainingBudget = remainingBudget
-  state.isLoading = false
-}
-
-export const setDetailData = (
+export const setReportData = (
   state: InitialState,
   action: PayloadAction<{
-    data: Data[]
-    detailCount: number
-    detailIncome: number
-    detailExpense: number
-    detailBudget: number
-    detailRemainingBudget: number
-    selectedDetailCategory: Category | null
+    totalIncome: number
+    totalExpense: number
+    avgSpending: number
+    incomeReport: ReportCategory[]
+    expenseReport: ReportCategory[]
   }>
 ) => {
   const {
-    data,
-    detailCount,
-    detailIncome,
-    detailExpense,
-    detailBudget,
-    detailRemainingBudget,
-    selectedDetailCategory,
+    totalIncome,
+    totalExpense,
+    avgSpending,
+    incomeReport,
+    expenseReport,
   } = action.payload
-
-  state.detailData = data
-  state.detailCount = detailCount
-  state.detailIncome = detailIncome
-  state.detailExpense = detailExpense
-  state.detailBudget = detailBudget
-  state.detailRemainingBudget = detailRemainingBudget
-  state.selectedDetailCategory = selectedDetailCategory || null
-  state.isDetailLoading = false
+  state.totalIncome = totalIncome
+  state.totalExpense = totalExpense
+  state.avgSpending = avgSpending
+  state.incomeReport = incomeReport
+  state.expenseReport = expenseReport
+  state.isLoading = false
 }

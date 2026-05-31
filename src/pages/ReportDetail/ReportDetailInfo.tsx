@@ -9,15 +9,15 @@ import { ProgressBar } from '@/components'
 import { AlertCircleSvg, AlertTriangleSvg } from '@/assets'
 
 const ReportDetailInfo = () => {
-  const { detailIncome, detailExpense, detailBudget, detailRemainingBudget } =
-    useAppSelector((state) => state.reportReducer)
+  const { totalIncome, totalExpense, totalBudget, remainingBudget } =
+    useAppSelector((state) => state.reportDetailReducer)
   const { formatMessage } = useIntl()
 
-  const hasIncome = detailIncome > 0
-  const hasExpense = detailExpense > 0
-  const hasBudget = detailBudget > 0
+  const hasIncome = totalIncome > 0
+  const hasExpense = totalExpense > 0
+  const hasBudget = totalBudget > 0
   const percentage = Number(
-    (100 - calculatePercentage(detailRemainingBudget, detailBudget)).toFixed(2)
+    (100 - calculatePercentage(remainingBudget, totalBudget)).toFixed(2)
   )
   const progress = Math.min(100, Math.max(0, percentage))
   const isWarning = percentage >= 75 && percentage < 90
@@ -54,7 +54,7 @@ const ReportDetailInfo = () => {
               {formatMessage({ id: 'TotalIncome' })}
             </span>
             <span className="text--bold text--6">
-              {currencyFormatter(detailIncome)}
+              {currencyFormatter(totalIncome)}
             </span>
           </div>
         )}
@@ -65,7 +65,7 @@ const ReportDetailInfo = () => {
                 {formatMessage({ id: 'TotalExpense' })}
               </span>
               <span className="text--bold text--6">
-                {currencyFormatter(detailExpense)}
+                {currencyFormatter(totalExpense)}
               </span>
             </div>
             {hasBudget && (
@@ -73,7 +73,7 @@ const ReportDetailInfo = () => {
                 <span className="text--light text--3">
                   {formatMessage({ id: 'BudgetRp' })}
                 </span>
-                <span>{currencyFormatter(detailBudget)}</span>
+                <span>{currencyFormatter(totalBudget)}</span>
               </div>
             )}
           </div>
@@ -102,7 +102,7 @@ const ReportDetailInfo = () => {
               <span className={budgetTextClassName}>
                 {formatMessage(
                   { id: 'BudgetLeft' },
-                  { budget: currencyFormatter(detailRemainingBudget) }
+                  { budget: currencyFormatter(remainingBudget) }
                 )}
               </span>
             </div>

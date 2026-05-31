@@ -2,18 +2,16 @@ import { useIntl } from 'react-intl'
 import { Navbar } from '@/components'
 import { THEME } from '@/constants'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { mainAction } from '@/store/main/main-slice'
+import { configAction } from '@/store/config/config-slice'
 import { Theme as ThemeType } from '@/types'
-import { setStorage } from '@/utils'
 
 const Theme = () => {
-  const theme = useAppSelector((state) => state.mainReducer.theme)
+  const theme = useAppSelector((state) => state.configReducer.theme)
   const dispatch = useAppDispatch()
   const { formatMessage } = useIntl()
 
   const toggleTheme = (selectedTheme: ThemeType) => {
-    setStorage('theme', selectedTheme)
-    dispatch(mainAction.setState({ state: 'theme', value: selectedTheme }))
+    dispatch(configAction.setTheme(selectedTheme))
   }
 
   return (

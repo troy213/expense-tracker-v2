@@ -1,12 +1,21 @@
 import { PayloadAction } from '@reduxjs/toolkit'
 import { Category } from '@/types'
-import { InitialState } from './categories-slice'
+import { initialState, InitialState } from './categories-slice'
+
+export const getAllCategories = (
+  state: InitialState,
+  action: PayloadAction<Category[]>
+) => {
+  state.categories = action.payload
+  state.isLoading = false
+}
 
 export const addCategory = (
   state: InitialState,
   action: PayloadAction<Category>
 ) => {
   state.categories = [...state.categories, action.payload]
+  state.isLoading = false
 }
 
 export const addCategories = (
@@ -14,6 +23,7 @@ export const addCategories = (
   action: PayloadAction<Category[]>
 ) => {
   state.categories = action.payload
+  state.isLoading = false
 }
 
 export const editCategory = (
@@ -26,6 +36,7 @@ export const editCategory = (
   })
 
   state.categories = newCategories
+  state.isLoading = false
 }
 
 export const deleteCategory = (
@@ -36,10 +47,16 @@ export const deleteCategory = (
 
   if (updated === null) {
     state.categories = state.categories.filter((category) => category.id !== id)
+    state.isLoading = false
     return
   }
 
   state.categories = state.categories.map((category) =>
     category.id === id ? updated : category
   )
+  state.isLoading = false
+}
+
+export const deleteAllCategories = () => {
+  return { ...initialState, isLoading: false }
 }

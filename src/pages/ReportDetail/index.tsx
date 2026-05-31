@@ -10,11 +10,12 @@ import {
 } from '@/constants/config'
 import { useAppDispatch, useAppSelector, useExpandableGroups } from '@/hooks'
 import TransactionContainer from '@/pages/Dashboard/Transactions/TransactionContainer'
-import { getDBReportDetail } from '@/store/report/report-thunk'
-import { reportAction } from '@/store/report/report-slice'
+import { getDBReportDetail } from '@/store/report-detail/report-detail-thunk'
+import { reportDetailAction } from '@/store/report-detail/report-detail-slice'
 import { TransactionFilters } from '@/types'
 import { formatTransactionDate, getCategoryById } from '@/utils'
 import ReportDetailInfo from './ReportDetailInfo'
+import { SpinnerSvg } from '@/assets'
 
 const ReportDetail = () => {
   const { scrollParent } = useOutletContext<LayoutContextType>()
@@ -22,10 +23,15 @@ const ReportDetail = () => {
   const dispatch = useAppDispatch()
   const { formatMessage } = useIntl()
 
-  const { data } = useAppSelector((state) => state.mainReducer)
+  const { data } = useAppSelector((state) => state.transactionsReducer)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
-  const { detailCount, detailData, selectedDetailCategory, isDetailLoading } =
-    useAppSelector((state) => state.reportReducer)
+  const {
+    data: detailData,
+    selectedDetailCategory,
+    isLoading: isDetailLoading,
+  } = useAppSelector((state) => state.reportDetailReducer)
+
+  const detailCount = detailData.length
 
   const [selectedTransaction, setSelectedTransaction] = useState('')
   const [showAll, setShowAll] = useState(false)
@@ -60,7 +66,7 @@ const ReportDetail = () => {
   // Clear detail state on unmount so stale results never flash.
   useEffect(() => {
     return () => {
-      dispatch(reportAction.resetDetail())
+      dispatch(reportDetailAction.resetDetail())
     }
   }, [dispatch])
 
@@ -92,6 +98,16 @@ const ReportDetail = () => {
   const visibleData = showAll
     ? detailData
     : detailData.slice(0, DEFAULT_VISIBLE_GROUPS)
+
+  if (isDetailLoading)
+    return (
+      <div className="report-detail p-4">
+        <Navbar enableBackButton={true} title="Reports" />
+        <div className="flex-justify-center flex-align-center flex-1">
+          <SpinnerSvg className="icon--xl icon--fill-primary spin" />
+        </div>
+      </div>
+    )
 
   return (
     <div className="report-detail">

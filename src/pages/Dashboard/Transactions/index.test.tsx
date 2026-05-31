@@ -5,9 +5,11 @@ import { Provider } from 'react-redux'
 import { IntlProvider } from 'react-intl'
 import { configureStore } from '@reduxjs/toolkit'
 
-import { LANGUAGES, LOCALES, THEME } from '@/constants'
+import { LANGUAGES, LOCALES } from '@/constants'
 import categoriesSlice from '@/store/categories/categories-slice'
-import mainSlice, { type InitialState } from '@/store/main/main-slice'
+import transactionsSlice, {
+  type InitialState,
+} from '@/store/transactions/transactions-slice'
 import type { Data } from '@/types'
 import Transactions from './'
 
@@ -43,11 +45,7 @@ vi.mock('react-router-dom', async () => {
 })
 
 const renderTransactions = (data: Data[]) => {
-  const mainReducer: InitialState = {
-    theme: THEME.LIGHT,
-    selectedLocale: LOCALES.ENGLISH,
-    searchValue: '',
-    hideBalance: false,
+  const transactionsReducer: InitialState = {
     isLoading: false,
     data,
   }
@@ -55,11 +53,11 @@ const renderTransactions = (data: Data[]) => {
   const store = configureStore({
     reducer: {
       categoriesReducer: categoriesSlice.reducer,
-      mainReducer: mainSlice.reducer,
+      transactionsReducer: transactionsSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({ immutableCheck: false, serializableCheck: false }),
-    preloadedState: { mainReducer },
+    preloadedState: { transactionsReducer },
   })
 
   return render(
@@ -77,7 +75,7 @@ const renderTransactions = (data: Data[]) => {
 }
 
 describe('Transactions month headers', () => {
-  it('renders one header per month, only at the first date-group of each month', () => {
+  it('renders a header at each month boundary, but suppresses the very first group', () => {
     const data: Data[] = [
       { date: '2026-05-23', subdata: [] },
       { date: '2026-05-10', subdata: [] },
@@ -88,12 +86,13 @@ describe('Transactions month headers', () => {
 
     // The month-header span has text exactly 'May' / 'April'. The day labels
     // read like '10 May 2026' (month: 'short'), so they don't match an exact
-    // 'May'/'April' text query.
-    expect(screen.getAllByText('May')).toHaveLength(1)
+    // 'May'/'April' text query. The first date-group (index 0) never renders a
+    // header, so the leading May group has no 'May' header; April still does.
+    expect(screen.queryAllByText('May')).toHaveLength(0)
     expect(screen.getAllByText('April')).toHaveLength(1)
   })
 
-  it('renders separate headers for the same month in different years', () => {
+  it('renders a header for a later same-month group in a different year (first group still suppressed)', () => {
     const data: Data[] = [
       { date: '2026-05-15', subdata: [] },
       { date: '2025-05-15', subdata: [] },
@@ -101,6 +100,8 @@ describe('Transactions month headers', () => {
 
     renderTransactions(data)
 
-    expect(screen.getAllByText('May')).toHaveLength(2)
+    // index 0 (2026 May) is suppressed; index 1 (2025 May) is a year-aware
+    // boundary, so exactly one 'May' header renders.
+    expect(screen.getAllByText('May')).toHaveLength(1)
   })
 })

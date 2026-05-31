@@ -50,7 +50,7 @@ export const REGEX = {
   },
 }
 
-export const DATE_RANGE = {
+export const TIME_FILTER = {
   ALL_TIME: 0,
   THIS_MONTH: 1,
   LAST_MONTH: 2,
@@ -58,25 +58,25 @@ export const DATE_RANGE = {
   CUSTOM_FILTER: 4,
 }
 
-export const DATE_RANGE_ITEM = [
+export const TIME_FILTER_ITEM = [
   {
     title: 'All',
-    value: DATE_RANGE.ALL_TIME,
+    value: TIME_FILTER.ALL_TIME,
   },
   {
     title: 'ThisMonth',
-    value: DATE_RANGE.THIS_MONTH,
+    value: TIME_FILTER.THIS_MONTH,
   },
   {
     title: 'LastMonth',
-    value: DATE_RANGE.LAST_MONTH,
+    value: TIME_FILTER.LAST_MONTH,
   },
   {
     title: 'ThisYear',
-    value: DATE_RANGE.THIS_YEAR,
+    value: TIME_FILTER.THIS_YEAR,
   },
   {
     title: 'CustomFilter',
-    value: DATE_RANGE.CUSTOM_FILTER,
+    value: TIME_FILTER.CUSTOM_FILTER,
   },
 ]

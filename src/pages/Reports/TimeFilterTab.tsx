@@ -1,29 +1,33 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useIntl } from 'react-intl'
 import { MoreVerticalSvg } from '@/assets'
-import { DATE_RANGE, DATE_RANGE_ITEM } from '@/constants'
-import DateRangeMenu from '@/components/Menu/DateRangeMenu'
+import { TIME_FILTER, TIME_FILTER_ITEM } from '@/constants'
+import TimeFilterMenu from '@/components/Menu/TimeFilterMenu'
 import InputDateModal from '@/components/Modal/InputDateModal'
 import { useAppDispatch, useClickOutside } from '@/hooks'
 import useDisclosure from '@/hooks/useDisclosure'
 import { reportAction } from '@/store/report/report-slice'
 import { combineClassName, toDateKey } from '@/utils'
-import './ReportTimeTab.scss'
+import './TimeFilterTab.scss'
 
-type ReportTimeTabProps = {
+type TimeFilterTabProps = {
   dateFrom: string | null
   dateTo: string | null
-  dateRange: number
+  timeFilter: number
 }
 
-const ReportTimeTab = ({ dateFrom, dateTo, dateRange }: ReportTimeTabProps) => {
-  const dateRangeModalRef = useRef<HTMLDivElement>(null)
+const TimeFilterTab = ({
+  dateFrom,
+  dateTo,
+  timeFilter,
+}: TimeFilterTabProps) => {
+  const timeFilterMenuRef = useRef<HTMLDivElement>(null)
   const { formatMessage } = useIntl()
   const dateModal = useDisclosure()
   const moreMenu = useDisclosure()
   const dispatch = useAppDispatch()
 
-  useClickOutside(dateRangeModalRef, moreMenu.close, moreMenu.isOpen)
+  useClickOutside(timeFilterMenuRef, moreMenu.close, moreMenu.isOpen)
 
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
@@ -40,14 +44,14 @@ const ReportTimeTab = ({ dateFrom, dateTo, dateRange }: ReportTimeTabProps) => {
   // The second tab is a dynamic slot: it shows the active range, falling back
   // to This Month whenever All Time is selected.
   const dynamicRange =
-    dateRange === DATE_RANGE.ALL_TIME ? DATE_RANGE.THIS_MONTH : dateRange
+    timeFilter === TIME_FILTER.ALL_TIME ? TIME_FILTER.THIS_MONTH : timeFilter
 
   const handleMoreOption = () => moreMenu.toggle()
 
-  const handleChangeDateRange = (range: number) => {
+  const handleTimeFilterChange = (range: number) => {
     moreMenu.close()
-    dispatch(reportAction.setState({ state: 'dateRange', value: range }))
-    if (range === DATE_RANGE.CUSTOM_FILTER) {
+    dispatch(reportAction.setState({ state: 'timeFilter', value: range }))
+    if (range === TIME_FILTER.CUSTOM_FILTER) {
       dateModal.open()
     }
   }
@@ -58,8 +62,12 @@ const ReportTimeTab = ({ dateFrom, dateTo, dateRange }: ReportTimeTabProps) => {
     )
   }
 
+  useEffect(() => {
+    dispatch(reportAction.setState({ state: 'customRange', value: null }))
+  }, [dispatch, timeFilter])
+
   return (
-    <div className="report-time-tab">
+    <div className="time-filter-tab">
       {dateModal.isOpen && (
         <InputDateModal
           isOpen={dateModal.isOpen}
@@ -71,29 +79,29 @@ const ReportTimeTab = ({ dateFrom, dateTo, dateRange }: ReportTimeTabProps) => {
       )}
 
       <div className="flex-align-center gap-2">
-        <div className="report-time-tab__tab">
-          {[DATE_RANGE.ALL_TIME, dynamicRange].map((value) => {
-            const item = DATE_RANGE_ITEM.find((d) => d.value === value)
+        <div className="time-filter-tab__tab">
+          {[TIME_FILTER.ALL_TIME, dynamicRange].map((value) => {
+            const item = TIME_FILTER_ITEM.find((d) => d.value === value)
             return (
               <button
                 key={value}
                 type="button"
                 role="tab"
-                aria-selected={dateRange === value}
-                className={combineClassName('report-time-tab__tab-item', [
+                aria-selected={timeFilter === value}
+                className={combineClassName('time-filter-tab__tab-item', [
                   {
-                    condition: dateRange === value,
+                    condition: timeFilter === value,
                     className: 'selected',
                   },
                 ])}
-                onClick={() => handleChangeDateRange(value)}
+                onClick={() => handleTimeFilterChange(value)}
               >
                 {item && formatMessage({ id: item.title })}
               </button>
             )
           })}
         </div>
-        <div className="relative" ref={dateRangeModalRef}>
+        <div className="relative" ref={timeFilterMenuRef}>
           <button
             type="button"
             className="btn btn-clear"
@@ -103,14 +111,14 @@ const ReportTimeTab = ({ dateFrom, dateTo, dateRange }: ReportTimeTabProps) => {
             <MoreVerticalSvg className="icon--stroke-primary" />
           </button>
           {moreMenu.isOpen && (
-            <DateRangeMenu
-              data={DATE_RANGE_ITEM.filter(
+            <TimeFilterMenu
+              data={TIME_FILTER_ITEM.filter(
                 (item) =>
-                  item.value !== DATE_RANGE.ALL_TIME &&
+                  item.value !== TIME_FILTER.ALL_TIME &&
                   item.value !== dynamicRange
               )}
-              dateRange={dateRange}
-              handleChangeDateRange={handleChangeDateRange}
+              timeFilter={timeFilter}
+              handleTimeFilterChange={handleTimeFilterChange}
             />
           )}
         </div>
@@ -125,4 +133,4 @@ const ReportTimeTab = ({ dateFrom, dateTo, dateRange }: ReportTimeTabProps) => {
   )
 }
 
-export default ReportTimeTab
+export default TimeFilterTab

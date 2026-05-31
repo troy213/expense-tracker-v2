@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.0-beta.25](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.24...v1.0.0-beta.25) (2026-05-31)
+
+
+### Features
+
+* add loading states and load initial data via thunks ([6a6f976](https://github.com/troy213/expense-tracker-v2/commit/6a6f9764e02d59c3939211da747458d067ba3522))
+* **categories:** add isLoading flag via addAsyncThunkCases ([8d3be16](https://github.com/troy213/expense-tracker-v2/commit/8d3be1652f59b56955a1554ad779dd6da472d0b8))
+* **report:** add getDBReportData thunk and wire reports page to store ([396cf19](https://github.com/troy213/expense-tracker-v2/commit/396cf195999792188315e6cba15c131efc877984))
+
+
+### Bug Fixes
+
+* **report:** correct avgSpending and add store async-case helper ([db12779](https://github.com/troy213/expense-tracker-v2/commit/db127794dc59899f0663087a95730cf55a888d90))
+
 ## [1.0.0-beta.24](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.23...v1.0.0-beta.24) (2026-05-28)
 
 

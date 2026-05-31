@@ -5,7 +5,7 @@ import { useAppDispatch } from '@/hooks'
 import dbServices from '@/lib/db'
 import { Category, Transaction } from '@/types'
 import { categoriesAction } from '@/store/categories/categories-slice'
-import { mainAction } from '@/store/main/main-slice'
+import { transactionsAction } from '@/store/transactions/transactions-slice'
 import { processMainData } from '@/utils'
 import { readXlsx } from '@/utils/fileGeneratorUtils'
 import Modal from '.'
@@ -40,7 +40,7 @@ const ImportDataModal: React.FC<ImportDataModalProps> = ({
 
         const newData = processMainData(rawData.dataOutput)
 
-        dispatch(mainAction.setState({ state: 'data', value: newData }))
+        dispatch(transactionsAction.setState({ state: 'data', value: newData }))
         dispatch(categoriesAction.addCategories(rawData.categoryOutput))
 
         navigate('/')

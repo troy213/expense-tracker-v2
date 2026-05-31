@@ -1,32 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { LOCALES, THEME } from '@/constants'
-import { Data, Locales, SetStatePayload, Theme } from '@/types'
-import { getStorage, setStateReducerValue } from '@/utils'
-import { addData, deleteData, editData, searchData } from './main-actions'
-import {
-  addDBTransactions,
-  deleteAllDBTransactions,
-  deleteDBTransactions,
-  editDBTransactions,
-  searchDBTransactions,
-} from './main-thunk'
+import { SetStatePayload } from '@/types'
+import { addAsyncThunkCases, setStateReducerValue } from '../utils'
+import { setDashboardInfo } from './main-actions'
+import { getDBDashboardInfo } from './main-thunk'
 
 export type InitialState = {
-  theme: Theme
-  selectedLocale: Locales
-  searchValue: string
-  hideBalance: boolean
   isLoading: boolean
-  data: Data[]
+  totalIncome: number
+  totalExpense: number
+  totalBudget: number
+  remainingBudget: number
 }
 
 const initialState: InitialState = {
-  theme: (getStorage('theme') as Theme) ?? THEME.LIGHT,
-  selectedLocale: (getStorage('locales') as Locales) ?? LOCALES.ENGLISH,
-  searchValue: '',
-  hideBalance: false,
   isLoading: true,
-  data: [],
+  totalIncome: 0,
+  totalExpense: 0,
+  totalBudget: 0,
+  remainingBudget: 0,
 }
 
 const mainSlice = createSlice({
@@ -38,7 +29,6 @@ const mainSlice = createSlice({
       action: PayloadAction<SetStatePayload<InitialState>>
     ) {
       const { state: key, value } = action.payload
-
       setStateReducerValue(state, key, value)
     },
     resetState() {
@@ -46,26 +36,12 @@ const mainSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(addDBTransactions.fulfilled, addData)
-    builder.addCase(editDBTransactions.fulfilled, editData)
-    builder.addCase(deleteDBTransactions.fulfilled, deleteData)
-    builder.addCase(searchDBTransactions.fulfilled, searchData)
-    builder.addCase(deleteAllDBTransactions.fulfilled, () => {
-      return { ...initialState, isLoading: false }
-    })
-    builder
-      .addMatcher(
-        (action) => action.type.endsWith('/pending'),
-        (state) => {
-          state.isLoading = true
-        }
-      )
-      .addMatcher(
-        (action) => action.type.endsWith('/rejected'),
-        (state) => {
-          state.isLoading = false
-        }
-      )
+    addAsyncThunkCases(
+      builder,
+      getDBDashboardInfo,
+      'isLoading',
+      setDashboardInfo
+    )
   },
 })
 
