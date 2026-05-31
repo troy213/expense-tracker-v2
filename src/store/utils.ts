@@ -53,3 +53,13 @@ export const addAsyncThunkCases = <
       ;(state as Record<BooleanKey<State>, boolean>)[loadingKey] = false
     })
 }
+
+// Generic typed setter for a slice's `setState` reducer (used with the
+// `SetStatePayload<State>` discriminated-union payload).
+export const setStateReducerValue = <T, K extends keyof T>(
+  state: T,
+  key: K,
+  value: T[K]
+) => {
+  state[key] = value
+}

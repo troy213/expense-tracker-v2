@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Category, SetStatePayload } from '@/types'
-import { setStateReducerValue, setStorage } from '@/utils'
-import { addAsyncThunkCases } from '../utils'
+import { setStorage } from '@/utils'
+import { addAsyncThunkCases, setStateReducerValue } from '../utils'
 import {
   addCategories,
   addCategory,

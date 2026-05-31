@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { SetStatePayload } from '@/types'
-import { setStateReducerValue } from '@/utils'
-import { addAsyncThunkCases } from '../utils'
+import { addAsyncThunkCases, setStateReducerValue } from '../utils'
 import { setDashboardInfo } from './main-actions'
 import { getDBDashboardInfo } from './main-thunk'
 

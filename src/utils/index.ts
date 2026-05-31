@@ -81,14 +81,6 @@ export const currencyFormatter = (amount: string | number) => {
   return formatter.format(number || 0)
 }
 
-export const setStateReducerValue = <T, K extends keyof T>(
-  state: T,
-  key: K,
-  value: T[K]
-) => {
-  state[key] = value
-}
-
 export const setStorage = <T>(key: string, value: T): void => {
   if (Array.isArray(value)) {
     localStorage.setItem(key, JSON.stringify(value))

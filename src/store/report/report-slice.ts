@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ReportCategory, SetStatePayload } from '@/types'
 import { TIME_FILTER } from '@/constants'
-import { setStateReducerValue } from '@/utils'
-import { addAsyncThunkCases } from '../utils'
+import { addAsyncThunkCases, setStateReducerValue } from '../utils'
 import { setReportData } from './report-actions'
 import { getDBReportData } from './report-thunk'
 

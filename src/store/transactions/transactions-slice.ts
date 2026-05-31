@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Data, SetStatePayload } from '@/types'
-import { setStateReducerValue } from '@/utils'
+import { setStateReducerValue } from '../utils'
 import { addData, deleteData, editData } from './transactions-actions'
 import {
   addDBTransactions,
