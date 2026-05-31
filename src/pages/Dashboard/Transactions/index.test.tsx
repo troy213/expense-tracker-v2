@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 import { IntlProvider } from 'react-intl'
 import { configureStore } from '@reduxjs/toolkit'
 
-import { LANGUAGES, LOCALES, THEME } from '@/constants'
+import { LANGUAGES, LOCALES } from '@/constants'
 import categoriesSlice from '@/store/categories/categories-slice'
 import mainSlice, { type InitialState } from '@/store/main/main-slice'
 import type { Data } from '@/types'
@@ -44,10 +44,7 @@ vi.mock('react-router-dom', async () => {
 
 const renderTransactions = (data: Data[]) => {
   const mainReducer: InitialState = {
-    theme: THEME.LIGHT,
-    selectedLocale: LOCALES.ENGLISH,
     searchValue: '',
-    hideBalance: false,
     isLoading: false,
     data,
   }

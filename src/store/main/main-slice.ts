@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { LOCALES, THEME } from '@/constants'
-import { Data, Locales, SetStatePayload, Theme } from '@/types'
-import { getStorage, setStateReducerValue } from '@/utils'
+import { Data, SetStatePayload } from '@/types'
+import { setStateReducerValue } from '@/utils'
 import { addData, deleteData, editData, searchData } from './main-actions'
 import {
   addDBTransactions,
@@ -12,19 +11,13 @@ import {
 } from './main-thunk'
 
 export type InitialState = {
-  theme: Theme
-  selectedLocale: Locales
   searchValue: string
-  hideBalance: boolean
   isLoading: boolean
   data: Data[]
 }
 
 const initialState: InitialState = {
-  theme: (getStorage('theme') as Theme) ?? THEME.LIGHT,
-  selectedLocale: (getStorage('locales') as Locales) ?? LOCALES.ENGLISH,
   searchValue: '',
-  hideBalance: false,
   isLoading: true,
   data: [],
 }

@@ -6,14 +6,14 @@ import { MemoryRouter } from 'react-router-dom'
 import { configureStore } from '@reduxjs/toolkit'
 
 import { LOCALES, LANGUAGES } from '@/constants'
-import mainSlice, { mainAction } from '@/store/main/main-slice'
+import configSlice, { configAction } from '@/store/config/config-slice'
 import Languages from '.'
 
-describe('Theme', () => {
+describe('Languages', () => {
   it('Renders Language', () => {
     const mockStore = configureStore({
       reducer: {
-        mainReducer: mainSlice.reducer,
+        configReducer: configSlice.reducer,
       },
     })
     render(
@@ -40,7 +40,7 @@ describe('Theme', () => {
   it('Switches to Indonesian Language when clicked', () => {
     const mockStore = configureStore({
       reducer: {
-        mainReducer: mainSlice.reducer,
+        configReducer: configSlice.reducer,
       },
     })
     const mockDispatch = vi.spyOn(mockStore, 'dispatch')
@@ -61,7 +61,7 @@ describe('Theme', () => {
     const ind = screen.getByText('Indonesia')
     fireEvent.click(ind)
     expect(mockDispatch).toBeCalledWith(
-      mainAction.setState({ state: 'selectedLocale', value: LOCALES.INDONESIA })
+      configAction.setLocale(LOCALES.INDONESIA)
     )
   })
 })

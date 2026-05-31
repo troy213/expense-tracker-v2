@@ -21,9 +21,8 @@ import {
 } from '@/pages/Settings'
 
 const App = () => {
-  const { selectedLocale, theme } = useAppSelector((state) => state.mainReducer)
-  const currentLanguage =
-    LANGUAGES[selectedLocale] || LANGUAGES[LOCALES.ENGLISH]
+  const { locale, theme } = useAppSelector((state) => state.configReducer)
+  const currentLanguage = LANGUAGES[locale] || LANGUAGES[LOCALES.ENGLISH]
 
   useInitConfig()
 

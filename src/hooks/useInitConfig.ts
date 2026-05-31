@@ -1,9 +1,8 @@
 import { useEffect } from 'react'
-import { LOCALES, THEME } from '@/constants'
 import { mainAction } from '@/store/main/main-slice'
 import { categoriesAction } from '@/store/categories/categories-slice'
 import dbServices from '@/lib/db'
-import { getStorage, processMainData } from '@/utils'
+import { processMainData } from '@/utils'
 import useAppDispatch from './useAppDispatch'
 
 const useInitConfig = () => {
@@ -13,27 +12,6 @@ const useInitConfig = () => {
     const initializeData = async () => {
       // Initialize IndexedDB
       await dbServices.initializeDB()
-
-      // Get theme and locale from localStorage
-      const storedTheme = getStorage('theme')
-      const storedLocales = getStorage('locales')
-      const storedConfig = getStorage('config')
-
-      if (storedTheme === THEME.DARK || storedTheme === THEME.LIGHT) {
-        dispatch(mainAction.setState({ state: 'theme', value: storedTheme }))
-      }
-
-      if (
-        storedLocales === LOCALES.ENGLISH ||
-        storedLocales === LOCALES.INDONESIA
-      ) {
-        dispatch(
-          mainAction.setState({
-            state: 'selectedLocale',
-            value: storedLocales,
-          })
-        )
-      }
 
       // Load categories from IndexedDB or migrate from localStorage
       const categories = await dbServices.categories.getCategoriesByIndex()
@@ -51,22 +29,10 @@ const useInitConfig = () => {
       const transactions = await dbServices.transactions.getAllTransactions()
 
       if (transactions.length > 0) {
-        // Load first 100 for initial display (pagination)
-        // const displayTransactions = transactions.slice(0, 100)
         dispatch(
           mainAction.setState({
             state: 'data',
             value: processMainData(transactions),
-          })
-        )
-      }
-
-      if (storedConfig) {
-        const parsedData = JSON.parse(storedConfig)
-        dispatch(
-          mainAction.setState({
-            state: 'hideBalance',
-            value: parsedData?.hideBalance,
           })
         )
       }

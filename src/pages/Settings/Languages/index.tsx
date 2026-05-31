@@ -3,20 +3,17 @@ import { CheckSvg } from '@/assets'
 import { Navbar } from '@/components'
 import { LANGUAGES_MENU } from '@/constants/config'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { mainAction } from '@/store/main/main-slice'
+import { configAction } from '@/store/config/config-slice'
 import { Locales } from '@/types'
-import { combineClassName, setStorage } from '@/utils'
+import { combineClassName } from '@/utils'
 
 const Languages = () => {
-  const selectedLocale = useAppSelector(
-    (state) => state.mainReducer.selectedLocale
-  )
+  const locale = useAppSelector((state) => state.configReducer.locale)
   const dispatch = useAppDispatch()
   const { formatMessage } = useIntl()
 
-  const switchLanguage = (locale: Locales) => {
-    setStorage('locales', locale)
-    dispatch(mainAction.setState({ state: 'selectedLocale', value: locale }))
+  const switchLanguage = (selectedLocale: Locales) => {
+    dispatch(configAction.setLocale(selectedLocale))
   }
 
   return (
@@ -26,7 +23,7 @@ const Languages = () => {
       <ul className="flex-column gap-8 py-4">
         {LANGUAGES_MENU.map((item, index) => {
           const { Icon, title, locales } = item
-          const isSelected = locales === selectedLocale
+          const isSelected = locales === locale
           const titleClassName = combineClassName('', [
             {
               condition: isSelected,

@@ -13,7 +13,7 @@ import {
 } from '@/assets'
 import { ProgressBar, Widget } from '@/components'
 import { useAppDispatch, useAppSelector } from '@/hooks'
-import { mainAction } from '@/store/main/main-slice'
+import { configAction } from '@/store/config/config-slice'
 import { getDBDashboardInfo } from '@/store/report/report-thunk'
 import {
   calculatePercentage,
@@ -30,7 +30,8 @@ type BalanceProps = {
 const DashboardInfo = () => {
   const dispatch = useAppDispatch()
   const { formatMessage } = useIntl()
-  const { data, hideBalance } = useAppSelector((state) => state.mainReducer)
+  const { data } = useAppSelector((state) => state.mainReducer)
+  const { hideBalance } = useAppSelector((state) => state.configReducer)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
   const { totalIncome, totalExpenses, totalBudget, remainingBudget } =
     useAppSelector((state) => state.reportReducer)
@@ -136,11 +137,11 @@ const DashboardInfo = () => {
 }
 
 const Balance: React.FC<BalanceProps> = ({ totalBalance }) => {
-  const { hideBalance } = useAppSelector((state) => state.mainReducer)
+  const { hideBalance } = useAppSelector((state) => state.configReducer)
   const dispatch = useAppDispatch()
 
   const handleHideBalance = () => {
-    dispatch(mainAction.setState({ state: 'hideBalance', value: !hideBalance }))
+    dispatch(configAction.toggleHideBalance())
   }
 
   return (
