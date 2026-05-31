@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Category, SetStatePayload } from '@/types'
 import { setStateReducerValue, setStorage } from '@/utils'
+import { addAsyncThunkCases } from '../utils'
 import {
   addCategories,
   addCategory,
@@ -16,10 +17,12 @@ import {
 } from './categories-thunk'
 
 export type InitialState = {
+  isLoading: boolean
   categories: Category[]
 }
 
 const initialState: InitialState = {
+  isLoading: true,
   categories: [],
 }
 
@@ -55,16 +58,16 @@ const categoriesSlice = createSlice({
       setStateReducerValue(state, key, value)
     },
     resetState() {
-      return initialState
+      return { ...initialState, isLoading: false }
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(addDBCategory.fulfilled, addCategory)
-    builder.addCase(addDBCategories.fulfilled, addCategories)
-    builder.addCase(editDBCategory.fulfilled, editCategory)
-    builder.addCase(deleteDBCategory.fulfilled, deleteCategory)
-    builder.addCase(deleteAllDBCategories.fulfilled, () => {
-      return initialState
+    addAsyncThunkCases(builder, addDBCategory, 'isLoading', addCategory)
+    addAsyncThunkCases(builder, addDBCategories, 'isLoading', addCategories)
+    addAsyncThunkCases(builder, editDBCategory, 'isLoading', editCategory)
+    addAsyncThunkCases(builder, deleteDBCategory, 'isLoading', deleteCategory)
+    addAsyncThunkCases(builder, deleteAllDBCategories, 'isLoading', () => {
+      return { ...initialState, isLoading: false }
     })
   },
 })

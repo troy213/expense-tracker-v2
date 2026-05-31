@@ -25,6 +25,8 @@ const useInitConfig = () => {
         )
       }
 
+      dispatch(categoriesAction.setState({ state: 'isLoading', value: false }))
+
       // Load transactions from IndexedDB or migrate from localStorage
       const transactions = await dbServices.transactions.getAllTransactions()
 
