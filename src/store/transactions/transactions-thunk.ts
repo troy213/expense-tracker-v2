@@ -1,6 +1,19 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { Transaction, TxFormData } from '@/types'
+import { Data, Transaction, TxFormData } from '@/types'
 import dbServices from '@/lib/db'
+import { processMainData } from '@/utils'
+
+export const getAllDBTransactions = createAsyncThunk(
+  'transactions/getTransactions',
+  async () => {
+    let data: Data[] = []
+    const transactions = await dbServices.transactions.getAllTransactions()
+
+    if (transactions.length > 0) data = processMainData(transactions)
+
+    return data
+  }
+)
 
 export const addDBTransactions = createAsyncThunk(
   'transactions/addTransactions',

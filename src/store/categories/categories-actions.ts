@@ -1,6 +1,14 @@
 import { PayloadAction } from '@reduxjs/toolkit'
 import { Category } from '@/types'
-import { InitialState } from './categories-slice'
+import { initialState, InitialState } from './categories-slice'
+
+export const getAllCategories = (
+  state: InitialState,
+  action: PayloadAction<Category[]>
+) => {
+  state.categories = action.payload
+  state.isLoading = false
+}
 
 export const addCategory = (
   state: InitialState,
@@ -47,4 +55,8 @@ export const deleteCategory = (
     category.id === id ? updated : category
   )
   state.isLoading = false
+}
+
+export const deleteAllCategories = () => {
+  return { ...initialState, isLoading: false }
 }

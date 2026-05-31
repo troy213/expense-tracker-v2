@@ -5,8 +5,10 @@ import { addAsyncThunkCases, setStateReducerValue } from '../utils'
 import {
   addCategories,
   addCategory,
+  deleteAllCategories,
   deleteCategory,
   editCategory,
+  getAllCategories,
 } from './categories-actions'
 import {
   addDBCategory,
@@ -14,6 +16,7 @@ import {
   deleteDBCategory,
   addDBCategories,
   deleteAllDBCategories,
+  getAllDBCategories,
 } from './categories-thunk'
 
 export type InitialState = {
@@ -21,7 +24,7 @@ export type InitialState = {
   categories: Category[]
 }
 
-const initialState: InitialState = {
+export const initialState: InitialState = {
   isLoading: true,
   categories: [],
 }
@@ -62,13 +65,22 @@ const categoriesSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    addAsyncThunkCases(
+      builder,
+      getAllDBCategories,
+      'isLoading',
+      getAllCategories
+    )
     addAsyncThunkCases(builder, addDBCategory, 'isLoading', addCategory)
     addAsyncThunkCases(builder, addDBCategories, 'isLoading', addCategories)
     addAsyncThunkCases(builder, editDBCategory, 'isLoading', editCategory)
     addAsyncThunkCases(builder, deleteDBCategory, 'isLoading', deleteCategory)
-    addAsyncThunkCases(builder, deleteAllDBCategories, 'isLoading', () => {
-      return { ...initialState, isLoading: false }
-    })
+    addAsyncThunkCases(
+      builder,
+      deleteAllDBCategories,
+      'isLoading',
+      deleteAllCategories
+    )
   },
 })
 

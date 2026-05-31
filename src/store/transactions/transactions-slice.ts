@@ -1,12 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Data, SetStatePayload } from '@/types'
-import { setStateReducerValue } from '../utils'
-import { addData, deleteData, editData } from './transactions-actions'
+import { addAsyncThunkCases, setStateReducerValue } from '../utils'
+import {
+  addData,
+  deleteAllTransactions,
+  deleteData,
+  editData,
+  getAllData,
+} from './transactions-actions'
 import {
   addDBTransactions,
   deleteAllDBTransactions,
   deleteDBTransactions,
   editDBTransactions,
+  getAllDBTransactions,
 } from './transactions-thunk'
 
 export type InitialState = {
@@ -14,7 +21,7 @@ export type InitialState = {
   data: Data[]
 }
 
-const initialState: InitialState = {
+export const initialState: InitialState = {
   isLoading: true,
   data: [],
 }
@@ -35,25 +42,16 @@ const transactionsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(addDBTransactions.fulfilled, addData)
-    builder.addCase(editDBTransactions.fulfilled, editData)
-    builder.addCase(deleteDBTransactions.fulfilled, deleteData)
-    builder.addCase(deleteAllDBTransactions.fulfilled, () => {
-      return { ...initialState, isLoading: false }
-    })
-    builder
-      .addMatcher(
-        (action) => action.type.endsWith('/pending'),
-        (state) => {
-          state.isLoading = true
-        }
-      )
-      .addMatcher(
-        (action) => action.type.endsWith('/rejected'),
-        (state) => {
-          state.isLoading = false
-        }
-      )
+    addAsyncThunkCases(builder, getAllDBTransactions, 'isLoading', getAllData)
+    addAsyncThunkCases(builder, addDBTransactions, 'isLoading', addData)
+    addAsyncThunkCases(builder, editDBTransactions, 'isLoading', editData)
+    addAsyncThunkCases(builder, deleteDBTransactions, 'isLoading', deleteData)
+    addAsyncThunkCases(
+      builder,
+      deleteAllDBTransactions,
+      'isLoading',
+      deleteAllTransactions
+    )
   },
 })
 

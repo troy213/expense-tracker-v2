@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useIntl } from 'react-intl'
 import { MoreVerticalSvg } from '@/assets'
 import { TIME_FILTER, TIME_FILTER_ITEM } from '@/constants'
@@ -61,6 +61,10 @@ const TimeFilterTab = ({
       reportAction.setState({ state: 'customRange', value: { from, to } })
     )
   }
+
+  useEffect(() => {
+    dispatch(reportAction.setState({ state: 'customRange', value: null }))
+  }, [dispatch, timeFilter])
 
   return (
     <div className="time-filter-tab">

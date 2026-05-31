@@ -1,6 +1,14 @@
 import { PayloadAction } from '@reduxjs/toolkit'
-import { TxFormData } from '@/types'
-import { InitialState } from './transactions-slice'
+import { Data, TxFormData } from '@/types'
+import { initialState, InitialState } from './transactions-slice'
+
+export const getAllData = (
+  state: InitialState,
+  action: PayloadAction<Data[]>
+) => {
+  state.data = action.payload
+  state.isLoading = false
+}
 
 export const addData = (
   state: InitialState,
@@ -105,6 +113,8 @@ export const deleteData = (
 ) => {
   const { index, data } = action.payload
 
+  state.isLoading = false
+
   const dayEntry = state.data[index]
   if (!dayEntry) return
 
@@ -117,4 +127,8 @@ export const deleteData = (
   if (dayEntry.subdata.length === 0) {
     state.data.splice(index, 1)
   }
+}
+
+export const deleteAllTransactions = () => {
+  return { ...initialState, isLoading: false }
 }

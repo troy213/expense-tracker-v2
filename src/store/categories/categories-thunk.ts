@@ -2,8 +2,15 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import { Category } from '@/types'
 import dbServices from '@/lib/db'
 
+export const getAllDBCategories = createAsyncThunk(
+  'categories/getAllCategories',
+  async () => {
+    return await dbServices.categories.getCategoriesByIndex()
+  }
+)
+
 export const addDBCategory = createAsyncThunk(
-  'categories/addDBCategory',
+  'categories/addCategory',
   async (payload: Category) => {
     await dbServices.categories.putCategory(payload)
 
@@ -12,7 +19,7 @@ export const addDBCategory = createAsyncThunk(
 )
 
 export const addDBCategories = createAsyncThunk(
-  'categories/addDBCategories',
+  'categories/addCategories',
   async (payload: Category[]) => {
     await dbServices.categories.putCategories(payload)
 
@@ -21,7 +28,7 @@ export const addDBCategories = createAsyncThunk(
 )
 
 export const editDBCategory = createAsyncThunk(
-  'categories/editDBCategory',
+  'categories/editCategory',
   async (payload: Category) => {
     await dbServices.categories.putCategory(payload)
 
@@ -30,7 +37,7 @@ export const editDBCategory = createAsyncThunk(
 )
 
 export const deleteDBCategory = createAsyncThunk(
-  'categories/deleteDBCategory',
+  'categories/deleteCategory',
   async (payload: Category) => {
     const updated = await dbServices.categories.deleteCategory(payload.id)
 
