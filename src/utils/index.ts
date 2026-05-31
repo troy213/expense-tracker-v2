@@ -168,9 +168,10 @@ export const toDateKey = (d: Date): string =>
 // All Time yields null bounds (no date filtering).
 export const getDateRangeForFilter = (
   rangeType: number,
-  now: Date,
   custom?: { from: string; to: string }
 ): { dateFrom: string | null; dateTo: string | null } => {
+  const now = new Date()
+
   switch (rangeType) {
     case DATE_RANGE.THIS_MONTH: {
       const { firstDate, lastDate } = getMonthRange(toDateKey(now))
@@ -194,10 +195,15 @@ export const getDateRangeForFilter = (
   }
 }
 
-// Inclusive whole-day difference between two 'YYYY-MM-DD' strings (local).
-const inclusiveDayCount = (startKey: string, endKey: string): number => {
-  const [sy, sm, sd] = startKey.split('-').map(Number)
-  const [ey, em, ed] = endKey.split('-').map(Number)
+/**
+ *
+ * @param date YYYY-MM-DD format
+ * @returns total elapsed day
+ */
+export const getElapsedDay = (date: string): number => {
+  const now = getDate()
+  const [sy, sm, sd] = date.split('-').map(Number)
+  const [ey, em, ed] = now.split('-').map(Number)
   const start = new Date(sy, sm - 1, sd)
   const end = new Date(ey, em - 1, ed)
   const diffMs = end.getTime() - start.getTime()
@@ -245,7 +251,7 @@ export const calculateAverageSpending = (
     return sum
   }, 0)
 
-  const days = Math.max(1, inclusiveDayCount(windowStart, windowEnd))
+  const days = Math.max(1, getElapsedDay(windowStart))
   return totalExpense / days
 }
 

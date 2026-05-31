@@ -19,12 +19,10 @@ const Reports = () => {
     (state) => state.reportReducer
   )
 
-  const now = new Date()
   const today = getDate()
 
   const { dateFrom, dateTo } = getDateRangeForFilter(
     dateRange,
-    now,
     customRange ?? undefined
   )
 

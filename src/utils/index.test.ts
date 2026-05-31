@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import {
   getMonthKey,
   formatMonthLabel,
@@ -53,47 +53,60 @@ describe('shouldShowMonthHeader', () => {
 })
 
 describe('getDateRangeForFilter', () => {
-  const now = new Date(2026, 4, 23) // 2026-05-23 (month is 0-based)
+  // The function reads `new Date()` internally, so pin the clock per-test.
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  const setNow = (date: Date) => {
+    vi.useFakeTimers()
+    vi.setSystemTime(date)
+  }
 
   it('returns null bounds for All Time', () => {
-    expect(getDateRangeForFilter(DATE_RANGE.ALL_TIME, now)).toEqual({
+    setNow(new Date(2026, 4, 23)) // 2026-05-23 (month is 0-based)
+    expect(getDateRangeForFilter(DATE_RANGE.ALL_TIME)).toEqual({
       dateFrom: null,
       dateTo: null,
     })
   })
 
   it('returns the full current month for This Month', () => {
-    expect(getDateRangeForFilter(DATE_RANGE.THIS_MONTH, now)).toEqual({
+    setNow(new Date(2026, 4, 23))
+    expect(getDateRangeForFilter(DATE_RANGE.THIS_MONTH)).toEqual({
       dateFrom: '2026-05-01',
       dateTo: '2026-05-31',
     })
   })
 
   it('returns the full previous month for Last Month', () => {
-    expect(getDateRangeForFilter(DATE_RANGE.LAST_MONTH, now)).toEqual({
+    setNow(new Date(2026, 4, 23))
+    expect(getDateRangeForFilter(DATE_RANGE.LAST_MONTH)).toEqual({
       dateFrom: '2026-04-01',
       dateTo: '2026-04-30',
     })
   })
 
   it('rolls back across the year boundary for Last Month in January', () => {
-    const jan = new Date(2026, 0, 15) // 2026-01-15
-    expect(getDateRangeForFilter(DATE_RANGE.LAST_MONTH, jan)).toEqual({
+    setNow(new Date(2026, 0, 15)) // 2026-01-15
+    expect(getDateRangeForFilter(DATE_RANGE.LAST_MONTH)).toEqual({
       dateFrom: '2025-12-01',
       dateTo: '2025-12-31',
     })
   })
 
   it('returns the full calendar year for This Year', () => {
-    expect(getDateRangeForFilter(DATE_RANGE.THIS_YEAR, now)).toEqual({
+    setNow(new Date(2026, 4, 23))
+    expect(getDateRangeForFilter(DATE_RANGE.THIS_YEAR)).toEqual({
       dateFrom: '2026-01-01',
       dateTo: '2026-12-31',
     })
   })
 
   it('passes through custom dates for Custom Filter', () => {
+    setNow(new Date(2026, 4, 23))
     expect(
-      getDateRangeForFilter(DATE_RANGE.CUSTOM_FILTER, now, {
+      getDateRangeForFilter(DATE_RANGE.CUSTOM_FILTER, {
         from: '2026-03-10',
         to: '2026-03-20',
       })
@@ -123,6 +136,16 @@ describe('calculateAverageSpending', () => {
     },
   ]
   const today = '2026-05-23'
+
+  // calculateAverageSpending derives elapsed days from the real clock via
+  // getElapsedDay/getDate, so pin the clock to `today` for determinism.
+  beforeEach(() => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(2026, 4, 23)) // 2026-05-23 (month is 0-based)
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+  })
 
   const makeData = (entries: [string, string, number][]): Data[] => {
     // entries: [date, category_id, amount]

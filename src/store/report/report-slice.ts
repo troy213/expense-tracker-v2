@@ -4,6 +4,7 @@ import { getDBDashboardInfo, getDBReportDetail } from './report-thunk'
 import { Category, Data, SetStatePayload } from '@/types'
 import { DATE_RANGE } from '@/constants'
 import { setStateReducerValue } from '@/utils'
+import { addAsyncThunkCases } from '../utils'
 
 export type InitialState = {
   totalIncome: number
@@ -67,20 +68,18 @@ const reportSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getDBDashboardInfo.fulfilled, setDashboardInfo)
-    builder.addCase(getDBDashboardInfo.pending, (state) => {
-      state.isLoading = true
-    })
-    builder.addCase(getDBDashboardInfo.rejected, (state) => {
-      state.isLoading = false
-    })
-    builder.addCase(getDBReportDetail.pending, (state) => {
-      state.isDetailLoading = true
-    })
-    builder.addCase(getDBReportDetail.fulfilled, setDetailData)
-    builder.addCase(getDBReportDetail.rejected, (state) => {
-      state.isDetailLoading = false
-    })
+    addAsyncThunkCases(
+      builder,
+      getDBDashboardInfo,
+      'isLoading',
+      setDashboardInfo
+    )
+    addAsyncThunkCases(
+      builder,
+      getDBReportDetail,
+      'isDetailLoading',
+      setDetailData
+    )
   },
 })
 
