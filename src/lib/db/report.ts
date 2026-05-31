@@ -8,6 +8,21 @@ import {
 import { getDB } from './connection'
 
 /**
+ * Pure helper: average daily expense within the window defined by oldestDate
+ * through today, excluding future-dated expenses from the numerator.
+ * The denominator is clamped to at least 1 so we never divide by zero or
+ * produce a negative/NaN result when oldestDate is in the future.
+ */
+export const computeAvgSpending = (
+  totalExpense: number,
+  totalFutureExpense: number,
+  oldestDate: string
+): number => {
+  const elapsedDay = Math.max(1, getElapsedDay(oldestDate))
+  return (totalExpense - totalFutureExpense) / elapsedDay
+}
+
+/**
  * Get dashboard info
  */
 async function getDashboardInfo(): Promise<DashboardInfo> {
@@ -114,8 +129,11 @@ async function getReportData(
   incomeReport.sort((a, b) => b.total - a.total)
   expenseReport.sort((a, b) => b.total - a.total)
 
-  const elapsedDay = Math.max(1, getElapsedDay(oldestDate))
-  const avgSpending = (totalExpense - totalFutureExpense) / elapsedDay
+  const avgSpending = computeAvgSpending(
+    totalExpense,
+    totalFutureExpense,
+    oldestDate
+  )
 
   return {
     totalIncome,

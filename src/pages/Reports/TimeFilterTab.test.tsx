@@ -4,11 +4,11 @@ import { MemoryRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { IntlProvider } from 'react-intl'
 
-import { DATE_RANGE, LANGUAGES, LOCALES } from '@/constants'
+import { TIME_FILTER, LANGUAGES, LOCALES } from '@/constants'
 import store from '@/store'
-import ReportTimeTab from './ReportTimeTab'
+import TimeFilterTab from './TimeFilterTab'
 
-const renderTab = (dateRange: number) =>
+const renderTab = (timeFilter: number) =>
   render(
     <MemoryRouter>
       <Provider store={store}>
@@ -16,7 +16,11 @@ const renderTab = (dateRange: number) =>
           locale={LOCALES.ENGLISH}
           messages={LANGUAGES[LOCALES.ENGLISH].messages}
         >
-          <ReportTimeTab dateFrom={null} dateTo={null} dateRange={dateRange} />
+          <TimeFilterTab
+            dateFrom={null}
+            dateTo={null}
+            timeFilter={timeFilter}
+          />
         </IntlProvider>
       </Provider>
     </MemoryRouter>
@@ -25,7 +29,7 @@ const renderTab = (dateRange: number) =>
 const openMenu = () =>
   fireEvent.click(screen.getByRole('button', { name: 'More options' }))
 
-describe('ReportTimeTab — dynamic second tab', () => {
+describe('TimeFilterTab — dynamic second tab', () => {
   beforeEach(() => {
     const portal = document.createElement('div')
     portal.setAttribute('id', 'portal')
@@ -37,7 +41,7 @@ describe('ReportTimeTab — dynamic second tab', () => {
   })
 
   it('defaults to All + This Month tabs with All selected and the rest in the menu', () => {
-    renderTab(DATE_RANGE.ALL_TIME)
+    renderTab(TIME_FILTER.ALL_TIME)
 
     expect(screen.getByRole('tab', { name: 'All' })).toHaveAttribute(
       'aria-selected',
@@ -63,7 +67,7 @@ describe('ReportTimeTab — dynamic second tab', () => {
   })
 
   it('promotes the selected range into the second tab and drops This Month into the menu', () => {
-    renderTab(DATE_RANGE.THIS_YEAR)
+    renderTab(TIME_FILTER.THIS_YEAR)
 
     expect(screen.getByRole('tab', { name: 'This Year' })).toHaveAttribute(
       'aria-selected',
@@ -90,7 +94,7 @@ describe('ReportTimeTab — dynamic second tab', () => {
   })
 
   it('reopens the date modal when the Custom Filter tab is clicked', () => {
-    renderTab(DATE_RANGE.CUSTOM_FILTER)
+    renderTab(TIME_FILTER.CUSTOM_FILTER)
 
     const customTab = screen.getByRole('tab', { name: 'Custom Filter' })
     expect(customTab).toHaveAttribute('aria-selected', 'true')
@@ -102,7 +106,7 @@ describe('ReportTimeTab — dynamic second tab', () => {
   })
 
   it('closes the menu when the trigger is clicked again while open', () => {
-    renderTab(DATE_RANGE.ALL_TIME)
+    renderTab(TIME_FILTER.ALL_TIME)
     const trigger = screen.getByRole('button', { name: 'More options' })
 
     fireEvent.click(trigger)

@@ -1,15 +1,14 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import { describe, it, expect, afterEach, vi } from 'vitest'
 import {
   getMonthKey,
   formatMonthLabel,
   shouldShowMonthHeader,
   getDateRangeForFilter,
-  calculateAverageSpending,
   filterTransactions,
   buildReportDetailQuery,
 } from './index'
-import { DATE_RANGE } from '@/constants'
-import type { Category, Data, Transaction } from '@/types'
+import { TIME_FILTER } from '@/constants'
+import type { Category, Transaction } from '@/types'
 
 describe('getMonthKey', () => {
   it('returns the YYYY-MM prefix of a date string', () => {
@@ -65,7 +64,7 @@ describe('getDateRangeForFilter', () => {
 
   it('returns null bounds for All Time', () => {
     setNow(new Date(2026, 4, 23)) // 2026-05-23 (month is 0-based)
-    expect(getDateRangeForFilter(DATE_RANGE.ALL_TIME)).toEqual({
+    expect(getDateRangeForFilter(TIME_FILTER.ALL_TIME)).toEqual({
       dateFrom: null,
       dateTo: null,
     })
@@ -73,7 +72,7 @@ describe('getDateRangeForFilter', () => {
 
   it('returns the full current month for This Month', () => {
     setNow(new Date(2026, 4, 23))
-    expect(getDateRangeForFilter(DATE_RANGE.THIS_MONTH)).toEqual({
+    expect(getDateRangeForFilter(TIME_FILTER.THIS_MONTH)).toEqual({
       dateFrom: '2026-05-01',
       dateTo: '2026-05-31',
     })
@@ -81,7 +80,7 @@ describe('getDateRangeForFilter', () => {
 
   it('returns the full previous month for Last Month', () => {
     setNow(new Date(2026, 4, 23))
-    expect(getDateRangeForFilter(DATE_RANGE.LAST_MONTH)).toEqual({
+    expect(getDateRangeForFilter(TIME_FILTER.LAST_MONTH)).toEqual({
       dateFrom: '2026-04-01',
       dateTo: '2026-04-30',
     })
@@ -89,7 +88,7 @@ describe('getDateRangeForFilter', () => {
 
   it('rolls back across the year boundary for Last Month in January', () => {
     setNow(new Date(2026, 0, 15)) // 2026-01-15
-    expect(getDateRangeForFilter(DATE_RANGE.LAST_MONTH)).toEqual({
+    expect(getDateRangeForFilter(TIME_FILTER.LAST_MONTH)).toEqual({
       dateFrom: '2025-12-01',
       dateTo: '2025-12-31',
     })
@@ -97,7 +96,7 @@ describe('getDateRangeForFilter', () => {
 
   it('returns the full calendar year for This Year', () => {
     setNow(new Date(2026, 4, 23))
-    expect(getDateRangeForFilter(DATE_RANGE.THIS_YEAR)).toEqual({
+    expect(getDateRangeForFilter(TIME_FILTER.THIS_YEAR)).toEqual({
       dateFrom: '2026-01-01',
       dateTo: '2026-12-31',
     })
@@ -106,134 +105,11 @@ describe('getDateRangeForFilter', () => {
   it('passes through custom dates for Custom Filter', () => {
     setNow(new Date(2026, 4, 23))
     expect(
-      getDateRangeForFilter(DATE_RANGE.CUSTOM_FILTER, {
+      getDateRangeForFilter(TIME_FILTER.CUSTOM_FILTER, {
         from: '2026-03-10',
         to: '2026-03-20',
       })
     ).toEqual({ dateFrom: '2026-03-10', dateTo: '2026-03-20' })
-  })
-})
-
-describe('calculateAverageSpending', () => {
-  const categories: Category[] = [
-    {
-      id: 'c-exp',
-      type: 'expense',
-      name: 'Food',
-      icon_id: 'food',
-      color: '#000',
-      index: 0,
-      is_active: true,
-    },
-    {
-      id: 'c-inc',
-      type: 'income',
-      name: 'Salary',
-      icon_id: 'salary',
-      color: '#fff',
-      index: 0,
-      is_active: true,
-    },
-  ]
-  const today = '2026-05-23'
-
-  // calculateAverageSpending derives elapsed days from the real clock via
-  // getElapsedDay/getDate, so pin the clock to `today` for determinism.
-  beforeEach(() => {
-    vi.useFakeTimers()
-    vi.setSystemTime(new Date(2026, 4, 23)) // 2026-05-23 (month is 0-based)
-  })
-  afterEach(() => {
-    vi.useRealTimers()
-  })
-
-  const makeData = (entries: [string, string, number][]): Data[] => {
-    // entries: [date, category_id, amount]
-    const byDate = new Map<string, Data>()
-    for (const [date, category_id, amount] of entries) {
-      if (!byDate.has(date)) byDate.set(date, { date, subdata: [] })
-      byDate.get(date)!.subdata.push({
-        category_id,
-        item: [{ id: date + amount, description: 'x', amount }],
-      })
-    }
-    return [...byDate.values()]
-  }
-
-  it('divides expense by inclusive elapsed days for a bounded range', () => {
-    // window = 2026-05-01..2026-05-23 (today) = 23 days; expense 2300 => 100/day
-    const data = makeData([['2026-05-10', 'c-exp', 2300]])
-    expect(
-      calculateAverageSpending(
-        data,
-        categories,
-        '2026-05-01',
-        '2026-05-31',
-        today
-      )
-    ).toBe(100)
-  })
-
-  it('excludes future-dated expense from both numerator and day count', () => {
-    // a 2026-05-30 expense is after today; it must not count
-    const data = makeData([
-      ['2026-05-10', 'c-exp', 2300],
-      ['2026-05-30', 'c-exp', 999999],
-    ])
-    expect(
-      calculateAverageSpending(
-        data,
-        categories,
-        '2026-05-01',
-        '2026-05-31',
-        today
-      )
-    ).toBe(100)
-  })
-
-  it('ignores income entirely', () => {
-    const data = makeData([
-      ['2026-05-10', 'c-exp', 2300],
-      ['2026-05-10', 'c-inc', 5000000],
-    ])
-    expect(
-      calculateAverageSpending(
-        data,
-        categories,
-        '2026-05-01',
-        '2026-05-31',
-        today
-      )
-    ).toBe(100)
-  })
-
-  it('for All Time uses oldest transaction date through today', () => {
-    // oldest = 2026-05-21, today = 2026-05-23 => 3 inclusive days; expense 300 => 100/day
-    const data = makeData([
-      ['2026-05-21', 'c-exp', 100],
-      ['2026-05-23', 'c-exp', 200],
-      ['2026-07-01', 'c-exp', 999999], // future, excluded
-    ])
-    expect(calculateAverageSpending(data, categories, null, null, today)).toBe(
-      100
-    )
-  })
-
-  it('returns 0 when the range is entirely in the future', () => {
-    const data = makeData([['2026-06-10', 'c-exp', 100]])
-    expect(
-      calculateAverageSpending(
-        data,
-        categories,
-        '2026-06-01',
-        '2026-06-30',
-        today
-      )
-    ).toBe(0)
-  })
-
-  it('returns 0 when there are no transactions', () => {
-    expect(calculateAverageSpending([], categories, null, null, today)).toBe(0)
   })
 })
 

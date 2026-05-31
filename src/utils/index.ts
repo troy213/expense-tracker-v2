@@ -3,7 +3,7 @@ import {
   DEFAULT_EXPENSE_COLOR,
   DEFAULT_INCOME_COLOR,
 } from '@/assets/categories-icons'
-import { DATE_RANGE } from '@/constants'
+import { TIME_FILTER } from '@/constants'
 import {
   Category,
   CategoryType,
@@ -116,26 +116,6 @@ export const calculateModalBottomThreshold = () => {
   return THRESHOLD
 }
 
-export const updateTotal = (data: Data[], categories: Category[]) => {
-  const { totalIncome, totalExpense } = data.reduce(
-    (total, currData) => {
-      currData.subdata.forEach((sub) => {
-        const category = getCategoryById(sub.category_id, categories)
-        const itemTotal = sub.item.reduce((sum, i) => sum + i.amount, 0)
-        if (category?.type === 'income') {
-          total.totalIncome += itemTotal
-        } else if (category?.type === 'expense') {
-          total.totalExpense += itemTotal
-        }
-      })
-      return total
-    },
-    { totalIncome: 0, totalExpense: 0 }
-  )
-  const totalBalance = totalIncome - totalExpense
-  return { totalIncome, totalExpense, totalBalance }
-}
-
 // Returns the first/last date (YYYY-MM-DD) of the month the given date falls in.
 // dateString is expected to be a zero-padded 'YYYY-MM-DD' value (see getDate()).
 export const getMonthRange = (dateString: string) => {
@@ -164,7 +144,7 @@ export const getCurrentMonthRange = () => getMonthRange(getDate())
 export const toDateKey = (d: Date): string =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 
-// Translates a DATE_RANGE selection into inclusive 'YYYY-MM-DD' bounds.
+// Translates a TIME_FILTER selection into inclusive 'YYYY-MM-DD' bounds.
 // All Time yields null bounds (no date filtering).
 export const getDateRangeForFilter = (
   rangeType: number,
@@ -173,23 +153,23 @@ export const getDateRangeForFilter = (
   const now = new Date()
 
   switch (rangeType) {
-    case DATE_RANGE.THIS_MONTH: {
+    case TIME_FILTER.THIS_MONTH: {
       const { firstDate, lastDate } = getMonthRange(toDateKey(now))
       return { dateFrom: firstDate, dateTo: lastDate }
     }
-    case DATE_RANGE.LAST_MONTH: {
+    case TIME_FILTER.LAST_MONTH: {
       const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1)
       const { firstDate, lastDate } = getMonthRange(toDateKey(lastMonth))
       return { dateFrom: firstDate, dateTo: lastDate }
     }
-    case DATE_RANGE.THIS_YEAR:
+    case TIME_FILTER.THIS_YEAR:
       return {
         dateFrom: `${now.getFullYear()}-01-01`,
         dateTo: `${now.getFullYear()}-12-31`,
       }
-    case DATE_RANGE.CUSTOM_FILTER:
+    case TIME_FILTER.CUSTOM_FILTER:
       return { dateFrom: custom?.from ?? null, dateTo: custom?.to ?? null }
-    case DATE_RANGE.ALL_TIME:
+    case TIME_FILTER.ALL_TIME:
     default:
       return { dateFrom: null, dateTo: null }
   }
@@ -208,51 +188,6 @@ export const getElapsedDay = (date: string): number => {
   const end = new Date(ey, em - 1, ed)
   const diffMs = end.getTime() - start.getTime()
   return Math.floor(diffMs / (24 * 60 * 60 * 1000)) + 1
-}
-
-// Average daily expense within a window clamped to `today`, so future-dated
-// entries distort neither the numerator (summed expense) nor the denominator
-// (elapsed days). For All Time (null bounds) the window is [oldest tx, today].
-export const calculateAverageSpending = (
-  data: Data[],
-  categories: Category[],
-  dateFrom: string | null,
-  dateTo: string | null,
-  today: string
-): number => {
-  const expenseIds = new Set(
-    categories.filter((c) => c.type === 'expense').map((c) => c.id)
-  )
-
-  // Determine the window start.
-  let windowStart = dateFrom
-  if (windowStart === null) {
-    // All Time: oldest transaction date present in data.
-    for (const entry of data) {
-      if (windowStart === null || entry.date < windowStart) {
-        windowStart = entry.date
-      }
-    }
-    if (windowStart === null) return 0 // no data
-  }
-
-  // Window end is clamped to today.
-  const windowEnd = dateTo !== null && dateTo < today ? dateTo : today
-
-  if (windowEnd < windowStart) return 0 // range entirely in the future
-
-  const totalExpense = data.reduce((sum, entry) => {
-    if (entry.date < windowStart! || entry.date > windowEnd) return sum
-    entry.subdata.forEach((sub) => {
-      if (expenseIds.has(sub.category_id)) {
-        sum += sub.item.reduce((acc, i) => acc + i.amount, 0)
-      }
-    })
-    return sum
-  }, 0)
-
-  const days = Math.max(1, getElapsedDay(windowStart))
-  return totalExpense / days
 }
 
 // Pure predicate chain over a flat Transaction[]. All provided filters are

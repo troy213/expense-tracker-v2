@@ -1,34 +1,34 @@
 import { useIntl } from 'react-intl'
 import { CheckSvg } from '@/assets'
-import './DateRangeMenu.scss'
+import './TimeFilterMenu.scss'
 
-type DateRangeMenuProps = {
+type TimeFilterMenuProps = {
   data: { title: string; value: number }[]
-  dateRange: number
-  handleChangeDateRange: (arg: number) => void
+  timeFilter: number
+  handleTimeFilterChange: (arg: number) => void
 }
 
-const DateRangeMenu: React.FC<DateRangeMenuProps> = ({
+const TimeFilterMenu: React.FC<TimeFilterMenuProps> = ({
   data,
-  dateRange,
-  handleChangeDateRange,
+  timeFilter,
+  handleTimeFilterChange,
 }) => {
   const { formatMessage } = useIntl()
 
   return (
-    <div className="date-range-menu">
+    <div className="time-filter-menu">
       {data.map((item, index) => {
         return (
           <button
             key={index}
             className="btn btn-clear flex-space-between"
             type="button"
-            onClick={() => handleChangeDateRange(item.value)}
+            onClick={() => handleTimeFilterChange(item.value)}
           >
             <span className="text--color-primary">
               {formatMessage({ id: item.title })}
             </span>
-            {dateRange === item.value && (
+            {timeFilter === item.value && (
               <CheckSvg className="icon icon--stroke-primary" />
             )}
           </button>
@@ -38,4 +38,4 @@ const DateRangeMenu: React.FC<DateRangeMenuProps> = ({
   )
 }
 
-export default DateRangeMenu
+export default TimeFilterMenu
