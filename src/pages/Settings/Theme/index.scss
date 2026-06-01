@@ -3,4 +3,19 @@
   flex-direction: column;
   gap: 2rem;
   padding: 1rem;
+
+  &__widget {
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.5rem;
+    box-shadow: $box-shadow-default;
+
+    li {
+      padding: 1rem;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid mix($color-primary, $color-white, 10%);
+      }
+    }
+  }
 }

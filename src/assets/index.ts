@@ -20,6 +20,7 @@ import GlobeSvg from './icons/globe.svg?react'
 import HomeSvg from './icons/home.svg?react'
 import HiddenTextSvg from './icons/hidden-text.svg?react'
 import ImportSvg from './icons/import.svg?react'
+import MoonSvg from './icons/moon.svg?react'
 import MoreVerticalSvg from './icons/more-vertical.svg?react'
 import PaletteSvg from './icons/palette.svg?react'
 import PieChartSvg from './icons/pie-chart.svg?react'
@@ -28,6 +29,7 @@ import SearchSvg from './icons/search.svg?react'
 import SettingsSvg from './icons/settings.svg?react'
 import SlidersSvg from './icons/sliders.svg?react'
 import SpinnerSvg from './icons/spinner.svg?react'
+import SunSvg from './icons/sun.svg?react'
 import TrashSvg from './icons/trash.svg?react'
 
 export {
@@ -53,6 +55,7 @@ export {
   HomeSvg,
   HiddenTextSvg,
   ImportSvg,
+  MoonSvg,
   MoreVerticalSvg,
   PaletteSvg,
   PieChartSvg,
@@ -61,5 +64,6 @@ export {
   SettingsSvg,
   SlidersSvg,
   SpinnerSvg,
+  SunSvg,
   TrashSvg,
 }

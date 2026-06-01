@@ -20,36 +20,41 @@ const Languages = () => {
     <div className="languages">
       <Navbar title="Language" enableBackButton={true} />
 
-      <ul className="flex-column gap-8 py-4">
-        {LANGUAGES_MENU.map((item, index) => {
-          const { Icon, title, locales } = item
-          const isSelected = locales === locale
-          const titleClassName = combineClassName('', [
-            {
-              condition: isSelected,
-              className: 'text--bold',
-            },
-          ])
+      <div className="flex-column gap-2">
+        <span className="text--uppercase text--light text--3">
+          {formatMessage({ id: 'SelectLanguage' })}
+        </span>
+        <ul className="languages__widget">
+          {LANGUAGES_MENU.map((item, index) => {
+            const { Icon, title, locales } = item
+            const isSelected = locales === locale
+            const titleClassName = combineClassName('', [
+              {
+                condition: isSelected,
+                className: 'text--bold',
+              },
+            ])
 
-          return (
-            <li className="flex-space-between" key={index}>
-              <button
-                type="button"
-                className="btn btn-clear"
-                onClick={() => switchLanguage(locales)}
-              >
-                <div className="flex-align-center gap-2">
-                  <Icon />
-                  <span className={titleClassName}>
-                    {formatMessage({ id: title })}
-                  </span>
-                </div>
-              </button>
-              {isSelected && <CheckSvg className="icon--stroke-primary" />}
-            </li>
-          )
-        })}
-      </ul>
+            return (
+              <li className="flex-space-between" key={index}>
+                <button
+                  type="button"
+                  className="btn btn-clear"
+                  onClick={() => switchLanguage(locales)}
+                >
+                  <div className="flex-align-center gap-2">
+                    <Icon />
+                    <span className={titleClassName}>
+                      {formatMessage({ id: title })}
+                    </span>
+                  </div>
+                </button>
+                {isSelected && <CheckSvg className="icon--stroke-primary" />}
+              </li>
+            )
+          })}
+        </ul>
+      </div>
     </div>
   )
 }
