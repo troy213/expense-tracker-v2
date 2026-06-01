@@ -133,7 +133,7 @@ const ReportDetail = () => {
           </div>
 
           {selectedDetailCategory && !selectedDetailCategory.is_active && (
-            <span className="pill pill--default text--uppercase">
+            <span className="pill pill--default">
               {formatMessage({ id: 'Archived' })}
             </span>
           )}

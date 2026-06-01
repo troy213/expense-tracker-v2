@@ -32,7 +32,7 @@ const ReportCategory: React.FC<ReportCategoryProps> = ({
         <div className="flex-space-between flex-align-center gap-2">
           <span className="text--4">{cat.name}</span>
           {!cat.is_active && (
-            <span className="pill pill--default text--uppercase">
+            <span className="pill pill--default">
               {formatMessage({ id: 'Archived' })}
             </span>
           )}

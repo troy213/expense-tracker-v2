@@ -17,35 +17,29 @@ const Toolbar = () => {
 
   return (
     <div className="toolbar">
-      <div className={getClassName('/')}>
-        <Modal isOpen={addModal.isOpen} onClose={addModal.close}>
-          <FormModal.FormTransaction onCancel={addModal.close} />
-        </Modal>
+      <Modal isOpen={addModal.isOpen} onClose={addModal.close}>
+        <FormModal.FormTransaction onCancel={addModal.close} />
+      </Modal>
 
-        <Link to="/">
-          <HomeSvg className="icon--stroke-primary" />
-        </Link>
-      </div>
-      <div className={getClassName('/reports')}>
-        <Link to="/reports">
-          <PieChartSvg className="icon--stroke-primary" />
-        </Link>
-      </div>
+      <Link to="/" className={getClassName('/')}>
+        <HomeSvg className="icon--stroke-primary" />
+      </Link>
+      <Link to="/reports" className={getClassName('/reports')}>
+        <PieChartSvg className="icon--stroke-primary" />
+      </Link>
+
       <div className="toolbar__menu">
         <button className="toolbar__add-button" onClick={addModal.toggle}>
           <PlusSvg className="icon--stroke-white" />
         </button>
       </div>
-      <div className={getClassName('/categories')}>
-        <Link to="/categories">
-          <BudgetSvg className="icon--stroke-primary" />
-        </Link>
-      </div>
-      <div className={getClassName('/settings')}>
-        <Link to="/settings">
-          <SettingsSvg className="icon--stroke-primary" />
-        </Link>
-      </div>
+
+      <Link to="/categories" className={getClassName('/categories')}>
+        <BudgetSvg className="icon--stroke-primary" />
+      </Link>
+      <Link to="/settings" className={getClassName('/settings')}>
+        <SettingsSvg className="icon--stroke-primary" />
+      </Link>
     </div>
   )
 }

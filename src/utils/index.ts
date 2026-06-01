@@ -9,6 +9,8 @@ import {
   CategoryType,
   ConditionArray,
   Data,
+  Locales,
+  Theme,
   Transaction,
   TransactionFilters,
 } from '@/types'
@@ -459,3 +461,19 @@ export const getDefaultCategoryIconColor = (type?: CategoryType): string => {
   if (type === 'income') return DEFAULT_INCOME_COLOR
   return DEFAULT_EXPENSE_COLOR
 }
+
+const THEME_TRANSLATION_KEY: Record<Theme, string> = {
+  light: 'Light',
+  dark: 'Dark',
+}
+
+export const getThemeTranslationKey = (theme: Theme): string =>
+  THEME_TRANSLATION_KEY[theme]
+
+const LANGUAGE_TRANSLATION_KEY: Record<Locales, string> = {
+  'en-US': 'English',
+  'id-ID': 'Indonesia',
+}
+
+export const getLanguageTranslationKey = (locale: Locales): string =>
+  LANGUAGE_TRANSLATION_KEY[locale]

@@ -7,7 +7,6 @@ import {
   GlobeSvg,
   ImportSvg,
   PaletteSvg,
-  TrashSvg,
 } from '@/assets'
 import { Locales } from '@/types'
 import { LOCALES } from '.'
@@ -19,6 +18,8 @@ type SettingMenu = {
   iconClassName?: string
   titleClassName?: string
   link?: string
+  modal?: string
+  disableChevron?: boolean
 }
 
 type LanguageMenu = {
@@ -27,47 +28,67 @@ type LanguageMenu = {
   locales: Locales
 }
 
-export const SETTING_MENUS: SettingMenu[] = [
+type SettingLayout = {
+  title: string
+  menus: SettingMenu[]
+}
+
+export const SETTING_MENUS: SettingLayout[] = [
   {
-    title: 'ImportData',
-    Icon: ImportSvg,
-    iconClassName: 'icon--stroke-primary',
+    title: 'DataManagement',
+    menus: [
+      {
+        title: 'ImportData',
+        Icon: ImportSvg,
+        iconClassName: 'icon--stroke-primary',
+        modal: 'ImportData',
+      },
+      {
+        title: 'ExportData',
+        Icon: ExportSvg,
+        iconClassName: 'icon--stroke-primary',
+        modal: 'ExportData',
+      },
+    ],
   },
   {
-    title: 'ExportData',
-    Icon: ExportSvg,
-    iconClassName: 'icon--stroke-primary',
+    title: 'AppearanceAndLanguage',
+    menus: [
+      {
+        title: 'Theme',
+        Icon: PaletteSvg,
+        iconClassName: 'icon--stroke-primary',
+        link: 'theme',
+      },
+      {
+        title: 'Language',
+        Icon: GlobeSvg,
+        iconClassName: 'icon--stroke-primary',
+        link: 'language',
+      },
+    ],
   },
   {
-    title: 'Theme',
-    Icon: PaletteSvg,
-    iconClassName: 'icon--stroke-primary',
-    link: 'theme',
+    title: 'Advanced',
+    menus: [
+      {
+        title: 'AdvancedSetting',
+        Icon: AdvancedSettingSvg,
+        iconClassName: 'icon--stroke-primary',
+        link: 'advanced-setting',
+      },
+    ],
   },
   {
-    title: 'Language',
-    Icon: GlobeSvg,
-    iconClassName: 'icon--stroke-primary',
-    link: 'language',
-  },
-  {
-    title: 'About',
-    Icon: AlertCircleSvg,
-    iconClassName: 'icon--stroke-primary',
-    link: 'about',
-  },
-  {
-    title: 'AdvancedSetting',
-    Icon: AdvancedSettingSvg,
-    iconClassName: 'icon--stroke-primary',
-    link: 'advanced-setting',
-  },
-  {
-    title: 'DeleteData',
-    titleClassName: 'text--color-danger',
-    Icon: TrashSvg,
-    iconClassName: 'icon--stroke-danger',
-    className: 'mt-6',
+    title: 'AboutAndLegal',
+    menus: [
+      {
+        title: 'About',
+        Icon: AlertCircleSvg,
+        iconClassName: 'icon--stroke-primary',
+        link: 'about',
+      },
+    ],
   },
 ]
 
