@@ -1,5 +1,5 @@
 import * as XLSX from 'xlsx'
-import { getDate } from '.'
+import { getDate, setStorage } from '.'
 import dbServices from '@/lib/db'
 
 export const readXlsx = (file: File) => {
@@ -110,4 +110,5 @@ export const createExcelFile = async () => {
 
   // Export file
   XLSX.writeFile(workbook, `Expense Tracker (${getDate()}).xlsx`)
+  setStorage('lastDownload', new Date().toISOString())
 }

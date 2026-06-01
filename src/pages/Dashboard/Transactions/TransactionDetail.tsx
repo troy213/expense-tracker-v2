@@ -162,7 +162,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
         })}
         {category && !category.is_active && (
           <div className="mt-1">
-            <span className="pill pill--default text--uppercase">
+            <span className="pill pill--default">
               {formatMessage({ id: 'Archived' })}
             </span>
           </div>
