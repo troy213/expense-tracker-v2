@@ -17,16 +17,23 @@ const AdvancedSetting = () => {
   }
 
   return (
-    <div className="advanced-setting">
+    <div className="advanced-settings">
       <Navbar title="AdvancedSetting" enableBackButton={true} />
 
-      <div className="flex-space-between flex-align-center">
-        <span>{formatMessage({ id: 'HideBalanceOnStartup' })}</span>
-        <input
-          type="checkbox"
-          onChange={onHideBalanceChange}
-          checked={config.hideBalance}
-        />
+      <div className="flex-column gap-2">
+        <span className="text--uppercase text--light text--3">
+          {formatMessage({ id: 'DashboardInfo' })}
+        </span>
+        <ul className="advanced-settings__widget">
+          <li className="flex-space-between flex-align-center">
+            <span>{formatMessage({ id: 'HideBalanceOnStartup' })}</span>
+            <input
+              type="checkbox"
+              onChange={onHideBalanceChange}
+              checked={config.hideBalance}
+            />
+          </li>
+        </ul>
       </div>
     </div>
   )

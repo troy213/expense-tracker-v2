@@ -6,7 +6,7 @@
     width: 100%;
     padding: 0 0.5em;
     background-color: transparent;
-    border: 1px solid rgba($color-primary, 0.7);
+    border: 1px solid mix($color-primary, $color-white, 70%);
     border-radius: 0.5em;
     font-size: 0.75rem;
     color: $color-primary;
@@ -22,7 +22,7 @@
     }
 
     &::placeholder {
-      color: rgba($color-dark, $alpha: 0.5);
+      color: mix($color-primary, $color-white, 50%);
     }
 
     &--error {
@@ -45,13 +45,13 @@
       align-items: center;
       justify-content: center;
       padding: 0.5em;
-      border: 1px solid rgba($color-primary, $alpha: 0.5);
+      border: 1px solid mix($color-primary, $color-white, 50%);
       border-radius: 0.5em;
       background-color: transparent;
       color: $color-primary;
 
       &:active {
-        background-color: rgba($color-primary, $alpha: 0.1);
+        background-color: mix($color-primary, $color-white, 10%);
       }
 
       &--prev {

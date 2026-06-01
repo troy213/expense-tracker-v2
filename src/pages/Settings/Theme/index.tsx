@@ -1,4 +1,5 @@
 import { useIntl } from 'react-intl'
+import { MoonSvg, SunSvg } from '@/assets'
 import { Navbar } from '@/components'
 import { THEME } from '@/constants'
 import { useAppDispatch, useAppSelector } from '@/hooks'
@@ -18,10 +19,17 @@ const Theme = () => {
     <div className="theme">
       <Navbar title="Theme" enableBackButton={true} />
 
-      <ul className="flex-column gap-8 py-4">
-        <li>
-          <button type="button" className="btn btn-clear">
-            <div className="flex-align-center gap-2">
+      <div className="flex-column gap-2">
+        <span className="text--uppercase text--light text--3">
+          {formatMessage({ id: 'Appearance' })}
+        </span>
+        <ul className="theme__widget">
+          <li>
+            <div className="flex-space-between flex-align-center gap-2">
+              <label htmlFor={THEME.LIGHT} className="flex-align-center gap-4">
+                <SunSvg className="icon--stroke-primary" />
+                <span>{formatMessage({ id: 'LightTheme' })}</span>
+              </label>
               <input
                 type="radio"
                 id={THEME.LIGHT}
@@ -30,15 +38,17 @@ const Theme = () => {
                 checked={theme === THEME.LIGHT}
                 onChange={() => toggleTheme(THEME.LIGHT)}
               />
-              <label htmlFor={THEME.LIGHT}>
-                {formatMessage({ id: 'LightTheme' })}
-              </label>
             </div>
-          </button>
-        </li>
-        <li>
-          <button type="button" className="btn btn-clear">
-            <div className="flex-align-center gap-2">
+          </li>
+          <li>
+            <div className="flex-space-between flex-align-center gap-2">
+              <label htmlFor={THEME.DARK} className="flex-align-center gap-4">
+                <MoonSvg className="icon--stroke-primary" />
+                <span>{formatMessage({ id: 'DarkTheme' })}</span>
+                <span className="text--italic text--light text--3">
+                  ({formatMessage({ id: 'Experimental' })})
+                </span>
+              </label>
               <input
                 type="radio"
                 id={THEME.DARK}
@@ -47,16 +57,10 @@ const Theme = () => {
                 checked={theme === THEME.DARK}
                 onChange={() => toggleTheme(THEME.DARK)}
               />
-              <label htmlFor={THEME.DARK}>
-                {formatMessage({ id: 'DarkTheme' })}
-              </label>
             </div>
-            <span className="text--italic text--light text--3">
-              ({formatMessage({ id: 'Experimental' })})
-            </span>
-          </button>
-        </li>
-      </ul>
+          </li>
+        </ul>
+      </div>
     </div>
   )
 }

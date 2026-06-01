@@ -13,7 +13,7 @@ const About = () => {
           <span className="text--bold">
             {formatMessage({ id: 'AboutThisApp' })}
           </span>
-          <p className="text--align-center text--light text--3">
+          <p className="text--align-center text--italic text--light text--3">
             {formatMessage({ id: 'AboutDescription' })}
           </p>
         </div>
