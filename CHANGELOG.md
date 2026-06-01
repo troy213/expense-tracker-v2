@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.0-beta.27](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.26...v1.0.0-beta.27) (2026-06-01)
+
+
+### Features
+
+* **settings:** change setting page ui ([9da1ac2](https://github.com/troy213/expense-tracker-v2/commit/9da1ac2932cd950ca72aac003266261476304f42))
+
 ## [1.0.0-beta.26](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.25...v1.0.0-beta.26) (2026-06-01)
 
 
