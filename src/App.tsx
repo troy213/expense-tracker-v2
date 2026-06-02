@@ -4,6 +4,8 @@ import { useEffect } from 'react'
 import { Layout, PWAInstallPrompt } from '@/components'
 import { LANGUAGES, LOCALES, THEME } from '@/constants'
 import { useAppSelector, useInitConfig } from '@/hooks'
+import { SpinnerSvg } from '@/assets'
+import './App.scss'
 import {
   Categories,
   Dashboard,
@@ -21,7 +23,9 @@ import {
 } from '@/pages/Settings'
 
 const App = () => {
-  const { locale, theme } = useAppSelector((state) => state.configReducer)
+  const { locale, theme, isInitialized } = useAppSelector(
+    (state) => state.configReducer
+  )
   const currentLanguage = LANGUAGES[locale] || LANGUAGES[LOCALES.ENGLISH]
 
   useInitConfig()
@@ -33,6 +37,14 @@ const App = () => {
       document.body.classList.remove(THEME.DARK)
     }
   }, [theme])
+
+  if (!isInitialized) {
+    return (
+      <div className="app-loading">
+        <SpinnerSvg className="icon--2xl icon--fill-white spin" />
+      </div>
+    )
+  }
 
   return (
     <IntlProvider
