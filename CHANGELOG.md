@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.0-beta.28](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.27...v1.0.0-beta.28) (2026-06-02)
+
+
+### Features
+
+* **app:** gate rendering behind isInitialized with a loading spinner ([58d53b1](https://github.com/troy213/expense-tracker-v2/commit/58d53b1bf7da14559386c44752ca61fc80a78dd4))
+* **config:** add isInitialized flag and setInitialized reducer ([b91c127](https://github.com/troy213/expense-tracker-v2/commit/b91c1275d078a8aced5fd63d6937a727f5542fef))
+* **init:** await all bootstrap loads before marking initialized ([dd76022](https://github.com/troy213/expense-tracker-v2/commit/dd7602248ec1bcd1922627b9dee9676ef595da75))
+
 ## [1.0.0-beta.27](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.26...v1.0.0-beta.27) (2026-06-01)
 
 
