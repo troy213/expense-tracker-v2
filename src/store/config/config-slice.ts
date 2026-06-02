@@ -7,12 +7,14 @@ export type InitialState = {
   theme: Theme
   locale: Locales
   hideBalance: boolean
+  isInitialized: boolean
 }
 
 const initialState: InitialState = {
   theme: (getStorage('theme') as Theme) ?? THEME.LIGHT,
   locale: (getStorage('locales') as Locales) ?? LOCALES.ENGLISH,
   hideBalance: getStorageConfig()?.hideBalance ?? false,
+  isInitialized: false,
 }
 
 const configSlice = createSlice({
@@ -36,6 +38,11 @@ const configSlice = createSlice({
     setHideBalanceDefault(state, action: PayloadAction<boolean>) {
       state.hideBalance = action.payload
       setStorage('config', JSON.stringify({ hideBalance: action.payload }))
+    },
+    // App-level bootstrap gate. Set true once useInitConfig finishes loading.
+    // Not persisted.
+    setInitialized(state, action: PayloadAction<boolean>) {
+      state.isInitialized = action.payload
     },
   },
 })
