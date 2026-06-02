@@ -49,11 +49,27 @@ vi.mock('@/lib/db', () => ({
         total: 0,
       }),
       getTransactionById: vi.fn().mockResolvedValue(undefined),
+      getFilteredTransactions: vi.fn().mockResolvedValue([]),
       putTransaction: vi.fn().mockResolvedValue(''),
       putTransactions: vi.fn().mockResolvedValue(undefined),
       deleteTransaction: vi.fn().mockResolvedValue(undefined),
       deleteTransactions: vi.fn().mockResolvedValue(undefined),
       clearTransactions: vi.fn().mockResolvedValue(undefined),
+    },
+    report: {
+      getDashboardInfo: vi.fn().mockResolvedValue({
+        totalIncome: 0,
+        totalExpense: 0,
+        totalBudget: 0,
+        remainingBudget: 0,
+      }),
+      getReportData: vi.fn().mockResolvedValue({
+        totalIncome: 0,
+        totalExpense: 0,
+        avgSpending: 0,
+        incomeReport: [],
+        expenseReport: [],
+      }),
     },
   },
 }))
