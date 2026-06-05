@@ -14,6 +14,7 @@ import {
   getStorage,
   getThemeTranslationKey,
 } from '@/utils'
+import './index.scss'
 
 const SettingMenus = () => {
   const { locale, theme } = useAppSelector((state) => state.configReducer)

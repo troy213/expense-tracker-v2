@@ -2,6 +2,7 @@ import { useIntl } from 'react-intl'
 import { CategoryIcon, ProgressBar } from '@/components'
 import { ReportCategory as TReportCategory } from '@/types'
 import { calculatePercentage, currencyFormatter } from '@/utils'
+import './ReportCategory.scss'
 
 type ReportCategoryProps = {
   cat: TReportCategory

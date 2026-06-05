@@ -1,5 +1,6 @@
 import ReactDOM from 'react-dom'
 import { combineClassName } from '@/utils'
+import './index.scss'
 
 type ModalProps = {
   isOpen: boolean

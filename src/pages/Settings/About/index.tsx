@@ -1,5 +1,6 @@
 import { useIntl } from 'react-intl'
 import { Navbar } from '@/components'
+import './index.scss'
 
 const About = () => {
   const { formatMessage } = useIntl()

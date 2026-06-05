@@ -1,28 +1,30 @@
-@import './DeleteDataModal.scss';
-@import './SearchModal.scss';
+@import '@/styles/variables';
+@import '@/styles/mixin';
 
-.modal {
-  @include fadeInAnimation;
-  position: fixed;
-  background: rgba($color-dark, 0.3);
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 3;
-
-  &__container {
-    padding: 1em;
-    position: relative;
-    background: $color-white;
-    border-radius: 0.75em;
-    min-height: 100px;
-    max-height: calc(100vh - 4rem);
+@layer components {
+  .modal {
+    @include fadeInAnimation;
+    position: fixed;
+    background: rgba($color-dark, 0.3);
+    height: 100%;
     width: 100%;
-    min-width: 100px;
-    max-width: 320px;
-    box-shadow: $box-shadow-default;
-    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3;
+
+    &__container {
+      padding: 1em;
+      position: relative;
+      background: $color-white;
+      border-radius: 0.75em;
+      min-height: 100px;
+      max-height: calc(100vh - 4rem);
+      width: 100%;
+      min-width: 100px;
+      max-width: 320px;
+      box-shadow: $box-shadow-default;
+      overflow-y: auto;
+    }
   }
 }

@@ -5,6 +5,7 @@ import { THEME } from '@/constants'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { configAction } from '@/store/config/config-slice'
 import { Theme as ThemeType } from '@/types'
+import './index.scss'
 
 const Theme = () => {
   const theme = useAppSelector((state) => state.configReducer.theme)

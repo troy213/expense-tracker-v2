@@ -16,6 +16,7 @@ import { TransactionFilters } from '@/types'
 import { formatTransactionDate, getCategoryById } from '@/utils'
 import ReportDetailInfo from './ReportDetailInfo'
 import { SpinnerSvg } from '@/assets'
+import './index.scss'
 
 const ReportDetail = () => {
   const { scrollParent } = useOutletContext<LayoutContextType>()

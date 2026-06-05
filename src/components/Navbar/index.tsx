@@ -1,6 +1,7 @@
 import { ArrowLeftSvg } from '@/assets'
 import { useIntl } from 'react-intl'
 import { useNavigate } from 'react-router-dom'
+import './index.scss'
 
 type NavbarProps = {
   children?: JSX.Element

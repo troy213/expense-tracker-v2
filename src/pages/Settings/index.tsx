@@ -4,6 +4,7 @@ import AdvancedSetting from './AdvancedSetting'
 import Languages from './Languages'
 import SettingMenus from './SettingMenus'
 import Theme from './Theme'
+import './index.scss'
 
 const Settings = () => {
   const appVersion = import.meta.env.APP_VERSION

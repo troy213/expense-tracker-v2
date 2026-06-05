@@ -9,6 +9,7 @@ import {
   formatTransactionDate,
 } from '@/utils'
 import TransactionDetail from './TransactionDetail'
+import './TransactionContainer.scss'
 
 type TransactionContainerProps = {
   data: Data

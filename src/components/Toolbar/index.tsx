@@ -4,6 +4,7 @@ import { combineClassName } from '@/utils'
 import { useDisclosure } from '@/hooks'
 import { FormModal } from '@/components'
 import Modal from '../Modal'
+import './index.scss'
 
 const Toolbar = () => {
   const addModal = useDisclosure()

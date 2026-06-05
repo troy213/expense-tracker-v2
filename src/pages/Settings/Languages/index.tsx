@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks'
 import { configAction } from '@/store/config/config-slice'
 import { Locales } from '@/types'
 import { combineClassName } from '@/utils'
+import './index.scss'
 
 const Languages = () => {
   const locale = useAppSelector((state) => state.configReducer.locale)

@@ -1,5 +1,7 @@
-.remaining-budget {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+@layer components {
+  .remaining-budget {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }

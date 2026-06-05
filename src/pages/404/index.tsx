@@ -1,5 +1,6 @@
 import { useIntl } from 'react-intl'
 import { useNavigate } from 'react-router-dom'
+import './index.scss'
 
 const NotFound = () => {
   const { formatMessage } = useIntl()

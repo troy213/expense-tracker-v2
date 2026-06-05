@@ -1,12 +1,13 @@
 import { useIntl } from 'react-intl'
+import { AlertCircleSvg, AlertTriangleSvg } from '@/assets'
+import { ProgressBar } from '@/components'
 import { useAppSelector } from '@/hooks'
 import {
   calculatePercentage,
   combineClassName,
   currencyFormatter,
 } from '@/utils'
-import { ProgressBar } from '@/components'
-import { AlertCircleSvg, AlertTriangleSvg } from '@/assets'
+import './ReportDetailInfo.scss'
 
 const ReportDetailInfo = () => {
   const { totalIncome, totalExpense, totalBudget, remainingBudget } =

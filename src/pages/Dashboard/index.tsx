@@ -4,6 +4,7 @@ import { useDisclosure } from '@/hooks'
 import SearchModal from '@/components/Modal/SearchModal'
 import DashboardInfo from './DashboardInfo'
 import Transactions from './Transactions'
+import './index.scss'
 
 const Dashboard = () => {
   const searchModal = useDisclosure()

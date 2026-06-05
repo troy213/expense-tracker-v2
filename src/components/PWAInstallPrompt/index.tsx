@@ -2,6 +2,7 @@ import ReactDOM from 'react-dom'
 import { useIntl } from 'react-intl'
 import { CrossSvg, ImportSvg } from '@/assets'
 import { usePWAInstall } from '@/hooks'
+import './index.scss'
 
 const PWAInstallPrompt = () => {
   const intl = useIntl()

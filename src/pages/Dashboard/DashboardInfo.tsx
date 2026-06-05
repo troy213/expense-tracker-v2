@@ -22,6 +22,7 @@ import {
   formatTransactionDate,
   getCurrentMonthRange,
 } from '@/utils'
+import './DashboardInfo.scss'
 
 type BalanceProps = {
   totalBalance: number

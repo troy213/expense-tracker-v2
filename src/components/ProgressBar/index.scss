@@ -1,21 +1,25 @@
-.progress-bar {
-  width: 100%;
-  height: 10px;
-  background-color: $color-white-2;
-  border-radius: 0.25rem;
-  overflow: hidden;
+@import '@/styles/variables';
 
-  &__fill {
-    background-color: $color-primary-2;
+@layer components {
+  .progress-bar {
+    width: 100%;
     height: 10px;
-    transition: all 0.5s ease-out;
+    background-color: $color-white-2;
+    border-radius: 0.25rem;
+    overflow: hidden;
 
-    &--warning {
-      background-color: $color-warning;
-    }
+    &__fill {
+      background-color: $color-primary-2;
+      height: 10px;
+      transition: all 0.5s ease-out;
 
-    &--danger {
-      background-color: $color-danger;
+      &--warning {
+        background-color: $color-warning;
+      }
+
+      &--danger {
+        background-color: $color-danger;
+      }
     }
   }
 }

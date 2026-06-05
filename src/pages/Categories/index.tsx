@@ -1,5 +1,6 @@
 import { Navbar } from '@/components'
 import CategoryTabView from './CategoryTabView'
+import './index.scss'
 
 const Categories = () => {
   return (

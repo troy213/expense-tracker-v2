@@ -1,5 +1,7 @@
-.dashboard-info {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+@layer components {
+  .dashboard-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
 }

@@ -6,6 +6,7 @@ import { getDateRangeForFilter } from '@/utils'
 import ReportInfo from './ReportInfo'
 import TimeFilterTab from './TimeFilterTab'
 import ReportWidget from './ReportWidget'
+import './index.scss'
 
 const Reports = () => {
   const dispatch = useAppDispatch()

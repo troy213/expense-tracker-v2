@@ -1,4 +1,5 @@
 import { combineClassName } from '@/utils'
+import './index.scss'
 
 type WidgetProps = {
   children: JSX.Element

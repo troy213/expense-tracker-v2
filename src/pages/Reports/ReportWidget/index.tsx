@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import ReportCategory from './ReportCategory'
 import { ReportCategory as TReportCategory } from '@/types'
 import { buildReportDetailQuery } from '@/utils'
+import './index.scss'
 
 type ReportWidgetProps = {
   type: 'income' | 'expense'

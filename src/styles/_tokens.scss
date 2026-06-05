@@ -1,0 +1,20 @@
+// CSS custom-property design tokens.
+// Light values on :root, dark overrides on body.dark.
+:root {
+  --main-font: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, sans-serif;
+
+  --default-svg-primary-stroke-color: #133e5d;
+  --default-svg-danger-stroke-color: #870805;
+  --default-color-danger: #870805;
+  --default-svg-warning-stroke-color: #b26a00;
+  --default-color-warning: #b26a00;
+}
+
+body.dark {
+  --default-svg-primary-stroke-color: #f2f0ed;
+  --default-svg-danger-stroke-color: #d40d08;
+  --default-color-danger: #d40d08;
+  --default-svg-warning-stroke-color: #e69500;
+  --default-color-warning: #e69500;
+}

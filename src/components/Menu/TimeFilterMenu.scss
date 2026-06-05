@@ -1,19 +1,21 @@
 @import '@/styles/variables';
 
-.time-filter-menu {
-  padding: 1rem;
-  position: absolute;
-  top: 0;
-  right: 1.5rem;
-  border-radius: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  background-color: $color-white;
-  box-shadow: $box-shadow-default;
+@layer components {
+  .time-filter-menu {
+    padding: 1rem;
+    position: absolute;
+    top: 0;
+    right: 1.5rem;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: $color-white;
+    box-shadow: $box-shadow-default;
 
-  .btn {
-    width: 100%;
-    min-width: max-content;
+    .btn {
+      width: 100%;
+      min-width: max-content;
+    }
   }
 }
