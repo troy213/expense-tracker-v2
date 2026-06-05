@@ -1,21 +1,23 @@
 @import '@/styles/variables';
 
-.more-option-menu {
-  padding: 1rem;
-  position: absolute;
-  top: 0;
-  right: 1.5rem;
-  border-radius: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1rem;
-  background-color: $color-white;
-  box-shadow: $box-shadow-default;
-  z-index: 2;
+@layer components {
+  .more-option-menu {
+    padding: 1rem;
+    position: absolute;
+    top: 0;
+    right: 1.5rem;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    background-color: var(--surface);
+    box-shadow: var(--shadow);
+    z-index: 2;
 
-  &.menu--top {
-    top: unset;
-    bottom: 0;
+    &.menu--top {
+      top: unset;
+      bottom: 0;
+    }
   }
 }

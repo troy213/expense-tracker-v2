@@ -1,62 +1,64 @@
 @import '@/styles/variables';
 
-.form-input {
-  &__select {
-    position: relative;
-    min-height: 2rem;
-    padding: 0 0.5em;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.75rem;
-    gap: 0.5em;
-    border: 1px solid rgba($color-primary, 0.7);
-    border-radius: 0.5em;
-
-    &-container {
+@layer components {
+  .form-input {
+    &__select {
+      position: relative;
+      min-height: 2rem;
+      padding: 0 0.5em;
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
       gap: 0.5em;
-    }
-
-    &-placeholder {
-      color: rgba($color-dark, 0.5);
-
-      &--has-value {
-        color: $color-primary;
-      }
-    }
-
-    &-option-container {
-      position: absolute;
-      display: flex;
-      flex-direction: column;
-      min-width: 150px;
-      width: 100%;
-      max-height: 250px;
-      top: 100%;
-      right: 0;
-      padding: 1em;
-      background-color: $color-white;
-      border: 1px solid $color-primary;
+      border: 1px solid var(--border-strong);
       border-radius: 0.5em;
-      list-style: none;
-      overflow-y: auto;
-      z-index: 4;
-    }
 
-    &-option {
-      padding: 0.5em;
-      color: $color-primary;
-
-      &.selected {
-        background-color: $color-primary-2;
-        color: $color-white;
+      &-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
       }
-    }
 
-    &--error {
-      border-color: $color-danger;
+      &-placeholder {
+        color: var(--text-muted);
+
+        &--has-value {
+          color: var(--text);
+        }
+      }
+
+      &-option-container {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        min-width: 150px;
+        width: 100%;
+        max-height: 250px;
+        top: 100%;
+        right: 0;
+        padding: 1em;
+        background-color: var(--surface);
+        border: 1px solid var(--border-strong);
+        border-radius: 0.5em;
+        list-style: none;
+        overflow-y: auto;
+        z-index: 4;
+      }
+
+      &-option {
+        padding: 0.5em;
+        color: var(--text);
+
+        &.selected {
+          background-color: var(--accent-2);
+          color: var(--accent-text);
+        }
+      }
+
+      &--error {
+        border-color: var(--default-color-danger);
+      }
     }
   }
 }

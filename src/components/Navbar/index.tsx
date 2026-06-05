@@ -1,6 +1,7 @@
 import { ArrowLeftSvg } from '@/assets'
 import { useIntl } from 'react-intl'
 import { useNavigate } from 'react-router-dom'
+import './index.scss'
 
 type NavbarProps = {
   children?: JSX.Element
@@ -17,7 +18,7 @@ const Navbar: React.FC<NavbarProps> = ({
   enableBackButton,
   backButtonClass,
 }) => {
-  const backBtnClass = backButtonClass ?? 'icon--stroke-primary'
+  const backBtnClass = backButtonClass ?? 'icon--color-primary'
   const navigate = useNavigate()
 
   const handleBack = (): void => {

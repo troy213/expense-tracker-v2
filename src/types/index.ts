@@ -82,7 +82,10 @@ export type ConditionArray =
     }
   | string
 
-export type Theme = 'light' | 'dark'
+// User-facing preference. 'system' follows the OS; it resolves to 'light' or
+// 'dark' at runtime (see App.tsx) and is never written to `data-theme`.
+export type Theme = 'light' | 'dark' | 'system'
+export type ResolvedTheme = 'light' | 'dark'
 
 export type Locales = 'en-US' | 'id-ID'
 

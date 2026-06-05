@@ -1,7 +1,8 @@
 import { useIntl } from 'react-intl'
-import { combineClassName, currencyFormatter } from '@/utils'
-import { Widget } from '@/components'
 import { CATEGORY_ICONS_MAP } from '@/assets/categories-icons'
+import { Widget } from '@/components'
+import { combineClassName, currencyFormatter } from '@/utils'
+import './ReportInfo.scss'
 
 type ReportInfoProps = {
   totalIncome: number

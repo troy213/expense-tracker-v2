@@ -1,63 +1,65 @@
-@import './CategoryWidget';
+@import '@/styles/variables';
 
-.category-tab-view {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-
-  &__tab {
-    display: flex;
-    justify-content: center;
-    flex: 1;
-    border-radius: 0.5rem 0.5rem 0 0;
-
-    & > button {
-      color: $color-primary;
-      padding: 0.5rem;
-      flex: 1;
-    }
-
-    &.selected {
-      background-color: $color-primary-2;
-
-      & > button {
-        color: $color-white;
-      }
-    }
-  }
-
-  &__budget-widget {
-    padding: 1rem;
-    border-radius: 0.5rem;
-    box-shadow: $box-shadow-default;
-    background: linear-gradient($color-primary-2, $color-primary);
-    color: $color-white;
-  }
-
-  &__add-button {
-    display: flex;
-    justify-content: center;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    border: 2px dashed $color-primary;
-    background-color: unset;
-  }
-
-  &__content {
+@layer components {
+  .category-tab-view {
     display: flex;
     flex-direction: column;
     flex: 1;
-    gap: 1rem;
-    padding: 1rem;
-    box-shadow: $box-shadow-default;
 
-    &.active {
-      &--left {
-        border-radius: 0 1rem 1rem 1rem;
+    &__tab {
+      display: flex;
+      justify-content: center;
+      flex: 1;
+      border-radius: 0.5rem 0.5rem 0 0;
+      padding: 0.5rem;
+
+      & > button {
+        color: var(--text);
+        flex: 1;
       }
 
-      &--right {
-        border-radius: 1rem 0 1rem 1rem;
+      &.selected {
+        background-color: var(--accent-2);
+
+        & > button {
+          color: var(--accent-text);
+        }
+      }
+    }
+
+    &__budget-widget {
+      padding: 1rem;
+      border-radius: 0.5rem;
+      box-shadow: var(--shadow);
+      background: var(--hero-gradient);
+      color: var(--accent-text);
+    }
+
+    &__add-button {
+      display: flex;
+      justify-content: center;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      border: 2px dashed var(--text);
+      background-color: unset;
+    }
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 1rem;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+
+      &.active {
+        &--left {
+          border-radius: 0 1rem 1rem 1rem;
+        }
+
+        &--right {
+          border-radius: 1rem 0 1rem 1rem;
+        }
       }
     }
   }

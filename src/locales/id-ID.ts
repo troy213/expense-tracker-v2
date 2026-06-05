@@ -37,6 +37,8 @@ const messages = {
   CustomFilter: 'Set Tanggal',
   Dark: 'Gelap',
   DarkTheme: 'Mode Gelap',
+  SystemTheme: 'Sistem',
+  System: 'Sistem',
   Dashboard: 'Dasbor',
   DashboardInfo: 'Info Dasbor',
   DataManagement: 'Manajemen Data',

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import Toolbar from '../Toolbar'
+import './index.scss'
 
 export type LayoutContextType = {
   // The scrollable content element, handed to children so a virtualized

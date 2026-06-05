@@ -1,8 +1,13 @@
-.report-category {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  text-align: left;
-  color: $color-primary;
-  border: none;
+@import '@/styles/variables';
+
+@layer components {
+  .report-category {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-align: left;
+    background-color: var(--surface);
+    color: var(--text);
+    border: none;
+  }
 }

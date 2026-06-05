@@ -4,6 +4,7 @@ import { useDisclosure } from '@/hooks'
 import SearchModal from '@/components/Modal/SearchModal'
 import DashboardInfo from './DashboardInfo'
 import Transactions from './Transactions'
+import './index.scss'
 
 const Dashboard = () => {
   const searchModal = useDisclosure()
@@ -16,7 +17,7 @@ const Dashboard = () => {
       <div className="dashboard__container">
         <Navbar title="Dashboard">
           <button className="btn btn-clear" onClick={searchModal.toggle}>
-            <SearchSvg className="icon--stroke-white" />
+            <SearchSvg className="icon--color-white" />
           </button>
         </Navbar>
         <DashboardInfo />

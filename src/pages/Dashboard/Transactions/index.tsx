@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Virtuoso } from 'react-virtuoso'
 import { useIntl } from 'react-intl'
+import { SpinnerSvg } from '@/assets'
 import type { LayoutContextType } from '@/components/Layout'
 import {
   DEFAULT_EXPANDED_COUNT,
@@ -10,7 +11,7 @@ import {
 import { useAppSelector, useExpandableGroups } from '@/hooks'
 import { formatMonthLabel, shouldShowMonthHeader } from '@/utils'
 import TransactionContainer from './TransactionContainer'
-import { SpinnerSvg } from '@/assets'
+import './index.scss'
 
 const Transactions = () => {
   const { scrollParent } = useOutletContext<LayoutContextType>()
@@ -39,7 +40,7 @@ const Transactions = () => {
   if (isLoading && !data.length)
     return (
       <div className="transactions flex-1 flex-justify-center flex-align-center">
-        <SpinnerSvg className="icon--xl icon--fill-primary spin" />
+        <SpinnerSvg className="icon--xl icon--color-primary spin" />
       </div>
     )
 

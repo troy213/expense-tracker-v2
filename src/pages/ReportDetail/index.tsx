@@ -16,6 +16,7 @@ import { TransactionFilters } from '@/types'
 import { formatTransactionDate, getCategoryById } from '@/utils'
 import ReportDetailInfo from './ReportDetailInfo'
 import { SpinnerSvg } from '@/assets'
+import './index.scss'
 
 const ReportDetail = () => {
   const { scrollParent } = useOutletContext<LayoutContextType>()
@@ -104,7 +105,7 @@ const ReportDetail = () => {
       <div className="report-detail p-4">
         <Navbar enableBackButton={true} title="Reports" />
         <div className="flex-justify-center flex-align-center flex-1">
-          <SpinnerSvg className="icon--xl icon--fill-primary spin" />
+          <SpinnerSvg className="icon--xl icon--color-primary spin" />
         </div>
       </div>
     )

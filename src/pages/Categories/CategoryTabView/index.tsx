@@ -12,13 +12,14 @@ import {
 } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { PlusSvg } from '@/assets'
+import { FormModal, Modal } from '@/components'
 import { useAppDispatch, useAppSelector, useDisclosure } from '@/hooks'
 import dbServices from '@/lib/db'
-import { FormModal, Modal } from '@/components'
 import { categoriesAction } from '@/store/categories/categories-slice'
 import { CategoryType } from '@/types'
 import { combineClassName, currencyFormatter } from '@/utils'
 import CategoryWidget from './CategoryWidget'
+import './index.scss'
 
 const CategoryTabView = () => {
   const dispatch = useAppDispatch()
@@ -173,7 +174,7 @@ const CategoryTabView = () => {
           onClick={() => addModal.open()}
         >
           <div className="flex-align-center gap-2">
-            <PlusSvg className="icon--stroke-primary" />
+            <PlusSvg className="icon--color-primary" />
             <span className="text--color-primary text--light text--3">
               {formatMessage({ id: 'AddCategory' })}
             </span>

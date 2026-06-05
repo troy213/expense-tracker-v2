@@ -1,0 +1,20 @@
+@import '@/styles/variables';
+
+@layer components {
+  .report-detail-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    background-color: var(--surface);
+    color: var(--text);
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow);
+
+    &__budget {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+}

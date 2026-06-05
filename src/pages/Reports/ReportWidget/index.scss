@@ -1,16 +1,18 @@
-@import './ReportCategory';
+@import '@/styles/variables';
 
-.report-widget {
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  border-radius: 0.5rem;
-  box-shadow: $box-shadow-default;
+@layer components {
+  .report-widget {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow);
 
-  &__title {
-    justify-content: start !important;
-    color: $color-primary;
-    font-weight: 700;
+    &__title {
+      justify-content: start !important;
+      color: var(--text);
+      font-weight: 700;
+    }
   }
 }

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useIntl } from 'react-intl'
 import { MoreVerticalSvg } from '@/assets'
+import { CategoryIcon, FormModal, Modal } from '@/components'
 import MoreOptionMenu from '@/components/Menu/MoreOptionMenu'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
 import {
@@ -10,14 +11,14 @@ import {
   useDisclosure,
 } from '@/hooks'
 import { TxFormData } from '@/types'
+import { deleteDBTransactions } from '@/store/transactions/transactions-thunk'
 import {
   combineClassName,
   currencyFormatter,
   getCategoryById,
   getDefaultCategoryIconColor,
 } from '@/utils'
-import { CategoryIcon, FormModal, Modal } from '@/components'
-import { deleteDBTransactions } from '@/store/transactions/transactions-thunk'
+import './TransactionDetail.scss'
 
 type TransactionDetailProps = {
   data: TxFormData
@@ -124,7 +125,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
                   type="button"
                   onClick={handleMoreOption}
                 >
-                  <MoreVerticalSvg className="icon icon--stroke-primary" />
+                  <MoreVerticalSvg className="icon icon--color-primary" />
                 </button>
                 {moreMenu.isOpen && (
                   <MoreOptionMenu

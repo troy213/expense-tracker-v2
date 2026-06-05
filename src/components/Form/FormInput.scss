@@ -1,65 +1,67 @@
 @import '@/styles/variables.scss';
 
-.form-input {
-  &__input {
-    min-height: 2rem;
-    width: 100%;
-    padding: 0 0.5em;
-    background-color: transparent;
-    border: 1px solid mix($color-primary, $color-white, 70%);
-    border-radius: 0.5em;
-    font-size: 0.75rem;
-    color: $color-primary;
+@layer components {
+  .form-input {
+    &__input {
+      min-height: 2rem;
+      width: 100%;
+      padding: 0 0.5em;
+      background-color: transparent;
+      border: 1px solid var(--border-strong);
+      border-radius: 0.5em;
+      font-size: 0.75rem;
+      color: var(--text);
 
-    &-container {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5em;
-    }
-
-    &:focus {
-      outline: 1px solid $color-primary;
-    }
-
-    &::placeholder {
-      color: mix($color-primary, $color-white, 50%);
-    }
-
-    &--error {
-      border: 1px solid $color-danger;
+      &-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+      }
 
       &:focus {
-        border-color: $color-danger;
-        outline-color: $color-danger;
-      }
-    }
-
-    &-nav {
-      display: flex;
-      gap: 0.5em;
-    }
-
-    &-nav-btn {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.5em;
-      border: 1px solid mix($color-primary, $color-white, 50%);
-      border-radius: 0.5em;
-      background-color: transparent;
-      color: $color-primary;
-
-      &:active {
-        background-color: mix($color-primary, $color-white, 10%);
+        outline: 1px solid var(--text);
       }
 
-      &--prev {
-        transform: rotate(90deg);
+      &::placeholder {
+        color: var(--text-muted);
       }
 
-      &--next {
-        transform: rotate(-90deg);
+      &--error {
+        border: 1px solid var(--default-color-danger);
+
+        &:focus {
+          border-color: var(--default-color-danger);
+          outline-color: var(--default-color-danger);
+        }
+      }
+
+      &-nav {
+        display: flex;
+        gap: 0.5em;
+      }
+
+      &-nav-btn {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5em;
+        border: 1px solid var(--border-strong);
+        border-radius: 0.5em;
+        background-color: transparent;
+        color: var(--text);
+
+        &:active {
+          background-color: var(--border);
+        }
+
+        &--prev {
+          transform: rotate(90deg);
+        }
+
+        &--next {
+          transform: rotate(-90deg);
+        }
       }
     }
   }

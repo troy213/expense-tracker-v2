@@ -4,6 +4,7 @@ import { Navbar } from '@/components'
 import { useAppDispatch } from '@/hooks'
 import { configAction } from '@/store/config/config-slice'
 import { getStorageConfig } from '@/utils'
+import './index.scss'
 
 const AdvancedSetting = () => {
   const [config, setConfig] = useState(getStorageConfig())

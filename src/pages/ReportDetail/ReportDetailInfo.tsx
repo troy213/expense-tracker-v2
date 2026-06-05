@@ -1,12 +1,13 @@
 import { useIntl } from 'react-intl'
+import { AlertCircleSvg, AlertTriangleSvg } from '@/assets'
+import { ProgressBar } from '@/components'
 import { useAppSelector } from '@/hooks'
 import {
   calculatePercentage,
   combineClassName,
   currencyFormatter,
 } from '@/utils'
-import { ProgressBar } from '@/components'
-import { AlertCircleSvg, AlertTriangleSvg } from '@/assets'
+import './ReportDetailInfo.scss'
 
 const ReportDetailInfo = () => {
   const { totalIncome, totalExpense, totalBudget, remainingBudget } =
@@ -87,10 +88,10 @@ const ReportDetailInfo = () => {
             <div className="flex-space-between">
               <div className="flex-align-center gap-1">
                 {isWarning && (
-                  <AlertTriangleSvg className="icon--sm icon--stroke-warning" />
+                  <AlertTriangleSvg className="icon--sm icon--color-warning" />
                 )}
                 {isDanger && (
-                  <AlertCircleSvg className="icon--sm icon--stroke-danger" />
+                  <AlertCircleSvg className="icon--sm icon--color-danger" />
                 )}
                 <span className={budgetTextClassName}>
                   {formatMessage(

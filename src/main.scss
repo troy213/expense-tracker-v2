@@ -1,25 +1,41 @@
-@import './styles/animation';
+// Cascade layer order. A later layer always wins over an earlier one,
+// regardless of selector specificity — this is what lets component styles be
+// co-located (imported from their own .tsx files) without their load order
+// affecting the cascade.
+//
+// The AUTHORITATIVE declaration lives in index.html's <head> so it is parsed
+// before any JS-injected stylesheet (see the comment there). This repeat is
+// defensive/documentary; first appearance wins, so it is a no-op in practice.
+@layer base, components, utilities;
+
+// External font load — must precede all style rules.
+@import './styles/fonts';
+
+// Tooling only — emit no CSS (variables/mixins) or layer-agnostic @keyframes.
 @import './styles/variables';
-@import './styles/global';
-@import './styles/config';
 @import './styles/mixin';
+@import './styles/animation';
 
-// components styles
-@import './components/Form';
-@import './components/Layout';
-@import './components/Modal';
-@import './components/Navbar';
-@import './components/ProgressBar';
-@import './components/PWAInstallPrompt';
-@import './components/Toolbar';
-@import './components/Widget';
+// base layer: design tokens + element resets. Everything else can override it.
+@layer base {
+  @import './styles/tokens';
+  @import './styles/reset';
+  @import './styles/base';
+}
 
-// pages styles
-@import './pages/404';
-@import './pages/Categories';
-@import './pages/Dashboard';
-@import './pages/ReportDetail';
-@import './pages/Reports';
-@import './pages/Settings';
+// The `components` layer is filled entirely by the component/page .scss files
+// themselves — each self-wraps its rules in `@layer components { ... }` and is
+// imported from its own .tsx. Nothing component-specific is imported here; the
+// layer declaration above is what guarantees their precedence regardless of
+// where/when they load.
 
-@import './styles/utility';
+// utilities layer: declared after components, so utilities win equal-specificity
+// ties against component classes — regardless of source order.
+@layer utilities {
+  @import './styles/utility';
+}
+
+// UNLAYERED — outranks every layer above. Dark mode lives here so it keeps
+// winning without depending on specificity. TODO: refactor into a `theme` layer
+// when revisiting dark mode.
+@import './styles/theme';

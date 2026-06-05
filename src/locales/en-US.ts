@@ -37,6 +37,8 @@ const messages = {
   CustomFilter: 'Custom Filter',
   Dark: 'Dark',
   DarkTheme: 'Dark Theme',
+  SystemTheme: 'System',
+  System: 'System',
   Dashboard: 'Dashboard',
   DashboardInfo: 'Dashboard Info',
   DataManagement: 'Data Management',

@@ -1,14 +1,18 @@
-.report-info {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+@import '@/styles/variables';
 
-  &__avg-spending-icon {
-    width: 3.5rem;
-    height: 3.5rem;
+@layer components {
+  .report-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 
-    & [stroke='black'] {
-      stroke: rgba($color-white, 0.3);
+    &__avg-spending-icon {
+      width: 3.5rem;
+      height: 3.5rem;
+
+      & [stroke='black'] {
+        stroke: rgba(255, 255, 255, 0.3);
+      }
     }
   }
 }

@@ -1,15 +1,18 @@
+// Brand blues
 $color-primary: #133e5d;
 $color-primary-2: #055086;
+$color-accent-dark: #3a7cb5;
+
+// Neutrals
 $color-white: #f2f0ed;
 $color-white-2: #dadada;
-$color-success: #2d8705;
-$color-danger: var(--default-color-danger);
-$color-warning: var(--default-color-warning);
 $color-dark: #2a2d32;
 $color-mute: #9ca3af;
 
-$box-shadow-default: 0 0.25rem 12px
-  rgba(
-    $color: black,
-    $alpha: 0.25,
-  );
+// Status — light / dark pairs (dark hues tuned for the dark surface, One Dark)
+$color-success: #2d8705;
+$color-success-dark: #98c379;
+$color-danger: #870805;
+$color-danger-dark: #e06c75;
+$color-warning: #b26a00;
+$color-warning-dark: #e0a458;

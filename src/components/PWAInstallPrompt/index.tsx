@@ -2,6 +2,7 @@ import ReactDOM from 'react-dom'
 import { useIntl } from 'react-intl'
 import { CrossSvg, ImportSvg } from '@/assets'
 import { usePWAInstall } from '@/hooks'
+import './index.scss'
 
 const PWAInstallPrompt = () => {
   const intl = useIntl()
@@ -35,7 +36,7 @@ const PWAInstallPrompt = () => {
           className="pwa-install__action"
           onClick={promptInstall}
         >
-          <ImportSvg className="icon--stroke-white" />
+          <ImportSvg className="icon--color-white" />
           {intl.formatMessage({ id: 'Install' })}
         </button>
       )}

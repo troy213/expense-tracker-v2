@@ -29,7 +29,7 @@ const TimeFilterMenu: React.FC<TimeFilterMenuProps> = ({
               {formatMessage({ id: item.title })}
             </span>
             {timeFilter === item.value && (
-              <CheckSvg className="icon icon--stroke-primary" />
+              <CheckSvg className="icon icon--color-primary" />
             )}
           </button>
         )

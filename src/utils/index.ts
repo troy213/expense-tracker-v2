@@ -462,9 +462,11 @@ export const getDefaultCategoryIconColor = (type?: CategoryType): string => {
   return DEFAULT_EXPENSE_COLOR
 }
 
+// Keyed by Theme, so adding a theme is a compile error until a label is given.
 const THEME_TRANSLATION_KEY: Record<Theme, string> = {
   light: 'Light',
   dark: 'Dark',
+  system: 'System',
 }
 
 export const getThemeTranslationKey = (theme: Theme): string =>

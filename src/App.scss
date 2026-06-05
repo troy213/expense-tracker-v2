@@ -1,9 +1,11 @@
 @import '@/styles/variables';
 
-.app-loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100dvh;
-  background-color: $color-primary;
+@layer components {
+  .app-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100dvh;
+    background-color: var(--accent);
+  }
 }

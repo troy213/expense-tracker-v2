@@ -1,4 +1,6 @@
-.transaction-detail {
-  display: flex;
-  gap: 1rem;
+@layer components {
+  .transaction-detail {
+    display: flex;
+    gap: 1rem;
+  }
 }

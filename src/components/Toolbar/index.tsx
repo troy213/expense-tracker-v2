@@ -4,6 +4,7 @@ import { combineClassName } from '@/utils'
 import { useDisclosure } from '@/hooks'
 import { FormModal } from '@/components'
 import Modal from '../Modal'
+import './index.scss'
 
 const Toolbar = () => {
   const addModal = useDisclosure()
@@ -22,23 +23,23 @@ const Toolbar = () => {
       </Modal>
 
       <Link to="/" className={getClassName('/')}>
-        <HomeSvg className="icon--stroke-primary" />
+        <HomeSvg className="icon--color-primary" />
       </Link>
       <Link to="/reports" className={getClassName('/reports')}>
-        <PieChartSvg className="icon--stroke-primary" />
+        <PieChartSvg className="icon--color-primary" />
       </Link>
 
       <div className="toolbar__menu">
         <button className="toolbar__add-button" onClick={addModal.toggle}>
-          <PlusSvg className="icon--stroke-white" />
+          <PlusSvg className="icon--color-white" />
         </button>
       </div>
 
       <Link to="/categories" className={getClassName('/categories')}>
-        <BudgetSvg className="icon--stroke-primary" />
+        <BudgetSvg className="icon--color-primary" />
       </Link>
       <Link to="/settings" className={getClassName('/settings')}>
-        <SettingsSvg className="icon--stroke-primary" />
+        <SettingsSvg className="icon--color-primary" />
       </Link>
     </div>
   )

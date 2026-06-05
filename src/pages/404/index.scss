@@ -1,9 +1,13 @@
-.not-found {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  gap: 2rem;
-  background-color: $color-primary;
+@import '@/styles/variables';
+
+@layer components {
+  .not-found {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    gap: 2rem;
+    background-color: var(--accent);
+  }
 }

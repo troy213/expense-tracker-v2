@@ -3,17 +3,18 @@ import { useIntl } from 'react-intl'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { CoinsSvg, MoreVerticalSvg } from '@/assets'
+import { CategoryIcon, FormModal, Modal } from '@/components'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
 import MoreOptionMenu from '@/components/Menu/MoreOptionMenu'
 import { useAppDispatch, useClickOutside, useDisclosure } from '@/hooks'
 import { Category } from '@/types'
+import { deleteDBCategory } from '@/store/categories/categories-thunk'
 import {
   calculateModalBottomThreshold,
   currencyFormatter,
   getDefaultCategoryIconColor,
 } from '@/utils'
-import { deleteDBCategory } from '@/store/categories/categories-thunk'
-import { CategoryIcon, FormModal, Modal } from '@/components'
+import './CategoryWidget.scss'
 
 type CategoryWidgetProps = {
   data: Category
@@ -113,7 +114,7 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
             <span>{name}</span>
             {type === 'expense' && (
               <div className="flex-align-center gap-2">
-                <CoinsSvg className="icon--fill-primary" />
+                <CoinsSvg className="icon--color-primary" />
                 <span className="text--light text--3">
                   {currencyFormatter(budget)}
                 </span>
@@ -128,7 +129,7 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
             className="btn btn-clear"
             onClick={(e) => handleMoreOption(e, id)}
           >
-            <MoreVerticalSvg className="icon--stroke-primary" />
+            <MoreVerticalSvg className="icon--color-primary" />
           </button>
           {moreMenu.isOpen && selectedCategoryId === id && (
             <MoreOptionMenu

@@ -22,6 +22,7 @@ import {
   formatTransactionDate,
   getCurrentMonthRange,
 } from '@/utils'
+import './DashboardInfo.scss'
 
 type BalanceProps = {
   totalBalance: number
@@ -78,7 +79,7 @@ const DashboardInfo = () => {
                 <span className="text--light text--3">
                   {formatMessage({ id: 'TotalIncome' })}
                 </span>
-                <ArrowUpSvg className="icon--sm icon--stroke-success" />
+                <ArrowUpSvg className="icon--sm icon--color-success" />
               </div>
               <span>{currencyFormatter(totalIncome)}</span>
             </div>
@@ -89,7 +90,7 @@ const DashboardInfo = () => {
                 <span className="text--light text--3">
                   {formatMessage({ id: 'TotalExpense' })}
                 </span>
-                <ArrowDownSvg className="icon--sm icon--stroke-danger" />
+                <ArrowDownSvg className="icon--sm icon--color-danger" />
               </div>
               <span>{currencyFormatter(totalExpense)}</span>
             </div>
@@ -108,7 +109,7 @@ const DashboardInfo = () => {
               </span>
             </div>
             <Link to="/categories?cat=expense">
-              <SlidersSvg className="icon--stroke-primary" />
+              <SlidersSvg className="icon--color-primary" />
             </Link>
           </div>
 
@@ -120,10 +121,10 @@ const DashboardInfo = () => {
             </span>
             <div className="flex-align-center gap-1">
               {isWarning && (
-                <AlertTriangleSvg className="icon--sm icon--stroke-warning" />
+                <AlertTriangleSvg className="icon--sm icon--color-warning" />
               )}
               {isDanger && (
-                <AlertCircleSvg className="icon--sm icon--stroke-danger" />
+                <AlertCircleSvg className="icon--sm icon--color-danger" />
               )}
               <span className={budgetPercentageClassName}>
                 {budgetPercentage}%
@@ -152,13 +153,13 @@ const Balance: React.FC<BalanceProps> = ({ totalBalance }) => {
         onClick={handleHideBalance}
       >
         {hideBalance ? (
-          <EyeOffSvg className="icon--stroke-white" />
+          <EyeOffSvg className="icon--color-white" />
         ) : (
-          <EyeSvg className="icon--stroke-white" />
+          <EyeSvg className="icon--color-white" />
         )}
       </button>
       {hideBalance ? (
-        <HiddenTextSvg className="icon--stroke-white icon--fill-white" />
+        <HiddenTextSvg className="icon--color-white icon--color-white" />
       ) : (
         <span className="text--bold text--8">
           {currencyFormatter(totalBalance)}

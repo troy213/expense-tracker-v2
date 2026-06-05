@@ -1,28 +1,19 @@
-@import './DashboardInfo';
-@import './Transactions';
+@import '@/styles/variables';
 
-.dashboard {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background: linear-gradient($color-primary-2, $color-primary);
-  color: $color-white;
-  position: relative;
-
-  &__container {
+@layer components {
+  .dashboard {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    padding: 1rem 1rem 1.5rem;
-  }
+    background: var(--hero-gradient);
+    color: var(--accent-text);
+    position: relative;
 
-  &.dark :is(.transactions, .transaction-detail, .widget, .toolbar) {
-    background: $color-dark;
-    color: $color-white;
-    svg {
-      path {
-        stroke: $color-white;
-      }
+    &__container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem 1rem 1.5rem;
     }
   }
 }

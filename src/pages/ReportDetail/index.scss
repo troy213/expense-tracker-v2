@@ -1,29 +1,11 @@
-.report-detail {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  background-color: $color-white;
-  color: $color-primary;
-}
+@import '@/styles/variables';
 
-.report-detail-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 1rem;
-  background-color: $color-white;
-  color: $color-primary;
-  border-radius: 0.75rem;
-  box-shadow: $box-shadow-default;
-
-  &__budget {
+@layer components {
+  .report-detail {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    flex: 1;
+    background-color: var(--surface);
+    color: var(--text);
   }
-}
-
-body.dark .report-detail-info {
-  background-color: $color-dark;
-  color: $color-white;
 }

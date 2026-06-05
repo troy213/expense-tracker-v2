@@ -11,6 +11,30 @@
     <link rel="mask-icon" href="/mask-icon.svg" color="#FFFFFF" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Expense Tracker</title>
+    <!-- Authoritative cascade-layer order. Declared here so it is parsed before
+         any JS-injected stylesheet, making layer precedence immune to Vite dev
+         HMR injection order (where a component's `@layer components {}` could
+         otherwise register before main.scss and invert base/components). -->
+    <style>
+      @layer base, components, utilities;
+    </style>
+    <!-- Resolve the stored theme preference to a data-theme on <html> before
+         first paint, so there is no flash of the wrong theme on load. Mirrors
+         the resolution logic in App.tsx. `theme` is stored as a raw string. -->
+    <script>
+      ;(function () {
+        try {
+          var pref = localStorage.getItem('theme') || 'system'
+          var dark =
+            pref === 'dark' ||
+            (pref === 'system' &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches)
+          document.documentElement.dataset.theme = dark ? 'dark' : 'light'
+        } catch (e) {
+          /* localStorage/matchMedia unavailable — fall back to default theme */
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="portal"></div>

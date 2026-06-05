@@ -14,6 +14,7 @@ import {
   getStorage,
   getThemeTranslationKey,
 } from '@/utils'
+import './index.scss'
 
 const SettingMenus = () => {
   const { locale, theme } = useAppSelector((state) => state.configReducer)
@@ -131,7 +132,7 @@ const SettingMenus = () => {
                           </span>
                         )}
                         {!disableChevron && (
-                          <ChevronDownSvg className="setting-menus__chevron icon--stroke-primary" />
+                          <ChevronDownSvg className="setting-menus__chevron icon--color-primary" />
                         )}
                       </div>
                     </span>
@@ -163,7 +164,7 @@ const SettingMenus = () => {
           className="setting-menus__delete-btn"
           onClick={() => modal.open('DeleteData')}
         >
-          <TrashSvg className="icon--lg icon--stroke-danger" />
+          <TrashSvg className="icon--lg icon--color-danger" />
           <span className="text--4 text--color-danger">
             {formatMessage({ id: 'DeleteData' })}
           </span>

@@ -1,13 +1,15 @@
-.layout {
-  display: flex;
-  flex-direction: column;
-  height: 100dvh;
-
-  &__content {
+@layer components {
+  .layout {
     display: flex;
     flex-direction: column;
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
+    height: 100dvh;
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
   }
 }

@@ -1,17 +1,19 @@
-.category-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 0.5rem;
+@layer components {
+  .category-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.5rem;
 
-  svg [fill='black'] {
-    fill: var(--icon-color);
-  }
+    svg [fill='black'] {
+      fill: var(--icon-color);
+    }
 
-  svg [stroke='black'] {
-    stroke: var(--icon-color);
+    svg [stroke='black'] {
+      stroke: var(--icon-color);
+    }
   }
 }

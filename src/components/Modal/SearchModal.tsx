@@ -41,7 +41,10 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
           required
         />
 
-        <Form.Submit className="mt-4" label={formatMessage({ id: 'Search' })} />
+        <Form.Submit
+          className="mt-4 p-4"
+          label={formatMessage({ id: 'Search' })}
+        />
         <Form.Cancel />
       </Form>
     </Modal>

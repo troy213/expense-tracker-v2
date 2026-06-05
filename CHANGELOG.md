@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.0-beta.29](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.28...v1.0.0-beta.29) (2026-06-05)
+
+
+### Features
+
+* **theme:** add system theme, semantic tokens, and icon unification ([95eae43](https://github.com/troy213/expense-tracker-v2/commit/95eae4374cc0e6ce67cea317372beb7cd3a65b45)), closes [#3a7cb5](https://github.com/troy213/expense-tracker-v2/issues/3a7cb5)
+
 ## [1.0.0-beta.28](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.27...v1.0.0-beta.28) (2026-06-02)
 
 

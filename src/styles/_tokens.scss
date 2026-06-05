@@ -1,0 +1,62 @@
+@import './variables';
+
+// CSS custom-property design tokens.
+// `:root` holds the light theme plus every theme-invariant token; each
+// `[data-theme='...']` block below only overrides what actually differs.
+// `data-theme` is the *resolved* theme ('light' | 'dark'); the 'system'
+// preference resolves to one of these at runtime (App.tsx + the pre-paint
+// script in index.html).
+:root {
+  --main-font: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, sans-serif;
+
+  // Base palette (light). Components reference these, never raw colors.
+  --surface: #{$color-white};
+  --text: #{$color-primary};
+
+  // Theme-invariant tokens — same in every theme, so defined only here.
+  --text-muted: #{$color-mute};
+  --accent: #{$color-primary}; // primary brand fill (primary buttons, pills)
+  --accent-2: #{$color-primary-2}; // secondary brand (FAB, info widgets)
+  --accent-text: #{$color-white}; // text/icons on an accent or always-coloured fill
+  --hero-gradient: linear-gradient(
+    #{$color-primary-2},
+    #{$color-primary}
+  ); // dashboard/category hero — brand, theme-invariant
+
+  // Derived tints — color-mix yields an OPAQUE blend (not a translucent rgba),
+  // so they read consistently on any backdrop, and they auto-adapt per theme
+  // because they reference the base tokens above. Defined once.
+  --border: color-mix(in srgb, var(--text) 15%, var(--surface));
+  --border-strong: color-mix(in srgb, var(--text) 40%, var(--surface));
+  --surface-muted: color-mix(
+    in srgb,
+    var(--text) 8%,
+    var(--surface)
+  ); // inset/track bg
+  --surface-selected: color-mix(in srgb, var(--accent) 22%, var(--surface));
+
+  // Genuinely translucent — alpha is the right tool here (the scrim shows the
+  // content behind it; shadows must be semi-transparent).
+  --overlay: #{rgba(#000, 0.4)};
+  --shadow: 0 0.25rem 12px #{rgba(#000, 0.25)};
+
+  // Status colors (light).
+  --default-color-danger: #{$color-danger};
+  --default-color-warning: #{$color-warning};
+  --default-color-success: #{$color-success};
+}
+
+// Only the tokens that actually differ from light are listed here.
+[data-theme='dark'] {
+  --surface: #{$color-dark};
+  --text: #{$color-white};
+  --accent: #{$color-accent-dark}; // brighter so primary fills pop on the dark surface
+
+  --overlay: #{rgba(#000, 0.6)};
+  --shadow: 0 0.25rem 12px #{rgba(#000, 0.45)};
+
+  --default-color-danger: #{$color-danger-dark};
+  --default-color-warning: #{$color-warning-dark};
+  --default-color-success: #{$color-success-dark};
+}

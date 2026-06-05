@@ -108,7 +108,7 @@ const TimeFilterTab = ({
             aria-label={formatMessage({ id: 'MoreOptions' })}
             onClick={handleMoreOption}
           >
-            <MoreVerticalSvg className="icon--stroke-primary" />
+            <MoreVerticalSvg className="icon--color-primary" />
           </button>
           {moreMenu.isOpen && (
             <TimeFilterMenu
