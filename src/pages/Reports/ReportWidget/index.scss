@@ -7,11 +7,11 @@
     flex-direction: column;
     gap: 1.5rem;
     border-radius: 0.5rem;
-    box-shadow: $box-shadow-default;
+    box-shadow: var(--shadow);
 
     &__title {
       justify-content: start !important;
-      color: $color-primary;
+      color: var(--text);
       font-weight: 700;
     }
   }

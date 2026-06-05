@@ -134,7 +134,7 @@ const FormSelect = ({
               <span className={placeholderClassName}>
                 {optionLabel || selectedValue || field.value || placeholder}
               </span>
-              <ChevronDownSvg className="icon--sm icon--stroke-primary" />
+              <ChevronDownSvg className="icon--sm icon--color-primary" />
 
               {isOpen && (
                 <ul className={finalOptionContainerClassName} role="listbox">

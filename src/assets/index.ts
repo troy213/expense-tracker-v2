@@ -30,6 +30,7 @@ import SettingsSvg from './icons/settings.svg?react'
 import SlidersSvg from './icons/sliders.svg?react'
 import SpinnerSvg from './icons/spinner.svg?react'
 import SunSvg from './icons/sun.svg?react'
+import SystemThemeSvg from './icons/system-theme.svg?react'
 import TrashSvg from './icons/trash.svg?react'
 
 export {
@@ -65,5 +66,6 @@ export {
   SlidersSvg,
   SpinnerSvg,
   SunSvg,
+  SystemThemeSvg,
   TrashSvg,
 }

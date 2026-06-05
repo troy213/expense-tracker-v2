@@ -13,6 +13,6 @@
     padding: 1rem;
     gap: 0.5rem;
     border-radius: 0.5rem;
-    box-shadow: $box-shadow-default;
+    box-shadow: var(--shadow);
   }
 }

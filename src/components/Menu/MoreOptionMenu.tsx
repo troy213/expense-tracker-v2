@@ -26,7 +26,7 @@ const MoreOptionMenu: React.FC<MoreOptionMenuProps> = ({
         type="button"
         onClick={handleEdit}
       >
-        <EditSvg className="icon icon--stroke-primary" />
+        <EditSvg className="icon icon--color-primary" />
         <span>{formatMessage({ id: 'Edit' })}</span>
       </button>
       <button
@@ -34,7 +34,7 @@ const MoreOptionMenu: React.FC<MoreOptionMenuProps> = ({
         type="button"
         onClick={handleDelete}
       >
-        <TrashSvg className="icon icon--stroke-danger" />
+        <TrashSvg className="icon icon--color-danger" />
         <span>{formatMessage({ id: 'Delete' })}</span>
       </button>
     </div>

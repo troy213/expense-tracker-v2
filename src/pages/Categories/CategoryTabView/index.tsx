@@ -174,7 +174,7 @@ const CategoryTabView = () => {
           onClick={() => addModal.open()}
         >
           <div className="flex-align-center gap-2">
-            <PlusSvg className="icon--stroke-primary" />
+            <PlusSvg className="icon--color-primary" />
             <span className="text--color-primary text--light text--3">
               {formatMessage({ id: 'AddCategory' })}
             </span>

@@ -98,10 +98,10 @@ const RemainingBudget = ({ editingItemIds }: RemainingBudgetProps) => {
         </span>
         <div className="flex-align-center gap-1">
           {isWarning && (
-            <AlertTriangleSvg className="icon--sm icon--stroke-warning" />
+            <AlertTriangleSvg className="icon--sm icon--color-warning" />
           )}
           {isExceeded && (
-            <AlertCircleSvg className="icon--sm icon--stroke-danger" />
+            <AlertCircleSvg className="icon--sm icon--color-danger" />
           )}
           <span className={budgetClassName}>
             {calculatePercentage(remainingBudget, categoryBudget)}%

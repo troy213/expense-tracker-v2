@@ -125,7 +125,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
                   type="button"
                   onClick={handleMoreOption}
                 >
-                  <MoreVerticalSvg className="icon icon--stroke-primary" />
+                  <MoreVerticalSvg className="icon icon--color-primary" />
                 </button>
                 {moreMenu.isOpen && (
                   <MoreOptionMenu

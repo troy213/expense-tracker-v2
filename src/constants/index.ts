@@ -3,7 +3,7 @@ import { Locales, Theme } from '@/types'
 
 type CountryKey = 'ENGLISH' | 'INDONESIA'
 
-type ThemeKey = 'LIGHT' | 'DARK'
+type ThemeKey = 'LIGHT' | 'DARK' | 'SYSTEM'
 
 type Messages = {
   [key: string]: {
@@ -20,6 +20,7 @@ export const LOCALES: Record<CountryKey, Locales> = {
 export const THEME: Record<ThemeKey, Theme> = {
   LIGHT: 'light',
   DARK: 'dark',
+  SYSTEM: 'system',
 } as const
 
 export const LANGUAGES: Messages = {

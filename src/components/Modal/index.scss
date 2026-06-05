@@ -5,7 +5,7 @@
   .modal {
     @include fadeInAnimation;
     position: fixed;
-    background: rgba($color-dark, 0.3);
+    background: var(--overlay);
     height: 100%;
     width: 100%;
     display: flex;
@@ -16,14 +16,14 @@
     &__container {
       padding: 1em;
       position: relative;
-      background: $color-white;
+      background: var(--surface);
       border-radius: 0.75em;
       min-height: 100px;
       max-height: calc(100vh - 4rem);
       width: 100%;
       min-width: 100px;
       max-width: 320px;
-      box-shadow: $box-shadow-default;
+      box-shadow: var(--shadow);
       overflow-y: auto;
     }
   }

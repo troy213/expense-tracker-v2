@@ -50,7 +50,7 @@ const Languages = () => {
                     </span>
                   </div>
                 </button>
-                {isSelected && <CheckSvg className="icon--stroke-primary" />}
+                {isSelected && <CheckSvg className="icon--color-primary" />}
               </li>
             )
           })}

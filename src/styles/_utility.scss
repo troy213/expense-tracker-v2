@@ -17,31 +17,31 @@
 }
 
 .btn-primary {
-  background-color: $color-primary;
-  color: $color-white;
+  background-color: var(--accent);
+  color: var(--accent-text);
 }
 
 .btn-danger {
-  background-color: $color-danger;
-  color: $color-white;
+  background-color: var(--default-color-danger);
+  color: var(--accent-text);
 }
 
 .btn-outline {
   &-primary {
     background-color: transparent;
-    border: 1px solid $color-primary;
-    color: $color-primary;
+    border: 1px solid var(--text);
+    color: var(--text);
   }
 
   &-white {
     background-color: transparent;
-    border: 1px solid $color-white;
-    color: $color-white;
+    border: 1px solid var(--accent-text);
+    color: var(--accent-text);
   }
 }
 
 .btn-dashed {
-  border: 1px dashed $color-primary;
+  border: 1px dashed var(--text);
   background-color: transparent;
 }
 
@@ -107,23 +107,23 @@
 }
 
 .text--color-primary {
-  color: $color-primary;
+  color: var(--text);
 }
 
 .text--color-danger {
-  color: $color-danger;
+  color: var(--default-color-danger);
 }
 
 .text--color-warning {
-  color: $color-warning;
+  color: var(--default-color-warning);
 }
 
 .text--color-white {
-  color: $color-white;
+  color: var(--accent-text);
 }
 
 .text--color-mute {
-  color: $color-mute;
+  color: var(--text-muted);
 }
 
 .icon {
@@ -166,40 +166,27 @@
   height: 4rem;
 }
 
-.icon--stroke-primary > * {
-  stroke: var(--default-svg-primary-stroke-color);
+// Unified icon colour. SVG icons are authored with `currentColor` for their
+// stroke/fill, so a single `color` drives both — no need to know whether a
+// given icon is stroke- or fill-based.
+.icon--color-primary {
+  color: var(--text);
 }
 
-.icon--stroke-white > * {
-  stroke: $color-white;
+.icon--color-white {
+  color: var(--accent-text);
 }
 
-.icon--stroke-success > * {
-  stroke: $color-success;
+.icon--color-success {
+  color: var(--default-color-success);
 }
 
-.icon--stroke-danger > * {
-  stroke: var(--default-svg-danger-stroke-color);
+.icon--color-danger {
+  color: var(--default-color-danger);
 }
 
-.icon--stroke-warning > * {
-  stroke: var(--default-svg-warning-stroke-color);
-}
-
-.icon--fill-primary > * {
-  fill: var(--default-svg-primary-stroke-color);
-}
-
-.icon--fill-white > * {
-  fill: $color-white;
-}
-
-.icon--fill-success > * {
-  fill: $color-success;
-}
-
-.icon--fill-danger > * {
-  stroke: var(--default-svg-danger-stroke-color);
+.icon--color-warning {
+  color: var(--default-color-warning);
 }
 
 // LAYOUT STYLE
@@ -487,27 +474,27 @@
   font-size: 0.75rem;
 
   &--default {
-    background-color: $color-mute;
-    color: $color-white;
+    background-color: color-mix(in srgb, var(--text-muted), transparent);
+    color: var(--accent-text);
   }
 
   &--primary {
-    background-color: $color-primary;
-    color: $color-white;
+    background-color: var(--accent);
+    color: var(--text);
   }
 
   &--danger {
-    background-color: $color-danger;
-    color: $color-white;
+    background-color: var(--default-color-danger);
+    color: var(--accent-text);
   }
 }
 
 .bg-primary {
-  background-color: $color-primary;
+  background-color: var(--accent);
 }
 
 .bg-primary-2 {
-  background-color: $color-primary-2;
+  background-color: var(--accent-2);
 }
 
 // ANIMATION

@@ -11,13 +11,13 @@
     }
 
     &-placeholder {
-      border: 1px solid $color-primary;
+      border: 1px solid var(--border-strong);
       border-radius: 0.25em;
       padding: 0 0.5em;
-      color: $color-primary;
+      color: var(--text);
 
       &--error {
-        border: 1px solid $color-danger;
+        border: 1px solid var(--default-color-danger);
       }
     }
   }

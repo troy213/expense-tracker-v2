@@ -3,10 +3,10 @@
 @layer components {
   .widget {
     padding: 1rem;
-    background-color: $color-white;
-    color: $color-primary;
+    background-color: var(--surface);
+    color: var(--text);
     flex: 1;
     border-radius: 0.5rem;
-    box-shadow: $box-shadow-default;
+    box-shadow: var(--shadow);
   }
 }

@@ -17,7 +17,7 @@ const Dashboard = () => {
       <div className="dashboard__container">
         <Navbar title="Dashboard">
           <button className="btn btn-clear" onClick={searchModal.toggle}>
-            <SearchSvg className="icon--stroke-white" />
+            <SearchSvg className="icon--color-white" />
           </button>
         </Navbar>
         <DashboardInfo />

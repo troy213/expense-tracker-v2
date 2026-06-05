@@ -14,7 +14,7 @@
       gap: 0.25rem;
       padding: 0.25rem;
       border-radius: 0.5rem;
-      background-color: rgba($color-primary, 0.08);
+      background-color: var(--surface-muted);
     }
 
     &__tab-item {
@@ -23,7 +23,7 @@
       border: none;
       border-radius: 0.375rem;
       background-color: transparent;
-      color: $color-primary;
+      color: var(--text);
       text-transform: capitalize;
       cursor: pointer;
       transition:
@@ -31,16 +31,16 @@
         color 0.15s ease-in-out;
 
       &:hover:not(.selected) {
-        background-color: rgba($color-primary, 0.12);
+        background-color: var(--surface-selected);
       }
 
       &.selected {
-        background-color: $color-white;
-        color: $color-primary;
+        background-color: var(--surface);
+        color: var(--text);
       }
 
       &:focus-visible {
-        outline: 2px solid $color-primary;
+        outline: 2px solid var(--text);
         outline-offset: 1px;
       }
     }

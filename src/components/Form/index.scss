@@ -25,7 +25,7 @@
     .form-input,
     .form-select {
       padding: 0.5rem 0.75rem;
-      border: 1px solid #ccc;
+      border: 1px solid var(--border);
       border-radius: 4px;
       font: inherit;
       background: transparent;
@@ -33,7 +33,7 @@
 
       &:focus {
         outline: none;
-        border-color: #1976d2;
+        border-color: var(--accent-2);
       }
     }
 
@@ -57,7 +57,7 @@
 
     .form-cancel {
       background: transparent;
-      border-color: #ccc;
+      border-color: var(--border);
       color: inherit;
     }
   }

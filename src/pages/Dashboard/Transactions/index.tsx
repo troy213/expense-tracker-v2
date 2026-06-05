@@ -40,7 +40,7 @@ const Transactions = () => {
   if (isLoading && !data.length)
     return (
       <div className="transactions flex-1 flex-justify-center flex-align-center">
-        <SpinnerSvg className="icon--xl icon--fill-primary spin" />
+        <SpinnerSvg className="icon--xl icon--color-primary spin" />
       </div>
     )
 

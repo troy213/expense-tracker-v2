@@ -114,7 +114,7 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
             <span>{name}</span>
             {type === 'expense' && (
               <div className="flex-align-center gap-2">
-                <CoinsSvg className="icon--fill-primary" />
+                <CoinsSvg className="icon--color-primary" />
                 <span className="text--light text--3">
                   {currencyFormatter(budget)}
                 </span>
@@ -129,7 +129,7 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
             className="btn btn-clear"
             onClick={(e) => handleMoreOption(e, id)}
           >
-            <MoreVerticalSvg className="icon--stroke-primary" />
+            <MoreVerticalSvg className="icon--color-primary" />
           </button>
           {moreMenu.isOpen && selectedCategoryId === id && (
             <MoreOptionMenu

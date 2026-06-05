@@ -28,3 +28,10 @@ a {
 li {
   list-style: none;
 }
+
+// Buttons don't inherit text colour by default; opt them in so they pick up the
+// themed `--text` (or whatever colour their surface sets) instead of the UA
+// default. Explicit colours (e.g. .btn-primary) still win from the utilities layer.
+button {
+  color: inherit;
+}

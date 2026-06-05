@@ -11,13 +11,13 @@
       display: flex;
       flex-direction: column;
       border-radius: 0.5rem;
-      box-shadow: $box-shadow-default;
+      box-shadow: var(--shadow);
 
       li {
         padding: 1rem;
 
         &:not(:last-child) {
-          border-bottom: 1px solid mix($color-primary, $color-white, 10%);
+          border-bottom: 1px solid var(--border);
         }
       }
     }

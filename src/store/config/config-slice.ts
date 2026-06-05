@@ -11,7 +11,7 @@ export type InitialState = {
 }
 
 const initialState: InitialState = {
-  theme: (getStorage('theme') as Theme) ?? THEME.LIGHT,
+  theme: (getStorage('theme') as Theme) ?? THEME.SYSTEM,
   locale: (getStorage('locales') as Locales) ?? LOCALES.ENGLISH,
   hideBalance: getStorageConfig()?.hideBalance ?? false,
   isInitialized: false,

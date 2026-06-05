@@ -5,8 +5,8 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    background: linear-gradient($color-primary-2, $color-primary);
-    color: $color-white;
+    background: var(--hero-gradient);
+    color: var(--accent-text);
     position: relative;
 
     &__container {

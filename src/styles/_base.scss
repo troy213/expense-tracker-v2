@@ -10,7 +10,7 @@ input[type='radio'] {
   height: 1rem;
   display: inline-grid;
   place-content: center;
-  border: 1px solid $color-primary;
+  border: 1px solid var(--text);
   border-radius: 50%;
   background-color: transparent;
   cursor: pointer;
@@ -20,7 +20,7 @@ input[type='radio'] {
     width: 0.5rem;
     height: 0.5rem;
     border-radius: 50%;
-    background-color: $color-primary;
+    background-color: var(--text);
     transform: scale(0);
     transition: transform 0.12s ease-in-out;
   }
@@ -30,7 +30,7 @@ input[type='radio'] {
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary;
+    outline: 2px solid var(--text);
     outline-offset: 1px;
   }
 
@@ -49,7 +49,7 @@ input[type='checkbox'] {
   height: 1rem;
   display: inline-grid;
   place-content: center;
-  border: 1px solid $color-primary;
+  border: 1px solid var(--text);
   border-radius: 3px;
   background-color: transparent;
   cursor: pointer;
@@ -61,16 +61,16 @@ input[type='checkbox'] {
     content: '';
     width: 0.625rem;
     height: 0.3125rem;
-    border-left: 2px solid $color-white;
-    border-bottom: 2px solid $color-white;
+    border-left: 2px solid var(--surface);
+    border-bottom: 2px solid var(--surface);
     transform: rotate(-45deg) translate(1px, -1px) scale(0);
     transform-origin: center;
     transition: transform 0.12s ease-in-out;
   }
 
   &:checked {
-    background-color: $color-primary;
-    border-color: $color-primary;
+    background-color: var(--text);
+    border-color: var(--text);
 
     &::before {
       transform: rotate(-45deg) translate(1px, -1px) scale(1);
@@ -78,7 +78,7 @@ input[type='checkbox'] {
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary;
+    outline: 2px solid var(--text);
     outline-offset: 1px;
   }
 

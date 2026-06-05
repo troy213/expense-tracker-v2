@@ -40,13 +40,13 @@ export const SETTING_MENUS: SettingLayout[] = [
       {
         title: 'ImportData',
         Icon: ImportSvg,
-        iconClassName: 'icon--stroke-primary',
+        iconClassName: 'icon--color-primary',
         modal: 'ImportData',
       },
       {
         title: 'ExportData',
         Icon: ExportSvg,
-        iconClassName: 'icon--stroke-primary',
+        iconClassName: 'icon--color-primary',
         modal: 'ExportData',
       },
     ],
@@ -57,13 +57,13 @@ export const SETTING_MENUS: SettingLayout[] = [
       {
         title: 'Theme',
         Icon: PaletteSvg,
-        iconClassName: 'icon--stroke-primary',
+        iconClassName: 'icon--color-primary',
         link: 'theme',
       },
       {
         title: 'Language',
         Icon: GlobeSvg,
-        iconClassName: 'icon--stroke-primary',
+        iconClassName: 'icon--color-primary',
         link: 'language',
       },
     ],
@@ -74,7 +74,7 @@ export const SETTING_MENUS: SettingLayout[] = [
       {
         title: 'AdvancedSetting',
         Icon: AdvancedSettingSvg,
-        iconClassName: 'icon--stroke-primary',
+        iconClassName: 'icon--color-primary',
         link: 'advanced-setting',
       },
     ],
@@ -85,7 +85,7 @@ export const SETTING_MENUS: SettingLayout[] = [
       {
         title: 'About',
         Icon: AlertCircleSvg,
-        iconClassName: 'icon--stroke-primary',
+        iconClassName: 'icon--color-primary',
         link: 'about',
       },
     ],

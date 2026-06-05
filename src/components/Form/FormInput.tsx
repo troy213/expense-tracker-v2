@@ -137,7 +137,7 @@ const renderField = (
             className="form-input__input-nav-btn"
             onClick={() => shiftDate(-1)}
           >
-            <ChevronDownSvg className="form-input__input-nav-btn--prev icon--sm icon--stroke-primary" />
+            <ChevronDownSvg className="form-input__input-nav-btn--prev icon--sm icon--color-primary" />
             <span className="text--color-primary text--light text--3">
               {formatMessage({ id: 'PreviousDay' })}
             </span>
@@ -150,7 +150,7 @@ const renderField = (
             <span className="text--color-primary text--light text--3">
               {formatMessage({ id: 'NextDay' })}
             </span>
-            <ChevronDownSvg className="form-input__input-nav-btn--next icon--sm icon--stroke-primary" />
+            <ChevronDownSvg className="form-input__input-nav-btn--next icon--sm icon--color-primary" />
           </button>
         </div>
       )}

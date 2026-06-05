@@ -3,7 +3,7 @@
 @layer components {
   .category-widget {
     border-radius: 0.5rem;
-    box-shadow: $box-shadow-default;
-    background-color: $color-white;
+    box-shadow: var(--shadow);
+    background-color: var(--surface);
   }
 }

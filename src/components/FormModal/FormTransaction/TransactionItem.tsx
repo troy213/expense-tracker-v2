@@ -34,7 +34,7 @@ const TransactionItems = () => {
                   remove(index)
                 }}
               >
-                <CrossSvg className="icon icon--stroke-primary" />
+                <CrossSvg className="icon icon--color-primary" />
               </button>
             )}
           </div>
@@ -59,7 +59,7 @@ const TransactionItems = () => {
         className="btn btn-dashed p-4"
         onClick={() => append(makeEmptyTransactionItem())}
       >
-        <PlusSvg className="icon--stroke-primary" />
+        <PlusSvg className="icon--color-primary" />
         <span className="text--color-primary text--light text--3">
           {formatMessage({ id: 'AddMoreTransaction' })}
         </span>

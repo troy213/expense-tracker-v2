@@ -14,15 +14,15 @@
       padding: 0.5rem;
 
       & > button {
-        color: $color-primary;
+        color: var(--text);
         flex: 1;
       }
 
       &.selected {
-        background-color: $color-primary-2;
+        background-color: var(--accent-2);
 
         & > button {
-          color: $color-white;
+          color: var(--accent-text);
         }
       }
     }
@@ -30,9 +30,9 @@
     &__budget-widget {
       padding: 1rem;
       border-radius: 0.5rem;
-      box-shadow: $box-shadow-default;
-      background: linear-gradient($color-primary-2, $color-primary);
-      color: $color-white;
+      box-shadow: var(--shadow);
+      background: var(--hero-gradient);
+      color: var(--accent-text);
     }
 
     &__add-button {
@@ -40,7 +40,7 @@
       justify-content: center;
       padding: 1rem;
       border-radius: 0.5rem;
-      border: 2px dashed $color-primary;
+      border: 2px dashed var(--text);
       background-color: unset;
     }
 
@@ -50,7 +50,7 @@
       flex: 1;
       gap: 1rem;
       padding: 1rem;
-      box-shadow: $box-shadow-default;
+      box-shadow: var(--shadow);
 
       &.active {
         &--left {

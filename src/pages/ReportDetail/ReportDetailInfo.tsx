@@ -88,10 +88,10 @@ const ReportDetailInfo = () => {
             <div className="flex-space-between">
               <div className="flex-align-center gap-1">
                 {isWarning && (
-                  <AlertTriangleSvg className="icon--sm icon--stroke-warning" />
+                  <AlertTriangleSvg className="icon--sm icon--color-warning" />
                 )}
                 {isDanger && (
-                  <AlertCircleSvg className="icon--sm icon--stroke-danger" />
+                  <AlertCircleSvg className="icon--sm icon--color-danger" />
                 )}
                 <span className={budgetTextClassName}>
                   {formatMessage(
