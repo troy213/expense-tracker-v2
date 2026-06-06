@@ -27,7 +27,7 @@ const FormTransaction = ({ data, index, onCancel }: FormTransactionProps) => {
   )
   const defaultCategoryType = data
     ? categories.find((cat) => cat.id === data.category_id)?.type || 'income'
-    : 'income'
+    : 'expense'
   const [categoryType, setCategoryType] =
     useState<CategoryType>(defaultCategoryType)
   const filteredCategories = categories.filter(
@@ -105,25 +105,32 @@ const FormTransaction = ({ data, index, onCancel }: FormTransactionProps) => {
           role="tablist"
           aria-label={formatMessage({ id: 'Transaction' })}
         >
-          {(['income', 'expense'] as CategoryType[]).map((value) => (
-            <button
-              key={value}
-              type="button"
-              role="tab"
-              aria-selected={categoryType === value}
-              className={combineClassName('transaction-type-tabs__tab', [
+          {(['income', 'expense'] as CategoryType[]).map((value) => {
+            const tabItemClassName = combineClassName(
+              'transaction-type-tabs__tab',
+              [
                 {
                   condition: categoryType === value,
                   className: 'selected',
                 },
-              ])}
-              onClick={() => setCategoryType(value)}
-            >
-              {formatMessage({
-                id: value === 'income' ? 'Income' : 'Expense',
-              })}
-            </button>
-          ))}
+              ]
+            )
+
+            return (
+              <button
+                key={value}
+                type="button"
+                role="tab"
+                aria-selected={categoryType === value}
+                className={tabItemClassName}
+                onClick={() => setCategoryType(value)}
+              >
+                {formatMessage({
+                  id: value === 'income' ? 'Income' : 'Expense',
+                })}
+              </button>
+            )
+          })}
         </div>
       </div>
 
