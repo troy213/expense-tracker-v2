@@ -7,6 +7,7 @@ export type InitialState = {
   theme: Theme
   locale: Locales
   hideBalance: boolean
+  lastDownload: string | null
   isInitialized: boolean
 }
 
@@ -14,6 +15,7 @@ const initialState: InitialState = {
   theme: (getStorage('theme') as Theme) ?? THEME.SYSTEM,
   locale: (getStorage('locales') as Locales) ?? LOCALES.ENGLISH,
   hideBalance: getStorageConfig()?.hideBalance ?? false,
+  lastDownload: getStorage('last-download') ?? null,
   isInitialized: false,
 }
 
@@ -43,6 +45,10 @@ const configSlice = createSlice({
     // Not persisted.
     setInitialized(state, action: PayloadAction<boolean>) {
       state.isInitialized = action.payload
+    },
+    setLastDownload(state, action: PayloadAction<string>) {
+      state.lastDownload = action.payload
+      setStorage('last-download', action.payload)
     },
   },
 })

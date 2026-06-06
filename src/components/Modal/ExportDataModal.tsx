@@ -1,4 +1,6 @@
 import { useIntl } from 'react-intl'
+import { useAppDispatch } from '@/hooks'
+import { configAction } from '@/store/config/config-slice'
 import { createExcelFile } from '@/utils/fileGeneratorUtils'
 import Modal from '.'
 
@@ -12,9 +14,11 @@ const ExportDataModal: React.FC<ExportDataModalProps> = ({
   onClose,
 }) => {
   const { formatMessage } = useIntl()
+  const dispatch = useAppDispatch()
 
-  const handleExport = () => {
-    createExcelFile()
+  const handleExport = async () => {
+    await createExcelFile()
+    dispatch(configAction.setLastDownload(new Date().toISOString()))
     onClose()
   }
 
