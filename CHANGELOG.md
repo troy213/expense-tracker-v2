@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.0-beta.30](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.29...v1.0.0-beta.30) (2026-06-06)
+
+
+### Features
+
+* **transaction:** default the new-transaction form to the expense tab ([23e360c](https://github.com/troy213/expense-tracker-v2/commit/23e360c220a11c4ab8b3e7bee3ad426a97ff0587))
+
 ## [1.0.0-beta.29](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.28...v1.0.0-beta.29) (2026-06-05)
 
 

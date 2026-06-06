@@ -82,18 +82,23 @@ const TimeFilterTab = ({
         <div className="time-filter-tab__tab">
           {[TIME_FILTER.ALL_TIME, dynamicRange].map((value) => {
             const item = TIME_FILTER_ITEM.find((d) => d.value === value)
+            const tabItemClassName = combineClassName(
+              'time-filter-tab__tab-item',
+              [
+                {
+                  condition: timeFilter === value,
+                  className: 'selected',
+                },
+              ]
+            )
+
             return (
               <button
                 key={value}
                 type="button"
                 role="tab"
                 aria-selected={timeFilter === value}
-                className={combineClassName('time-filter-tab__tab-item', [
-                  {
-                    condition: timeFilter === value,
-                    className: 'selected',
-                  },
-                ])}
+                className={tabItemClassName}
                 onClick={() => handleTimeFilterChange(value)}
               >
                 {item && formatMessage({ id: item.title })}

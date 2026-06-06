@@ -9,15 +9,13 @@ import ImportDataModal from '@/components/Modal/ImportDataModal'
 import { useAppDispatch, useAppSelector, useDisclosure } from '@/hooks'
 import { deleteAllDBCategories } from '@/store/categories/categories-thunk'
 import { deleteAllDBTransactions } from '@/store/transactions/transactions-thunk'
-import {
-  getLanguageTranslationKey,
-  getStorage,
-  getThemeTranslationKey,
-} from '@/utils'
+import { getLanguageTranslationKey, getThemeTranslationKey } from '@/utils'
 import './index.scss'
 
 const SettingMenus = () => {
-  const { locale, theme } = useAppSelector((state) => state.configReducer)
+  const { locale, theme, lastDownload } = useAppSelector(
+    (state) => state.configReducer
+  )
   const modal = useDisclosure<string>()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
@@ -27,6 +25,7 @@ const SettingMenus = () => {
     modal.close()
     dispatch(deleteAllDBCategories())
     dispatch(deleteAllDBTransactions())
+    localStorage.clear()
     navigate('/')
   }
 
@@ -40,8 +39,6 @@ const SettingMenus = () => {
         return ''
     }
   }
-
-  const lastDownload = getStorage('lastDownload')
 
   const getSubtitleValue = (menu: string): string => {
     switch (menu) {
