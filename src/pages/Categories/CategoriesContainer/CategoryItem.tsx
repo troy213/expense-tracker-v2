@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useCallback, useRef } from 'react'
 import { useIntl } from 'react-intl'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
@@ -9,45 +9,31 @@ import MoreOptionMenu from '@/components/Menu/MoreOptionMenu'
 import { useAppDispatch, useClickOutside, useDisclosure } from '@/hooks'
 import { Category } from '@/types'
 import { deleteDBCategory } from '@/store/categories/categories-thunk'
-import {
-  calculateModalBottomThreshold,
-  currencyFormatter,
-  getDefaultCategoryIconColor,
-} from '@/utils'
-import './CategoryWidget.scss'
+import { currencyFormatter, getDefaultCategoryIconColor } from '@/utils'
+import { useCategoriesContext } from '../CategoriesContext'
+import './CategoryItem.scss'
 
-type CategoryWidgetProps = {
+type CategoryItemProps = {
   data: Category
-  selectedCategoryId: string | null
-  setSelectedCategoryId: (id: string | null) => void
 }
 
-const getModalPositionClassName = (elementRect: DOMRect | undefined) => {
-  const modalBottomThreshold = calculateModalBottomThreshold()
-  const viewPortHeight = window.innerHeight
-  const elementSizeDiff = viewPortHeight - (elementRect?.bottom ?? 0)
-
-  if (elementSizeDiff < modalBottomThreshold) return 'modal--top'
-  return ''
-}
-
-const CategoryWidget: React.FC<CategoryWidgetProps> = ({
-  data,
-  selectedCategoryId,
-  setSelectedCategoryId,
-}) => {
+const CategoryItem: React.FC<CategoryItemProps> = ({ data }) => {
   const { id, name, type, budget = 0, icon_id, color, is_active } = data
-  const moreMenu = useDisclosure()
+  const { selectedCategoryId, setSelectedCategoryId } = useCategoriesContext()
   const editModal = useDisclosure()
   const deleteModal = useDisclosure()
-  const [moreOptionModalClassName, setMoreOptionModalClassName] = useState('')
-  const transactionRefs = useRef<Map<string, HTMLDivElement>>(new Map())
   const moreOptionMenuRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch()
   const { formatMessage } = useIntl()
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id })
-  useClickOutside(moreOptionMenuRef, moreMenu.close, moreMenu.isOpen)
+
+  const isMenuOpen = selectedCategoryId === id
+  const closeMenu = useCallback(
+    () => setSelectedCategoryId(null),
+    [setSelectedCategoryId]
+  )
+  useClickOutside(moreOptionMenuRef, closeMenu, isMenuOpen)
 
   const newTransform = transform
     ? { ...transform, scaleX: 1.05, scaleY: 1.05 }
@@ -61,12 +47,9 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
   const defaultCategoryIcon = type === 'income' ? 'income' : 'expense'
   const defaultCategoryIconColor = getDefaultCategoryIconColor(type)
 
-  const handleMoreOption = (e: React.MouseEvent, id: string) => {
+  const handleMoreOption = (e: React.MouseEvent) => {
     e.stopPropagation()
-    const elementRect = transactionRefs.current.get(id)?.getBoundingClientRect()
-    setMoreOptionModalClassName(getModalPositionClassName(elementRect))
-    moreMenu.toggle()
-    setSelectedCategoryId(id)
+    setSelectedCategoryId(isMenuOpen ? null : id)
   }
 
   const handleDeleteCategory = (category: Category) => {
@@ -79,7 +62,7 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
       {...attributes}
       {...listeners}
       style={style}
-      className="category-widget p-4"
+      className="category-item p-4"
     >
       <Modal isOpen={editModal.isOpen} onClose={editModal.close}>
         <FormModal.FormCategory
@@ -127,19 +110,18 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
           <button
             type="button"
             className="btn btn-clear"
-            onClick={(e) => handleMoreOption(e, id)}
+            onClick={handleMoreOption}
           >
             <MoreVerticalSvg className="icon--color-primary" />
           </button>
-          {moreMenu.isOpen && selectedCategoryId === id && (
+          {isMenuOpen && (
             <MoreOptionMenu
-              className={moreOptionModalClassName}
               handleEdit={() => {
-                moreMenu.close()
+                closeMenu()
                 editModal.open()
               }}
               handleDelete={() => {
-                moreMenu.close()
+                closeMenu()
                 deleteModal.open()
               }}
             />
@@ -150,4 +132,4 @@ const CategoryWidget: React.FC<CategoryWidgetProps> = ({
   )
 }
 
-export default CategoryWidget
+export default CategoryItem

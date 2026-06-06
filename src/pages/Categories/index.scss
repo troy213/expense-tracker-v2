@@ -10,5 +10,23 @@
     background-color: var(--surface);
     color: var(--text);
     position: relative;
+
+    &__budget-widget {
+      margin-bottom: 0.5rem;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      box-shadow: var(--shadow);
+      background: var(--hero-gradient);
+      color: var(--accent-text);
+    }
+
+    &__add-button {
+      display: flex;
+      justify-content: center;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      border: 2px dashed var(--text);
+      background-color: unset;
+    }
   }
 }
