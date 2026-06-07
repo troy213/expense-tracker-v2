@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.0-beta.31](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.30...v1.0.0-beta.31) (2026-06-07)
+
+
+### Features
+
+* **seo:** add meta description and robots.txt ([cff0050](https://github.com/troy213/expense-tracker-v2/commit/cff0050ee037910c3b94ecb29ae17d0f6960ac05))
+
+
+### Bug Fixes
+
+* **a11y:** name icon-only controls and associate form labels ([6a44c2b](https://github.com/troy213/expense-tracker-v2/commit/6a44c2bed6eb03437cf3395a9a5114ef36c0931f))
+
 ## [1.0.0-beta.30](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.29...v1.0.0-beta.30) (2026-06-06)
 
 
