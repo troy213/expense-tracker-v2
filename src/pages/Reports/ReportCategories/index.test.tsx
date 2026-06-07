@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { IntlProvider } from 'react-intl'
 import { LANGUAGES, LOCALES } from '@/constants'
-import ReportWidget from './'
+import ReportCategories from '.'
 import type { ReportCategory } from '@/types'
 
 const navigateMock = vi.fn()
@@ -19,7 +19,7 @@ const renderWidget = (report: ReportCategory[]) =>
         locale={LOCALES.ENGLISH}
         messages={LANGUAGES[LOCALES.ENGLISH].messages}
       >
-        <ReportWidget
+        <ReportCategories
           type="expense"
           report={report}
           typeTotal={1000}
@@ -41,7 +41,7 @@ const sampleCat: ReportCategory = {
   is_active: true,
 }
 
-describe('ReportWidget navigation', () => {
+describe('ReportCategories navigation', () => {
   it('navigates to the detail page by type when the header is clicked', () => {
     navigateMock.mockClear()
     renderWidget([sampleCat])
