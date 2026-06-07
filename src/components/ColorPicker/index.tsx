@@ -27,6 +27,8 @@ const ColorPicker = ({ selectedColor, onChange }: ColorPickerProps) => {
               } as React.CSSProperties
             }
             onClick={() => onChange(color)}
+            aria-label={`${formatMessage({ id: 'Color' })} ${color}`}
+            aria-pressed={selectedColor === color}
           />
         ))}
       </div>

@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
+import { useIntl } from 'react-intl'
 import { BudgetSvg, HomeSvg, PieChartSvg, PlusSvg, SettingsSvg } from '@/assets'
 import { combineClassName } from '@/utils'
 import { useDisclosure } from '@/hooks'
@@ -8,6 +9,7 @@ import './index.scss'
 
 const Toolbar = () => {
   const addModal = useDisclosure()
+  const { formatMessage } = useIntl()
 
   const currentMenu = useLocation().pathname
 
@@ -22,23 +24,43 @@ const Toolbar = () => {
         <FormModal.FormTransaction onCancel={addModal.close} />
       </Modal>
 
-      <Link to="/" className={getClassName('/')}>
+      <Link
+        to="/"
+        className={getClassName('/')}
+        aria-label={formatMessage({ id: 'Dashboard' })}
+      >
         <HomeSvg className="icon--color-primary" />
       </Link>
-      <Link to="/reports" className={getClassName('/reports')}>
+      <Link
+        to="/reports"
+        className={getClassName('/reports')}
+        aria-label={formatMessage({ id: 'Reports' })}
+      >
         <PieChartSvg className="icon--color-primary" />
       </Link>
 
       <div className="toolbar__menu">
-        <button className="toolbar__add-button" onClick={addModal.toggle}>
+        <button
+          className="toolbar__add-button"
+          onClick={addModal.toggle}
+          aria-label={formatMessage({ id: 'AddTransaction' })}
+        >
           <PlusSvg className="icon--color-white" />
         </button>
       </div>
 
-      <Link to="/categories" className={getClassName('/categories')}>
+      <Link
+        to="/categories"
+        className={getClassName('/categories')}
+        aria-label={formatMessage({ id: 'CategoryAndBudget' })}
+      >
         <BudgetSvg className="icon--color-primary" />
       </Link>
-      <Link to="/settings" className={getClassName('/settings')}>
+      <Link
+        to="/settings"
+        className={getClassName('/settings')}
+        aria-label={formatMessage({ id: 'Settings' })}
+      >
         <SettingsSvg className="icon--color-primary" />
       </Link>
     </div>

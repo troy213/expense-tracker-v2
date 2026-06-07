@@ -115,6 +115,7 @@ const messages = {
   SelectLanguage: 'Pilih Bahasa',
   September: 'September',
   Settings: 'Pengaturan',
+  ShowBalance: 'Tampilkan Saldo',
   ShowLess: 'Tampilkan Lebih Sedikit',
   Submit: 'Kirim',
   Theme: 'Tema',

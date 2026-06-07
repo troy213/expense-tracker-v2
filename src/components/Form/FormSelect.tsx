@@ -128,6 +128,7 @@ const FormSelect = ({
               className={finalInputClassName}
               onClick={() => setIsOpen((val) => !val)}
               role="combobox"
+              aria-label={label}
               aria-haspopup="listbox"
               aria-expanded={isOpen}
             >

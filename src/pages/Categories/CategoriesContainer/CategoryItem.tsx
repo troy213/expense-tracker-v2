@@ -111,6 +111,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({ data }) => {
             type="button"
             className="btn btn-clear"
             onClick={handleMoreOption}
+            aria-label={formatMessage({ id: 'MoreOptions' })}
           >
             <MoreVerticalSvg className="icon--color-primary" />
           </button>

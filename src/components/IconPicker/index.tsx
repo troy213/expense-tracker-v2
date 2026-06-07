@@ -39,6 +39,8 @@ const IconPicker = ({
                   : undefined
               }
               onClick={() => onChange(id)}
+              aria-label={`${formatMessage({ id: 'Icon' })} ${id}`}
+              aria-pressed={isSelected}
             >
               <IconComponent className="icon--lg" />
             </button>

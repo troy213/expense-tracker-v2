@@ -1,5 +1,13 @@
 import '@testing-library/jest-dom'
+import { configure } from '@testing-library/dom'
 import { vi } from 'vitest'
+
+// Routes are code-split with React.lazy, so findBy*/waitFor must wait out the
+// dynamic import. Vitest transforms each lazy module on first import, and that
+// latency varies with CPU load — the default 1000ms window is flaky for any
+// lazy route. Raise it globally. (Production is unaffected; chunks are tiny and
+// SW-precached.)
+configure({ asyncUtilTimeout: 5000 })
 
 // jsdom does not implement matchMedia; usePWAInstall relies on it.
 Object.defineProperty(window, 'matchMedia', {

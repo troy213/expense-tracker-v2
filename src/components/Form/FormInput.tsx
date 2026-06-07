@@ -1,3 +1,4 @@
+import { useId } from 'react'
 import { useFormContext, Controller, FieldValues } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import { ChevronDownSvg } from '@/assets'
@@ -66,6 +67,7 @@ const renderField = (
   setValue: (value: string | number) => void,
   props: BaseProps,
   formatMessage: (msg: { id: string }) => string,
+  inputId: string,
   error?: string,
   fieldRef?: React.Ref<HTMLInputElement>,
   fieldName?: string
@@ -119,8 +121,13 @@ const renderField = (
 
   return (
     <div className={containerClassName}>
-      {label && <label className={labelClassName}>{label}</label>}
+      {label && (
+        <label htmlFor={inputId} className={labelClassName}>
+          {label}
+        </label>
+      )}
       <input
+        id={inputId}
         ref={fieldRef}
         name={fieldName}
         className={inputClassName}
@@ -163,6 +170,7 @@ const FormInput = (props: FormInputProps) => {
   const { valueKey, value, onChange, pattern, errorMessage, required } = props
   const methods = useFormContext<FieldValues>()
   const { formatMessage } = useIntl()
+  const inputId = useId()
 
   if (valueKey === undefined) {
     const error = validateValue(
@@ -177,6 +185,7 @@ const FormInput = (props: FormInputProps) => {
       (next) => onChange?.(next),
       props,
       formatMessage,
+      inputId,
       error === true ? undefined : error
     )
   }
@@ -201,6 +210,7 @@ const FormInput = (props: FormInputProps) => {
           (next) => field.onChange(next),
           props,
           formatMessage,
+          inputId,
           fieldState.error?.message,
           field.ref,
           field.name

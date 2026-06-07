@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useIntl } from 'react-intl'
-import { Form } from '@/components'
+import Form from '@/components/Form'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import {
   addDBTransactions,

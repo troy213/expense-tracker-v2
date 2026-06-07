@@ -108,7 +108,10 @@ const DashboardInfo = () => {
                 {currencyFormatter(remainingBudget ?? 0)}
               </span>
             </div>
-            <Link to="/categories?cat=expense">
+            <Link
+              to="/categories?cat=expense"
+              aria-label={formatMessage({ id: 'CategoryAndBudget' })}
+            >
               <SlidersSvg className="icon--color-primary" />
             </Link>
           </div>
@@ -140,6 +143,7 @@ const DashboardInfo = () => {
 const Balance: React.FC<BalanceProps> = ({ totalBalance }) => {
   const { hideBalance } = useAppSelector((state) => state.configReducer)
   const dispatch = useAppDispatch()
+  const { formatMessage } = useIntl()
 
   const handleHideBalance = () => {
     dispatch(configAction.toggleHideBalance())
@@ -151,6 +155,9 @@ const Balance: React.FC<BalanceProps> = ({ totalBalance }) => {
         className="btn btn-clear"
         type="button"
         onClick={handleHideBalance}
+        aria-label={formatMessage({
+          id: hideBalance ? 'ShowBalance' : 'HideBalance',
+        })}
       >
         {hideBalance ? (
           <EyeOffSvg className="icon--color-white" />

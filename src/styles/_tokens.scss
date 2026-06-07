@@ -7,7 +7,10 @@
 // preference resolves to one of these at runtime (App.tsx + the pre-paint
 // script in index.html).
 :root {
-  --main-font: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont,
+  // 'Inter Variable' is the family name registered by @fontsource-variable/inter
+  // (see _fonts.scss). 'Inter' kept as a fallback for any locally-installed copy;
+  // the rest is the system-font stack used until/if Inter loads.
+  --main-font: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont,
     'Segoe UI', Roboto, sans-serif;
 
   // Base palette (light). Components reference these, never raw colors.

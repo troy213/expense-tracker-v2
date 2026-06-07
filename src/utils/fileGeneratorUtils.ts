@@ -1,8 +1,11 @@
-import * as XLSX from 'xlsx'
 import { getDate } from '.'
 import dbServices from '@/lib/db'
 
-export const readXlsx = (file: File) => {
+// `xlsx` is ~420 KB. It's only needed when the user actually imports/exports
+// data, so it's loaded on demand via dynamic import() instead of being pulled
+// into the bundle of whatever route renders the import/export modals.
+export const readXlsx = async (file: File) => {
+  const XLSX = await import('xlsx')
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onload = (e) => {
@@ -51,6 +54,7 @@ export const readXlsx = (file: File) => {
 }
 
 export const createExcelFile = async () => {
+  const XLSX = await import('xlsx')
   const transactions = await dbServices.transactions.getAllTransactions()
   const categories = await dbServices.categories.getAllCategories()
 

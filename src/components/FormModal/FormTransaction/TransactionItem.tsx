@@ -1,7 +1,7 @@
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import { CrossSvg, PlusSvg } from '@/assets'
-import { Form } from '@/components'
+import Form from '@/components/Form'
 import { REGEX } from '@/constants'
 import { TxFormData } from '@/types'
 import { makeEmptyTransactionItem } from '@/utils'
@@ -33,6 +33,7 @@ const TransactionItems = () => {
                 onClick={() => {
                   remove(index)
                 }}
+                aria-label={formatMessage({ id: 'Delete' })}
               >
                 <CrossSvg className="icon icon--color-primary" />
               </button>
