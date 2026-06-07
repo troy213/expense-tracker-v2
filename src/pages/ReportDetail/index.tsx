@@ -89,7 +89,7 @@ const ReportDetail = () => {
 
   return (
     <div className="report-detail">
-      <div className="flex-column flex-1 gap-4 p-4">
+      <div className="flex-column gap-4 p-4">
         <Navbar enableBackButton={true} title="Reports" />
 
         <div className="flex-space-between flex-align-center">
