@@ -14,9 +14,9 @@ const Layout = () => {
 
   return (
     <div className="layout">
-      <div className="layout__content" ref={setScrollParent}>
+      <main className="layout__content" ref={setScrollParent}>
         <Outlet context={{ scrollParent } satisfies LayoutContextType} />
-      </div>
+      </main>
       <Toolbar />
     </div>
   )

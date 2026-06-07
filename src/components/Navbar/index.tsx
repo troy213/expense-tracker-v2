@@ -29,7 +29,12 @@ const Navbar: React.FC<NavbarProps> = ({
   return (
     <div className="navbar">
       {enableBackButton && (
-        <button className="btn btn-clear" type="button" onClick={handleBack}>
+        <button
+          className="btn btn-clear"
+          type="button"
+          onClick={handleBack}
+          aria-label={formatMessage({ id: 'Back' })}
+        >
           <ArrowLeftSvg className={backBtnClass} />
         </button>
       )}

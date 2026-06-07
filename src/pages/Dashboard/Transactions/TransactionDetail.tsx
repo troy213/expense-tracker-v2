@@ -124,6 +124,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
                   className="btn btn-clear"
                   type="button"
                   onClick={handleMoreOption}
+                  aria-label={formatMessage({ id: 'MoreOptions' })}
                 >
                   <MoreVerticalSvg className="icon icon--color-primary" />
                 </button>

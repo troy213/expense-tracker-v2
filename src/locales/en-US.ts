@@ -114,6 +114,7 @@ const messages = {
   SelectLanguage: 'Select Language',
   September: 'September',
   Settings: 'Settings',
+  ShowBalance: 'Show Balance',
   ShowLess: 'Show Less',
   Submit: 'Submit',
   Theme: 'Theme',
