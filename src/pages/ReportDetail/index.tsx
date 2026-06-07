@@ -1,15 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useOutletContext, useSearchParams } from 'react-router-dom'
-import { Virtuoso } from 'react-virtuoso'
+import { useEffect, useMemo } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 import { CategoryIcon, Navbar } from '@/components'
-import type { LayoutContextType } from '@/components/Layout'
-import {
-  DEFAULT_EXPANDED_COUNT,
-  DEFAULT_VISIBLE_GROUPS,
-} from '@/constants/config'
-import { useAppDispatch, useAppSelector, useExpandableGroups } from '@/hooks'
-import TransactionContainer from '@/components/Transactions/TransactionContainer'
+import Transactions from '@/components/Transactions'
+import { useAppDispatch, useAppSelector } from '@/hooks'
 import { getDBReportDetail } from '@/store/report-detail/report-detail-thunk'
 import { reportDetailAction } from '@/store/report-detail/report-detail-slice'
 import { TransactionFilters } from '@/types'
@@ -19,7 +13,6 @@ import { SpinnerSvg } from '@/assets'
 import './index.scss'
 
 const ReportDetail = () => {
-  const { scrollParent } = useOutletContext<LayoutContextType>()
   const [searchParams] = useSearchParams()
   const dispatch = useAppDispatch()
   const { formatMessage } = useIntl()
@@ -31,16 +24,6 @@ const ReportDetail = () => {
     selectedDetailCategory,
     isLoading: isDetailLoading,
   } = useAppSelector((state) => state.reportDetailReducer)
-
-  const detailCount = detailData.length
-
-  const [selectedTransaction, setSelectedTransaction] = useState('')
-  const [showAll, setShowAll] = useState(false)
-  const { isExpanded, toggle } = useExpandableGroups(
-    detailData,
-    (group) => group.date,
-    DEFAULT_EXPANDED_COUNT
-  )
 
   // Parse the URL params into a filter object.
   const filters = useMemo<TransactionFilters>(() => {
@@ -94,12 +77,6 @@ const ReportDetail = () => {
     return formatMessage({ id: 'AllTime' })
   }, [filters, formatMessage])
 
-  // Collapse to the first few date groups until the user opts into the full list.
-  const hasMore = detailData.length > DEFAULT_VISIBLE_GROUPS
-  const visibleData = showAll
-    ? detailData
-    : detailData.slice(0, DEFAULT_VISIBLE_GROUPS)
-
   if (isDetailLoading)
     return (
       <div className="report-detail p-4">
@@ -141,78 +118,9 @@ const ReportDetail = () => {
         </div>
 
         <ReportDetailInfo />
-
-        <div className="flex-space-between flex-align-center pt-4">
-          <div className="flex-column">
-            <span className="text--bold">
-              {formatMessage({ id: 'RecentTransactions' })}
-            </span>
-            <span className="text--light text--3">
-              {formatMessage(
-                { id: 'TransactionCount' },
-                { count: detailCount }
-              )}
-            </span>
-          </div>
-
-          {hasMore && (
-            <button
-              type="button"
-              className="btn btn-clear"
-              onClick={() => setShowAll((prev) => !prev)}
-            >
-              <span className="text--3 text--color-primary">
-                {formatMessage({ id: showAll ? 'ShowLess' : 'ViewAll' })}
-              </span>
-            </button>
-          )}
-        </div>
-
-        {!isDetailLoading && detailData.length === 0 && (
-          <div className="flex-justify-center flex-align-center flex-1">
-            <span className="text--italic text--light">
-              {formatMessage({ id: 'NoTransaction' })}
-            </span>
-          </div>
-        )}
-
-        {scrollParent && detailData.length > 0 && (
-          <Virtuoso
-            customScrollParent={scrollParent}
-            data={visibleData}
-            computeItemKey={(_, item) => item.date}
-            itemContent={(index, item) => (
-              <div className="transactions__item">
-                <TransactionContainer
-                  data={item}
-                  index={index}
-                  isExpanded={isExpanded(item.date)}
-                  onToggle={toggle}
-                  selectedTransaction={selectedTransaction}
-                  setSelectedTransaction={setSelectedTransaction}
-                />
-              </div>
-            )}
-          />
-        )}
-
-        {hasMore && !showAll && (
-          <div className="flex-justify-center flex-align-center mb-4">
-            <button
-              type="button"
-              className="btn btn-clear"
-              onClick={() => setShowAll((prev) => !prev)}
-            >
-              <span className="text--italic text--3 text--color-primary">
-                {formatMessage(
-                  { id: 'SeeMoreTransactions' },
-                  { count: detailCount - DEFAULT_VISIBLE_GROUPS }
-                )}
-              </span>
-            </button>
-          </div>
-        )}
       </div>
+
+      <Transactions data={detailData} />
     </div>
   )
 }
