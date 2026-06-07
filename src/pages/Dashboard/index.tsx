@@ -4,6 +4,7 @@ import { Navbar } from '@/components'
 import { useAppSelector, useDisclosure } from '@/hooks'
 import SearchModal from '@/components/Modal/SearchModal'
 import DashboardInfo from './DashboardInfo'
+import DashboardLauncher from './DashboardLauncher'
 import Transactions from '@/components/Transactions'
 import './index.scss'
 
@@ -28,6 +29,7 @@ const Dashboard = () => {
           </button>
         </Navbar>
         <DashboardInfo />
+        <DashboardLauncher />
       </div>
 
       <Transactions data={data} isLoading={isLoading} showMonthHeaders />

@@ -17,14 +17,17 @@ import ExportSvg from './icons/export.svg?react'
 import FlagIDSVg from './icons/flag-id.svg?react'
 import FlagUKSvg from './icons/flag-uk.svg?react'
 import GlobeSvg from './icons/globe.svg?react'
+import GoalSvg from './icons/goal.svg?react'
 import HomeSvg from './icons/home.svg?react'
 import HiddenTextSvg from './icons/hidden-text.svg?react'
 import ImportSvg from './icons/import.svg?react'
+import LoanSvg from './icons/loan.svg?react'
 import MoonSvg from './icons/moon.svg?react'
 import MoreVerticalSvg from './icons/more-vertical.svg?react'
 import PaletteSvg from './icons/palette.svg?react'
 import PieChartSvg from './icons/pie-chart.svg?react'
 import PlusSvg from './icons/plus.svg?react'
+import RecurringSvg from './icons/recurring.svg?react'
 import SearchSvg from './icons/search.svg?react'
 import SettingsSvg from './icons/settings.svg?react'
 import SlidersSvg from './icons/sliders.svg?react'
@@ -53,14 +56,17 @@ export {
   FlagIDSVg,
   FlagUKSvg,
   GlobeSvg,
+  GoalSvg,
   HomeSvg,
   HiddenTextSvg,
   ImportSvg,
+  LoanSvg,
   MoonSvg,
   MoreVerticalSvg,
   PaletteSvg,
   PieChartSvg,
   PlusSvg,
+  RecurringSvg,
   SearchSvg,
   SettingsSvg,
   SlidersSvg,
