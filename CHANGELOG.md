@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.0-beta.32](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.31...v1.0.0-beta.32) (2026-06-07)
+
+
+### Bug Fixes
+
+* prevent ReportDetail header from splitting space with transactions sheet ([8127986](https://github.com/troy213/expense-tracker-v2/commit/81279866dfb5c4df1153abfcd29f06bee847b968))
+
 ## [1.0.0-beta.31](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.30...v1.0.0-beta.31) (2026-06-07)
 
 
