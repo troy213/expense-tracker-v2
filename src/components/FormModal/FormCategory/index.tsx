@@ -1,7 +1,14 @@
 import { useState } from 'react'
 import { useIntl } from 'react-intl'
 import { v7 as uuidv7 } from 'uuid'
-import { CategoryIcon, ColorPicker, Form, IconPicker } from '@/components'
+// Import siblings directly (not via the `@/components` barrel) to avoid a
+// circular dependency: the barrel imports FormModal, which would otherwise
+// import the barrel back. Harmless in one bundle, but breaks chunk execution
+// order once routes are code-split.
+import CategoryIcon from '@/components/CategoryIcon'
+import ColorPicker from '@/components/ColorPicker'
+import Form from '@/components/Form'
+import IconPicker from '@/components/IconPicker'
 import { REGEX } from '@/constants'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { Category, CategoryIconId, CategoryType } from '@/types'

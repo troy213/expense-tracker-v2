@@ -1,26 +1,27 @@
 import { IntlProvider } from 'react-intl'
 import { Routes, Route } from 'react-router-dom'
-import { useEffect } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import { Layout, PWAInstallPrompt } from '@/components'
 import { LANGUAGES, LOCALES, THEME } from '@/constants'
 import { useAppSelector, useInitConfig } from '@/hooks'
 import { SpinnerSvg } from '@/assets'
 import './App.scss'
-import {
-  Categories,
-  Dashboard,
-  NotFound,
-  ReportDetail,
-  Reports,
-  Settings,
-} from '@/pages'
-import {
-  About,
-  AdvancedSetting,
-  Languages,
-  SettingMenus,
-  Theme,
-} from '@/pages/Settings'
+// Dashboard is the landing route, so it stays in the main bundle — lazy-loading
+// it would add a chunk round trip before first paint on the most-visited page.
+// Every other route is split into its own chunk via React.lazy; the PWA service
+// worker precaches those chunks, so navigation is instant after the first load.
+import Dashboard from '@/pages/Dashboard'
+
+const Categories = lazy(() => import('@/pages/Categories'))
+const Reports = lazy(() => import('@/pages/Reports'))
+const ReportDetail = lazy(() => import('@/pages/ReportDetail'))
+const NotFound = lazy(() => import('@/pages/404'))
+const Settings = lazy(() => import('@/pages/Settings'))
+const About = lazy(() => import('@/pages/Settings/About'))
+const AdvancedSetting = lazy(() => import('@/pages/Settings/AdvancedSetting'))
+const Languages = lazy(() => import('@/pages/Settings/Languages'))
+const SettingMenus = lazy(() => import('@/pages/Settings/SettingMenus'))
+const Theme = lazy(() => import('@/pages/Settings/Theme'))
 
 const App = () => {
   const { locale, theme, isInitialized } = useAppSelector(
@@ -68,24 +69,32 @@ const App = () => {
       locale={currentLanguage.locale}
       messages={currentLanguage.messages}
     >
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/categories" element={<Categories />} />
-          <Route path="/reports" element={<Reports />} />
-          <Route path="/report-detail" element={<ReportDetail />} />
-          <Route path="/settings" element={<Settings />}>
-            <Route index element={<SettingMenus />} />
-            <Route path="about" element={<About />} />
-            <Route path="theme" element={<Theme />} />
-            <Route path="language" element={<Languages />} />
-            <Route path="advanced-setting" element={<AdvancedSetting />} />
+      <Suspense
+        fallback={
+          <div className="app-loading">
+            <SpinnerSvg className="icon--2xl icon--color-white spin" />
+          </div>
+        }
+      >
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/categories" element={<Categories />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/report-detail" element={<ReportDetail />} />
+            <Route path="/settings" element={<Settings />}>
+              <Route index element={<SettingMenus />} />
+              <Route path="about" element={<About />} />
+              <Route path="theme" element={<Theme />} />
+              <Route path="language" element={<Languages />} />
+              <Route path="advanced-setting" element={<AdvancedSetting />} />
+            </Route>
           </Route>
-        </Route>
 
-        {/* 404 not found */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          {/* 404 not found */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
 
       <PWAInstallPrompt />
     </IntlProvider>

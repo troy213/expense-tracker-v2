@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form'
 import { useAppSelector } from '@/hooks'
 import { TxFormData } from '@/types'
-import { CategoryIcon } from '@/components'
+import CategoryIcon from '@/components/CategoryIcon'
 
 const CategoryIconPreview = () => {
   const categories = useAppSelector(

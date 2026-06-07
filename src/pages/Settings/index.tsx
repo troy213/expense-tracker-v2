@@ -1,9 +1,4 @@
 import { Outlet } from 'react-router-dom'
-import About from './About'
-import AdvancedSetting from './AdvancedSetting'
-import Languages from './Languages'
-import SettingMenus from './SettingMenus'
-import Theme from './Theme'
 import './index.scss'
 
 const Settings = () => {
@@ -20,7 +15,5 @@ const Settings = () => {
     </div>
   )
 }
-
-export { About, AdvancedSetting, Languages, SettingMenus, Theme }
 
 export default Settings
