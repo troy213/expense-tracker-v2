@@ -9,7 +9,7 @@ import {
   DEFAULT_VISIBLE_GROUPS,
 } from '@/constants/config'
 import { useAppDispatch, useAppSelector, useExpandableGroups } from '@/hooks'
-import TransactionContainer from '@/pages/Dashboard/Transactions/TransactionContainer'
+import TransactionContainer from '@/components/Transactions/TransactionContainer'
 import { getDBReportDetail } from '@/store/report-detail/report-detail-thunk'
 import { reportDetailAction } from '@/store/report-detail/report-detail-slice'
 import { TransactionFilters } from '@/types'

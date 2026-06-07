@@ -4,7 +4,7 @@ import { Navbar } from '@/components'
 import { useDisclosure } from '@/hooks'
 import SearchModal from '@/components/Modal/SearchModal'
 import DashboardInfo from './DashboardInfo'
-import Transactions from './Transactions'
+import Transactions from '@/components/Transactions'
 import './index.scss'
 
 const Dashboard = () => {
