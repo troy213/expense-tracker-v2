@@ -5,7 +5,7 @@ import { getDBReportData } from '@/store/report/report-thunk'
 import { getDateRangeForFilter } from '@/utils'
 import ReportInfo from './ReportInfo'
 import TimeFilterTab from './TimeFilterTab'
-import ReportWidget from './ReportWidget'
+import ReportCategories from './ReportCategories'
 import './index.scss'
 
 const Reports = () => {
@@ -53,7 +53,7 @@ const Reports = () => {
 
         <div className="flex-column gap-4 mt-4">
           {incomeReport.length > 0 && (
-            <ReportWidget
+            <ReportCategories
               type="income"
               report={incomeReport}
               typeTotal={totalIncome}
@@ -63,7 +63,7 @@ const Reports = () => {
           )}
 
           {expenseReport.length > 0 && (
-            <ReportWidget
+            <ReportCategories
               type="expense"
               report={expenseReport}
               typeTotal={totalExpense}

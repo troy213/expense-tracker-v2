@@ -8,16 +8,26 @@ import {
   DEFAULT_EXPANDED_COUNT,
   DEFAULT_VISIBLE_GROUPS,
 } from '@/constants/config'
-import { useAppSelector, useExpandableGroups } from '@/hooks'
+import { useExpandableGroups } from '@/hooks'
+import type { Data } from '@/types'
 import { formatMonthLabel, shouldShowMonthHeader } from '@/utils'
 import TransactionContainer from './TransactionContainer'
 import './index.scss'
 
-const Transactions = () => {
+type TransactionsProps = {
+  // Pass a referentially stable array (straight from a store slice) so
+  // useExpandableGroups' seed/diff effect only runs on real data changes.
+  data: Data[]
+  isLoading?: boolean
+  showMonthHeaders?: boolean
+}
+
+const Transactions: React.FC<TransactionsProps> = ({
+  data,
+  isLoading = false,
+  showMonthHeaders = false,
+}) => {
   const { scrollParent } = useOutletContext<LayoutContextType>()
-  const { data, isLoading } = useAppSelector(
-    (state) => state.transactionsReducer
-  )
   const [selectedTransaction, setSelectedTransaction] = useState('')
   const [showAll, setShowAll] = useState(false)
   const { isExpanded, toggle } = useExpandableGroups(
@@ -87,7 +97,8 @@ const Transactions = () => {
           computeItemKey={(_, item) => item.date}
           itemContent={(index, item) => (
             <div className="transactions__item">
-              {shouldShowMonthHeader(item.date, data[index - 1]?.date) &&
+              {showMonthHeaders &&
+                shouldShowMonthHeader(item.date, data[index - 1]?.date) &&
                 index > 0 && (
                   <span className="transactions__month-header">
                     {formatMessage({ id: formatMonthLabel(item.date) })}

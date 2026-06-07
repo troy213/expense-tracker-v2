@@ -5,7 +5,7 @@ import { ReportCategory as TReportCategory } from '@/types'
 import { buildReportDetailQuery } from '@/utils'
 import './index.scss'
 
-type ReportWidgetProps = {
+type ReportCategoriesProps = {
   type: 'income' | 'expense'
   report: TReportCategory[]
   typeTotal: number
@@ -13,7 +13,7 @@ type ReportWidgetProps = {
   dateTo: string | null
 }
 
-const ReportWidget: React.FC<ReportWidgetProps> = ({
+const ReportCategories: React.FC<ReportCategoriesProps> = ({
   type,
   report,
   typeTotal,
@@ -44,10 +44,10 @@ const ReportWidget: React.FC<ReportWidgetProps> = ({
   }
 
   return (
-    <div key={type} className="report-widget">
+    <div key={type} className="report-categories">
       <button
         type="button"
-        className="btn btn-clear report-widget__title"
+        className="btn btn-clear report-categories__title"
         onClick={handleWidgetClick}
       >
         {getTitle()}
@@ -64,4 +64,4 @@ const ReportWidget: React.FC<ReportWidgetProps> = ({
   )
 }
 
-export default ReportWidget
+export default ReportCategories

@@ -7,9 +7,7 @@ import { configureStore } from '@reduxjs/toolkit'
 
 import { LANGUAGES, LOCALES } from '@/constants'
 import categoriesSlice from '@/store/categories/categories-slice'
-import transactionsSlice, {
-  type InitialState,
-} from '@/store/transactions/transactions-slice'
+import transactionsSlice from '@/store/transactions/transactions-slice'
 import type { Data } from '@/types'
 import Transactions from './'
 
@@ -44,12 +42,8 @@ vi.mock('react-router-dom', async () => {
   }
 })
 
-const renderTransactions = (data: Data[]) => {
-  const transactionsReducer: InitialState = {
-    isLoading: false,
-    data,
-  }
-
+const renderTransactions = (data: Data[], showMonthHeaders = true) => {
+  // TransactionContainer / TransactionDetail still read categoriesReducer.
   const store = configureStore({
     reducer: {
       categoriesReducer: categoriesSlice.reducer,
@@ -57,7 +51,6 @@ const renderTransactions = (data: Data[]) => {
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({ immutableCheck: false, serializableCheck: false }),
-    preloadedState: { transactionsReducer },
   })
 
   return render(
@@ -67,7 +60,7 @@ const renderTransactions = (data: Data[]) => {
           locale={LOCALES.ENGLISH}
           messages={LANGUAGES[LOCALES.ENGLISH].messages}
         >
-          <Transactions />
+          <Transactions data={data} showMonthHeaders={showMonthHeaders} />
         </IntlProvider>
       </Provider>
     </MemoryRouter>
@@ -103,5 +96,23 @@ describe('Transactions month headers', () => {
     // index 0 (2026 May) is suppressed; index 1 (2025 May) is a year-aware
     // boundary, so exactly one 'May' header renders.
     expect(screen.getAllByText('May')).toHaveLength(1)
+  })
+
+  it('renders no month headers when showMonthHeaders is false', () => {
+    const data: Data[] = [
+      { date: '2026-05-15', subdata: [] },
+      { date: '2025-05-15', subdata: [] },
+    ]
+
+    renderTransactions(data, false)
+
+    expect(screen.queryAllByText('May')).toHaveLength(0)
+  })
+})
+
+describe('Transactions empty / loading states', () => {
+  it('shows the empty message when data is empty and not loading', () => {
+    renderTransactions([])
+    expect(screen.getByText('There is no transaction')).toBeInTheDocument()
   })
 })

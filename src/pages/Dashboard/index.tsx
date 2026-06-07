@@ -1,15 +1,16 @@
 import { useIntl } from 'react-intl'
 import { SearchSvg } from '@/assets'
 import { Navbar } from '@/components'
-import { useDisclosure } from '@/hooks'
+import { useAppSelector, useDisclosure } from '@/hooks'
 import SearchModal from '@/components/Modal/SearchModal'
 import DashboardInfo from './DashboardInfo'
-import Transactions from './Transactions'
+import Transactions from '@/components/Transactions'
 import './index.scss'
 
 const Dashboard = () => {
   const searchModal = useDisclosure()
   const { formatMessage } = useIntl()
+  const { data, isLoading } = useAppSelector((s) => s.transactionsReducer)
 
   return (
     <div className="dashboard">
@@ -29,7 +30,7 @@ const Dashboard = () => {
         <DashboardInfo />
       </div>
 
-      <Transactions />
+      <Transactions data={data} isLoading={isLoading} showMonthHeaders />
     </div>
   )
 }
