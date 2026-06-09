@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useIntl } from 'react-intl'
 import { MoreVerticalSvg } from '@/assets'
-import { CategoryIcon, FormModal, Modal } from '@/components'
+import { CategoryIcon, FormModal } from '@/components'
 import MoreOptionMenu from '@/components/Menu/MoreOptionMenu'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
 import {
@@ -89,13 +89,13 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({
       ref={transactionRefs}
       onClick={(e) => handleSelectTransaction(e, category_id)}
     >
-      <Modal isOpen={editModal.isOpen} onClose={editModal.close}>
-        <FormModal.FormTransaction
-          data={data}
-          index={dataIndex}
-          onCancel={editModal.close}
-        />
-      </Modal>
+      <FormModal.FormTransaction
+        data={data}
+        index={dataIndex}
+        isOpen={editModal.isOpen}
+        onClose={editModal.close}
+        onCancel={editModal.close}
+      />
 
       {deleteModal.isOpen && (
         <DeleteDataModal

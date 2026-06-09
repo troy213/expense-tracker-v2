@@ -1,16 +1,62 @@
+import { useState } from 'react'
 import { useIntl } from 'react-intl'
-import { Navbar } from '@/components'
-import { GoalSvg } from '@/assets'
+import { PlusSvg } from '@/assets'
+import { FormModal, Navbar } from '@/components'
+import { useAppSelector, useDisclosure } from '@/hooks'
+import GoalItem from './GoalItem'
+import './index.scss'
 
 const Goals = () => {
   const { formatMessage } = useIntl()
+  const addModal = useDisclosure()
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null)
+
+  const goals = useAppSelector((s) => s.goalsReducer.goals)
 
   return (
-    <div className="flex-column gap-4 p-4">
-      <Navbar enableBackButton title="Goals" />
-      <div className="flex-column flex-align-center gap-2 mt-4 text--light">
-        <GoalSvg className="icon--2xl" />
-        <span>{formatMessage({ id: 'FeatureComingSoon' })}</span>
+    <div className="goals">
+      <FormModal.FormGoal
+        isOpen={addModal.isOpen}
+        onClose={addModal.close}
+        onCancel={addModal.close}
+      />
+
+      <div className="flex-column flex-1 gap-4 p-4">
+        <Navbar enableBackButton title="Goals" />
+
+        <div className="flex-column gap-4 mt-2">
+          <button
+            type="button"
+            className="goals__add-button"
+            onClick={() => addModal.open()}
+          >
+            <div className="flex-align-center gap-2">
+              <PlusSvg className="icon--color-primary" />
+              <span className="text--color-primary text--light text--3">
+                {formatMessage({ id: 'AddGoal' })}
+              </span>
+            </div>
+          </button>
+
+          {goals.length === 0 ? (
+            <div className="flex-column flex-align-center gap-2 mt-4 text--light">
+              <span className="text--3">
+                {formatMessage({ id: 'NoGoals' })}
+              </span>
+            </div>
+          ) : (
+            <div className="flex-column gap-3">
+              {goals.map((goal) => (
+                <GoalItem
+                  key={goal.id}
+                  goal={goal}
+                  isMenuOpen={openMenuId === goal.id}
+                  onMenuToggle={setOpenMenuId}
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )

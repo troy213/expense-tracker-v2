@@ -13,6 +13,7 @@ type BaseProps = {
   errorMessage?: string
   enableDateNavigation?: boolean
   required?: boolean
+  min?: number
   className?: string
   labelClassName?: string
   inputClassName?: string
@@ -44,7 +45,8 @@ const validateValue = (
   required: boolean | undefined,
   pattern: RegExp | undefined,
   errorMessage: string | undefined,
-  formatMessage: (msg: { id: string }) => string
+  formatMessage: (msg: { id: string }) => string,
+  min?: number
 ): string | true => {
   const isEmpty =
     value === undefined ||
@@ -53,6 +55,8 @@ const validateValue = (
     (typeof value === 'number' && isNaN(value))
 
   if (required && isEmpty) return formatMessage({ id: 'FormEmptyError' })
+  if (min !== undefined && typeof value === 'number' && value < min)
+    return formatMessage({ id: 'FormMinValueError' })
   if (pattern && !isEmpty && !pattern.test(String(value))) {
     return (
       formatMessage({ id: errorMessage ?? '' }) ??
@@ -70,7 +74,8 @@ const renderField = (
   inputId: string,
   error?: string,
   fieldRef?: React.Ref<HTMLInputElement>,
-  fieldName?: string
+  fieldName?: string,
+  required?: boolean
 ) => {
   const {
     type = 'text',
@@ -92,7 +97,7 @@ const renderField = (
     props.className ?? '',
   ])
   const labelClassName = combineClassName(
-    'text--light text--color-primary text--3',
+    'flex gap-1 text--light text--color-primary text--3',
     [props.labelClassName ?? '']
   )
   const inputClassName = combineClassName('form-input__input', [
@@ -123,7 +128,12 @@ const renderField = (
     <div className={containerClassName}>
       {label && (
         <label htmlFor={inputId} className={labelClassName}>
-          {label}
+          <span>{label}</span>
+          {!required && (
+            <span className="text--italic">
+              ({formatMessage({ id: 'Optional' })})
+            </span>
+          )}
         </label>
       )}
       <input
@@ -167,7 +177,8 @@ const renderField = (
 }
 
 const FormInput = (props: FormInputProps) => {
-  const { valueKey, value, onChange, pattern, errorMessage, required } = props
+  const { valueKey, value, onChange, pattern, errorMessage, required, min } =
+    props
   const methods = useFormContext<FieldValues>()
   const { formatMessage } = useIntl()
   const inputId = useId()
@@ -178,7 +189,8 @@ const FormInput = (props: FormInputProps) => {
       required,
       pattern,
       errorMessage,
-      formatMessage
+      formatMessage,
+      min
     )
     return renderField(
       value,
@@ -186,7 +198,10 @@ const FormInput = (props: FormInputProps) => {
       props,
       formatMessage,
       inputId,
-      error === true ? undefined : error
+      error === true ? undefined : error,
+      undefined,
+      undefined,
+      required
     )
   }
 
@@ -201,7 +216,8 @@ const FormInput = (props: FormInputProps) => {
             required,
             pattern,
             errorMessage,
-            formatMessage
+            formatMessage,
+            min
           ),
       }}
       render={({ field, fieldState }) =>
@@ -213,7 +229,8 @@ const FormInput = (props: FormInputProps) => {
           inputId,
           fieldState.error?.message,
           field.ref,
-          field.name
+          field.name,
+          required
         )
       }
     />

@@ -1,0 +1,36 @@
+@layer components {
+  .goal-item {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow);
+    background-color: var(--card);
+    cursor: pointer;
+    transition: opacity 0.15s ease-in-out;
+
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+
+  .progress-bar__fill--goal {
+    background-color: var(--accent);
+  }
+
+  .progress-bar__fill--goal-success {
+    background-color: var(--default-color-success);
+  }
+
+  .progress-bar__fill--goal-cancelled {
+    background-color: var(--text-muted);
+  }
+
+  .goal-item--cancelled {
+    color: var(--text-muted);
+
+    .text--color-primary {
+      color: var(--text-muted) !important;
+    }
+  }
+}

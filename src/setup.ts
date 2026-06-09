@@ -64,6 +64,14 @@ vi.mock('@/lib/db', () => ({
       deleteTransactions: vi.fn().mockResolvedValue(undefined),
       clearTransactions: vi.fn().mockResolvedValue(undefined),
     },
+    goals: {
+      getAllGoals: vi.fn().mockResolvedValue([]),
+      getAllHistory: vi.fn().mockResolvedValue([]),
+      putGoal: vi.fn().mockResolvedValue(''),
+      putHistoryEntry: vi.fn().mockResolvedValue(''),
+      deleteGoal: vi.fn().mockResolvedValue(undefined),
+      clearGoals: vi.fn().mockResolvedValue(undefined),
+    },
     report: {
       getDashboardInfo: vi.fn().mockResolvedValue({
         totalIncome: 0,

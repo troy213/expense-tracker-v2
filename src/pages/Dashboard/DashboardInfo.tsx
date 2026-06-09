@@ -13,6 +13,7 @@ import {
 } from '@/assets'
 import { ProgressBar, Widget } from '@/components'
 import { useAppDispatch, useAppSelector } from '@/hooks'
+import { computeTotalBalance } from '@/lib/db/goals'
 import { configAction } from '@/store/config/config-slice'
 import { getDBDashboardInfo } from '@/store/main/main-thunk'
 import {
@@ -34,10 +35,18 @@ const DashboardInfo = () => {
   const { data } = useAppSelector((state) => state.transactionsReducer)
   const { hideBalance } = useAppSelector((state) => state.configReducer)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
+  const { goals, history } = useAppSelector((state) => state.goalsReducer)
   const { totalIncome, totalExpense, totalBudget, remainingBudget } =
     useAppSelector((state) => state.mainReducer)
 
-  const totalBalance = totalIncome - totalExpense
+  // Money locked in active goals is set aside, so it's removed from the
+  // spendable balance here (Dashboard only — Reports stay pure).
+  const totalBalance = computeTotalBalance(
+    totalIncome,
+    totalExpense,
+    goals,
+    history
+  )
   const { firstDate, lastDate } = getCurrentMonthRange()
 
   useEffect(() => {

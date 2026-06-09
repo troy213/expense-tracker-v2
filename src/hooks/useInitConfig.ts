@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import dbServices from '@/lib/db'
 import { getAllDBTransactions } from '@/store/transactions/transactions-thunk'
 import { getAllDBCategories } from '@/store/categories/categories-thunk'
+import { getAllDBGoals } from '@/store/goals/goals-thunk'
 import { getDBDashboardInfo } from '@/store/main/main-thunk'
 import { getDBReportData } from '@/store/report/report-thunk'
 import { configAction } from '@/store/config/config-slice'
@@ -22,6 +23,7 @@ const useInitConfig = () => {
       await Promise.all([
         dispatch(getAllDBCategories()),
         dispatch(getAllDBTransactions()),
+        dispatch(getAllDBGoals()),
         dispatch(getDBDashboardInfo()),
         dispatch(getDBReportData({ dateFrom: null, dateTo: null })),
       ])

@@ -29,6 +29,23 @@ export async function initializeDB(): Promise<IDBPDatabase<ExpenseTrackerDB>> {
         txStore.createIndex('by-description', 'description')
       }
 
+      // Create goals store (v3). The contains-guard covers both fresh installs
+      // and existing installs upgrading from v1/v2 — a brand-new store needs no
+      // separate oldVersion branch (that's only for adding indexes to an
+      // existing store, as the v2 categories migration below does).
+      if (!db.objectStoreNames.contains('goals')) {
+        const goalStore = db.createObjectStore('goals', { keyPath: 'id' })
+        goalStore.createIndex('by-status', 'status')
+      }
+
+      // Create goal_history store (v3): the per-goal money log.
+      if (!db.objectStoreNames.contains('goal_history')) {
+        const historyStore = db.createObjectStore('goal_history', {
+          keyPath: 'id',
+        })
+        historyStore.createIndex('by-goal', 'goal_id')
+      }
+
       // v2: add the by-index index to existing installs and backfill any
       // legacy categories that predate the `index` field, so they aren't
       // dropped from the (sparse) by-index index.

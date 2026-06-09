@@ -1,5 +1,12 @@
 import { DBSchema } from 'idb'
-import { Category, CategoryType, Transaction } from '@/types'
+import {
+  Category,
+  CategoryType,
+  Goal,
+  GoalHistoryEntry,
+  GoalStatus,
+  Transaction,
+} from '@/types'
 
 // IndexedDB Schema
 export interface ExpenseTrackerDB extends DBSchema {
@@ -20,7 +27,21 @@ export interface ExpenseTrackerDB extends DBSchema {
       'by-description': string
     }
   }
+  goals: {
+    key: string
+    value: Goal
+    indexes: {
+      'by-status': GoalStatus
+    }
+  }
+  goal_history: {
+    key: string
+    value: GoalHistoryEntry
+    indexes: {
+      'by-goal': string
+    }
+  }
 }
 
 export const DB_NAME = 'expense-tracker'
-export const DB_VERSION = 2
+export const DB_VERSION = 3

@@ -64,6 +64,27 @@ export type Data = {
   }[]
 }
 
+export type GoalStatus = 'in_progress' | 'completed' | 'spent' | 'cancelled'
+
+export type Goal = {
+  id: string
+  name: string
+  target_amount: number
+  deadline: string | null
+  category_id: string // FK → categories (expense); drives icon, color, spend category
+  status: GoalStatus
+  linked_transaction_id?: string // set only when status='spent'
+  created_at: string
+}
+
+export type GoalHistoryEntry = {
+  id: string
+  goal_id: string // FK → goals.id
+  type: 'contribution' | 'withdrawal'
+  amount: number // always > 0
+  date: string
+}
+
 export type ReportCategory = Category & {
   total: number
 }

@@ -1,11 +1,12 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import { useIntl } from 'react-intl'
-import { EditSvg, TrashSvg } from '@/assets'
+import { CrossSvg, EditSvg, TrashSvg } from '@/assets'
 import { combineClassName } from '@/utils'
 import './MoreOptionMenu.scss'
 
 type MoreOptionMenuProps = {
   handleEdit?: () => void
+  handleCancel?: (e?: React.MouseEvent) => void
   handleDelete: () => void
 }
 
@@ -18,7 +19,8 @@ const remToPx = (rem: number) =>
   rem * parseFloat(getComputedStyle(document.documentElement).fontSize)
 
 const MoreOptionMenu: React.FC<MoreOptionMenuProps> = ({
-  handleEdit = () => {},
+  handleEdit,
+  handleCancel,
   handleDelete,
 }) => {
   const { formatMessage } = useIntl()
@@ -38,15 +40,32 @@ const MoreOptionMenu: React.FC<MoreOptionMenuProps> = ({
   ])
 
   return (
-    <div className={menuClassName} ref={menuRef}>
-      <button
-        className="btn btn-clear text--color-primary"
-        type="button"
-        onClick={handleEdit}
-      >
-        <EditSvg className="icon icon--color-primary" />
-        <span>{formatMessage({ id: 'Edit' })}</span>
-      </button>
+    <div
+      className={menuClassName}
+      ref={menuRef}
+      onClick={(e) => e.stopPropagation()}
+    >
+      {handleEdit && (
+        <button
+          className="btn btn-clear text--color-primary"
+          type="button"
+          onClick={handleEdit}
+        >
+          <EditSvg className="icon icon--color-primary" />
+          <span>{formatMessage({ id: 'Edit' })}</span>
+        </button>
+      )}
+      {handleCancel && (
+        <button
+          className="btn btn-clear text--color-primary"
+          type="button"
+          onClick={handleCancel}
+        >
+          <CrossSvg className="icon icon--color-primary" />
+          <span>{formatMessage({ id: 'Cancel' })}</span>
+        </button>
+      )}
+
       <button
         className="btn btn-clear text--color-danger"
         type="button"

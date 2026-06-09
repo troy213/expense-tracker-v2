@@ -16,5 +16,6 @@ module.exports = {
       { allowConstantExport: true },
     ],
     'prettier/prettier': 'error',
+    'no-console': ['warn', { allow: ['error', 'warn'] }],
   },
 }
