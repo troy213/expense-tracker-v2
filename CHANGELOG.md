@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.0-beta.33](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.32...v1.0.0-beta.33) (2026-06-10)
+
+
+### Features
+
+* **dashboard:** add quick-actions launcher with Goals, Recurring, and Loans ([8924e9c](https://github.com/troy213/expense-tracker-v2/commit/8924e9cf530741a73ae00f13e32148c0242c496a))
+* **goals:** add goal-detail store and route, total-saved widget, a11y sweep ([9621da3](https://github.com/troy213/expense-tracker-v2/commit/9621da3ffcf0a4ec71ad281604bc2214d5b559a0))
+* **goals:** add goals savings tracker with spend flow and polish ([b2f25b3](https://github.com/troy213/expense-tracker-v2/commit/b2f25b3235335f6892520c173089300f0ab52037))
+
 ## [1.0.0-beta.32](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.31...v1.0.0-beta.32) (2026-06-07)
 
 
