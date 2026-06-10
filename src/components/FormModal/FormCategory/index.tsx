@@ -18,16 +18,25 @@ import {
 } from '@/store/categories/categories-thunk'
 import { getDefaultCategoryIconColor } from '@/utils'
 import './index.scss'
+import Modal from '@/components/Modal'
 
 type CategoryFormData = Category
 
 type FormCategoryProps = {
   type: CategoryType
+  isOpen: boolean
+  onClose: () => void
   data?: CategoryFormData
   onCancel?: () => void
 }
 
-const FormCategory = ({ type, data, onCancel }: FormCategoryProps) => {
+const FormCategory = ({
+  type,
+  isOpen,
+  data,
+  onClose,
+  onCancel,
+}: FormCategoryProps) => {
   const defaultIcon: CategoryIconId = type === 'income' ? 'income' : 'expense'
   const defaultColor = getDefaultCategoryIconColor(type)
   const lastIndex = useAppSelector((state) =>
@@ -86,51 +95,58 @@ const FormCategory = ({ type, data, onCancel }: FormCategoryProps) => {
     onCancel?.()
   }
 
+  if (!isOpen) return
+
   return (
-    <Form<CategoryFormData>
-      defaultValues={data ?? initialValue}
-      onSubmit={handleSubmit}
-      onCancel={onCancel}
-    >
-      <span className="text--bold text--color-primary">
-        {formatMessage({ id: getFormTitle() })}
-      </span>
-      <div className="flex-align-center gap-4">
-        <CategoryIcon
-          iconId={selectedIcon ?? defaultIcon}
-          color={selectedColor}
-          isActive={true}
-        />
-        <Form.Input
-          className="flex-1"
-          valueKey="name"
-          label={formatMessage({ id: 'CategoryName' })}
-          placeholder={formatMessage({ id: 'CategoryName' })}
-          pattern={REGEX.COMMON_TEXT.PATTERN}
-          errorMessage={REGEX.COMMON_TEXT.ERROR_MESSAGE}
-          required
-        />
-      </div>
-      {type === 'expense' && (
-        <Form.Input
-          type="currency"
-          valueKey="budget"
-          label={formatMessage({ id: 'BudgetRp' })}
-        />
-      )}
+    <Modal isOpen onClose={onClose}>
+      <Form<CategoryFormData>
+        defaultValues={data ?? initialValue}
+        onSubmit={handleSubmit}
+        onCancel={onCancel}
+      >
+        <span className="text--bold text--color-primary">
+          {formatMessage({ id: getFormTitle() })}
+        </span>
+        <div className="flex-align-center gap-4">
+          <CategoryIcon
+            iconId={selectedIcon ?? defaultIcon}
+            color={selectedColor}
+            isActive={true}
+          />
+          <Form.Input
+            className="flex-1"
+            valueKey="name"
+            label={formatMessage({ id: 'CategoryName' })}
+            placeholder={formatMessage({ id: 'CategoryName' })}
+            pattern={REGEX.COMMON_TEXT.PATTERN}
+            errorMessage={REGEX.COMMON_TEXT.ERROR_MESSAGE}
+            required
+          />
+        </div>
+        {type === 'expense' && (
+          <Form.Input
+            type="currency"
+            valueKey="budget"
+            label={formatMessage({ id: 'BudgetRp' })}
+          />
+        )}
 
-      <ColorPicker selectedColor={selectedColor} onChange={setSelectedColor} />
-      <IconPicker
-        selectedIcon={selectedIcon}
-        selectedColor={selectedColor}
-        onChange={setSelectedIcon}
-      />
+        <ColorPicker
+          selectedColor={selectedColor}
+          onChange={setSelectedColor}
+        />
+        <IconPicker
+          selectedIcon={selectedIcon}
+          selectedColor={selectedColor}
+          onChange={setSelectedIcon}
+        />
 
-      <div className="flex-column gap-4 mt-4">
-        <Form.Submit label={data ? 'Save' : 'Add Category'} className="p-4" />
-        <Form.Cancel />
-      </div>
-    </Form>
+        <div className="flex-column gap-4 mt-4">
+          <Form.Submit label={data ? 'Save' : 'Add Category'} className="p-4" />
+          <Form.Cancel />
+        </div>
+      </Form>
+    </Modal>
   )
 }
 

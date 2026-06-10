@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useIntl } from 'react-intl'
+import CategoryIconPreview from '@/components/CategoryIconPreview'
 import Form from '@/components/Form'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import {
@@ -9,18 +10,26 @@ import {
 } from '@/store/transactions/transactions-thunk'
 import { CategoryType, TxFormData } from '@/types'
 import { combineClassName, getDate, makeEmptyTransactionItem } from '@/utils'
-import CategoryIconPreview from './CategoryIconPreview'
 import RemainingBudget from './RemainingBudget'
 import TransactionItems from './TransactionItem'
 import './index.scss'
+import Modal from '@/components/Modal'
 
 type FormTransactionProps = {
+  isOpen: boolean
+  onClose: () => void
   data?: TxFormData
   index?: number
   onCancel?: () => void
 }
 
-const FormTransaction = ({ data, index, onCancel }: FormTransactionProps) => {
+const FormTransaction = ({
+  data,
+  index,
+  isOpen,
+  onClose,
+  onCancel,
+}: FormTransactionProps) => {
   const { formatMessage } = useIntl()
   const categories = useAppSelector(
     (state) => state.categoriesReducer.categories
@@ -39,6 +48,8 @@ const FormTransaction = ({ data, index, onCancel }: FormTransactionProps) => {
     () => data?.item.map((item) => item.id),
     [data]
   )
+
+  if (!isOpen) return
 
   if (filteredCategories.length === 0) {
     return (
@@ -90,88 +101,90 @@ const FormTransaction = ({ data, index, onCancel }: FormTransactionProps) => {
   }
 
   return (
-    <div className="flex-column gap-4">
-      <span className="text--bold text--color-primary">
-        {formatMessage({
-          id: `${data ? 'EditTransaction' : 'AddTransaction'}`,
-        })}
-      </span>
-      <div className="flex-column gap-2">
-        <span className="text--color-primary text--light text--3">
-          {formatMessage({ id: 'Transaction' })}
-        </span>
-        <div
-          className="transaction-type-tabs"
-          role="tablist"
-          aria-label={formatMessage({ id: 'Transaction' })}
-        >
-          {(['income', 'expense'] as CategoryType[]).map((value) => {
-            const tabItemClassName = combineClassName(
-              'transaction-type-tabs__tab',
-              [
-                {
-                  condition: categoryType === value,
-                  className: 'selected',
-                },
-              ]
-            )
-
-            return (
-              <button
-                key={value}
-                type="button"
-                role="tab"
-                aria-selected={categoryType === value}
-                className={tabItemClassName}
-                onClick={() => setCategoryType(value)}
-              >
-                {formatMessage({
-                  id: value === 'income' ? 'Income' : 'Expense',
-                })}
-              </button>
-            )
+    <Modal isOpen onClose={onClose}>
+      <div className="flex-column gap-4">
+        <span className="text--bold text--color-primary">
+          {formatMessage({
+            id: `${data ? 'EditTransaction' : 'AddTransaction'}`,
           })}
-        </div>
-      </div>
+        </span>
+        <div className="flex-column gap-2">
+          <span className="text--color-primary text--light text--3">
+            {formatMessage({ id: 'Transaction' })}
+          </span>
+          <div
+            className="transaction-type-tabs"
+            role="tablist"
+            aria-label={formatMessage({ id: 'Transaction' })}
+          >
+            {(['income', 'expense'] as CategoryType[]).map((value) => {
+              const tabItemClassName = combineClassName(
+                'transaction-type-tabs__tab',
+                [
+                  {
+                    condition: categoryType === value,
+                    className: 'selected',
+                  },
+                ]
+              )
 
-      <Form<TxFormData>
-        key={categoryType}
-        defaultValues={initialValue}
-        onSubmit={handleSubmit}
-        onCancel={onCancel}
-      >
-        <div className="flex-column gap-4">
-          <Form.Input
-            type="date"
-            valueKey="date"
-            label="Date"
-            placeholder="yyyy-mm-dd"
-            enableDateNavigation
-            required
-          />
-          <div className="flex-align-center gap-4">
-            <CategoryIconPreview />
-            <Form.Select
-              valueKey="category_id"
-              label="Category"
-              options={filteredCategories}
-              selectedValue={selectedCategoryLabel}
-              className="width-100"
+              return (
+                <button
+                  key={value}
+                  type="button"
+                  role="tab"
+                  aria-selected={categoryType === value}
+                  className={tabItemClassName}
+                  onClick={() => setCategoryType(value)}
+                >
+                  {formatMessage({
+                    id: value === 'income' ? 'Income' : 'Expense',
+                  })}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        <Form<TxFormData>
+          key={categoryType}
+          defaultValues={initialValue}
+          onSubmit={handleSubmit}
+          onCancel={onCancel}
+        >
+          <div className="flex-column gap-4">
+            <Form.Input
+              type="date"
+              valueKey="date"
+              label="Date"
+              placeholder="yyyy-mm-dd"
+              enableDateNavigation
               required
             />
+            <div className="flex-align-center gap-4">
+              <CategoryIconPreview />
+              <Form.Select
+                valueKey="category_id"
+                label="Category"
+                options={filteredCategories}
+                selectedValue={selectedCategoryLabel}
+                className="width-100"
+                required
+              />
+            </div>
+
+            <RemainingBudget editingItemIds={editingItemIds} />
+            <TransactionItems />
+
+            <Form.Submit
+              label={formatMessage({ id: data ? 'Update' : 'Submit' })}
+              className="mt-4 p-4"
+            />
+            <Form.Cancel />
           </div>
-
-          <RemainingBudget editingItemIds={editingItemIds} />
-          <TransactionItems />
-
-          <Form.Submit
-            label={formatMessage({ id: data ? 'Update' : 'Submit' })}
-            className="mt-4 p-4"
-          />
-          <Form.Cancel />
-        </div>
-      </Form>
-    </div>
+        </Form>
+      </div>
+    </Modal>
   )
 }
 

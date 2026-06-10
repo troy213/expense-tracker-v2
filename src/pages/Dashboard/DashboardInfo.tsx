@@ -34,10 +34,15 @@ const DashboardInfo = () => {
   const { data } = useAppSelector((state) => state.transactionsReducer)
   const { hideBalance } = useAppSelector((state) => state.configReducer)
   const { categories } = useAppSelector((state) => state.categoriesReducer)
+  const { totalSaved: goalsLocked } = useAppSelector(
+    (state) => state.goalsReducer
+  )
   const { totalIncome, totalExpense, totalBudget, remainingBudget } =
     useAppSelector((state) => state.mainReducer)
 
-  const totalBalance = totalIncome - totalExpense
+  // Money locked in active goals is set aside, so it's removed from the
+  // spendable balance here (Dashboard only — Reports stay pure).
+  const totalBalance = totalIncome - totalExpense - goalsLocked
   const { firstDate, lastDate } = getCurrentMonthRange()
 
   useEffect(() => {

@@ -36,4 +36,32 @@ describe('Dashboard Component', () => {
 
     expect(screen.getByText('Dashboard')).toBeInTheDocument()
   })
+
+  it('renders the quick-actions launcher (Goals, Recurring, Loans)', () => {
+    render(
+      <MemoryRouter>
+        <Provider store={store}>
+          <IntlProvider
+            locale={LOCALES.ENGLISH}
+            messages={LANGUAGES[LOCALES.ENGLISH].messages}
+          >
+            <Dashboard />
+          </IntlProvider>
+        </Provider>
+      </MemoryRouter>
+    )
+
+    expect(screen.getByRole('link', { name: /goals/i })).toHaveAttribute(
+      'href',
+      '/goals'
+    )
+    expect(screen.getByRole('link', { name: /recurring/i })).toHaveAttribute(
+      'href',
+      '/recurring'
+    )
+    expect(screen.getByRole('link', { name: /loans/i })).toHaveAttribute(
+      'href',
+      '/loans'
+    )
+  })
 })

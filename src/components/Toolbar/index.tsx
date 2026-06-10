@@ -4,7 +4,6 @@ import { BudgetSvg, HomeSvg, PieChartSvg, PlusSvg, SettingsSvg } from '@/assets'
 import { combineClassName } from '@/utils'
 import { useDisclosure } from '@/hooks'
 import { FormModal } from '@/components'
-import Modal from '../Modal'
 import './index.scss'
 
 const Toolbar = () => {
@@ -20,9 +19,11 @@ const Toolbar = () => {
 
   return (
     <div className="toolbar">
-      <Modal isOpen={addModal.isOpen} onClose={addModal.close}>
-        <FormModal.FormTransaction onCancel={addModal.close} />
-      </Modal>
+      <FormModal.FormTransaction
+        isOpen={addModal.isOpen}
+        onClose={addModal.close}
+        onCancel={addModal.close}
+      />
 
       <Link
         to="/"

@@ -1,6 +1,6 @@
 import { useIntl } from 'react-intl'
 import { PlusSvg } from '@/assets'
-import { FormModal, Modal, Navbar } from '@/components'
+import { FormModal, Navbar } from '@/components'
 import { useCategoriesContext } from './CategoriesContext'
 import { CategoriesProvider } from './CategoriesProvider'
 import { useDisclosure } from '@/hooks'
@@ -21,12 +21,12 @@ const CategoriesPage = () => {
 
   return (
     <div className="categories">
-      <Modal isOpen={addModal.isOpen} onClose={addModal.close}>
-        <FormModal.FormCategory
-          type={selectedCategory}
-          onCancel={addModal.close}
-        />
-      </Modal>
+      <FormModal.FormCategory
+        type={selectedCategory}
+        isOpen={addModal.isOpen}
+        onClose={addModal.close}
+        onCancel={addModal.close}
+      />
 
       <div className="flex-column flex-1 gap-4 p-4">
         <Navbar enableBackButton={true} title="CategoryAndBudget" />

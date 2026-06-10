@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { CoinsSvg, MoreVerticalSvg } from '@/assets'
-import { CategoryIcon, FormModal, Modal } from '@/components'
+import { CategoryIcon, FormModal } from '@/components'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
 import MoreOptionMenu from '@/components/Menu/MoreOptionMenu'
 import { useAppDispatch, useClickOutside, useDisclosure } from '@/hooks'
@@ -64,13 +64,13 @@ const CategoryItem: React.FC<CategoryItemProps> = ({ data }) => {
       style={style}
       className="category-item p-4"
     >
-      <Modal isOpen={editModal.isOpen} onClose={editModal.close}>
-        <FormModal.FormCategory
-          data={data}
-          type={type}
-          onCancel={editModal.close}
-        />
-      </Modal>
+      <FormModal.FormCategory
+        data={data}
+        type={type}
+        isOpen={editModal.isOpen}
+        onClose={editModal.close}
+        onCancel={editModal.close}
+      />
 
       {deleteModal.isOpen && (
         <DeleteDataModal

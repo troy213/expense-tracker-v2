@@ -1,4 +1,5 @@
 import CategoryIcon from './CategoryIcon'
+import CategoryIconPreview from './CategoryIconPreview'
 import ColorPicker from './ColorPicker'
 import Form from './Form'
 import FormModal from './FormModal'
@@ -13,6 +14,7 @@ import Widget from './Widget'
 
 export {
   CategoryIcon,
+  CategoryIconPreview,
   ColorPicker,
   Form,
   FormModal,

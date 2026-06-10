@@ -27,3 +27,6 @@ dist-ssr
 CLAUDE.md
 .claude/*
 docs/superpowers/
+
+# Graphify knowledge graph (derived artifact, machine-specific paths inside)
+graphify-out/

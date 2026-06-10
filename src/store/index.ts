@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
 import categoriesSlice from './categories/categories-slice'
 import configSlice from './config/config-slice'
+import goalDetailSlice from './goal-detail/goal-detail-slice'
+import goalsSlice from './goals/goals-slice'
 import mainSlice from './main/main-slice'
 import reportSlice from './report/report-slice'
 import reportDetailSlice from './report-detail/report-detail-slice'
@@ -10,6 +12,8 @@ const store = configureStore({
   reducer: {
     categoriesReducer: categoriesSlice.reducer,
     configReducer: configSlice.reducer,
+    goalDetailReducer: goalDetailSlice.reducer,
+    goalsReducer: goalsSlice.reducer,
     mainReducer: mainSlice.reducer,
     reportReducer: reportSlice.reducer,
     reportDetailReducer: reportDetailSlice.reducer,
