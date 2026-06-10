@@ -30,8 +30,16 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ amount, options = {} }) => {
     },
   ])
 
+  const clampedValue = Math.round(Math.min(Math.max(amount, 0), 100))
+
   return (
-    <div className="progress-bar">
+    <div
+      className="progress-bar"
+      role="progressbar"
+      aria-valuenow={clampedValue}
+      aria-valuemin={0}
+      aria-valuemax={100}
+    >
       <div className={fillClassName} style={{ width: progressWidth }} />
     </div>
   )

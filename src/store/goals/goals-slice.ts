@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Goal, GoalHistoryEntry, SetStatePayload } from '@/types'
+import { Goal, SetStatePayload } from '@/types'
 import { addAsyncThunkCases, setStateReducerValue } from '../utils'
 import {
   addGoal,
@@ -22,13 +22,23 @@ import {
 export type InitialState = {
   isLoading: boolean
   goals: Goal[]
-  history: GoalHistoryEntry[]
+  savedAmounts: Record<string, number>
+  totalSaved: number
+  totalTarget: number
+  totalInactiveSaved: number
+  totalInactiveTarget: number
+  totalCompleted: number
 }
 
 export const initialState: InitialState = {
   isLoading: true,
   goals: [],
-  history: [],
+  savedAmounts: {},
+  totalSaved: 0,
+  totalTarget: 0,
+  totalInactiveSaved: 0,
+  totalInactiveTarget: 0,
+  totalCompleted: 0,
 }
 
 const goalsSlice = createSlice({

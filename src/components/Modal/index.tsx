@@ -36,7 +36,12 @@ const Modal: React.FC<ModalProps> = ({
 
   return ReactDOM.createPortal(
     <div className={modalClassName} id="modal" onClick={handleClickOutside}>
-      <div className="modal__container" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="modal__container"
+        role="dialog"
+        aria-modal="true"
+        onClick={(e) => e.stopPropagation()}
+      >
         {children}
       </div>
     </div>,

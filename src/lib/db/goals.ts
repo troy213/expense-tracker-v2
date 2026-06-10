@@ -110,6 +110,29 @@ async function deleteGoal(id: string): Promise<void> {
 }
 
 /**
+ * Get a single goal by id
+ */
+async function getGoalById(id: string): Promise<Goal | undefined> {
+  const database = await getDB()
+  return database.get('goals', id)
+}
+
+/**
+ * Get all history entries for a single goal, newest-first (date desc, id desc).
+ */
+async function getHistoryByGoalId(goalId: string): Promise<GoalHistoryEntry[]> {
+  const database = await getDB()
+  const entries = await database.getAllFromIndex(
+    'goal_history',
+    'by-goal',
+    goalId
+  )
+  return entries.sort(
+    (a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id)
+  )
+}
+
+/**
  * Clear all goals and history
  */
 async function clearGoals(): Promise<void> {
@@ -121,6 +144,8 @@ async function clearGoals(): Promise<void> {
 const goalsServices = {
   getAllGoals,
   getAllHistory,
+  getGoalById,
+  getHistoryByGoalId,
   putGoal,
   putHistoryEntry,
   deleteGoal,

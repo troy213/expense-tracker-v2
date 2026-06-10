@@ -117,7 +117,7 @@ const ReportDetail = () => {
           )}
         </div>
 
-        <ReportDetailInfo />
+        {detailData.length > 0 && <ReportDetailInfo />}
       </div>
 
       <Transactions data={detailData} />

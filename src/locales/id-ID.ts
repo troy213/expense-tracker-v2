@@ -79,6 +79,7 @@ const messages = {
   GoalCancelled: 'Dibatalkan',
   GoalCompleted: 'Selesai',
   GoalDailyAmount: 'Tambah {amount}/hari untuk mencapainya tepat waktu.',
+  GoalSavedOf: 'tersimpan dari {amount}',
   GoalDeleteWithBalance:
     '{amount} akan kembali ke saldo anda. Aksi ini tidak dapat dibatalkan.',
   GoalDetail: 'Detail Tujuan',
@@ -118,6 +119,7 @@ const messages = {
   NextDay: 'Hari Berikutnya',
   NoCategoryWarningMessage:
     'Oops! sepertinya anda tidak memiliki kategori apapun. Anda dapat menambahkan kategori pertama anda di tautan di bawah ini.',
+  NoGoalDetail: 'Tujuan tidak ditemukan.',
   NoGoals: 'Anda belum memiliki tujuan apapun.',
   NoTransaction: 'Tidak ada transaksi apapun',
   November: 'November',
@@ -161,6 +163,7 @@ const messages = {
   TotalIncome: 'Total Pendapatan',
   TotalMaxBudget: 'Total Max Anggaran',
   TotalRemainingBudget: 'Sisa Anggaran',
+  TotalSaved: 'Total Tersimpan',
   Transaction: 'Transaksi',
   Transactions: 'Transaksi',
   TransactionCount: '{count} transaksi',
@@ -168,6 +171,7 @@ const messages = {
   TransactionName: 'Nama transaksi',
   Update: 'Perbarui',
   ViewAll: 'Lihat Semua',
+  ViewGoalDetail: 'Lihat detail {name}',
   Withdraw: 'Tarik',
   expense: 'pengeluaran',
   friday: 'jumat',

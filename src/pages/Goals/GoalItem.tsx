@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 import { MoreVerticalSvg, PlaySvg, SquareSvg } from '@/assets'
@@ -11,7 +11,6 @@ import {
   useClickOutside,
   useDisclosure,
 } from '@/hooks'
-import { savedAmount } from '@/lib/db/goals'
 import { Goal } from '@/types'
 import {
   cancelDBGoal,
@@ -23,14 +22,13 @@ import {
   currencyFormatter,
   formatTransactionDate,
 } from '@/utils'
+import {
+  GOAL_STATUS_LABEL_ID,
+  goalDeleteMessageDescriptor,
+  goalProgress,
+  goalProgressFillClassName,
+} from '@/utils/goal'
 import './GoalItem.scss'
-
-const STATUS_LABEL_ID: Record<Goal['status'], string> = {
-  in_progress: 'GoalInProgress',
-  completed: 'GoalCompleted',
-  spent: 'GoalSpent',
-  cancelled: 'GoalCancelled',
-}
 
 type GoalItemProps = {
   goal: Goal
@@ -46,25 +44,26 @@ const GoalItem = ({ goal, isMenuOpen, onMenuToggle }: GoalItemProps) => {
   const deleteModal = useDisclosure()
   const menuRef = useRef<HTMLDivElement>(null)
 
-  const goalHistory = useAppSelector((state) => state.goalsReducer.history)
-  const filteredGoalHistory = useMemo(
-    () => goalHistory.filter((e) => e.goal_id === goal.id),
-    [goalHistory, goal.id]
+  const saved = useAppSelector(
+    (state) => state.goalsReducer.savedAmounts[goal.id] ?? 0
   )
   const category = useAppSelector((s) =>
     s.categoriesReducer.categories.find((c) => c.id === goal.category_id)
   )
-
-  const saved = savedAmount(filteredGoalHistory)
-  const progressPercent =
-    goal.target_amount > 0 ? (saved / goal.target_amount) * 100 : 0
-  const barFill = Math.min(progressPercent, 100)
+  const { progressPercent, barFill } = goalProgress(saved, goal.target_amount)
   const isTerminal = goal.status === 'spent'
 
   const closeMenu = useCallback(() => onMenuToggle(null), [onMenuToggle])
   useClickOutside(menuRef, closeMenu, isMenuOpen)
 
-  const handleRowClick = () => navigate(`/goals/${goal.id}`)
+  const handleRowClick = () => navigate(`/goal-detail?id=${goal.id}`)
+
+  const handleRowKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      handleRowClick()
+    }
+  }
 
   const handleMoreOption = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -84,13 +83,11 @@ const GoalItem = ({ goal, isMenuOpen, onMenuToggle }: GoalItemProps) => {
     }
   }
 
-  const deleteMessage =
-    saved > 0 && goal.status !== 'spent'
-      ? formatMessage(
-          { id: 'GoalDeleteWithBalance' },
-          { amount: currencyFormatter(saved) }
-        )
-      : formatMessage({ id: 'DeleteDataSpecific' }, { name: goal.name })
+  const deleteMessageDescriptor = goalDeleteMessageDescriptor(goal, saved)
+  const deleteMessage = formatMessage(
+    { id: deleteMessageDescriptor.id },
+    deleteMessageDescriptor.values
+  )
 
   const goalItemClassName = combineClassName('goal-item p-4', [
     {
@@ -99,16 +96,7 @@ const GoalItem = ({ goal, isMenuOpen, onMenuToggle }: GoalItemProps) => {
     },
   ])
 
-  const progressFillClassName = combineClassName('progress-bar__fill--goal', [
-    {
-      condition: goal.status === 'cancelled',
-      className: 'progress-bar__fill--goal-cancelled',
-    },
-    {
-      condition: goal.status === 'completed' || goal.status === 'spent',
-      className: 'progress-bar__fill--goal-success',
-    },
-  ])
+  const progressFillClassName = goalProgressFillClassName(goal.status)
 
   const buttonClassName = combineClassName('btn', [
     {
@@ -127,7 +115,8 @@ const GoalItem = ({ goal, isMenuOpen, onMenuToggle }: GoalItemProps) => {
       onClick={handleRowClick}
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => e.key === 'Enter' && handleRowClick()}
+      aria-label={formatMessage({ id: 'ViewGoalDetail' }, { name: goal.name })}
+      onKeyDown={handleRowKeyDown}
     >
       <FormModal.FormGoal
         isOpen={editModal.isOpen}
@@ -169,7 +158,7 @@ const GoalItem = ({ goal, isMenuOpen, onMenuToggle }: GoalItemProps) => {
         </div>
         <div className="relative flex-align-center gap-2" ref={menuRef}>
           <span className={`pill pill--${goal.status} text--uppercase`}>
-            {formatMessage({ id: STATUS_LABEL_ID[goal.status] })}
+            {formatMessage({ id: GOAL_STATUS_LABEL_ID[goal.status] })}
           </span>
 
           <button
@@ -177,8 +166,13 @@ const GoalItem = ({ goal, isMenuOpen, onMenuToggle }: GoalItemProps) => {
             className="btn btn-clear"
             onClick={handleMoreOption}
             aria-label={formatMessage({ id: 'MoreOptions' })}
+            aria-haspopup="menu"
+            aria-expanded={isMenuOpen}
           >
-            <MoreVerticalSvg className="icon--color-primary" />
+            <MoreVerticalSvg
+              className="icon--color-primary"
+              aria-hidden="true"
+            />
           </button>
           {isMenuOpen && (
             <MoreOptionMenu
@@ -232,14 +226,20 @@ const GoalItem = ({ goal, isMenuOpen, onMenuToggle }: GoalItemProps) => {
           >
             {goal.status === 'cancelled' ? (
               <div className="flex-align-center gap-2">
-                <PlaySvg className="icon--md icon--color-white" />
+                <PlaySvg
+                  className="icon--md icon--color-white"
+                  aria-hidden="true"
+                />
                 <span className="text--3">
                   {formatMessage({ id: 'ResumeGoal' })}
                 </span>
               </div>
             ) : (
               <div className="flex-align-center gap-2">
-                <SquareSvg className="icon--md icon--color-primary" />
+                <SquareSvg
+                  className="icon--md icon--color-primary"
+                  aria-hidden="true"
+                />
                 <span className="text--3">
                   {formatMessage({ id: 'CancelGoal' })}
                 </span>

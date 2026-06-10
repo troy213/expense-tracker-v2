@@ -34,61 +34,107 @@ const entry = (
 const state = (overrides: Partial<InitialState> = {}): InitialState => ({
   isLoading: true,
   goals: [],
-  history: [],
+  savedAmounts: {},
+  totalSaved: 0,
+  totalTarget: 0,
+  totalInactiveSaved: 0,
+  totalInactiveTarget: 0,
+  totalCompleted: 0,
   ...overrides,
 })
 
 describe('goals-actions', () => {
-  it('setGoals replaces goals + history and clears loading', () => {
+  it('setGoals replaces goals, computes savedAmounts and aggregates', () => {
     const s = state()
     setGoals(s, {
       type: '',
-      payload: { goals: [goal()], history: [entry()] },
+      payload: {
+        goals: [goal()],
+        history: [entry({ amount: 300_000 })],
+      },
     })
     expect(s.goals).toHaveLength(1)
-    expect(s.history).toHaveLength(1)
+    expect(s.savedAmounts['g1']).toBe(300_000)
+    expect(s.totalSaved).toBe(300_000)
+    expect(s.totalTarget).toBe(1_000_000)
     expect(s.isLoading).toBe(false)
   })
 
-  it('addGoal appends to the list', () => {
-    const s = state({ goals: [goal({ id: 'a' })] })
-    addGoal(s, { type: '', payload: goal({ id: 'b' }) })
+  it('setGoals counts cancelled and completed goals into inactive / totalCompleted', () => {
+    const s = state()
+    setGoals(s, {
+      type: '',
+      payload: {
+        goals: [
+          goal({ id: 'a', status: 'cancelled', target_amount: 500_000 }),
+          goal({ id: 'b', status: 'spent', target_amount: 200_000 }),
+        ],
+        history: [
+          entry({ goal_id: 'a', amount: 100_000 }),
+          entry({ goal_id: 'b', amount: 200_000 }),
+        ],
+      },
+    })
+    expect(s.totalInactiveSaved).toBe(100_000)
+    expect(s.totalInactiveTarget).toBe(500_000)
+    expect(s.totalCompleted).toBe(1)
+  })
+
+  it('addGoal appends to the list and updates aggregates', () => {
+    const s = state({ goals: [goal({ id: 'a', target_amount: 1_000_000 })] })
+    addGoal(s, {
+      type: '',
+      payload: {
+        goal: goal({ id: 'b', target_amount: 500_000 }),
+        savedAmount: 0,
+      },
+    })
     expect(s.goals.map((g) => g.id)).toEqual(['a', 'b'])
+    expect(s.totalTarget).toBe(1_500_000)
   })
 
-  it('replaceGoal swaps the matching goal by id', () => {
-    const s = state({ goals: [goal({ id: 'a', status: 'in_progress' })] })
-    replaceGoal(s, { type: '', payload: goal({ id: 'a', status: 'spent' }) })
+  it('replaceGoal swaps the matching goal and updates savedAmounts', () => {
+    const s = state({
+      goals: [goal({ id: 'a', status: 'in_progress' })],
+      savedAmounts: { a: 500_000 },
+    })
+    replaceGoal(s, {
+      type: '',
+      payload: {
+        goal: goal({ id: 'a', status: 'spent' }),
+        savedAmount: 500_000,
+      },
+    })
     expect(s.goals[0].status).toBe('spent')
+    expect(s.totalCompleted).toBe(1)
+    expect(s.totalSaved).toBe(0)
   })
 
-  it('removeGoal deletes the goal and cascade-removes its history', () => {
+  it('removeGoal removes the goal and its savedAmount entry', () => {
     const s = state({
       goals: [goal({ id: 'a' }), goal({ id: 'b' })],
-      history: [
-        entry({ id: 'e1', goal_id: 'a' }),
-        entry({ id: 'e2', goal_id: 'b' }),
-        entry({ id: 'e3', goal_id: 'a' }),
-      ],
+      savedAmounts: { a: 100_000, b: 200_000 },
     })
     removeGoal(s, { type: '', payload: 'a' })
     expect(s.goals.map((g) => g.id)).toEqual(['b'])
-    expect(s.history.map((h) => h.id)).toEqual(['e2'])
+    expect(s.savedAmounts).not.toHaveProperty('a')
+    expect(s.totalSaved).toBe(200_000)
   })
 
-  it('addHistory appends the entry and replaces the recomputed goal', () => {
+  it('addHistory replaces the goal and updates savedAmount', () => {
     const s = state({
       goals: [goal({ id: 'a', status: 'in_progress' })],
-      history: [entry({ id: 'e1', goal_id: 'a' })],
+      savedAmounts: { a: 500_000 },
     })
     addHistory(s, {
       type: '',
       payload: {
         entry: entry({ id: 'e2', goal_id: 'a', amount: 800_000 }),
         goal: goal({ id: 'a', status: 'completed' }),
+        savedAmount: 1_300_000,
       },
     })
-    expect(s.history.map((h) => h.id)).toEqual(['e1', 'e2'])
     expect(s.goals[0].status).toBe('completed')
+    expect(s.savedAmounts['a']).toBe(1_300_000)
   })
 })

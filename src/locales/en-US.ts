@@ -79,6 +79,7 @@ const messages = {
   GoalCancelled: 'Cancelled',
   GoalCompleted: 'Completed',
   GoalDailyAmount: 'Add {amount}/day to reach it in time.',
+  GoalSavedOf: 'saved of {amount}',
   GoalDeleteWithBalance:
     '{amount} saved will return to your balance. This cannot be undone.',
   GoalDetail: 'Goal Detail',
@@ -117,6 +118,7 @@ const messages = {
   NextDay: 'Next Day',
   NoCategoryWarningMessage:
     "Oops! it seems you don't have any category. You can add your first category in the link below.",
+  NoGoalDetail: 'Goal not found.',
   NoGoals: "You don't have any goals yet.",
   NoTransaction: 'There is no transaction',
   November: 'November',
@@ -160,6 +162,7 @@ const messages = {
   TotalIncome: 'Total Income',
   TotalMaxBudget: 'Total Max Budget',
   TotalRemainingBudget: 'Total Remaining Budget',
+  TotalSaved: 'Total Saved',
   Transaction: 'Transaction',
   Transactions: 'Transactions',
   TransactionCount: '{count} transactions',
@@ -167,6 +170,7 @@ const messages = {
   TransactionName: 'Transaction name',
   Update: 'Update',
   ViewAll: 'View All',
+  ViewGoalDetail: 'View details for {name}',
   Withdraw: 'Withdraw',
   expense: 'expense',
   friday: 'friday',

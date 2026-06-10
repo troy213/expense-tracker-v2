@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useIntl } from 'react-intl'
-import { PlusSvg } from '@/assets'
-import { FormModal, Navbar } from '@/components'
+import { GoalSvg, PlusSvg } from '@/assets'
+import { FormModal, Navbar, Widget } from '@/components'
 import { useAppSelector, useDisclosure } from '@/hooks'
+import { currencyFormatter } from '@/utils'
 import GoalItem from './GoalItem'
 import './index.scss'
 
@@ -12,6 +13,7 @@ const Goals = () => {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null)
 
   const goals = useAppSelector((s) => s.goalsReducer.goals)
+  const totalSaved = useAppSelector((s) => s.goalsReducer.totalSaved)
 
   return (
     <div className="goals">
@@ -24,6 +26,22 @@ const Goals = () => {
       <div className="flex-column flex-1 gap-4 p-4">
         <Navbar enableBackButton title="Goals" />
 
+        {goals.length > 0 && (
+          <Widget className="bg-primary text--color-white p-4">
+            <div className="flex-justify-center flex-align-center gap-4">
+              <GoalSvg className="goals__total-saved-icon" aria-hidden="true" />
+              <div className="flex-column">
+                <span className="text--light text--3">
+                  {formatMessage({ id: 'TotalSaved' })}
+                </span>
+                <span className="text--bold">
+                  {currencyFormatter(totalSaved)}
+                </span>
+              </div>
+            </div>
+          </Widget>
+        )}
+
         <div className="flex-column gap-4 mt-2">
           <button
             type="button"
@@ -31,7 +49,7 @@ const Goals = () => {
             onClick={() => addModal.open()}
           >
             <div className="flex-align-center gap-2">
-              <PlusSvg className="icon--color-primary" />
+              <PlusSvg className="icon--color-primary" aria-hidden="true" />
               <span className="text--color-primary text--light text--3">
                 {formatMessage({ id: 'AddGoal' })}
               </span>

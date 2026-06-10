@@ -14,5 +14,14 @@
       border: 2px dashed var(--text);
       background-color: unset;
     }
+
+    &__total-saved-icon {
+      width: 3rem;
+      height: 3rem;
+
+      & [stroke] {
+        stroke: rgba(255, 255, 255, 0.3);
+      }
+    }
   }
 }
