@@ -5,6 +5,8 @@ import {
   Goal,
   GoalHistoryEntry,
   GoalStatus,
+  Recurring,
+  RecurringHistoryEntry,
   Transaction,
 } from '@/types'
 
@@ -41,7 +43,18 @@ export interface ExpenseTrackerDB extends DBSchema {
       'by-goal': string
     }
   }
+  recurring: {
+    key: string
+    value: Recurring
+  }
+  recurring_history: {
+    key: string
+    value: RecurringHistoryEntry
+    indexes: {
+      'by-recurring': string
+    }
+  }
 }
 
 export const DB_NAME = 'expense-tracker'
-export const DB_VERSION = 3
+export const DB_VERSION = 4

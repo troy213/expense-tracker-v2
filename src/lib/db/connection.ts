@@ -46,6 +46,23 @@ export async function initializeDB(): Promise<IDBPDatabase<ExpenseTrackerDB>> {
         historyStore.createIndex('by-goal', 'goal_id')
       }
 
+      // Create recurring store (v4): monthly recurring-transaction rules.
+      if (!db.objectStoreNames.contains('recurring')) {
+        db.createObjectStore('recurring', { keyPath: 'id' })
+      }
+
+      // Create recurring_history store (v4): the ledger — one row per
+      // (definition, month), pending included.
+      if (!db.objectStoreNames.contains('recurring_history')) {
+        const recurringHistoryStore = db.createObjectStore(
+          'recurring_history',
+          {
+            keyPath: 'id',
+          }
+        )
+        recurringHistoryStore.createIndex('by-recurring', 'recurring_id')
+      }
+
       // v2: add the by-index index to existing installs and backfill any
       // legacy categories that predate the `index` field, so they aren't
       // dropped from the (sparse) by-index index.
