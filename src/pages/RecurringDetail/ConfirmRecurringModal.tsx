@@ -37,7 +37,13 @@ const ConfirmRecurringModal = ({
       >
         <span className="text--bold text--color-primary">{recurringName}</span>
         <span className="text--light text--3">
-          {formatDate(row.date, { month: 'long', year: 'numeric' })}
+          {/* timeZone UTC: keep the label on the row's stored month
+              regardless of the viewer's timezone. */}
+          {formatDate(row.date, {
+            month: 'long',
+            year: 'numeric',
+            timeZone: 'UTC',
+          })}
         </span>
 
         <Form.Input

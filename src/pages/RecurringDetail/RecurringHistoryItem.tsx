@@ -44,7 +44,14 @@ const RecurringHistoryItem = ({
       <div className="flex-space-between flex-align-center gap-2">
         <div className="flex-column">
           <span className="text--bold text--color-primary">
-            {formatDate(row.date, { month: 'long', year: 'numeric' })}
+            {/* timeZone UTC: 'YYYY-MM-DD' parses as UTC midnight; local
+                rendering west of UTC would label day-1 dates with the
+                previous month. */}
+            {formatDate(row.date, {
+              month: 'long',
+              year: 'numeric',
+              timeZone: 'UTC',
+            })}
           </span>
           <span className="text--light text--3">
             {currencyFormatter(row.amount)}

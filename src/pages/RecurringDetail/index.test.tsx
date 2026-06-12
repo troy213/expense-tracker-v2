@@ -40,6 +40,7 @@ describe('RecurringDetail page', () => {
   it('shows the not-found state when no id is provided', () => {
     renderAt('/recurring-detail')
 
+    expect(screen.getByRole('button', { name: /back/i })).toBeInTheDocument()
     expect(screen.getByText(/recurring not found/i)).toBeInTheDocument()
   })
 })

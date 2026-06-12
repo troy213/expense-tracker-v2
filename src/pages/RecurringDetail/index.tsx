@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 import { Navbar } from '@/components'
 import { useAppSelector } from '@/hooks'
@@ -13,10 +13,24 @@ const RecurringDetail = () => {
   const { formatMessage } = useIntl()
   const [openMenuId, setOpenMenuId] = useState<string | null>(null)
 
+  const navigate = useNavigate()
+
   const definition = useAppSelector((s) =>
     s.recurringReducer.recurring.find((d) => d.id === id)
   )
   const history = useAppSelector((s) => s.recurringReducer.history)
+
+  // Deleting from the header card removes the definition while we're still on
+  // its page. Distinguish "just deleted" (definition existed earlier this
+  // mount → leave) from "never existed" (stale link → not-found state below).
+  const hadDefinition = useRef(false)
+  useEffect(() => {
+    if (definition) {
+      hadDefinition.current = true
+    } else if (hadDefinition.current) {
+      navigate('/recurring', { replace: true })
+    }
+  }, [definition, navigate])
 
   // Pending months on top (oldest first — the catch-up queue), resolved below
   // (newest first).
