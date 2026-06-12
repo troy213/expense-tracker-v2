@@ -5,6 +5,8 @@ import useDisclosure from './useDisclosure'
 import useExpandableGroups from './useExpandableGroups'
 import useInitConfig from './useInitConfig'
 import usePWAInstall from './usePWAInstall'
+import useRecurringGenerator from './useRecurringGenerator'
+import useToday from './useToday'
 
 export {
   useAppDispatch,
@@ -14,4 +16,6 @@ export {
   useExpandableGroups,
   useInitConfig,
   usePWAInstall,
+  useRecurringGenerator,
+  useToday,
 }

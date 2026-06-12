@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import { Suspense, lazy, useEffect } from 'react'
 import { Layout, PWAInstallPrompt } from '@/components'
 import { LANGUAGES, LOCALES, THEME } from '@/constants'
-import { useAppSelector, useInitConfig } from '@/hooks'
+import { useAppSelector, useInitConfig, useRecurringGenerator } from '@/hooks'
 import { SpinnerSvg } from '@/assets'
 import './App.scss'
 // Dashboard is the landing route, so it stays in the main bundle — lazy-loading
@@ -34,6 +34,7 @@ const App = () => {
   const currentLanguage = LANGUAGES[locale] || LANGUAGES[LOCALES.ENGLISH]
 
   useInitConfig()
+  useRecurringGenerator()
 
   // Resolve the theme preference to a concrete `data-theme` on <html>.
   // 'system' follows the OS and updates live; 'light'/'dark' are applied as-is.
