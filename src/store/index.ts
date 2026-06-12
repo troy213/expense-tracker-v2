@@ -4,6 +4,7 @@ import configSlice from './config/config-slice'
 import goalDetailSlice from './goal-detail/goal-detail-slice'
 import goalsSlice from './goals/goals-slice'
 import mainSlice from './main/main-slice'
+import recurringSlice from './recurring/recurring-slice'
 import reportSlice from './report/report-slice'
 import reportDetailSlice from './report-detail/report-detail-slice'
 import transactionsSlice from './transactions/transactions-slice'
@@ -15,6 +16,7 @@ const store = configureStore({
     goalDetailReducer: goalDetailSlice.reducer,
     goalsReducer: goalsSlice.reducer,
     mainReducer: mainSlice.reducer,
+    recurringReducer: recurringSlice.reducer,
     reportReducer: reportSlice.reducer,
     reportDetailReducer: reportDetailSlice.reducer,
     transactionsReducer: transactionsSlice.reducer,

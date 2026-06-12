@@ -3,6 +3,7 @@ import dbServices from '@/lib/db'
 import { getAllDBTransactions } from '@/store/transactions/transactions-thunk'
 import { getAllDBCategories } from '@/store/categories/categories-thunk'
 import { getAllDBGoals } from '@/store/goals/goals-thunk'
+import { getAllDBRecurring } from '@/store/recurring/recurring-thunk'
 import { getDBDashboardInfo } from '@/store/main/main-thunk'
 import { getDBReportData } from '@/store/report/report-thunk'
 import { configAction } from '@/store/config/config-slice'
@@ -24,6 +25,7 @@ const useInitConfig = () => {
         dispatch(getAllDBCategories()),
         dispatch(getAllDBTransactions()),
         dispatch(getAllDBGoals()),
+        dispatch(getAllDBRecurring()),
         dispatch(getDBDashboardInfo()),
         dispatch(getDBReportData({ dateFrom: null, dateTo: null })),
       ])
