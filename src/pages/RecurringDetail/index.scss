@@ -1,0 +1,22 @@
+@layer components {
+  .recurring-detail {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--surface);
+    color: var(--text);
+  }
+
+  .recurring-history-item {
+    background-color: var(--card);
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow);
+
+    &--pending {
+      // Keep the elevation shadow and add the warning ring on top.
+      box-shadow:
+        var(--shadow),
+        0 0 0 2px var(--default-color-warning);
+    }
+  }
+}
