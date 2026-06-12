@@ -92,11 +92,16 @@ const FormRecurring = ({
         recurring_name: '',
         transaction_name: '',
         type: 'expense',
-        category_id: '',
+        // Seed the first active expense category (FormGoal pattern) so the
+        // select never starts empty; RecurringCategoryField re-seeds it on
+        // income/expense toggle.
+        category_id:
+          categories.find((c) => c.type === 'expense' && c.is_active)?.id ?? '',
         amount: 0,
         due_day: '',
         start_period: getDate().slice(0, 7),
         active_until: '',
+        // No form control on purpose — activation is toggled outside the form.
         is_active: true,
       }
 
