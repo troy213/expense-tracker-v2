@@ -1,10 +1,16 @@
 @layer components {
   .recurring {
-    flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: var(--surface);
-    color: var(--text);
-    padding: 1rem;
+    flex: 1;
+
+    &__add-button {
+      display: flex;
+      justify-content: center;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      border: 2px dashed var(--text);
+      background-color: unset;
+    }
   }
 }
