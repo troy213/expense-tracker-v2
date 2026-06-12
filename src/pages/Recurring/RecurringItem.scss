@@ -4,10 +4,19 @@
     flex-direction: column;
     background-color: var(--card);
     border-radius: 0.5rem;
+    box-shadow: var(--shadow);
     cursor: pointer;
+    transition: opacity 0.15s ease-in-out;
+
+    &:hover {
+      opacity: 0.85;
+    }
 
     &--pending {
-      box-shadow: 0 0 0 2px var(--default-color-warning);
+      // Keep the elevation shadow and add the warning ring on top.
+      box-shadow:
+        var(--shadow),
+        0 0 0 2px var(--default-color-warning);
     }
 
     &--inactive {
