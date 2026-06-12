@@ -1,4 +1,5 @@
-import { Recurring, RecurringHistoryEntry } from '@/types'
+import { Recurring, RecurringHistoryEntry, Transaction } from '@/types'
+import { getDB } from './connection'
 
 /** "YYYY-MM" of a "YYYY-MM-DD" date string. */
 export const periodOf = (date: string): string => date.slice(0, 7)
@@ -81,3 +82,147 @@ export const computeRowsToGenerate = (
  */
 export const isExpired = (definition: Recurring, today: string): boolean =>
   definition.active_until !== null && periodOf(today) > definition.active_until
+
+// ============================================================================
+// DB SERVICE WRAPPERS (thin IndexedDB adapters — covered by the setup mock)
+// ============================================================================
+
+/**
+ * Get all recurring definitions
+ */
+async function getAllRecurring(): Promise<Recurring[]> {
+  const database = await getDB()
+  return database.getAll('recurring')
+}
+
+/**
+ * Get all recurring-history rows (flat, across every definition)
+ */
+async function getAllHistory(): Promise<RecurringHistoryEntry[]> {
+  const database = await getDB()
+  return database.getAll('recurring_history')
+}
+
+/**
+ * Get all history rows for a single definition
+ */
+async function getHistoryByRecurringId(
+  recurringId: string
+): Promise<RecurringHistoryEntry[]> {
+  const database = await getDB()
+  return database.getAllFromIndex(
+    'recurring_history',
+    'by-recurring',
+    recurringId
+  )
+}
+
+/**
+ * Add or update a recurring definition
+ */
+async function putRecurring(definition: Recurring): Promise<string> {
+  const database = await getDB()
+  return database.put('recurring', definition)
+}
+
+/**
+ * Insert generated pending rows with add() — NEVER put(). Each add is its own
+ * one-shot transaction, so a ConstraintError (the row already exists: StrictMode
+ * double-effect, second tab, date-change re-run) is swallowed per-row without
+ * aborting the rest and, critically, without clobbering an already-resolved
+ * month back to pending. Returns only the rows actually written.
+ */
+async function addHistoryRows(
+  rows: RecurringHistoryEntry[]
+): Promise<RecurringHistoryEntry[]> {
+  const database = await getDB()
+  const written: RecurringHistoryEntry[] = []
+  for (const row of rows) {
+    try {
+      await database.add('recurring_history', row)
+      written.push(row)
+    } catch (error) {
+      if ((error as DOMException).name !== 'ConstraintError') throw error
+    }
+  }
+  return written
+}
+
+/**
+ * Overwrite existing history rows (edit-cascade into pending rows, skip-resolve)
+ */
+async function putHistoryRows(rows: RecurringHistoryEntry[]): Promise<void> {
+  const database = await getDB()
+  const tx = database.transaction('recurring_history', 'readwrite')
+  for (const row of rows) {
+    await tx.store.put(row)
+  }
+  await tx.done
+}
+
+/**
+ * Resolve a pending month as 'added': write the generated transaction and the
+ * updated history row in ONE IndexedDB transaction across both stores, so the
+ * ledger can never disagree with the transaction list.
+ */
+async function resolveAdd(
+  row: RecurringHistoryEntry,
+  transaction: Transaction
+): Promise<void> {
+  const database = await getDB()
+  const tx = database.transaction(
+    ['transactions', 'recurring_history'],
+    'readwrite'
+  )
+  await tx.objectStore('transactions').put(transaction)
+  await tx.objectStore('recurring_history').put(row)
+  await tx.done
+}
+
+/**
+ * Delete a definition and cascade-delete ALL its history rows (pending and
+ * resolved) in one transaction. Generated transactions are real money events
+ * and are intentionally kept.
+ */
+async function deleteRecurring(id: string): Promise<void> {
+  const database = await getDB()
+  const tx = database.transaction(
+    ['recurring', 'recurring_history'],
+    'readwrite'
+  )
+
+  await tx.objectStore('recurring').delete(id)
+
+  const historyStore = tx.objectStore('recurring_history')
+  const index = historyStore.index('by-recurring')
+  let cursor = await index.openCursor(id)
+  while (cursor) {
+    await cursor.delete()
+    cursor = await cursor.continue()
+  }
+
+  await tx.done
+}
+
+/**
+ * Clear all recurring definitions and history
+ */
+async function clearRecurring(): Promise<void> {
+  const database = await getDB()
+  await database.clear('recurring')
+  await database.clear('recurring_history')
+}
+
+const recurringServices = {
+  getAllRecurring,
+  getAllHistory,
+  getHistoryByRecurringId,
+  putRecurring,
+  addHistoryRows,
+  putHistoryRows,
+  resolveAdd,
+  deleteRecurring,
+  clearRecurring,
+}
+
+export default recurringServices
