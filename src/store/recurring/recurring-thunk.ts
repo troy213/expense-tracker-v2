@@ -86,7 +86,15 @@ export const addDBRecurring = createAsyncThunk(
 export const editDBRecurring = createAsyncThunk(
   'recurring/edit',
   async (payload: { definition: Recurring; today: string }) => {
-    const { definition, today } = payload
+    const { today } = payload
+    // Expiry wins over the submitted flag (mirroring the generator's
+    // deactivate-after-generation rule), so the Active pill never lags until
+    // the next trigger when active_until is edited into the past.
+    const definition: Recurring = {
+      ...payload.definition,
+      is_active:
+        payload.definition.is_active && !isExpired(payload.definition, today),
+    }
     await dbServices.recurring.putRecurring(definition)
 
     const own = await dbServices.recurring.getHistoryByRecurringId(
@@ -103,9 +111,12 @@ export const editDBRecurring = createAsyncThunk(
       }))
     await dbServices.recurring.putHistoryRows(refreshed)
 
-    const generated = definition.is_active
+    // Generate from the user's intent (pre-expiry flag) so the final periods
+    // up to active_until still get their pending rows even when the edit
+    // itself expires the definition; the walk breaks at active_until.
+    const generated = payload.definition.is_active
       ? await dbServices.recurring.addHistoryRows(
-          computeRowsToGenerate(definition, own, today)
+          computeRowsToGenerate(payload.definition, own, today)
         )
       : []
 

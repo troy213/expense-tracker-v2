@@ -1,7 +1,7 @@
 import { useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useIntl } from 'react-intl'
-import { MoreVerticalSvg } from '@/assets'
+import { MoreVerticalSvg, PlaySvg, SquareSvg } from '@/assets'
 import { CategoryIcon, FormModal } from '@/components'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
 import MoreOptionMenu from '@/components/Menu/MoreOptionMenu'
@@ -12,8 +12,11 @@ import {
   useDisclosure,
 } from '@/hooks'
 import { Recurring } from '@/types'
-import { deleteDBRecurring } from '@/store/recurring/recurring-thunk'
-import { combineClassName, currencyFormatter } from '@/utils'
+import {
+  deleteDBRecurring,
+  editDBRecurring,
+} from '@/store/recurring/recurring-thunk'
+import { combineClassName, currencyFormatter, getDate } from '@/utils'
 import './RecurringItem.scss'
 
 type RecurringItemProps = {
@@ -60,9 +63,32 @@ const RecurringItem = ({
     onMenuToggle(isMenuOpen ? null : definition.id)
   }
 
+  // Reuses the edit thunk: flipping on regenerates missed months (catch-up by
+  // design); flipping off keeps existing pending rows resolvable (spec v1).
+  const handleToggleActive = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    dispatch(
+      editDBRecurring({
+        definition: { ...definition, is_active: !definition.is_active },
+        today: getDate(),
+      })
+    )
+  }
+
   const itemClassName = combineClassName('recurring-item p-4', [
     { condition: hasPending, className: 'recurring-item--pending' },
     { condition: !definition.is_active, className: 'recurring-item--inactive' },
+  ])
+
+  const toggleButtonClassName = combineClassName('btn', [
+    {
+      condition: !definition.is_active,
+      className: 'btn-primary',
+    },
+    {
+      condition: definition.is_active,
+      className: 'btn-outline-primary',
+    },
   ])
 
   return (
@@ -159,6 +185,39 @@ const RecurringItem = ({
             />
           )}
         </div>
+      </div>
+
+      <div className="flex-end mt-3">
+        <button
+          type="button"
+          className={toggleButtonClassName}
+          onClick={handleToggleActive}
+          aria-label={formatMessage({
+            id: definition.is_active ? 'Deactivate' : 'Activate',
+          })}
+        >
+          {definition.is_active ? (
+            <div className="flex-align-center gap-2">
+              <SquareSvg
+                className="icon--md icon--color-primary"
+                aria-hidden="true"
+              />
+              <span className="text--3">
+                {formatMessage({ id: 'Deactivate' })}
+              </span>
+            </div>
+          ) : (
+            <div className="flex-align-center gap-2">
+              <PlaySvg
+                className="icon--md icon--color-white"
+                aria-hidden="true"
+              />
+              <span className="text--3">
+                {formatMessage({ id: 'Activate' })}
+              </span>
+            </div>
+          )}
+        </button>
       </div>
     </div>
   )
