@@ -24,11 +24,12 @@ const definition = (overrides: Partial<Recurring> = {}): Recurring => ({
 
 const row = (
   period: string,
-  status: RecurringHistoryEntry['status'] = 'added'
+  status: RecurringHistoryEntry['status'] = 'added',
+  dueDay = 15
 ): RecurringHistoryEntry => ({
   id: historyRowId('r1', period),
   recurring_id: 'r1',
-  date: clampDueDate(period, 15),
+  date: clampDueDate(period, dueDay),
   category_id: 'c1',
   transaction_name: 'Credit card payment',
   amount: 500_000,
@@ -140,6 +141,33 @@ describe('computeRowsToGenerate', () => {
         '2026-06-20'
       )
     ).toEqual([])
+  })
+
+  it('backfills across a year boundary', () => {
+    const rows = computeRowsToGenerate(
+      definition({ start_period: '2026-11' }),
+      [],
+      '2027-02-20'
+    )
+    expect(rows.map((r) => r.id)).toEqual([
+      'r1:2026-11',
+      'r1:2026-12',
+      'r1:2027-01',
+      'r1:2027-02',
+    ])
+  })
+
+  it('honors an active_until in a later year', () => {
+    const rows = computeRowsToGenerate(
+      definition({ start_period: '2026-11', active_until: '2027-01' }),
+      [],
+      '2027-03-20'
+    )
+    expect(rows.map((r) => r.id)).toEqual([
+      'r1:2026-11',
+      'r1:2026-12',
+      'r1:2027-01',
+    ])
   })
 })
 

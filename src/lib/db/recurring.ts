@@ -44,7 +44,9 @@ export const computeRowsToGenerate = (
   const currentPeriod = periodOf(today)
   const latestPeriod = existingHistory.reduce<string | null>((latest, row) => {
     if (row.recurring_id !== definition.id) return latest
-    const period = periodOf(row.date)
+    // The id (`${recurring_id}:${period}`) is the authoritative period source —
+    // row.date is display data and must not steer the walk.
+    const period = row.id.slice(row.recurring_id.length + 1)
     return latest === null || period > latest ? period : latest
   }, null)
 
