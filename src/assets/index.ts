@@ -27,6 +27,7 @@ import MoonSvg from './icons/moon.svg?react'
 import MoreVerticalSvg from './icons/more-vertical.svg?react'
 import PaletteSvg from './icons/palette.svg?react'
 import PieChartSvg from './icons/pie-chart.svg?react'
+import PiggyBankSvg from './icons/piggy-bank.svg?react'
 import PlaySvg from './icons/play.svg?react'
 import PlusSvg from './icons/plus.svg?react'
 import RecurringSvg from './icons/recurring.svg?react'
@@ -69,6 +70,7 @@ export {
   MoreVerticalSvg,
   PaletteSvg,
   PieChartSvg,
+  PiggyBankSvg,
   PlaySvg,
   PlusSvg,
   RecurringSvg,
