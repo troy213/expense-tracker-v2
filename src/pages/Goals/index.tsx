@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useIntl } from 'react-intl'
-import { GoalSvg, PlusSvg } from '@/assets'
+import { PiggyBankSvg, PlusSvg } from '@/assets'
 import { FormModal, Navbar, Widget } from '@/components'
 import { useAppSelector, useDisclosure } from '@/hooks'
 import { currencyFormatter } from '@/utils'
@@ -26,10 +26,13 @@ const Goals = () => {
       <div className="flex-column flex-1 gap-4 p-4">
         <Navbar enableBackButton title="Goals" />
 
-        {goals.length > 0 && (
+        <div>
           <Widget className="bg-primary text--color-white p-4">
             <div className="flex-justify-center flex-align-center gap-4">
-              <GoalSvg className="goals__total-saved-icon" aria-hidden="true" />
+              <PiggyBankSvg
+                className="goals__total-saved-icon"
+                aria-hidden="true"
+              />
               <div className="flex-column">
                 <span className="text--light text--3">
                   {formatMessage({ id: 'TotalSaved' })}
@@ -40,9 +43,9 @@ const Goals = () => {
               </div>
             </div>
           </Widget>
-        )}
+        </div>
 
-        <div className="flex-column gap-4 mt-2">
+        <div className="flex-column flex-1 gap-4 mt-2">
           <button
             type="button"
             className="goals__add-button"
@@ -57,7 +60,7 @@ const Goals = () => {
           </button>
 
           {goals.length === 0 ? (
-            <div className="flex-column flex-align-center gap-2 mt-4 text--light">
+            <div className="flex-column flex-1 flex-justify-center flex-align-center gap-2 mt-4 text--light">
               <span className="text--3">
                 {formatMessage({ id: 'NoGoals' })}
               </span>
