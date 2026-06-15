@@ -21,8 +21,14 @@ const ConfirmRecurringModal = ({
   const { formatMessage, formatDate } = useIntl()
   const dispatch = useAppDispatch()
 
-  const handleSubmit = (formData: { amount: number }) => {
-    dispatch(resolveAddDBRecurring({ row, amount: formData.amount }))
+  const handleSubmit = (formData: { name: string; amount: number }) => {
+    dispatch(
+      resolveAddDBRecurring({
+        row,
+        amount: formData.amount,
+        name: formData.name,
+      })
+    )
     onClose()
   }
 
@@ -30,8 +36,8 @@ const ConfirmRecurringModal = ({
 
   return (
     <Modal isOpen onClose={onClose}>
-      <Form<{ amount: number }>
-        defaultValues={{ amount: row.amount }}
+      <Form<{ name: string; amount: number }>
+        defaultValues={{ name: row.transaction_name, amount: row.amount }}
         onSubmit={handleSubmit}
         onCancel={onClose}
       >
@@ -45,6 +51,13 @@ const ConfirmRecurringModal = ({
             timeZone: 'UTC',
           })}
         </span>
+
+        <Form.Input
+          type="text"
+          valueKey="name"
+          label={formatMessage({ id: 'TransactionName' })}
+          required
+        />
 
         <Form.Input
           type="currency"

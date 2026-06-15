@@ -4,6 +4,7 @@ const messages = {
   Activate: 'Activate',
   Active: 'Active',
   ActiveUntil: 'Active Until',
+  ActiveUntilDate: 'Active Until: <b>{date}</b>',
   AboutDescription:
     'This Expense Tracker app helps you manage your budget efficiently by allowing you to track your expenses and budgets. It is designed to provide a simple and intuitive experience.',
   AboutThisApp: 'About This App',
@@ -68,6 +69,7 @@ const messages = {
   Design: 'Design',
   Due: 'Due {date}',
   DueDay: 'Due Day (1–31)',
+  DueDayOrdinal: 'Due Day: <b>{day}</b>',
   DueDayError: 'Must be a day between 1 and 31',
   Edit: 'Edit',
   EditRecurring: 'Edit Recurring',
@@ -87,6 +89,7 @@ const messages = {
   Filter: 'Filter',
   FormEmptyError: 'This field cannot be empty',
   FormMinValueError: 'Value must be greater than 0',
+  Frequency: 'Frequency',
   From: 'From',
   GoalCancelled: 'Cancelled',
   GoalCompleted: 'Completed',
@@ -101,6 +104,7 @@ const messages = {
   GoalSpent: 'Spent',
   Goals: 'Goals',
   HideBalance: 'Hide Balance',
+  History: 'History',
   HideBalanceOnStartup: 'Hide balance on startup',
   Icon: 'Icon',
   Inactive: 'Inactive',
@@ -127,8 +131,10 @@ const messages = {
   Loans: 'Loans',
   March: 'March',
   May: 'May',
+  Monthly: 'Monthly',
   MoreOptions: 'More options',
   NextDay: 'Next Day',
+  NoEndDate: 'No End Date',
   NoCategoryWarningMessage:
     "Oops! it seems you don't have any category. You can add your first category in the link below.",
   NoGoalDetail: 'Goal not found.',
@@ -144,6 +150,7 @@ const messages = {
   PendingRecurringCount:
     '{count, plural, one {# pending recurring transaction} other {# pending recurring transactions}}',
   PerDay: '/day',
+  PerMonth: '/month',
   PeriodFormatError: 'Use YYYY-MM format',
   PreviousDay: 'Previous Day',
   RecentTransactions: 'Recent Transactions',
@@ -157,6 +164,7 @@ const messages = {
   RemainingBudgetForThisCategory:
     'Remaining budget for this category in this month',
   Reports: 'Reports',
+  RuleDetails: 'Rule Details',
   ResumeGoal: 'Resume Goal',
   Salary: 'Salary',
   SavedAmount: 'Saved',

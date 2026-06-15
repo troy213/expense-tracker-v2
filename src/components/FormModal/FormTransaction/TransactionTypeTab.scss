@@ -3,10 +3,16 @@
 @layer components {
   .transaction-type-tabs {
     display: flex;
-    gap: 0.25rem;
-    padding: 0.25rem;
-    border-radius: 0.5rem;
-    background-color: var(--surface-muted);
+    flex-direction: column;
+    gap: 0.5rem;
+
+    &__container {
+      display: flex;
+      gap: 0.25rem;
+      padding: 0.25rem;
+      border-radius: 0.5rem;
+      background-color: var(--surface-muted);
+    }
 
     &__tab {
       flex: 1;

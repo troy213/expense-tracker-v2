@@ -5,18 +5,66 @@
     flex-direction: column;
     background-color: var(--surface);
     color: var(--text);
+
+    &__header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 1.5rem 0 1.5rem;
+    }
+
+    &__info {
+      flex: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    &--inactive &__header,
+    &--inactive &__info {
+      color: var(--text-muted);
+    }
   }
 
   .recurring-history-item {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     background-color: var(--card);
     border-radius: 0.5rem;
     box-shadow: var(--shadow);
 
     &--pending {
-      // Keep the elevation shadow and add the warning ring on top.
       box-shadow:
         var(--shadow),
-        0 0 0 2px var(--default-color-warning);
+        0 0 4px 4px
+          color-mix(in srgb, var(--default-color-warning) 25%, var(--surface));
+    }
+
+    &__icon {
+      width: 2rem;
+      height: 2rem;
+      padding: 0.25rem;
+      border-radius: 50%;
+    }
+
+    &--skipped &__icon {
+      background-color: color-mix(
+        in srgb,
+        var(--text-muted) 20%,
+        var(--surface)
+      );
+      color: var(--text-muted);
+    }
+
+    &--added &__icon {
+      background-color: color-mix(
+        in srgb,
+        var(--default-color-success) 20%,
+        var(--surface)
+      );
+      color: var(--default-color-success);
     }
   }
 }

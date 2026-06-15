@@ -139,14 +139,23 @@ export const deleteDBRecurring = createAsyncThunk(
  */
 export const resolveAddDBRecurring = createAsyncThunk(
   'recurring/resolveAdd',
-  async (payload: { row: RecurringHistoryEntry; amount: number }) => {
-    const { row, amount } = payload
-    const resolved: RecurringHistoryEntry = { ...row, status: 'added', amount }
+  async (payload: {
+    row: RecurringHistoryEntry
+    amount: number
+    name: string
+  }) => {
+    const { row, amount, name } = payload
+    const resolved: RecurringHistoryEntry = {
+      ...row,
+      status: 'added',
+      transaction_name: name,
+      amount,
+    }
     const transaction: Transaction = {
       id: uuidv7(),
       date: row.date,
       category_id: row.category_id,
-      description: row.transaction_name,
+      description: name,
       amount,
     }
     await dbServices.recurring.resolveAdd(resolved, transaction)

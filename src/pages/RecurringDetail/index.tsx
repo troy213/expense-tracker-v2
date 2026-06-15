@@ -1,36 +1,39 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useIntl } from 'react-intl'
-import { Navbar } from '@/components'
+import { CategoryIcon, Navbar, Widget } from '@/components'
 import { useAppSelector } from '@/hooks'
-import RecurringItem from '@/pages/Recurring/RecurringItem'
+import { combineClassName, currencyFormatter, ordinal } from '@/utils'
 import RecurringHistoryItem from './RecurringHistoryItem'
+import RecurringAction from './RecurringAction'
 import './index.scss'
 
 const RecurringDetail = () => {
   const [searchParams] = useSearchParams()
   const id = searchParams.get('id')
   const { formatMessage } = useIntl()
-  const [openMenuId, setOpenMenuId] = useState<string | null>(null)
 
   const navigate = useNavigate()
 
-  const definition = useAppSelector((s) =>
+  const data = useAppSelector((s) =>
     s.recurringReducer.recurring.find((d) => d.id === id)
+  )
+  const category = useAppSelector((s) =>
+    s.categoriesReducer.categories.find((c) => data?.category_id === c.id)
   )
   const history = useAppSelector((s) => s.recurringReducer.history)
 
-  // Deleting from the header card removes the definition while we're still on
-  // its page. Distinguish "just deleted" (definition existed earlier this
+  // Deleting from the header card removes the data while we're still on
+  // its page. Distinguish "just deleted" (data existed earlier this
   // mount → leave) from "never existed" (stale link → not-found state below).
-  const hadDefinition = useRef(false)
+  const hadData = useRef(false)
   useEffect(() => {
-    if (definition) {
-      hadDefinition.current = true
-    } else if (hadDefinition.current) {
+    if (data) {
+      hadData.current = true
+    } else if (hadData.current) {
       navigate('/recurring', { replace: true })
     }
-  }, [definition, navigate])
+  }, [data, navigate])
 
   // Pending months on top (oldest first — the catch-up queue), resolved below
   // (newest first).
@@ -45,7 +48,17 @@ const RecurringDetail = () => {
     return [...pending, ...resolved]
   }, [history, id])
 
-  if (!id || !definition) {
+  const containerClassName = combineClassName(
+    'recurring-detail flex-column gap-4 p-4',
+    [
+      {
+        condition: data !== undefined && !data.is_active,
+        className: 'recurring-detail--inactive',
+      },
+    ]
+  )
+
+  if (!id || !data) {
     return (
       <div className="recurring-detail flex-column gap-4 p-4">
         <Navbar enableBackButton title="RecurringDetail" />
@@ -59,21 +72,95 @@ const RecurringDetail = () => {
   }
 
   return (
-    <div className="recurring-detail flex-column gap-4 p-4">
+    <div className={containerClassName}>
       <Navbar enableBackButton title="RecurringDetail" />
 
-      <RecurringItem
-        definition={definition}
-        isMenuOpen={openMenuId === definition.id}
-        onMenuToggle={setOpenMenuId}
-      />
+      <div className="recurring-detail__header">
+        {category && (
+          <CategoryIcon
+            iconId={category.icon_id}
+            color={category.color}
+            isActive={data.is_active}
+          />
+        )}
+        <div className="flex-column flex-align-center">
+          <span>{data.recurring_name}</span>
+          {category && (
+            <span className="text--light text--3">{category.name}</span>
+          )}
+        </div>
 
-      <div className="flex-column gap-3">
+        <div className="flex-align-center gap-1">
+          <span className="text--bold text--6">
+            {currencyFormatter(data.amount)}
+          </span>
+          <span className="text--light text--3">
+            {formatMessage({ id: 'PerMonth' })}
+          </span>
+        </div>
+      </div>
+
+      <RecurringAction data={data} />
+
+      <Widget className="flex-none">
+        <div className="recurring-detail__info">
+          <span className="text--3 text--uppercase">
+            {formatMessage({ id: 'RuleDetails' })}
+          </span>
+          <div className="flex-space-between">
+            <div className="flex-1 flex-column gap-1">
+              <span className="text--light text--3">
+                {formatMessage({ id: 'Frequency' })}
+              </span>
+              <span className="text--bold text--3">
+                {formatMessage({ id: 'Monthly' })}
+              </span>
+            </div>
+            <div className="flex-1 flex-column gap-1">
+              <span className="text--light text--3">
+                {formatMessage({ id: 'DueDay' })}
+              </span>
+              <span className="text--bold text--3">
+                {ordinal(data.due_day)}
+              </span>
+            </div>
+          </div>
+          <div className="flex-space-between">
+            <div className="flex-1 flex-column gap-1">
+              <span className="text--light text--3">
+                {formatMessage({ id: 'StartPeriod' })}
+              </span>
+              <span className="text--bold text--3">{data.start_period}</span>
+            </div>
+            <div className="flex-1 flex-column gap-1">
+              <span className="text--light text--3">
+                {formatMessage({ id: 'ActiveUntil' })}
+              </span>
+              {data.active_until ? (
+                <span className="text--bold text--3">{data.active_until}</span>
+              ) : (
+                <span className="text--light text--3 text--italic">
+                  {formatMessage({ id: 'NoEndDate' })}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      </Widget>
+
+      <div className="flex-1 flex-column gap-4 mt-4">
+        <span className="text--bold">{formatMessage({ id: 'History' })}</span>
+
+        {rows.length === 0 && (
+          <span className="flex-1 flex-justify-center flex-align-center text--light text--3">
+            {formatMessage({ id: 'NoRecurring' })}
+          </span>
+        )}
         {rows.map((row) => (
           <RecurringHistoryItem
             key={row.id}
             row={row}
-            recurringName={definition.recurring_name}
+            recurringName={data.recurring_name}
           />
         ))}
       </div>

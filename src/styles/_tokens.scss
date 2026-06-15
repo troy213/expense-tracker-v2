@@ -50,12 +50,10 @@
   --default-color-success: #{$color-success};
 }
 
-// Only the tokens that actually differ from light are listed here.
 [data-theme='dark'] {
   --surface: #{$color-dark};
   --text: #{$color-white};
-  --accent: #{$color-accent-dark}; // brighter so primary fills pop on the dark surface
-
+  --accent: #{$color-accent-dark};
   --overlay: #{rgba(#000, 0.6)};
   --shadow: 0 0.25rem 12px #{rgba(#000, 0.45)};
 

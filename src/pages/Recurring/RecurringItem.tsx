@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { MoreVerticalSvg, PlaySvg, SquareSvg } from '@/assets'
 import { CategoryIcon, FormModal } from '@/components'
 import DeleteDataModal from '@/components/Modal/DeleteDataModal'
@@ -16,7 +16,8 @@ import {
   deleteDBRecurring,
   editDBRecurring,
 } from '@/store/recurring/recurring-thunk'
-import { combineClassName, currencyFormatter, getDate } from '@/utils'
+import { isExpired } from '@/lib/db/recurring'
+import { combineClassName, currencyFormatter, getDate, ordinal } from '@/utils'
 import './RecurringItem.scss'
 
 type RecurringItemProps = {
@@ -52,7 +53,7 @@ const RecurringItem = ({
   const handleRowClick = () => navigate(`/recurring-detail?id=${definition.id}`)
 
   const handleRowKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
+    if (e.key === 'Enter') {
       e.preventDefault()
       handleRowClick()
     }
@@ -63,8 +64,6 @@ const RecurringItem = ({
     onMenuToggle(isMenuOpen ? null : definition.id)
   }
 
-  // Reuses the edit thunk: flipping on regenerates missed months (catch-up by
-  // design); flipping off keeps existing pending rows resolvable (spec v1).
   const handleToggleActive = (e: React.MouseEvent) => {
     e.stopPropagation()
     dispatch(
@@ -75,7 +74,9 @@ const RecurringItem = ({
     )
   }
 
-  const itemClassName = combineClassName('recurring-item p-4', [
+  const canToggleActive = !isExpired(definition, getDate())
+
+  const itemClassName = combineClassName('recurring-item', [
     { condition: hasPending, className: 'recurring-item--pending' },
     { condition: !definition.is_active, className: 'recurring-item--inactive' },
   ])
@@ -133,31 +134,17 @@ const RecurringItem = ({
             />
           )}
           <div className="flex-column">
-            <span className="text--bold text--color-primary">
-              {definition.recurring_name}
-            </span>
-            <span className="text--light text--3 text--italic">
-              {formatMessage(
-                { id: 'EveryMonthOnDay' },
-                { day: definition.due_day }
-              )}
+            <span className="text--bold">{definition.recurring_name}</span>
+            <span className="text--light text--3">
+              {definition.transaction_name}
             </span>
           </div>
         </div>
 
         <div className="relative flex-align-center gap-2" ref={menuRef}>
-          <div className="flex-column flex-align-end gap-1">
-            <span className="text--light text--3">
-              {currencyFormatter(definition.amount)}
-            </span>
-            <span
-              className={`pill pill--${definition.is_active ? 'primary' : 'default'} text--uppercase`}
-            >
-              {formatMessage({
-                id: definition.is_active ? 'Active' : 'Inactive',
-              })}
-            </span>
-          </div>
+          <span className="text--bold">
+            {currencyFormatter(definition.amount)}
+          </span>
 
           <button
             type="button"
@@ -187,37 +174,61 @@ const RecurringItem = ({
         </div>
       </div>
 
-      <div className="flex-end mt-3">
-        <button
-          type="button"
-          className={toggleButtonClassName}
-          onClick={handleToggleActive}
-          aria-label={formatMessage({
-            id: definition.is_active ? 'Deactivate' : 'Activate',
-          })}
-        >
-          {definition.is_active ? (
-            <div className="flex-align-center gap-2">
-              <SquareSvg
-                className="icon--md icon--color-primary"
-                aria-hidden="true"
+      <div className="recurring-item__footer">
+        <div className="flex-column flex-justify-center gap-1">
+          <span className="text--light text--3">
+            <FormattedMessage
+              id="DueDayOrdinal"
+              values={{
+                day: ordinal(definition.due_day),
+                b: (chunks) => <span className="text--bold">{chunks}</span>,
+              }}
+            />
+          </span>
+          {definition.active_until && (
+            <span className="text--light text--3">
+              <FormattedMessage
+                id="ActiveUntilDate"
+                values={{
+                  date: definition.active_until,
+                  b: (chunks) => <span className="text--bold">{chunks}</span>,
+                }}
               />
-              <span className="text--3">
-                {formatMessage({ id: 'Deactivate' })}
-              </span>
-            </div>
-          ) : (
-            <div className="flex-align-center gap-2">
-              <PlaySvg
-                className="icon--md icon--color-white"
-                aria-hidden="true"
-              />
-              <span className="text--3">
-                {formatMessage({ id: 'Activate' })}
-              </span>
-            </div>
+            </span>
           )}
-        </button>
+        </div>
+        {canToggleActive && (
+          <button
+            type="button"
+            className={toggleButtonClassName}
+            onClick={handleToggleActive}
+            aria-label={formatMessage({
+              id: definition.is_active ? 'Deactivate' : 'Activate',
+            })}
+          >
+            {definition.is_active ? (
+              <div className="flex-align-center gap-2">
+                <SquareSvg
+                  className="icon--md icon--color-primary"
+                  aria-hidden="true"
+                />
+                <span className="text--3">
+                  {formatMessage({ id: 'Deactivate' })}
+                </span>
+              </div>
+            ) : (
+              <div className="flex-align-center gap-2">
+                <PlaySvg
+                  className="icon--md icon--color-white"
+                  aria-hidden="true"
+                />
+                <span className="text--3">
+                  {formatMessage({ id: 'Activate' })}
+                </span>
+              </div>
+            )}
+          </button>
+        )}
       </div>
     </div>
   )
