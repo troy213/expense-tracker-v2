@@ -87,6 +87,7 @@ const GoalCard = ({ goal }: GoalCardProps) => {
 
         <ProgressBar
           amount={barFill}
+          label={goal.name}
           options={{
             enableStyle: false,
             progressClassName: progressFillClassName,

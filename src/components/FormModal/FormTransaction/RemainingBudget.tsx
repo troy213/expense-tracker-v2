@@ -91,7 +91,10 @@ const RemainingBudget = ({ editingItemIds }: RemainingBudgetProps) => {
           {formatMessage({ id: 'RemainingBudgetForThisCategory' })}
         </span>
       </div>
-      <ProgressBar amount={progress} />
+      <ProgressBar
+        amount={progress}
+        label={formatMessage({ id: 'RemainingBudgetForThisCategory' })}
+      />
       <div className="flex-space-between gap-2">
         <span className={budgetClassName}>
           {currencyFormatter(remainingBudget)}

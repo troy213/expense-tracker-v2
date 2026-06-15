@@ -3,13 +3,18 @@ import './index.scss'
 
 type ProgressBarProps = {
   amount: number
+  label?: string
   options?: {
     enableStyle?: boolean
     progressClassName?: string
   }
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ amount, options = {} }) => {
+const ProgressBar: React.FC<ProgressBarProps> = ({
+  amount,
+  label = 'Progress',
+  options = {},
+}) => {
   const { enableStyle = true, progressClassName = '' } = options
   const progressWidth = `${amount}%`
   const isWarning = amount > 0 && amount <= 25
@@ -36,6 +41,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ amount, options = {} }) => {
     <div
       className="progress-bar"
       role="progressbar"
+      aria-label={label}
       aria-valuenow={clampedValue}
       aria-valuemin={0}
       aria-valuemax={100}

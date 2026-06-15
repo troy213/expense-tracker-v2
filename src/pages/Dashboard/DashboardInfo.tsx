@@ -121,7 +121,10 @@ const DashboardInfo = () => {
             </Link>
           </div>
 
-          <ProgressBar amount={budgetPercentage < 0 ? 0 : budgetPercentage} />
+          <ProgressBar
+            amount={budgetPercentage < 0 ? 0 : budgetPercentage}
+            label={formatMessage({ id: 'TotalRemainingBudget' })}
+          />
 
           <div className="flex-space-between">
             <span className="text--italic text--light text--3">
