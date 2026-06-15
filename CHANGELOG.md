@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.0-beta.35](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.34...v1.0.0-beta.35) (2026-06-15)
+
+
+### Features
+
+* **recurring:** add types and IndexedDB stores (DB v4) ([91ff650](https://github.com/troy213/expense-tracker-v2/commit/91ff650f2c7c11c6c03cadc5ce7c23ccb2f803e3))
+* **recurring:** date-change generator trigger via useToday clock hook ([a340f3a](https://github.com/troy213/expense-tracker-v2/commit/a340f3ac0f601b03cd6046de956d82c70fdd2c08))
+* **recurring:** definition create/edit form modal ([7de67d8](https://github.com/troy213/expense-tracker-v2/commit/7de67d832f02a6267e76df8a94934f57f6d34a53))
+* **recurring:** detail page with pending add/skip resolution ([4c14872](https://github.com/troy213/expense-tracker-v2/commit/4c14872b60146d341e5466b4ffd79243534f4a33))
+* **recurring:** indexedDB service wrappers ([99bda82](https://github.com/troy213/expense-tracker-v2/commit/99bda82579fdf9429220242fbed787a2d771511a))
+* **recurring:** locale messages (en-US, id-ID) ([8902f02](https://github.com/troy213/expense-tracker-v2/commit/8902f028e0a658933c8c76acb4fdf7fc46927a3a))
+* **recurring:** manual activate/deactivate toggle on definition cards ([de03ef1](https://github.com/troy213/expense-tracker-v2/commit/de03ef17e8f2e9f71ad87f1d0f3747693c84198e))
+* **recurring:** name input on confirm modal, summary widget, i18n coverage ([4e798a1](https://github.com/troy213/expense-tracker-v2/commit/4e798a19b72371093290d21be6565e7a6a33891c))
+* **recurring:** pending badge on the dashboard launcher tile ([ae1312e](https://github.com/troy213/expense-tracker-v2/commit/ae1312efeae0b506967500672985b35afb2002a7))
+* **recurring:** pure generator core with unit tests ([268a2c8](https://github.com/troy213/expense-tracker-v2/commit/268a2c89e58439283044cd54016320b29235a8cb))
+* **recurring:** recurring list page with definition cards ([5d67c9d](https://github.com/troy213/expense-tracker-v2/commit/5d67c9dd8bd1ca36c488658b6388188b8fe8bd4f))
+* **recurring:** redux slice, thunks, and bootstrap load ([ac8d9d4](https://github.com/troy213/expense-tracker-v2/commit/ac8d9d4e95a9dadae72707b9c028093c4a3dde0e))
+
+
+### Bug Fixes
+
+* **recurring:** align page surface and card elevation with goals styling ([7043a77](https://github.com/troy213/expense-tracker-v2/commit/7043a7733f296bbbf3b42df281d65896f5320a1f))
+* **recurring:** utc month labels and post-delete navigation on detail page ([7733e45](https://github.com/troy213/expense-tracker-v2/commit/7733e4573e1ba3a03d2df86ddd8e72f53b3ebd2a))
+
 ## [1.0.0-beta.34](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.33...v1.0.0-beta.34) (2026-06-12)
 
 
