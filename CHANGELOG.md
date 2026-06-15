@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.0-beta.36](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.35...v1.0.0-beta.36) (2026-06-15)
+
+
+### Bug Fixes
+
+* **a11y:** add accessible names to all ProgressBar instances ([aa9a957](https://github.com/troy213/expense-tracker-v2/commit/aa9a9575c5dc2fa9c2e07903f8b359af80460de2))
+
 ## [1.0.0-beta.35](https://github.com/troy213/expense-tracker-v2/compare/v1.0.0-beta.34...v1.0.0-beta.35) (2026-06-15)
 
 
