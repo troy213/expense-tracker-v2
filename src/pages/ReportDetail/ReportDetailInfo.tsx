@@ -83,6 +83,7 @@ const ReportDetailInfo = () => {
           <div className="flex-column gap-2">
             <ProgressBar
               amount={progress}
+              label={formatMessage({ id: 'RemainingBudget' })}
               options={{ enableStyle: false, progressClassName }}
             />
             <div className="flex-space-between">

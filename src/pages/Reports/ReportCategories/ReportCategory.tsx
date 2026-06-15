@@ -39,7 +39,11 @@ const ReportCategory: React.FC<ReportCategoryProps> = ({
           )}
         </div>
 
-        <ProgressBar amount={percentage} options={{ enableStyle: false }} />
+        <ProgressBar
+          amount={percentage}
+          label={cat.name}
+          options={{ enableStyle: false }}
+        />
         <div className="flex-space-between">
           <span className="text--light text--3">
             {currencyFormatter(cat.total)}

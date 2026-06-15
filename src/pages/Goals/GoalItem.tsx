@@ -196,6 +196,7 @@ const GoalItem = ({ goal, isMenuOpen, onMenuToggle }: GoalItemProps) => {
       <div className="flex-column gap-2 flex-1">
         <ProgressBar
           amount={barFill}
+          label={goal.name}
           options={{
             enableStyle: false,
             progressClassName: progressFillClassName,
