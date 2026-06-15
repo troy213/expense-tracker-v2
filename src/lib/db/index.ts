@@ -2,6 +2,7 @@ import { Category, Transaction } from '@/types'
 import { closeDB, getDB, initializeDB } from './connection'
 import categoryServices from './categories'
 import goalsServices from './goals'
+import recurringServices from './recurring'
 import reportServices from './report'
 import transactionServices from './transactions'
 
@@ -71,6 +72,7 @@ const dbServices = {
   // Namespaced operations
   categories: categoryServices,
   goals: goalsServices,
+  recurring: recurringServices,
   report: reportServices,
   transactions: transactionServices,
 }

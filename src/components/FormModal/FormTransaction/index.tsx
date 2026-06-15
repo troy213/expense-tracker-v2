@@ -3,17 +3,17 @@ import { Link } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 import CategoryIconPreview from '@/components/CategoryIconPreview'
 import Form from '@/components/Form'
+import Modal from '@/components/Modal'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import {
   addDBTransactions,
   editDBTransactions,
 } from '@/store/transactions/transactions-thunk'
 import { CategoryType, TxFormData } from '@/types'
-import { combineClassName, getDate, makeEmptyTransactionItem } from '@/utils'
+import { getDate, makeEmptyTransactionItem } from '@/utils'
 import RemainingBudget from './RemainingBudget'
 import TransactionItems from './TransactionItem'
-import './index.scss'
-import Modal from '@/components/Modal'
+import TransactionTypeTab from './TransactionTypeTab'
 
 type FormTransactionProps = {
   isOpen: boolean
@@ -108,43 +108,11 @@ const FormTransaction = ({
             id: `${data ? 'EditTransaction' : 'AddTransaction'}`,
           })}
         </span>
-        <div className="flex-column gap-2">
-          <span className="text--color-primary text--light text--3">
-            {formatMessage({ id: 'Transaction' })}
-          </span>
-          <div
-            className="transaction-type-tabs"
-            role="tablist"
-            aria-label={formatMessage({ id: 'Transaction' })}
-          >
-            {(['income', 'expense'] as CategoryType[]).map((value) => {
-              const tabItemClassName = combineClassName(
-                'transaction-type-tabs__tab',
-                [
-                  {
-                    condition: categoryType === value,
-                    className: 'selected',
-                  },
-                ]
-              )
 
-              return (
-                <button
-                  key={value}
-                  type="button"
-                  role="tab"
-                  aria-selected={categoryType === value}
-                  className={tabItemClassName}
-                  onClick={() => setCategoryType(value)}
-                >
-                  {formatMessage({
-                    id: value === 'income' ? 'Income' : 'Expense',
-                  })}
-                </button>
-              )
-            })}
-          </div>
-        </div>
+        <TransactionTypeTab
+          categoryType={categoryType}
+          setCategoryType={setCategoryType}
+        />
 
         <Form<TxFormData>
           key={categoryType}

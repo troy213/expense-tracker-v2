@@ -17,6 +17,7 @@ import EyeSvg from './icons/eye.svg?react'
 import ExportSvg from './icons/export.svg?react'
 import FlagIDSVg from './icons/flag-id.svg?react'
 import FlagUKSvg from './icons/flag-uk.svg?react'
+import ForbiddenSvg from './icons/forbidden.svg?react'
 import GlobeSvg from './icons/globe.svg?react'
 import GoalSvg from './icons/goal.svg?react'
 import HomeSvg from './icons/home.svg?react'
@@ -60,6 +61,7 @@ export {
   ExportSvg,
   FlagIDSVg,
   FlagUKSvg,
+  ForbiddenSvg,
   GlobeSvg,
   GoalSvg,
   HomeSvg,

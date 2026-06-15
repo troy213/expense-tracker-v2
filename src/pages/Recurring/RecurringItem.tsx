@@ -1,0 +1,237 @@
+import { useCallback, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { FormattedMessage, useIntl } from 'react-intl'
+import { MoreVerticalSvg, PlaySvg, SquareSvg } from '@/assets'
+import { CategoryIcon, FormModal } from '@/components'
+import DeleteDataModal from '@/components/Modal/DeleteDataModal'
+import MoreOptionMenu from '@/components/Menu/MoreOptionMenu'
+import {
+  useAppDispatch,
+  useAppSelector,
+  useClickOutside,
+  useDisclosure,
+} from '@/hooks'
+import { Recurring } from '@/types'
+import {
+  deleteDBRecurring,
+  editDBRecurring,
+} from '@/store/recurring/recurring-thunk'
+import { isExpired } from '@/lib/db/recurring'
+import { combineClassName, currencyFormatter, getDate, ordinal } from '@/utils'
+import './RecurringItem.scss'
+
+type RecurringItemProps = {
+  definition: Recurring
+  isMenuOpen: boolean
+  onMenuToggle: (id: string | null) => void
+}
+
+const RecurringItem = ({
+  definition,
+  isMenuOpen,
+  onMenuToggle,
+}: RecurringItemProps) => {
+  const { formatMessage } = useIntl()
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const editModal = useDisclosure()
+  const deleteModal = useDisclosure()
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  const hasPending = useAppSelector((s) =>
+    s.recurringReducer.history.some(
+      (r) => r.recurring_id === definition.id && r.status === 'pending'
+    )
+  )
+  const category = useAppSelector((s) =>
+    s.categoriesReducer.categories.find((c) => c.id === definition.category_id)
+  )
+
+  const closeMenu = useCallback(() => onMenuToggle(null), [onMenuToggle])
+  useClickOutside(menuRef, closeMenu, isMenuOpen)
+
+  const handleRowClick = () => navigate(`/recurring-detail?id=${definition.id}`)
+
+  const handleRowKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      handleRowClick()
+    }
+  }
+
+  const handleMoreOption = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onMenuToggle(isMenuOpen ? null : definition.id)
+  }
+
+  const handleToggleActive = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    dispatch(
+      editDBRecurring({
+        definition: { ...definition, is_active: !definition.is_active },
+        today: getDate(),
+      })
+    )
+  }
+
+  const canToggleActive = !isExpired(definition, getDate())
+
+  const itemClassName = combineClassName('recurring-item', [
+    { condition: hasPending, className: 'recurring-item--pending' },
+    { condition: !definition.is_active, className: 'recurring-item--inactive' },
+  ])
+
+  const toggleButtonClassName = combineClassName('btn', [
+    {
+      condition: !definition.is_active,
+      className: 'btn-primary',
+    },
+    {
+      condition: definition.is_active,
+      className: 'btn-outline-primary',
+    },
+  ])
+
+  return (
+    <div
+      className={itemClassName}
+      onClick={handleRowClick}
+      role="button"
+      tabIndex={0}
+      aria-label={formatMessage(
+        { id: 'ViewRecurringDetail' },
+        { name: definition.recurring_name }
+      )}
+      onKeyDown={handleRowKeyDown}
+    >
+      <FormModal.FormRecurring
+        isOpen={editModal.isOpen}
+        data={definition}
+        onClose={editModal.close}
+        onCancel={editModal.close}
+      />
+
+      {deleteModal.isOpen && (
+        <DeleteDataModal
+          isOpen={deleteModal.isOpen}
+          onClose={deleteModal.close}
+          title={formatMessage({ id: 'DeleteRecurring' })}
+          message={formatMessage(
+            { id: 'DeleteRecurringMessage' },
+            { name: definition.recurring_name }
+          )}
+          handleDelete={() => dispatch(deleteDBRecurring(definition.id))}
+        />
+      )}
+
+      <div className="flex-space-between flex-align-center gap-2">
+        <div className="flex-align-center gap-4">
+          {category && (
+            <CategoryIcon
+              iconId={category.icon_id}
+              color={category.color}
+              isActive={definition.is_active}
+            />
+          )}
+          <div className="flex-column">
+            <span className="text--bold">{definition.recurring_name}</span>
+            <span className="text--light text--3">
+              {definition.transaction_name}
+            </span>
+          </div>
+        </div>
+
+        <div className="relative flex-align-center gap-2" ref={menuRef}>
+          <span className="text--bold">
+            {currencyFormatter(definition.amount)}
+          </span>
+
+          <button
+            type="button"
+            className="btn btn-clear"
+            onClick={handleMoreOption}
+            aria-label={formatMessage({ id: 'MoreOptions' })}
+            aria-haspopup="menu"
+            aria-expanded={isMenuOpen}
+          >
+            <MoreVerticalSvg
+              className="icon--color-primary"
+              aria-hidden="true"
+            />
+          </button>
+          {isMenuOpen && (
+            <MoreOptionMenu
+              handleEdit={() => {
+                closeMenu()
+                editModal.open()
+              }}
+              handleDelete={() => {
+                closeMenu()
+                deleteModal.open()
+              }}
+            />
+          )}
+        </div>
+      </div>
+
+      <div className="recurring-item__footer">
+        <div className="flex-column flex-justify-center gap-1">
+          <span className="text--light text--3">
+            <FormattedMessage
+              id="DueDayOrdinal"
+              values={{
+                day: ordinal(definition.due_day),
+                b: (chunks) => <span className="text--bold">{chunks}</span>,
+              }}
+            />
+          </span>
+          {definition.active_until && (
+            <span className="text--light text--3">
+              <FormattedMessage
+                id="ActiveUntilDate"
+                values={{
+                  date: definition.active_until,
+                  b: (chunks) => <span className="text--bold">{chunks}</span>,
+                }}
+              />
+            </span>
+          )}
+        </div>
+        {canToggleActive && (
+          <button
+            type="button"
+            className={toggleButtonClassName}
+            onClick={handleToggleActive}
+            aria-label={formatMessage({
+              id: definition.is_active ? 'Deactivate' : 'Activate',
+            })}
+          >
+            {definition.is_active ? (
+              <div className="flex-align-center gap-2">
+                <SquareSvg
+                  className="icon--md icon--color-primary"
+                  aria-hidden="true"
+                />
+                <span className="text--3">
+                  {formatMessage({ id: 'Deactivate' })}
+                </span>
+              </div>
+            ) : (
+              <div className="flex-align-center gap-2">
+                <PlaySvg
+                  className="icon--md icon--color-white"
+                  aria-hidden="true"
+                />
+                <span className="text--3">
+                  {formatMessage({ id: 'Activate' })}
+                </span>
+              </div>
+            )}
+          </button>
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default RecurringItem

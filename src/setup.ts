@@ -72,6 +72,17 @@ vi.mock('@/lib/db', () => ({
       deleteGoal: vi.fn().mockResolvedValue(undefined),
       clearGoals: vi.fn().mockResolvedValue(undefined),
     },
+    recurring: {
+      getAllRecurring: vi.fn().mockResolvedValue([]),
+      getAllHistory: vi.fn().mockResolvedValue([]),
+      getHistoryByRecurringId: vi.fn().mockResolvedValue([]),
+      putRecurring: vi.fn().mockResolvedValue(''),
+      addHistoryRows: vi.fn().mockResolvedValue([]),
+      putHistoryRows: vi.fn().mockResolvedValue(undefined),
+      resolveAdd: vi.fn().mockResolvedValue(undefined),
+      deleteRecurring: vi.fn().mockResolvedValue(undefined),
+      clearRecurring: vi.fn().mockResolvedValue(undefined),
+    },
     report: {
       getDashboardInfo: vi.fn().mockResolvedValue({
         totalIncome: 0,

@@ -265,6 +265,10 @@
   flex-wrap: wrap;
 }
 
+.flex-none {
+  flex: none;
+}
+
 .flex-1 {
   flex: 1;
 }
@@ -496,7 +500,8 @@
   width: fit-content;
 
   &--default,
-  &--cancelled {
+  &--cancelled,
+  &--skipped {
     background-color: color-mix(in srgb, var(--text-muted) 15%, transparent);
     color: var(--text-muted);
   }
@@ -508,13 +513,23 @@
   }
 
   &--spent,
-  &--completed {
+  &--completed,
+  &--added {
     background-color: color-mix(
       in srgb,
       var(--default-color-success) 15%,
       transparent
     );
     color: var(--default-color-success);
+  }
+
+  &--pending {
+    background-color: color-mix(
+      in srgb,
+      var(--default-color-warning) 15%,
+      transparent
+    );
+    color: var(--default-color-warning);
   }
 
   &--danger {

@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import { Suspense, lazy, useEffect } from 'react'
 import { Layout, PWAInstallPrompt } from '@/components'
 import { LANGUAGES, LOCALES, THEME } from '@/constants'
-import { useAppSelector, useInitConfig } from '@/hooks'
+import { useAppSelector, useInitConfig, useRecurringGenerator } from '@/hooks'
 import { SpinnerSvg } from '@/assets'
 import './App.scss'
 // Dashboard is the landing route, so it stays in the main bundle — lazy-loading
@@ -18,6 +18,7 @@ const ReportDetail = lazy(() => import('@/pages/ReportDetail'))
 const Goals = lazy(() => import('@/pages/Goals'))
 const GoalDetail = lazy(() => import('@/pages/GoalDetail'))
 const Recurring = lazy(() => import('@/pages/Recurring'))
+const RecurringDetail = lazy(() => import('@/pages/RecurringDetail'))
 const Loans = lazy(() => import('@/pages/Loans'))
 const NotFound = lazy(() => import('@/pages/404'))
 const Settings = lazy(() => import('@/pages/Settings'))
@@ -34,6 +35,7 @@ const App = () => {
   const currentLanguage = LANGUAGES[locale] || LANGUAGES[LOCALES.ENGLISH]
 
   useInitConfig()
+  useRecurringGenerator()
 
   // Resolve the theme preference to a concrete `data-theme` on <html>.
   // 'system' follows the OS and updates live; 'light'/'dark' are applied as-is.
@@ -89,6 +91,7 @@ const App = () => {
             <Route path="/goals" element={<Goals />} />
             <Route path="/goal-detail" element={<GoalDetail />} />
             <Route path="/recurring" element={<Recurring />} />
+            <Route path="/recurring-detail" element={<RecurringDetail />} />
             <Route path="/loans" element={<Loans />} />
             <Route path="/settings" element={<Settings />}>
               <Route index element={<SettingMenus />} />

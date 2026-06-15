@@ -85,6 +85,30 @@ export type GoalHistoryEntry = {
   date: string
 }
 
+export type Recurring = {
+  id: string // uuid
+  recurring_name: string // display name of the rule, e.g. "BCA Credit Card"
+  transaction_name: string // generated transaction's description
+  category_id: string // FK → categories; the category's type encodes income vs expense
+  amount: number // default/expected amount (editable at Add time)
+  due_day: number // 1–31; clamped to the month's last day for short months
+  start_period: string // "YYYY-MM"; first period eligible for generation
+  active_until: string | null // "YYYY-MM"; null = runs indefinitely
+  is_active: boolean // auto-set false by the generator once active_until is exceeded
+}
+
+export type RecurringStatus = 'pending' | 'added' | 'skipped'
+
+export type RecurringHistoryEntry = {
+  id: string // `${recurring_id}:${period}` — the store enforces one row per (definition, month)
+  recurring_id: string // FK → recurring.id
+  date: string // clamped due date "YYYY-MM-DD"; becomes the transaction date
+  category_id: string // snapshot from the definition (kept fresh while pending)
+  transaction_name: string // snapshot from the definition (kept fresh while pending)
+  amount: number // pending: definition default; added: what was actually added
+  status: RecurringStatus
+}
+
 export type ReportCategory = Category & {
   total: number
 }

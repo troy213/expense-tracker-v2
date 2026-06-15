@@ -464,3 +464,20 @@ const LANGUAGE_TRANSLATION_KEY: Record<Locales, string> = {
 
 export const getLanguageTranslationKey = (locale: Locales): string =>
   LANGUAGE_TRANSLATION_KEY[locale]
+
+export const ordinal = (n: number): string => {
+  const abs = Math.abs(Math.trunc(n))
+  const mod100 = abs % 100
+  const mod10 = abs % 10
+  const suffix =
+    mod100 >= 11 && mod100 <= 13
+      ? 'th'
+      : mod10 === 1
+        ? 'st'
+        : mod10 === 2
+          ? 'nd'
+          : mod10 === 3
+            ? 'rd'
+            : 'th'
+  return `${n}${suffix}`
+}

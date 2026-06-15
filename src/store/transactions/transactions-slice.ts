@@ -15,6 +15,7 @@ import {
   editDBTransactions,
   getAllDBTransactions,
 } from './transactions-thunk'
+import { resolveAddDBRecurring } from '../recurring/recurring-thunk'
 
 export type InitialState = {
   isLoading: boolean
@@ -51,6 +52,9 @@ const transactionsSlice = createSlice({
       deleteAllDBTransactions,
       'isLoading',
       deleteAllTransactions
+    )
+    builder.addCase(resolveAddDBRecurring.fulfilled, (state, action) =>
+      addData(state, { ...action, payload: { data: action.payload.data } })
     )
   },
 })
